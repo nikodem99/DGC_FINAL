@@ -1,0 +1,173 @@
+$flaticon_medically-font: "flaticon_medically";
+
+@font-face {
+    font-family: $flaticon_medically-font;
+    src: url("./flaticon_medically.woff2?4319b266fb98e79c94c0cf546315ba25") format("woff2"),
+url("./flaticon_medically.woff?4319b266fb98e79c94c0cf546315ba25") format("woff"),
+url("./flaticon_medically.eot?4319b266fb98e79c94c0cf546315ba25#iefix") format("embedded-opentype"),
+url("./flaticon_medically.ttf?4319b266fb98e79c94c0cf546315ba25") format("truetype"),
+url("./flaticon_medically.svg?4319b266fb98e79c94c0cf546315ba25#flaticon_medically") format("svg");
+}
+
+i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
+    font-family: flaticon_medically !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+$flaticon_medically-map: (
+    "baby": "\f101",
+    "rehabilitation": "\f102",
+    "microsurgery": "\f103",
+    "tooth": "\f104",
+    "cup": "\f105",
+    "mortar": "\f106",
+    "microsurgery-1": "\f107",
+    "quote": "\f108",
+    "star": "\f109",
+    "phone-call": "\f10a",
+    "24-7": "\f10b",
+    "doctor": "\f10c",
+    "businesswoman": "\f10d",
+    "award": "\f10e",
+    "customer-care": "\f10f",
+    "deadline": "\f110",
+    "location": "\f111",
+    "remedy": "\f112",
+    "left-arrow": "\f113",
+    "right-arrow": "\f114",
+    "left-arrow-1": "\f115",
+    "next": "\f116",
+    "play": "\f117",
+    "calendar": "\f118",
+    "linkedin": "\f119",
+    "facebook-app-symbol": "\f11a",
+    "instagram": "\f11b",
+    "twitter": "\f11c",
+    "search": "\f11d",
+    "close": "\f11e",
+    "trash": "\f11f",
+    "telephone": "\f120",
+    "location-1": "\f121",
+    "star-1": "\f122",
+    "bone": "\f123",
+    "shopping-bag": "\f124",
+    "email": "\f125",
+);
+
+.flaticon-baby:before {
+    content: map-get($flaticon_medically-map, "baby");
+}
+.flaticon-rehabilitation:before {
+    content: map-get($flaticon_medically-map, "rehabilitation");
+}
+.flaticon-microsurgery:before {
+    content: map-get($flaticon_medically-map, "microsurgery");
+}
+.flaticon-tooth:before {
+    content: map-get($flaticon_medically-map, "tooth");
+}
+.flaticon-cup:before {
+    content: map-get($flaticon_medically-map, "cup");
+}
+.flaticon-mortar:before {
+    content: map-get($flaticon_medically-map, "mortar");
+}
+.flaticon-microsurgery-1:before {
+    content: map-get($flaticon_medically-map, "microsurgery-1");
+}
+.flaticon-quote:before {
+    content: map-get($flaticon_medically-map, "quote");
+}
+.flaticon-star:before {
+    content: map-get($flaticon_medically-map, "star");
+}
+.flaticon-phone-call:before {
+    content: map-get($flaticon_medically-map, "phone-call");
+}
+.flaticon-24-7:before {
+    content: map-get($flaticon_medically-map, "24-7");
+}
+.flaticon-doctor:before {
+    content: map-get($flaticon_medically-map, "doctor");
+}
+.flaticon-businesswoman:before {
+    content: map-get($flaticon_medically-map, "businesswoman");
+}
+.flaticon-award:before {
+    content: map-get($flaticon_medically-map, "award");
+}
+.flaticon-customer-care:before {
+    content: map-get($flaticon_medically-map, "customer-care");
+}
+.flaticon-deadline:before {
+    content: map-get($flaticon_medically-map, "deadline");
+}
+.flaticon-location:before {
+    content: map-get($flaticon_medically-map, "location");
+}
+.flaticon-remedy:before {
+    content: map-get($flaticon_medically-map, "remedy");
+}
+.flaticon-left-arrow:before {
+    content: map-get($flaticon_medically-map, "left-arrow");
+}
+.flaticon-right-arrow:before {
+    content: map-get($flaticon_medically-map, "right-arrow");
+}
+.flaticon-left-arrow-1:before {
+    content: map-get($flaticon_medically-map, "left-arrow-1");
+}
+.flaticon-next:before {
+    content: map-get($flaticon_medically-map, "next");
+}
+.flaticon-play:before {
+    content: map-get($flaticon_medically-map, "play");
+}
+.flaticon-calendar:before {
+    content: map-get($flaticon_medically-map, "calendar");
+}
+.flaticon-linkedin:before {
+    content: map-get($flaticon_medically-map, "linkedin");
+}
+.flaticon-facebook-app-symbol:before {
+    content: map-get($flaticon_medically-map, "facebook-app-symbol");
+}
+.flaticon-instagram:before {
+    content: map-get($flaticon_medically-map, "instagram");
+}
+.flaticon-twitter:before {
+    content: map-get($flaticon_medically-map, "twitter");
+}
+.flaticon-search:before {
+    content: map-get($flaticon_medically-map, "search");
+}
+.flaticon-close:before {
+    content: map-get($flaticon_medically-map, "close");
+}
+.flaticon-trash:before {
+    content: map-get($flaticon_medically-map, "trash");
+}
+.flaticon-telephone:before {
+    content: map-get($flaticon_medically-map, "telephone");
+}
+.flaticon-location-1:before {
+    content: map-get($flaticon_medically-map, "location-1");
+}
+.flaticon-star-1:before {
+    content: map-get($flaticon_medically-map, "star-1");
+}
+.flaticon-bone:before {
+    content: map-get($flaticon_medically-map, "bone");
+}
+.flaticon-shopping-bag:before {
+    content: map-get($flaticon_medically-map, "shopping-bag");
+}
+.flaticon-email:before {
+    content: map-get($flaticon_medically-map, "email");
+}

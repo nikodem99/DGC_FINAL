@@ -1,0 +1,170 @@
+.theme-btn {
+	background: $theme-primary-color;
+	color: $white;
+	display: inline-block;
+	padding: 10px 30px;
+	padding-right: 80px;
+	border: 0;
+	text-transform: capitalize;
+	-webkit-backface-visibility: hidden;
+	z-index: 1;
+	position: relative;
+	border-radius: 40px;
+	font-family: $base-font;
+	font-size: 20px;
+	font-weight: 500;
+	line-height: 40px;
+
+	@include media-query(991px) {
+		padding: 10px 30px;
+	}
+
+	&:after {
+		position: absolute;
+		content: '';
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border-radius: 40px;
+		background: darken($light, 5%);
+		transition: opacity 0.5s ease-out;
+		opacity: 0;
+		z-index: -1;
+	}
+
+	&::before {
+		position: absolute;
+		content: "\f114";
+		font-family: flaticon_medically !important;
+		top: 5px;
+		right: 5px;
+		width: 50px;
+		height: 50px;
+		border: 1px solid $white;
+		border-radius: 100px;
+		transition: opacity 0.5s ease-out;
+		opacity: 1;
+		z-index: 1;
+		text-align: center;
+		font-size: 25px;
+		line-height: 50px;
+
+		@include media-query(991px) {
+			display: none;
+		}
+	}
+
+	&:hover,
+	&:focus,
+	&:active {
+		color: $white;
+	}
+
+	&:hover:after {
+		opacity: .4;
+	}
+
+	@include media-query(991px) {
+		font-size: 18px;
+		padding: 5px 25px;
+	}
+
+	@include media-query(757px) {
+		font-size: 15px;
+	}
+
+
+}
+
+.theme-btn-s2 {
+	color: $white;
+	display: inline-block;
+	padding: 10px 30px;
+	text-transform: capitalize;
+	z-index: 1;
+	position: relative;
+	border: 1px solid rgba(255, 255, 255, 0.20);
+	background: rgba(255, 255, 255, 0.15);
+	backdrop-filter: blur(10px);
+	font-size: 20px;
+	font-weight: 500;
+	line-height: 30px;
+	display: inline-flex;
+	align-items: center;
+
+	&:after {
+		position: absolute;
+		content: '';
+		top: 0;
+		left: 0;
+		width: 0%;
+		height: 100%;
+		background: $light;
+		transition: all .4s ease-in-out;
+		opacity: 0;
+		z-index: -1;
+		border: 1px solid rgba(255, 255, 255, 0.20);
+	}
+
+	@include media-query(991px) {
+		font-size: 15px;
+	}
+
+	i {
+		font-size: 25px;
+		padding-left: 20px;
+		padding-top: 10px;
+
+		&::before {
+			line-height: 0px;
+		}
+	}
+
+	&:hover,
+	&:focus,
+	&:active {
+		color: $white;
+	}
+
+	&:hover:after {
+		width: 100%;
+		opacity: 0.6;
+	}
+
+	@include media-query(767px) {
+		padding: 8px 25px;
+	}
+}
+
+
+
+.view-cart-btn {
+	@extend .theme-btn;
+	display: block;
+	margin-top: 15px;
+	border-radius: 5px;
+	padding: 10px 45px;
+
+
+
+	&:after {
+		display: none;
+	}
+
+	&:hover {
+		background-color: darken($light, 8%);
+	}
+
+	&.s1 {
+		background: #ddd;
+
+		&:hover {
+			background-color: darken(#ddd, 8%);
+		}
+	}
+
+	&::before {
+		display: none;
+	}
+}

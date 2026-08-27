@@ -1,0 +1,177 @@
+/* 6. Home-style-3 */
+
+
+/*6.1 appointment_section_s2 */
+.appointment_section_s2 {
+    position: relative;
+    margin-top: -225px;
+    margin-left: -95px;
+    margin-bottom: 120px;
+    z-index: 1;
+
+    @media (max-width:1799px) {
+        margin-left: 0px;
+    }
+
+    @media (max-width:991px) {
+        margin: 90px 0;
+    }
+}
+
+
+/*6.2 about_section_s3 */
+.about_section_s3 {
+
+    .wrapper {
+
+        &::before {
+            position: absolute;
+            right: 100px;
+            top: 0;
+            height: 100%;
+            width: 100%;
+
+            @media (max-width:1499px) {
+                right: 50px;
+            }
+        }
+    }
+
+    .content {
+        padding: 0px ;
+    }
+
+    .about_left {
+        position: unset;
+        margin-right: -100px;
+        margin-left: 80px;
+
+        @media (max-width:1499px) {
+            margin-right: -50px;
+            margin-left: 40px;
+        }
+
+        @media (max-width:1199px) {
+            margin-right: 0px;
+            margin-left: 0px;
+            margin-bottom: 40px;
+        }
+    }
+
+}
+
+/*6.3 service_section_s3 */
+
+.service_section_s3 {
+    background: #EBF7FF;
+    padding-bottom: 90px;
+
+    @media (max-width:991px) {
+        padding-bottom: 60px;
+    }
+
+    @media (max-width:767px) {
+        padding-bottom: 50px;
+    }
+
+
+    .service_card {
+        box-shadow: none;
+
+
+        &::before {
+            background: url(../../images/common-shape-black.png) no-repeat center;
+        }
+    }
+    .btn{
+        display: none;
+    }
+
+}
+
+
+/*6.4 project_section_s3 */
+.project_section_s3 {
+    &::before {
+        display: none;
+    }
+}
+
+/*6.5 cta_section_s2 */
+.cta_section_s2 {
+    margin-top: 140px;
+
+    @media (max-width:1399px) {
+        margin-top: 50px;
+    }
+
+    @media (max-width:991px) {
+        margin-top: 80px;
+    }
+
+    @media (max-width:767px) {
+        margin-top: 0px;
+    }
+
+    .cta_wrapper {
+
+        .content {
+
+            .text {
+
+
+                h3 {
+                    font-size: 90px;
+
+                    @media (max-width:1199px) {
+                        font-size: 60px;
+                    }
+
+                    @media (max-width:991px) {
+                        font-size: 40px;
+                        line-height: 50px;
+                    }
+                }
+            }
+        }
+
+        .shape-icon {
+            position: absolute;
+            left: 56%;
+
+            @media (max-width:991px) {
+                font-size: 100px;
+                left: 55%;
+            }
+
+            @media (max-width:767px) {
+                left: 75%;
+            }
+        }
+
+        .image {
+            max-width: 540px;
+            max-height: 540px;
+            position: absolute;
+            right: 0px;
+            bottom: 0;
+
+            @media (max-width:1399px) {
+                max-width: 420px;
+            }
+
+            @media (max-width:1199px) {
+                max-width: 400px;
+            }
+
+            @media (max-width:991px) {
+                max-width: 300px;
+                right: 19px;
+            }
+
+            @media (max-width:767px) {
+                display: none;
+            }
+        }
+    }
+}

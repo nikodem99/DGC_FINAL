@@ -1,0 +1,137 @@
+/*------------------------------------------------------------------
+[Master Stylesheet]
+Theme Name:     Medically | Health & Medical HTML Template
+Version:        1.0.0
+-------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+
+1. General
+	1.1 Theme Reset Style
+	1.2 Global Elements
+
+2. header
+	2.1 topbar
+	2.2 navigation
+
+3. content
+	3.1 hero_section
+	3.2 appointment_section
+	3.3 service_section
+	3.4 about_section
+	3.5 work_section 
+	3.6 project_section
+	3.7 testimonial_section
+	3.8 cta_section
+	3.9 team_section
+	3.10 funfact_section
+	3.11 blog_section
+	3.12 ctafrom_section
+
+4. wpo-footer
+
+5. Home-style-2
+   5.1 about_section_s2
+   5.2 service_section_s2
+   5.3 project_section_s2
+   5.4 funfact_section_s2
+   5.5 team_section_s2 
+
+6. Home-style-3
+   6.1 appointment_section_s2
+   6.2 about_section_s3
+   6.3 service_section_s3
+   6.4 project_section_s3
+   6.5 cta_section_s2 
+
+
+7. service_single
+
+8. project_single
+
+9. team_single_page
+
+10. shop_page
+
+11. shop-single-page
+
+12 cart-area-s2
+
+14. checkout-page
+
+15. faq-page
+
+16. pf-terms-section
+
+17. blog-pg-section
+
+18. blog-single-section
+
+19. contact-pg-section
+
+20. error-404-section
+
+----------------------------------------------------------------*/
+
+
+/*------------------------------------------------------------------
+1. General
+----------------------------------------------------------------*/
+
+// helpers
+@import "helpers/variables";
+@import "helpers/functions";
+@import "helpers/mixins";
+
+// base
+@import "base/base";
+
+
+// components
+@import "components/section-title";
+@import "components/buttons";
+@import "components/form";
+@import "components/social-links";
+@import "components/page-title";
+@import "components/preloader";
+@import "components/blog-sidebar";
+@import "components/pagination";
+
+// layout
+@import "layout/header";
+@import "layout/hero-slider";
+@import "layout/footer";
+
+// components
+@import "components/sticky-header";
+
+
+// page
+@import "page/home-default";
+@import "page/home-style-2";
+@import "page/home-style-3";
+@import "page/service-single";
+@import "page/project-single";
+@import "page/team-single";
+@import "page/shop";
+@import "page/shop-single";
+@import "page/cart";
+@import "page/checkout";
+@import "page/faq";
+@import "page/terms";
+
+
+@import "page/_blog";
+
+@import "page/_blog-single";
+
+@import "page/contact";
+
+@import "page/error-404";
+
+
+
+
