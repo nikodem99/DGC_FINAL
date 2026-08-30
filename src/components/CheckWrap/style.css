@@ -2,16 +2,16 @@
   display: flex;
   min-height: 100vh;
   padding: 80px 0;
-  background: #f9f9f9;
+  background: #FDFCFC;
 }
 .loginWrapper .loginForm {
   width: 500px;
   max-width: 90%;
   margin: auto;
-  background: #fff;
+  background: #FDFCFC;
   padding: 70px 50px;
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 15px rgba(13, 68, 68, 0.05);
 }
 @media (max-width: 445px) {
   .loginWrapper .loginForm {
@@ -27,11 +27,11 @@
   margin-bottom: 30px;
   text-align: center;
   font-weight: 500;
-  color: #666666;
+  color: #0D4444;
 }
 .loginWrapper .loginForm form .inputOutline label {
   font-size: 16px;
-  background: #fff;
+  background: #FDFCFC;
   padding: 0 10px 0 0;
 }
 .loginWrapper .loginForm form .inputOutline input {
@@ -39,19 +39,19 @@
   letter-spacing: 0;
 }
 .loginWrapper .loginForm form .inputOutline input::-webkit-input-placeholder {
-  color: #888888;
+  color: #0D4444;
   opacity: 1;
 }
 .loginWrapper .loginForm form .inputOutline input::-moz-placeholder {
-  color: #888888;
+  color: #0D4444;
   opacity: 1;
 }
 .loginWrapper .loginForm form .inputOutline input:-ms-input-placeholder {
-  color: #888888;
+  color: #0D4444;
   opacity: 1;
 }
 .loginWrapper .loginForm form .inputOutline input:-moz-placeholder {
-  color: #888888;
+  color: #0D4444;
   opacity: 1;
 }
 .loginWrapper .loginForm .formAction {
@@ -71,7 +71,7 @@
   letter-spacing: 0;
   font-size: 13px;
   font-weight: 500;
-  color: #246fea;
+  color: #0D4444;
   cursor: pointer;
   transition: all 0.3s ease 0s;
 }
@@ -95,21 +95,21 @@
   flex: 1 1;
   display: block;
   text-align: center;
-  background: #3b5998;
+  background: #0D4444;
   margin: 5px;
-  color: #fff;
+  color: #FDFCFC;
   border-radius: 3px;
   font-size: 14px;
   padding: 4px 9px;
 }
 .loginWrapper .loginForm .loginWithSocial button.facebook {
-  background: #3b5998;
+  background: #0D4444;
 }
 .loginWrapper .loginForm .loginWithSocial button.twitter {
-  background: #55acee;
+  background: #127887;
 }
 .loginWrapper .loginForm .loginWithSocial button.linkedin {
-  background: #0077B5;
+  background: #127887;
 }
 .loginWrapper .loginForm .noteHelp {
   text-align: center;
@@ -120,7 +120,7 @@
 }
 .loginWrapper .loginForm .noteHelp a {
   display: inline-block;
-  color: #0077b5;
+  color: #0D4444;
   margin-left: 10px;
   font-size: 13px;
   font-weight: 500;
@@ -133,16 +133,16 @@
   margin-top: 15px;
 }
 .btn-area .admin {
-  border-right: 1px solid #c2b133;
+  border-right: 1px solid #D8BB2B;
   padding-right: 10px;
 }
 .btn-area .vendor {
-  border-right: 1px solid #c2b133;
+  border-right: 1px solid #D8BB2B;
   padding-right: 10px;
 }
 .btn-area .auth-btn {
   margin: 0 5px;
-  color: #c2b133;
+  color: #0D4444;
   line-height: 16px;
   cursor: pointer;
   font-size: 15px;
@@ -154,8 +154,8 @@
 }
 
 .cBtnTheme {
-  background: #DB9E30;
-  color: #fff;
+  background: #D8BB2B;
+  color: #FDFCFC;
 }
 
 .chCardBody {

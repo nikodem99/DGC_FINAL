@@ -1,0 +1,218 @@
+/* ---------------------------------------------------------------
+   DGC — warstwa marki
+
+   Paleta i jej zasady (wg wytycznych Kamila + logotyp DGC):
+   #127887  teal z logotypu — przyciski, ikony, elementy interaktywne
+   #0D4444  glebokie teal   — teksty i ciemne powierzchnie, nigdy tlo strony
+   #D8BB2B  zloto           — akcenty, linie, numery, CTA; nigdy kolor tekstu
+   #EBFFFF  jasny akwamaryn — tla boksow i grafik; nigdy tlo strony;
+                              jako tekst tylko na #0D4444
+   #FDFCFC  kanwa           — tlo strony i jasny tekst, bez ograniczen
+   #B50B50  magenta         — rezerwa na pojedyncze akcenty, nigdy tekst
+
+   Sama paleta siedzi w helpers/_variables.scss i w partialach.
+   Tutaj sa tylko reguly przekrojowe i swiadome akcenty ze zlota.
+   --------------------------------------------------------------- */
+
+:root {
+  --dgc-ink: #{$dgc-ink};
+  --dgc-brand: #{$dgc-brand};
+  --dgc-brand-deep: #{$dgc-brand-deep};
+  --dgc-gold: #{$dgc-gold};
+  --dgc-gold-deep: #{$dgc-gold-deep};
+  --dgc-gold-soft: #{$dgc-gold-soft};
+  --dgc-panel: #{$dgc-panel};
+  --dgc-canvas: #{$dgc-canvas};
+  --dgc-line: #{$dgc-line};
+  --dgc-highlight: #{$dgc-highlight};
+
+  /* Bootstrap ma wlasna niebieska palete — podpinamy ja pod nasza,
+     zeby zaden nieostylowany komponent nie wrocil ze stockowym kolorem. */
+  --bs-primary: #{$dgc-brand};
+  --bs-primary-rgb: 18, 120, 135;
+  --bs-danger: #{$dgc-highlight};
+  --bs-danger-rgb: 181, 11, 80;
+  --bs-body-color: #{$dgc-ink};
+  --bs-body-color-rgb: 13, 68, 68;
+  --bs-body-bg: #{$dgc-canvas};
+  --bs-emphasis-color: #{$dgc-ink};
+  --bs-secondary-color: rgba(13, 68, 68, 0.70);
+  --bs-link-color: #{$dgc-ink};
+  --bs-link-color-rgb: 13, 68, 68;
+  --bs-link-hover-color: #{$dgc-ink};
+  --bs-link-hover-color-rgb: 13, 68, 68;
+  --bs-border-color: rgba(13, 68, 68, 0.18);
+  --bs-focus-ring-color: rgba(18, 120, 135, 0.18);
+}
+
+/* Tlo strony trzyma sam dokument. #root i .App musza zostac przezroczyste:
+   kilka sekcji maluje swoj kolor przez ::before z z-index:-1 i nieprzezroczysty
+   wrapper by je zaslonil. */
+body {
+  background-color: var(--dgc-canvas);
+  color: var(--dgc-ink);
+}
+
+html,
+#root,
+.App {
+  background-color: transparent;
+}
+
+::selection {
+  background: var(--dgc-brand);
+  color: var(--dgc-canvas);
+}
+
+/* --- Przyciski -------------------------------------------------- */
+/* Podstawowy: teal z logotypu. Zloty wariant .theme-btn-gold zostaje
+   na jedno glowne CTA na ekranie. */
+.theme-btn-gold {
+  background: var(--dgc-gold) !important;
+  border-color: var(--dgc-gold) !important;
+  color: var(--dgc-ink) !important;
+
+  &:hover,
+  &:focus {
+    background: var(--dgc-gold-deep) !important;
+    border-color: var(--dgc-gold-deep) !important;
+    color: var(--dgc-ink) !important;
+  }
+}
+
+.btn-primary,
+.btn-danger {
+  --bs-btn-bg: #{$dgc-brand};
+  --bs-btn-border-color: #{$dgc-brand};
+  --bs-btn-color: #{$dgc-canvas};
+  --bs-btn-hover-bg: #{$dgc-brand-deep};
+  --bs-btn-hover-border-color: #{$dgc-brand-deep};
+  --bs-btn-hover-color: #{$dgc-canvas};
+  --bs-btn-active-bg: #{$dgc-brand-deep};
+  --bs-btn-active-border-color: #{$dgc-brand-deep};
+}
+
+/* Checkout CTA to przycisk MUI bez wlasnego stylu w szablonie. */
+.cBtnTheme {
+  background: var(--dgc-brand) !important;
+  color: var(--dgc-canvas) !important;
+
+  &:hover {
+    background: var(--dgc-brand-deep) !important;
+  }
+}
+
+/* --- Zloto jako jezyk akcentow ---------------------------------- */
+/* Podkreslenia naglowkow, kreski, gwiazdki ocen i numeracja. */
+.widget-title h3::after,
+.wpo-breadcumb-wrap h2::after,
+.section_title h3::after,
+.about_title h2::after {
+  background: var(--dgc-gold);
+}
+
+/* Złota kreska pod tytułem — jedyny element marki obecny na KAŻDEJ podstronie,
+   także tam, gdzie nie ma etykiet sekcji (kontakt, FAQ, blog). */
+.wpo-breadcumb-wrap h2::after,
+.wpo-contact-title h2::after,
+.wpo-section-title.text-center h2::after {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin: 14px auto 16px;
+  border-radius: 2px;
+  background: var(--dgc-gold);
+}
+
+/* Otwarta pozycja FAQ dostaje złoty znacznik zamiast samej zmiany tła. */
+.accordion-item:has(.accordion-button:not(.collapsed)) {
+  border-left: 3px solid var(--dgc-gold);
+}
+
+.accordion-button:not(.collapsed)::after {
+  filter: none;
+}
+
+.rating i,
+.give-rating i,
+.fa-star,
+.product-rating i {
+  color: var(--dgc-gold);
+}
+
+/* --- Linki ------------------------------------------------------ */
+/* Kolorem tekstu jest zawsze ink; sygnalem interakcji zlota kreska. */
+a:not(.theme-btn):not(.theme-btn-s2):not(.theme-btn-s3):not(.theme-btn-gold):not(.view-cart-btn):hover {
+  text-decoration: underline;
+  text-decoration-color: var(--dgc-gold);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
+}
+
+/* --- Formularze ------------------------------------------------- */
+input:focus,
+textarea:focus,
+select:focus,
+.form-control:focus {
+  border-color: var(--dgc-brand);
+  box-shadow: 0 0 0 3px rgba(18, 120, 135, 0.14);
+  outline: 0;
+}
+
+.form-check-input:checked {
+  background-color: var(--dgc-brand);
+  border-color: var(--dgc-brand);
+}
+
+/* Walidacja: komunikat zostaje w kolorze tekstu (ink), a sygnalem bledu
+   jest magentowa kropka i ramka pola — magenta nigdy nie jest tekstem. */
+.error,
+label.error,
+.errorMessage,
+.MuiFormHelperText-root.Mui-error {
+  color: var(--dgc-ink) !important;
+  font-weight: 500;
+}
+
+.error::before,
+label.error::before,
+.errorMessage::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--dgc-highlight);
+  vertical-align: middle;
+}
+
+input.error,
+textarea.error,
+select.error,
+.form-control.error {
+  border-color: var(--dgc-highlight) !important;
+}
+
+/* --- Komponenty Bootstrapa uzywane przez szablon ---------------- */
+.accordion {
+  --bs-accordion-active-color: #{$dgc-ink};
+  --bs-accordion-active-bg: #{$dgc-panel};
+  --bs-accordion-btn-focus-border-color: #{$dgc-brand};
+  --bs-accordion-border-color: rgba(13, 68, 68, 0.18);
+}
+
+.nav-pills {
+  --bs-nav-pills-link-active-bg: #{$dgc-brand};
+  --bs-nav-pills-link-active-color: #{$dgc-canvas};
+}
+
+.pagination {
+  --bs-pagination-active-bg: #{$dgc-brand};
+  --bs-pagination-active-border-color: #{$dgc-brand};
+  --bs-pagination-active-color: #{$dgc-canvas};
+  --bs-pagination-color: #{$dgc-ink};
+  --bs-pagination-hover-color: #{$dgc-ink};
+  --bs-pagination-focus-bg: #{$dgc-panel};
+}

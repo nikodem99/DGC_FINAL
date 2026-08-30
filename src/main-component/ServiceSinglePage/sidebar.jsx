@@ -6,6 +6,7 @@ import ins3 from '../../images/instagram/3.jpg'
 import ins4 from '../../images/instagram/4.jpg'
 import ins5 from '../../images/instagram/5.jpg'
 import ins6 from '../../images/instagram/6.jpg'
+import offerMenu from '../../api/offerMenu'
 
 const insData = [
     {
@@ -86,17 +87,16 @@ const ServiceSidebar = (props) => {
                         <i className="flaticon-search"></i>
                     </button>
                 </form>
-                {showError && <p style={{ color: 'red' }}>Please enter a search term.</p>}
+                {showError && <p style={{ color: '#0D4444' }}>Please enter a search term.</p>}
             </div>
             <div className="services_widget widget">
-                <h2>Services</h2>
+                <h2>Oferta</h2>
                 <ul>
-                    <li><Link onClick={ClickHandler} to="/services">Dental Care <span>2</span></Link></li>
-                    <li><Link onClick={ClickHandler} to="/services">Orthopedic <span>5</span></Link></li>
-                    <li><Link onClick={ClickHandler} to="/services">Pharmacology <span>3</span></Link></li>
-                    <li><Link onClick={ClickHandler} to="/services">Genealogy <span>7</span></Link></li>
-                    <li><Link onClick={ClickHandler} to="/services">Rehabilitation <span>8</span></Link></li>
-                    <li><Link onClick={ClickHandler} to="/services">Heart Surgery <span>4</span></Link></li>
+                    {offerMenu.map((item) => (
+                        <li key={item.link}>
+                            <Link onClick={ClickHandler} to={item.link}>{item.title}</Link>
+                        </li>
+                    ))}
                 </ul>
             </div>
             <div className="newsletter_widget widget">

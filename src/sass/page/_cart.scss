@@ -3,7 +3,7 @@
 ===========================*/
 .cart-area {
     .cart-wrapper {
-      box-shadow: 0px 5px 15px 0px rgba(68, 68, 68, 0.1);
+      box-shadow: 0px 5px 15px 0px rgba(13, 68, 68, 0.1);
   
       table {
         @media (max-width: 991px) {
@@ -22,25 +22,25 @@
     .cart-wrap td,
     .cart-wrap th {
       width: 10%;
-      border-bottom: 1px solid #f0f0f094;
+      border-bottom: 1px solid #EBFFFF94;
       text-align: center;
       font-weight: 400;
-      color: #414141;
+      color: #0D4444;
     }
     .cart-wrap th {
-      border-bottom: 1px solid #f0f0f094;
+      border-bottom: 1px solid #EBFFFF94;
       padding: 40px 0;
     }
   
     .cart-wrap thead {
-      background: #fff;
-      color: #505050;
+      background: #FDFCFC;
+      color: #0D4444;
       padding: 40px;
     }
     .cart-area form {
       margin: auto;
       text-align: center;
-      background: #fff;
+      background: #FDFCFC;
     }
     .cart-wrap .product {
       width: 15%;
@@ -54,7 +54,7 @@
     }
     .cart-wrap .product a {
       font-size: 16px;
-      color: #a5a4a4;
+      color: #0D4444;
     }
   
     .cart-wrap .product-2 {
@@ -101,23 +101,23 @@
       width: 100px;
       height: 38px;
       line-height: 34px;
-      color: #ee9902;
+      color: #0D4444;
       font-size: 14px;
-      border: 1.5px solid #ee9902;
+      border: 1.5px solid #D8BB2B;
       border-radius: 4px;
       margin: 0 auto;
     }
     .cart-wrap td.Del span {
-      color: #4aba4e;
-      border: 1.5px solid #4aba4e;
+      color: #0D4444;
+      border: 1.5px solid #0D4444;
     }
     .cart-wrap td.can span {
-      color: #d85656;
-      border: 1.5px solid #d85656;
+      color: #0D4444;
+      border: 1.5px solid #B50B50;
     }
     .cart-wrap td.pro span {
-      color: #691a5f;
-      border: 1.5px solid #691a5f;
+      color: #0D4444;
+      border: 1.5px solid #0D4444;
     }
   
     .cart-wrap .name {
@@ -129,14 +129,14 @@
       width: 40px;
       height: 38px;
       line-height: 38px;
-      background: #414141;
-      color: #fff;
+      background: #0D4444;
+      color: #FDFCFC;
       border-radius: 4px;
       font-size: 14px;
       border: none;
   
       &.c-btn {
-        background: rgb(207, 55, 55);
+        background: rgb(181, 11, 80);
       }
   
       .fi {
@@ -154,8 +154,8 @@
         width: 40px;
         height: 38px;
         line-height: 45px;
-        background: #414141;
-        color: #fff;
+        background: #0D4444;
+        color: #FDFCFC;
         border-radius: 4px;
         font-size: 14px;
         cursor: pointer;
@@ -193,7 +193,7 @@
       padding: 0;
     }
     .cart-wrap tr:nth-child(even) {
-      background: #fcfcfc;
+      background: #FDFCFC;
     }
   
     .cart-wrap .quantity {
@@ -205,9 +205,9 @@
       text-align: center;
       height: 30px;
       position: relative;
-      background: #fff;
+      background: #FDFCFC;
       border: none;
-      border: 1px solid #b1b1b2;
+      border: 1px solid #0D4444;
     }
     .quantity .qtybutton {
       position: absolute;
@@ -218,9 +218,9 @@
       text-align: center;
       line-height: 28px;
       cursor: pointer;
-      color: #333;
+      color: #0D4444;
       border: 0;
-      border-left: 1px solid #b1b1b2;
+      border-left: 1px solid #0D4444;
       min-width: 35px;
       border-radius: 0;
     }
@@ -230,7 +230,7 @@
       transform: translateY(-51%);
       -webkit-transform: translateY(-51%);
       -moz-transform: translateY(-51%);
-      border-right: 1px solid #b1b1b2;
+      border-right: 1px solid #0D4444;
     }
     .cart-wrap .quantity .qtybutton.dec {
       border-left: none;
@@ -244,7 +244,7 @@
         height: unset;
         line-height: unset;
         border-radius: 0;
-        color: #333;
+        color: #0D4444;
       }
     }
     .cart-wrap .quantity .qtybutton.inc {
@@ -298,7 +298,7 @@
   
     .cart-product-list {
       ul {
-        border-top: 1px solid #f0f0f094;
+        border-top: 1px solid #EBFFFF94;
         padding-top: 20px;
   
         li {
@@ -308,12 +308,12 @@
           font-weight: 300;
           font-size: 18px;
           line-height: 21px;
-          color: #414141;
+          color: #0D4444;
           padding-bottom: 30px;
   
           &.cart-b {
-            border-top: 1px solid #f0f0f094;
-            border-bottom: 1px solid #f0f0f094;
+            border-top: 1px solid #EBFFFF94;
+            border-bottom: 1px solid #EBFFFF94;
             color: $theme-primary-color;
             padding-top: 30px;
             font-weight: 600;

@@ -2,11 +2,11 @@
     input,
     textarea,
     select {
-        border-color: lighten( $black, 75% );
+        border-color: rgba(13, 68, 68, 0.20);
         border-radius: 0;
         outline: 0;
         box-shadow: none;
-        color: lighten($black, 35%);
+        color: $dgc-ink;
         font-style: normal;
 
         &:focus {
@@ -15,7 +15,7 @@
         }
     }
 
-    @include placeholder-style(lighten($black, 35%));
+    @include placeholder-style(rgba(13, 68, 68, 0.55));
 
     select {
         font-style: normal;

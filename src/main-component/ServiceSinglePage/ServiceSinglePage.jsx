@@ -22,7 +22,7 @@ const ServiceSinglePage = (props) => {
     return (
         <Fragment>
             <Navbar Logo={logo} hclass={'wpo-site-header wpo-site-header-s2'} />
-            <PageTitle pageTitle={serviceDetails.title} pagesub={'Service Single'} />
+            <PageTitle pageTitle={serviceDetails.title} pagesub={'Oferta'} />
             <section className="service_single section-padding">
                 <div className="container">
                     <div className="row g-0">
@@ -91,7 +91,7 @@ const ServiceSinglePage = (props) => {
                                                 <div className="content">
                                                     <h2>{serves.title}</h2>
                                                     <p>{serves.description}</p>
-                                                    <Link onClick={ClickHandler} to={`/service-single/${serves.slug}`}><i className="flaticon-right-arrow"></i></Link>
+                                                    <Link onClick={ClickHandler} to={`/oferta/${serves.slug}/`}><i className="flaticon-right-arrow"></i></Link>
                                                 </div>
                                             </div>
                                         </div>

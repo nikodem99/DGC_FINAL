@@ -5,14 +5,14 @@
     z-index: 9999;
     height: 100vh;
     width: 300px;
-    background: rgb(48, 150, 218);
+    background: rgb(18, 120, 135);
     transition: all 0.3s ease 0s;
-    box-shadow: 0px 10px 40px 0px rgba(50, 50, 50, 0.1);
+    box-shadow: 0px 10px 40px 0px rgba(13, 68, 68, 0.1);
     overflow-x: auto;
     overflow-y: scroll;
 }
 .responsivemenu .card-body{
-    background: #1A1729;
+    background: #0D4444;
 }
 .mobileMenu h2{
     padding-left: 20px;
@@ -40,7 +40,7 @@
     letter-spacing: 0;
     text-transform: capitalize;
     font-weight: 500;
-    color: #fff;
+    color: #FDFCFC;
     cursor: pointer;
 }
 .responsivemenu li p{
@@ -62,7 +62,7 @@
 }
 .responsivemenu ul p,
 .responsivemenu ul a{
-    color: #fff;
+    color: #FDFCFC;
     position: relative;
     font-size: 13px;
 }
@@ -91,7 +91,7 @@
 }
 .showmenu i {
     font-size: 30px;
-    color: #fff;
+    color: #FDFCFC;
 }
 
 .mobileMenu{
@@ -115,7 +115,7 @@
         box-shadow: none;
     }
     .showmenu button span{
-        background-color: #fff;
+        background-color: #FDFCFC;
         width: 20px;
         display: block;
         height: 2px;
@@ -137,7 +137,7 @@
 }
 
 .middle-header-3 .showmenu i{
-    color: #fff;
+    color: #FDFCFC;
 }
 
 
@@ -155,5 +155,5 @@
 
 .responsivemenu a:not([href]):not([class]), 
 .responsivemenu a:not([href]):not([class]):hover{
- color: #ddd;
+ color: #EBFFFF;
 }

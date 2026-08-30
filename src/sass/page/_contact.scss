@@ -59,11 +59,11 @@
 		margin: 0 -15px;
 		overflow: hidden;
 
-		@include placeholder-style(#9d9c9c, 15px, normal);
+		@include placeholder-style(#0D4444, 15px, normal);
 
 		select {
 			display: inline-block;
-			color: #a9a9a9;
+			color: #0D4444;
 			cursor: pointer;
 			opacity: 1;
 			padding: 6px 25px;
@@ -156,13 +156,13 @@
 
 		.office-info-item {
 			text-align: center;
-			box-shadow: 0px 5px 15px 0px rgba(62, 65, 159, 0.1);
+			box-shadow: 0px 5px 15px 0px rgba(13, 68, 68, 0.1);
 			padding: 40px;
 
 			.office-info-icon {
 				width: 85px;
 				height: 85px;
-				background: #f5f5f5;
+				background: #EBFFFF;
 				line-height: 110px;
 				text-align: center;
 				margin: 0 auto;
@@ -200,13 +200,13 @@
 	}
 
 	.errorMessage {
-		color: red;
+		color: #0D4444;
 	}
 
 	.wpo-contact-form-area {
 		padding: 50px;
 		background: $white;
-		box-shadow: 0px 1px 15px 0px rgba(62, 65, 159, 0.1);
+		box-shadow: 0px 1px 15px 0px rgba(13, 68, 68, 0.1);
 		padding-bottom: 0;
 		margin-bottom: -125px;
 		position: relative;

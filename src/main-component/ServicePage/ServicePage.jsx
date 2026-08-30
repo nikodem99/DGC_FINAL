@@ -12,7 +12,7 @@ const ServicePage = () => {
     return (
         <Fragment>
             <Navbar hclass={'wpo-site-header wpo-site-header-s2'} Logo={Logo} />
-            <PageTitle pageTitle={'Service'} pagesub={'Service'} />
+            <PageTitle pageTitle={'Oferta'} pagesub={'Oferta'} />
             <ServiceSection hclass={"service_section_s2 s3 section-padding"} sliceEnd={6} showSectionTitle={false} AllServices={false} />
             <CtafromSection hclass={'ctafrom_section'} />
             <Footer hclass={'wpo-site-footer'} />

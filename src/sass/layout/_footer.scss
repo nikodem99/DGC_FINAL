@@ -2,7 +2,7 @@
 4. wpo-footer
 --------------------------------------------------------------*/
 .wpo-site-footer,.wpo-site-footer_s2 {
-    background: url(../../images/footer-bg.png) center / cover no-repeat;
+    background: $dgc-ink url(../../images/footer-bg.png) center / cover no-repeat;
     position: relative;
     font-size: 15px;
     overflow: hidden;
@@ -14,8 +14,8 @@
         width: 100%;
         height: 100%;
         content: '';
-        background: #EBF7FF;
-        z-index: -1;
+        background: rgba(13, 68, 68, 0.93);
+        z-index: 0;
     }
 
 
@@ -24,16 +24,17 @@
     }
 
     p {
-        color: $text-color;
+        color: rgba(253, 252, 252, 0.80);
         font-size: 17px;
     }
 
     li {
-        color: $text-color;
+        color: rgba(253, 252, 252, 0.80);
     }
 
     .container {
         position: relative;
+        z-index: 1;
     }
 
     .wpo-upper-footer {
@@ -86,7 +87,7 @@
     .widget-title {
         h3 {
             font-size: 45px;
-            color: $heading-color;
+            color: $dgc-canvas;
             margin: 0;
             position: relative;
             font-family: $heading-font;
@@ -146,7 +147,7 @@
                 position: relative;
 
                 a {
-                    color: $text-color;
+                    color: rgba(253, 252, 252, 0.80);
                     font-size: 18px;
                     font-weight: 400;
                     text-transform: capitalize;
@@ -180,12 +181,12 @@
                 a {
                     font-size: 16px;
                     font-weight: 600;
-                    color: $heading-color;
+                    color: $dgc-canvas;
                     width: 40px;
                     height: 40px;
                     line-height: 45px;
                     text-align: center;
-                    background: rgb(134, 188, 226, 0.15);
+                    background: $dgc-brand;
                     border-radius: 100px;
                     display: block;
 
@@ -212,7 +213,7 @@
                     padding-top: 5px;
                 }
 
-                color: $text-color;
+                color: rgba(253, 252, 252, 0.80);
                 font-size: 18px;
                 font-weight: 400;
                 line-height: 32px;
@@ -228,14 +229,14 @@
         .row {
             padding: 25px 0;
             position: relative;
-            border-top: 1px solid #D5DCE1;
+            border-top: 1px solid rgba(253, 252, 252, 0.22);
         }
 
         .copyright {
             display: inline-block;
             margin: 0;
             text-align: left;
-            color: #69A1C9;
+            color: $dgc-canvas;
             font-size: 18px;
             font-weight: 400;
             line-height: 32px;
@@ -244,7 +245,7 @@
 
             a {
                 text-decoration: none;
-                color: $heading-color;
+                color: $dgc-canvas;
             }
 
             @media (max-width: 991px) {
@@ -268,7 +269,7 @@
 
 
                 a {
-                    color: #69A1C9;
+                    color: $dgc-canvas;
                     font-size: 18px;
                     font-weight: 400;
                     line-height: 32px;

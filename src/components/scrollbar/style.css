@@ -8,21 +8,21 @@ ul.smothscroll {
 
 
 ul.smothscroll a {
-    background-color:rgb(0, 128, 210,0.7);
+    background-color:rgba(18, 120, 135, 0.7);
     width: 45px;
     height: 45px;
     line-height: 45px;
     border-radius:50%;
     display: block;
     text-align: center;
-    color: #fff;
+    color: #FDFCFC;
     background-size: 200%,1px;
     background-position: 0;
-    border: 2px solid #0080D2;
+    border: 2px solid #127887;
 }
 ul.smothscroll a:hover {
-    background-color: #0080D2;
-    color: #fff;
+    background-color: #127887;
+    color: #FDFCFC;
 }
 
 @media(max-width:767px){

@@ -4,7 +4,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        box-shadow: 0px 5px 15px 0px rgba(62, 65, 159, 0.1);
+        box-shadow: 0px 5px 15px 0px rgba(13, 68, 68, 0.1);
         flex-wrap: wrap;
 
         @media(max-width:767px) {
@@ -17,7 +17,7 @@
             span {
                 display: block;
                 font-size: 25px;
-                color: #888;
+                color: #0D4444;
                 font-weight: 500;
                 margin-bottom: 10px;
             }
@@ -27,7 +27,7 @@
 
     .cartStatus {
         padding: 40px;
-        box-shadow: 0px 5px 15px 0px rgba(62, 65, 159, 0.1);
+        box-shadow: 0px 5px 15px 0px rgba(13, 68, 68, 0.1);
         margin-top: 40px;
 
         @media(max-width:767px) {

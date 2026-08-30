@@ -16,7 +16,7 @@ const hero = () => {
         <section className="hero_section">
             <div className="bg_shape">
                 <svg viewBox="0 0 1920 1075" fill="none">
-                    <path d="M0 0H1920V1000C1920 1000 1632 619 962 917C292 1215 0 1000 0 1000V0Z" fill="#EBF7FF" />
+                    <path d="M0 0H1920V1000C1920 1000 1632 619 962 917C292 1215 0 1000 0 1000V0Z" fill="#EBFFFF" />
                 </svg>
             </div>
             <div className="content">
@@ -27,7 +27,7 @@ const hero = () => {
                     placerat egestas sed sed venenatis nisl.
                     Tincidunt faucibus facilisi vestibulum et ut congue in eget. Augue purus hendrerit tempus
                     consequat ut sit.</p>
-                <Link onClick={ClickHandler} className="theme-btn" to="/about">Make
+                <Link onClick={ClickHandler} className="theme-btn theme-btn-gold" to="/about">Make
                     Appointment</Link>
             </div>
             <div className="image_content">

@@ -22,7 +22,7 @@
 				text-transform: uppercase;
 
 				a {
-					color: #636893;
+					color: #0D4444;
 
 					&:hover {
 						color: $theme-primary-color;
@@ -141,7 +141,7 @@
 
 		blockquote {
 			background-color: $section-bg-color;
-			color: #233d62;
+			color: #0D4444;
 			font-size: 20px;
 			line-height: 1.6em;
 			padding: 65px;
@@ -265,7 +265,7 @@
 				display: inline-block;
 				padding: 5px 18px;
 				color: $dark-gray;
-				background: #ecf4fb;
+				background: #EBFFFF;
 				border-radius: 5px;
 				text-transform: uppercase;
 
@@ -486,7 +486,7 @@
 
 
 		li>div {
-			border-bottom: 1px solid #e4effb;
+			border-bottom: 1px solid #EBFFFF;
 			padding: 35px;
 
 			@include media-query(991px) {

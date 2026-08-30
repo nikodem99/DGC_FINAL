@@ -84,8 +84,8 @@
 	text-transform: capitalize;
 	z-index: 1;
 	position: relative;
-	border: 1px solid rgba(255, 255, 255, 0.20);
-	background: rgba(255, 255, 255, 0.15);
+	border: 1px solid rgba(253, 252, 252, 0.20);
+	background: rgba(253, 252, 252, 0.15);
 	backdrop-filter: blur(10px);
 	font-size: 20px;
 	font-weight: 500;
@@ -104,7 +104,7 @@
 		transition: all .4s ease-in-out;
 		opacity: 0;
 		z-index: -1;
-		border: 1px solid rgba(255, 255, 255, 0.20);
+		border: 1px solid rgba(253, 252, 252, 0.20);
 	}
 
 	@include media-query(991px) {
@@ -157,10 +157,12 @@
 	}
 
 	&.s1 {
-		background: #ddd;
+		background: $dgc-ink;
+		color: $dgc-canvas;
 
 		&:hover {
-			background-color: darken(#ddd, 8%);
+			background-color: lighten($dgc-ink, 6%);
+			color: $dgc-canvas;
 		}
 	}
 

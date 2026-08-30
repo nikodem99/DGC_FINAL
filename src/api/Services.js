@@ -14,49 +14,49 @@ const Services = [
         id: 1,
         icon: 'flaticon-tooth',
         simage: simg1,
-        title: 'Dental Care',
+        title: 'Biuro rachunkowe Łódź',
         description: 'We have more doctor for your dental illness. We are here for your better treatment',
-        slug: 'Dental-Care'
+        slug: 'biuro-rachunkowe-lodz'
     },
     {
         id: 2,
         icon: 'flaticon-mortar',
         simage: simg2,
-        title: 'Pharmacology',
+        title: 'Biuro księgowe Łódź',
         description: 'We have more doctor for your dental illness. We are here for your better treatment',
-        slug: 'Pharmacology'
+        slug: 'biuro-ksiegowe-lodz'
     },
     {
         id: 3,
         icon: 'flaticon-bone',
         simage: simg3,
-        title: 'Orthopedic',
+        title: 'Rozliczenia podatku VAT, PIT, CIT, IFT, PCC',
         description: 'We have more doctor for your dental illness. We are here for your better treatment',
-        slug: 'Orthopedic'
+        slug: 'rozliczenia-podatku'
     },
     {
         id: 4,
         icon: 'flaticon-baby',
         simage: simg4,
-        title: 'Gyneological',
+        title: 'Rozliczenia kadrowo–płacowe pracowników',
         description: 'We have more doctor for your dental illness. We are here for your better treatment',
-        slug: 'Gyneological'
+        slug: 'rozliczenia-kadrowo-placowe-pracownikow'
     },
     {
         id: 5,
         icon: 'flaticon-rehabilitation',
         simage: simg5,
-        title: 'Rehabilitation',
+        title: 'Usługi kadrowo-płacowe',
         description: 'We have more doctor for your dental illness. We are here for your better treatment',
-        slug: 'Rehabilitation'
+        slug: 'uslugi-kadrowo-placowe'
     },
     {
         id: 6,
         icon: 'flaticon-microsurgery',
         simage: simg6,
-        title: 'Heart Surgery',
+        title: 'Prowadzenie ksiąg rachunkowych',
         description: 'We have more doctor for your dental illness. We are here for your better treatment',
-        slug: 'Heart Surgery'
+        slug: 'prowadzenie-ksiag-rachunkowych'
     },
 
 

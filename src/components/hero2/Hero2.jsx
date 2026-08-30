@@ -20,9 +20,9 @@ const Hero2 = () => {
                         <img src={HeroIm1} alt="" />
                         <div className="shape">
                             <svg viewBox="0 0 686 686" fill="none">
-                                <circle cx="343" cy="343" r="226.5" stroke="#A1BCC0" />
-                                <circle cx="343" cy="343" r="278.5" stroke="#A1BCC0" />
-                                <circle cx="343" cy="343" r="342.5" stroke="#A1BCC0" />
+                                <circle cx="343" cy="343" r="226.5" stroke="#0D4444" />
+                                <circle cx="343" cy="343" r="278.5" stroke="#0D4444" />
+                                <circle cx="343" cy="343" r="342.5" stroke="#0D4444" />
                             </svg>
                         </div>
                     </div>

@@ -5,7 +5,7 @@
 /*-- 2.1 topbar --*/
 
 .topbar {
-	background: #163967;
+	background: #0D4444;
 	padding: 0 100px;
 }
 
@@ -27,7 +27,7 @@
 
 .topbar {
 	font-size: 16px;
-	color: #e5e3e3;
+	color: #EBFFFF;
 	margin: 0;
 }
 
@@ -53,7 +53,7 @@
 	font-size: 16px;
 	float: left;
 	padding: 15px 10px;
-	color: #e5e3e3;
+	color: #EBFFFF;
 	line-height: 1em;
 
 	@media(max-width:991px) {
@@ -73,7 +73,7 @@
 				top: 10px;
 				width: 1px;
 				height: 25px;
-				background: rgba(255, 255, 255, .2);
+				background: rgba(253, 252, 252, .2);
 				content: "";
 
 				@media(max-width:767px) {
@@ -85,7 +85,7 @@
 }
 
 .topbar .contact-info ul li a {
-	color: #e4e4e4;
+	color: #EBFFFF;
 }
 
 
@@ -162,7 +162,7 @@
 	font-size: 14px;
 	font-weight: 600;
 	margin-bottom: -3px;
-	color: #fff !important;
+	color: #FDFCFC !important;
 }
 
 .topbar ul .fi {
@@ -175,7 +175,7 @@
 .topbar ul .fi:before {
 	font-size: 15px;
 	font-size: 1rem;
-	color: #fff;
+	color: #FDFCFC;
 }
 
 
@@ -188,7 +188,7 @@
 	/* style for navigation less than 992px */
 	/*navbar collaps less then 992px*/
 	/*** cart-search-contact ***/
-	// background-color: #fff;
+	// background-color: #FDFCFC;
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -197,7 +197,7 @@
 }
 
 .wpo-site-header .navigation {
-	// background-color: #fff;
+	// background-color: #FDFCFC;
 	margin-bottom: 0;
 	padding: 0;
 	border: 0;
@@ -221,8 +221,8 @@
 	-o-transition: all 1s;
 	-ms-transition: all 1s;
 	transition: all 1s;
-	-webkit-box-shadow: 0 -5px 15px #086ad84a;
-	box-shadow: 0 -5px 15px #086ad84a;
+	-webkit-box-shadow: 0 -5px 15px #1278874a;
+	box-shadow: 0 -5px 15px #1278874a;
 }
 
 .sticky-on {
@@ -350,7 +350,7 @@
 	}
 
 	.wpo-site-header .navbar-header button span {
-		background-color: #fff;
+		background-color: #FDFCFC;
 		width: 20px;
 		display: block;
 		height: 2px;
@@ -382,7 +382,7 @@
 	}
 
 	.wpo-site-header #navbar ul a {
-		color: #000;
+		color: #0D4444;
 	}
 
 	.wpo-site-header #navbar ul a:hover,
@@ -549,8 +549,8 @@
 	-o-border-radius: 50%;
 	-ms-border-radius: 50%;
 	border-radius: 50%;
-	fill: #FFF;
-	filter: drop-shadow(0px 4px 22px rgba(18, 47, 105, 0.05)) drop-shadow(0px 0px 20px rgba(63, 85, 204, 0.05));
+	fill: #FDFCFC;
+	filter: drop-shadow(0px 4px 22px rgba(13, 68, 68, 0.05)) drop-shadow(0px 0px 20px rgba(18, 120, 135, 0.05));
 
 	@media(max-width:1200px) {
 		width: 50px;
@@ -621,7 +621,7 @@
 		padding: 30px;
 		border-radius: 6px;
 		@include transition-time(0.5s);
-		box-shadow: -2px 18px 40px -9px rgba(153, 153, 153, 1);
+		box-shadow: -2px 18px 40px -9px rgba(13, 68, 68, 1);
 
 		@include media-query(991px) {
 			top: 65px;
@@ -685,12 +685,12 @@
 }
 
 .mini-cart .cart-count {
-	background: #FF4F4F;
+	background: #B50B50;
 	width: 20px;
 	height: 20px;
 	font-size: 15px;
 	line-height: 20px;
-	color: white;
+	color: #FDFCFC;
 	position: absolute;
 	top: -2px;
 	right: -5px;
@@ -717,7 +717,7 @@
 	opacity: 0;
 	visibility: hidden;
 	@include transition-time(0.5s);
-	box-shadow: -2px 18px 40px -9px rgba(153, 153, 153, 1);
+	box-shadow: -2px 18px 40px -9px rgba(13, 68, 68, 1);
 
 	@media(max-width:575px) {
 		width: 290px;
@@ -728,8 +728,8 @@
 		display: block;
 		width: 40px;
 		height: 40px;
-		background-color: rgb(51, 51, 51);
-		color: rgb(255, 255, 255);
+		background-color: rgb(13, 68, 68);
+		color: rgb(253, 252, 252);
 		font-size: 0px;
 		text-align: center;
 		overflow: hidden;
@@ -761,7 +761,7 @@
 	.mini-cart-item {
 		padding-top: 15px;
 		margin-top: 15px;
-		border-top: 1px solid #efefef;
+		border-top: 1px solid #EBFFFF;
 	}
 
 	.mini-cart-item:first-child {
@@ -774,7 +774,7 @@
 	.mini-cart-item-image {
 		width: 50px;
 		height: 50px;
-		border: 2px solid #f3f3f3;
+		border: 2px solid #EBFFFF;
 		float: left;
 		margin-right: 15px;
 	}
@@ -807,7 +807,7 @@
 	.mini-cart-item-des .mini-cart-item-price {
 		font-size: 13px;
 		font-size: calc-rem-value(13);
-		color: #888;
+		color: #0D4444;
 		display: block;
 		margin-top: 3px;
 	}
@@ -815,7 +815,7 @@
 	.mini-cart-item-des .mini-cart-item-quantity {
 		font-size: 12px;
 		font-size: calc-rem-value(12);
-		color: #444;
+		color: #0D4444;
 		display: block;
 		position: absolute;
 		right: 0;
@@ -888,7 +888,7 @@
 		content: "";
 		width: 100%;
 		height: 100%;
-		background: rgba(0, 0, 0, 0.9);
+		background: rgba(13, 68, 68, 0.9);
 		position: absolute;
 		left: 0;
 		top: 0;
@@ -902,7 +902,7 @@
 }
 
 .header-search-area {
-	background: #fff;
+	background: #FDFCFC;
 	width: 100%;
 	padding: 100px 0;
 	text-align: center;
@@ -927,7 +927,7 @@
 	font-size: 1.2rem;
 	border-radius: 0;
 	border: 0;
-	border-bottom: 1px solid #d0d0d0;
+	border-bottom: 1px solid #D3E7E7;
 	-webkit-box-shadow: none;
 	box-shadow: none;
 }
@@ -969,7 +969,7 @@
 	font-size: 13px;
 	font-size: 0.86667rem;
 	text-transform: uppercase;
-	color: #000;
+	color: #0D4444;
 	letter-spacing: 2px;
 	z-index: 99;
 }
@@ -1019,7 +1019,7 @@
 				font-size: 20px;
 				padding: 35px 20px;
 				display: block;
-				color: #000B47;
+				color: #0D4444;
 				font-weight: 500;
 				position: relative;
 
@@ -1029,8 +1029,8 @@
 			}
 
 			>ul .sub-menu {
-				background-color: #fff;
-				box-shadow: 0px 2px 20px 0px rgba(62, 65, 159, 0.09);
+				background-color: #FDFCFC;
+				box-shadow: 0px 2px 20px 0px rgba(13, 68, 68, 0.09);
 				width: 225px;
 				position: absolute;
 				padding: 20px 0;
@@ -1137,11 +1137,11 @@
 
 			>ul .menu-item-has-children>a {
 				position: relative;
-				color: #fff;
+				color: #FDFCFC;
 
 				&:hover,
 				&.active {
-					color: #fff;
+					color: #FDFCFC;
 				}
 
 				&:before {
@@ -1164,7 +1164,7 @@
 				}
 
 				&.rotate {
-					color: #fff;
+					color: #FDFCFC;
 				}
 			}
 		}
@@ -1193,7 +1193,7 @@
 		}
 
 		.mobail-menu button {
-			background-color: rgb(48, 150, 218);
+			background-color: rgb(18, 120, 135);
 			width: 40px;
 			height: 35px;
 			border: 0;
@@ -1222,7 +1222,7 @@
 		}
 
 		#navbar {
-			background-color: rgb(48, 150, 218);
+			background-color: rgb(18, 120, 135);
 			display: block !important;
 			width: 300px;
 			height: 100%;
@@ -1472,7 +1472,7 @@
 		background: transparent;
 
 		&.sticky-on {
-			background: #29395b;
+			background: #0D4444;
 		}
 	}
 
@@ -1482,7 +1482,7 @@
 
 	.header-right .cart-toggle-btn,
 	.header-right .search-toggle-btn {
-		background-color: rgba(255, 255, 255, 0.1);
+		background-color: rgba(253, 252, 252, 0.1);
 		color: $white;
 
 		.fi {
@@ -1549,15 +1549,15 @@
 	}
 
 	.navigation.sticky-header {
-		background: #007fd1;
+		background: #127887;
 
 		.header-right .cart-toggle-btn {
-			background-color: #ffffff30;
+			background-color: #FDFCFC30;
 			color: $white;
 		}
 
 		.header-right .search-toggle-btn {
-			background-color: #ffffff30;
+			background-color: #FDFCFC30;
 			color: $white;
 		}
 

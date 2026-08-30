@@ -21,20 +21,41 @@ $heading-font: "Katibeh" ;
 
 
 
-// color
-$dark-gray: #000B47;//
-$body-color: #687693;
-$white: #fff;//
-$light: #0080D2;//
-$black: #000;//
-$small-black: #333;
-$cyan: #848892;
+// ---------------------------------------------------------------
+// DGC colour system
+// #127887  teal z logotypu  - przyciski, ikony, elementy interaktywne
+// #0d4444  glebokie teal    - teksty i ciemne powierzchnie (nigdy tlo strony)
+// #d8bb2b  zloto            - akcenty, linie, numery (nigdy tekst)
+// #ebffff  jasny akwamaryn  - tla boksow i grafik (nigdy tlo strony)
+// #fdfcfc  kanwa            - tlo strony i jasny tekst, bez ograniczen
+// #b50b50  magenta          - rezerwa na pojedyncze akcenty (nigdy tekst)
+// ---------------------------------------------------------------
 
-$theme-primary-color: linear-gradient(358deg, #1E63FF -1077.15%, #187CFF -690.64%, #128FFF -213.19%, #0CA9FF 218.79%, #06C2FF 764.46%, #00DBFF 1196.44%);
-$body-bg-color: #fff;
-$section-bg-color: #fafbfe;
-$text-color: #767676;//
-$text-light-color: #585858;//
-$heading-color: $dark-gray;
-$border-color: #D5DCE1;//
-$border-color-s2: #D9D9D9;
+$dgc-ink: #0d4444;
+$dgc-brand: #127887;
+$dgc-brand-deep: #0D4444;
+$dgc-gold: #d8bb2b;
+$dgc-gold-deep: #D8BB2B;
+$dgc-gold-soft: #EBFFFF;
+$dgc-panel: #ebffff;
+$dgc-canvas: #fdfcfc;
+$dgc-line: #d3e7e7;
+$dgc-highlight: #b50b50;
+
+// mapowanie na zmienne szablonu
+$dark-gray: $dgc-ink;
+$body-color: $dgc-ink;
+$white: $dgc-canvas;
+$light: $dgc-brand;
+$black: $dgc-ink;
+$small-black: $dgc-ink;
+$cyan: $dgc-brand;
+
+$theme-primary-color: $dgc-brand;
+$body-bg-color: $dgc-canvas;
+$section-bg-color: $dgc-panel;
+$text-color: $dgc-ink;
+$text-light-color: $dgc-ink;
+$heading-color: $dgc-ink;
+$border-color: rgba(13, 68, 68, 0.20);
+$border-color-s2: rgba(13, 68, 68, 0.14);

@@ -64,7 +64,7 @@ const CtaForm = () => {
                 {errors.company && <span className="error">{errors.company}</span>}
             </div>
             <div className="input_filled">
-                <button type="submit" >Free Consultancy</button>
+                <button type="submit" className="theme-btn-gold">Free Consultancy</button>
             </div>
         </form>
     );

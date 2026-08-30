@@ -96,7 +96,7 @@ img{
     }
 
     label.error {
-        color: red;
+        color: #0D4444;
         font-size: calc-rem-value(14);
         font-weight: normal;
         margin: 5px 0 0 0;
@@ -137,15 +137,15 @@ img{
 
     #c-success,
     #success {
-        background-color: lighten(green, 5%);
-        border-left: 5px solid green;
+        background-color: $dgc-panel;
+        border-left: 5px solid $dgc-brand;
         margin-bottom: 5px;
     }
 
     #c-error,
     #error {
-        background-color: lighten(red, 5%);
-        border-left: 5px solid red;
+        background-color: $dgc-panel;
+        border-left: 5px solid $dgc-highlight;
     }
 }
 
@@ -209,7 +209,7 @@ img{
 .back-to-top i {
     font-size: 18px;
     font-size: calc-rem-value(18);
-    color: #fff;
+    color: #FDFCFC;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -247,7 +247,7 @@ img{
 
 /*** for fancybox video ***/
 .fancybox-overlay {
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(13, 68, 68, 0.9);
   z-index: 9999 !important;
 }
 

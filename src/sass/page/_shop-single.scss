@@ -4,7 +4,7 @@
 .shop_single {
 
 	.slider-nav {
-		border: 1px solid #D5DCE1;
+		border: 1px solid #EBFFFF;
 	}
 
 	/*** product slider ***/
@@ -133,7 +133,7 @@
 				font-size: 24px;
 				font-size: calc-rem-value(24);
 				font-weight: normal;
-				color: lighten($text-color, 20%);
+				color: rgba(13, 68, 68, 0.55);
 				text-decoration: line-through;
 				display: inline-block;
 				margin-left: 5px;
@@ -160,7 +160,7 @@
 				margin-right: 10px;
 
 				i {
-					color: #f9d322;
+					color: #0D4444;
 				}
 			}
 		}
@@ -255,7 +255,7 @@
 			height: 45px;
 			line-height: 32px;
 			outline: 0;
-			border: 2px solid #e6e6e6;
+			border: 2px solid #EBFFFF;
 			border-radius: 0;
 
 			&:hover {
@@ -281,12 +281,12 @@
 			background-color: $white;
 			font-size: 18px;
 			color: $white;
-			border: 1px solid lighten($black, 90%);
+			border: 1px solid rgba(13, 68, 68, 0.14);
 		}
 
 		#product-count {
 			border-radius: 0;
-			border: 1px solid lighten($black, 90%);
+			border: 1px solid rgba(13, 68, 68, 0.14);
 		}
 
 		#product-count:focus {
@@ -297,7 +297,7 @@
 		.bootstrap-touchspin .input-group-btn-vertical .bootstrap-touchspin-up,
 		.bootstrap-touchspin .input-group-btn-vertical .bootstrap-touchspin-down {
 			border-radius: 0;
-			border-color: lighten($black, 90%);
+			border-color: rgba(13, 68, 68, 0.14);
 			display: block;
 			padding: 3px 4px;
 			font-size: 10px;
@@ -473,7 +473,7 @@
 				padding-left: 12px;
 
 				i {
-					color: #f9d322;
+					color: #0D4444;
 
 				}
 
@@ -485,7 +485,7 @@
 
 			.name-rating-time .time {
 				float: right;
-				color: lighten($black, 70%);
+				color: rgba(13, 68, 68, 0.55);
 				text-transform: uppercase;
 
 				@include media-query(767px) {
@@ -575,17 +575,17 @@
 			}
 
 			.give-rating label:last-child .icon {
-				color: #ddd;
+				color: #EBFFFF;
 			}
 
 			.give-rating:not(:hover) label input:checked~.icon,
 			.give-rating:hover label:hover input~.icon {
-				color: #FFD400;
+				color: #0D4444;
 			}
 
 			.give-rating label input:focus:not(:checked)~.icon:last-child {
-				color: #ddd;
-				text-shadow: 0 0 5px #FFD400;
+				color: #EBFFFF;
+				text-shadow: 0 0 5px #D8BB2B;
 			}
 
 			form {
@@ -596,7 +596,7 @@
 					border-radius: 0;
 					box-shadow: none;
 					height: 50px;
-					border: 1px solid #efefef;
+					border: 1px solid #EBFFFF;
 				}
 
 				input:focus,
@@ -619,7 +619,7 @@
 
 				.theme-btn-s4 {
 					background-color: transparent;
-					color: #908f8f;
+					color: #0D4444;
 					outline: 0;
 					box-shadow: none;
 
