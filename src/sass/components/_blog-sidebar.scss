@@ -293,6 +293,47 @@
 	}
 
 
+	/*** month-widget ***/
+	.month-widget {
+		.month-select-wrapper {
+			position: relative;
+
+			&:after {
+				content: "";
+				width: 9px;
+				height: 9px;
+				border-right: 2px solid #0D4444;
+				border-bottom: 2px solid #0D4444;
+				position: absolute;
+				right: 22px;
+				top: 21px;
+				transform: rotate(45deg);
+				pointer-events: none;
+			}
+		}
+
+		select {
+			width: 100%;
+			height: 58px;
+			padding: 0 50px 0 18px;
+			color: #0D4444;
+			font-size: 16px;
+			background: #FDFCFC;
+			border: 1px solid rgba(13, 68, 68, 0.22);
+			border-radius: 6px;
+			outline: none;
+			appearance: none;
+			cursor: pointer;
+			transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+			&:focus {
+				border-color: #B50B50;
+				box-shadow: 0 0 0 3px rgba(181, 11, 80, 0.1);
+			}
+		}
+	}
+
+
 	/*** instagram-widget ***/
 
 	.wpo-instagram-widget {

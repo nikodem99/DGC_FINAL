@@ -1,0 +1,444 @@
+.pricing_page,
+.pricing_section {
+    .pricing_intro {
+        padding-bottom: 110px;
+
+        .section_title {
+            margin-bottom: 22px;
+        }
+    }
+
+    .pricing_intro_lead {
+        max-width: 790px;
+        margin: 0 auto;
+        color: rgba(13, 68, 68, 0.78);
+        font-size: 18px;
+        line-height: 30px;
+        text-align: center;
+    }
+
+    .pricing_service_area {
+        margin-top: 50px;
+    }
+
+    .pricing_service_note {
+        max-width: 900px;
+        margin: 0 auto 35px;
+        padding-bottom: 22px;
+        border-bottom: 1px solid $dgc-line;
+        color: rgba(13, 68, 68, 0.72);
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 30px;
+        text-align: center;
+    }
+
+    .pricing_grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+    }
+
+    .pricing_card {
+        position: relative;
+        display: flex;
+        min-height: 390px;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 50px 35px 30px;
+        border: 1px solid $dgc-line;
+        border-radius: 20px;
+        background: $dgc-panel;
+        box-shadow: 0 4px 22px rgba(13, 68, 68, 0.07), 0 0 0 rgba(18, 120, 135, 0.05);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 4px;
+            background: $dgc-gold;
+        }
+
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 22px 60px rgba(13, 68, 68, 0.12);
+        }
+
+        &.is_featured {
+            border-color: rgba(181, 11, 80, 0.28);
+        }
+    }
+
+    .pricing_badge {
+        position: absolute;
+        top: 12px;
+        left: 35px;
+        z-index: 1;
+        margin: 0;
+        padding: 5px 20px;
+        border-radius: 30px;
+        background: $dgc-highlight;
+        color: $dgc-canvas;
+        font-family: $base-font;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    .pricing_card_heading {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 30px;
+        min-height: 95px;
+        padding-bottom: 25px;
+        border-bottom: 1px solid rgba(13, 68, 68, 0.14);
+
+        h3 {
+            max-width: 320px;
+            margin: 0;
+            color: $dgc-ink;
+            font-family: $heading-font;
+            font-size: clamp(24px, 0.9vw + 18px, 32px);
+            font-weight: 400;
+            line-height: 1.3;
+            text-wrap: balance;
+        }
+    }
+
+    .pricing_price {
+        text-align: right;
+
+        strong,
+        span {
+            display: block;
+        }
+
+        strong {
+            color: $dgc-ink;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 30px;
+            white-space: nowrap;
+        }
+
+        span {
+            margin-top: 4px;
+            color: rgba(13, 68, 68, 0.68);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+    }
+
+    .pricing_card ul {
+        margin: 26px 0 30px;
+        padding: 0;
+        list-style: none;
+
+        li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 14px;
+            color: $dgc-ink;
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 30px;
+        }
+    }
+
+    .check_mark {
+        display: inline-flex;
+        width: 23px;
+        height: 23px;
+        flex: 0 0 23px;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1px;
+        border-radius: 50%;
+        background: $dgc-brand;
+        color: $dgc-canvas;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .pricing_card_link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        align-self: flex-start;
+        margin-top: auto;
+        color: $dgc-ink;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 30px;
+        text-decoration: none;
+
+        span {
+            font-size: 20px;
+            transition: transform 0.2s ease;
+        }
+
+        &:hover span {
+            transform: translateX(4px);
+        }
+    }
+
+    .pricing_support {
+        padding: 0 0 110px;
+        background: $dgc-canvas;
+    }
+
+    .pricing_support_wrap {
+        padding: 50px 60px 60px;
+        border: 1px solid $dgc-line;
+        border-radius: 40px;
+        background: $dgc-panel;
+        box-shadow: 0 4px 22px rgba(13, 68, 68, 0.08);
+
+        .section_title {
+            margin-bottom: 20px;
+
+            h3 {
+                max-width: 920px;
+                margin: 8px auto 0;
+                font-size: 60px;
+                line-height: 65px;
+                text-wrap: balance;
+            }
+        }
+    }
+
+    .pricing_support_lead {
+        max-width: 760px;
+        margin: 0 auto 42px;
+        color: rgba(13, 68, 68, 0.76);
+        font-size: 18px;
+        line-height: 30px;
+        text-align: center;
+    }
+
+    .pricing_contact_options {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .pricing_contact_item {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 22px 24px;
+        border: 1px solid rgba(13, 68, 68, 0.13);
+        border-radius: 16px;
+        background: $dgc-canvas;
+        color: $dgc-ink;
+        text-decoration: none;
+        transition: border-color 0.2s ease, transform 0.2s ease;
+
+        &:hover {
+            transform: translateX(4px);
+            border-color: $dgc-brand;
+        }
+
+        small,
+        strong {
+            display: block;
+        }
+
+        small {
+            margin-bottom: 3px;
+            color: rgba(13, 68, 68, 0.66);
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        strong {
+            color: $dgc-ink;
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 30px;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    .pricing_contact_icon {
+        display: inline-flex;
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: $dgc-brand;
+
+        i {
+            color: $dgc-canvas;
+            font-size: 21px;
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    .pricing_page,
+.pricing_section {
+        .pricing_intro {
+            padding-bottom: 90px;
+        }
+
+        .pricing_support_wrap {
+            padding: 50px 40px 55px;
+
+            .section_title h3 {
+                font-size: 50px;
+                line-height: 55px;
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .pricing_page,
+.pricing_section {
+        .pricing_intro,
+        .pricing_support {
+            padding-top: 80px;
+            padding-bottom: 80px;
+        }
+
+        .pricing_support {
+            padding-top: 0;
+        }
+
+        .pricing_grid,
+        .pricing_contact_options {
+            grid-template-columns: 1fr;
+        }
+
+        .pricing_card {
+            min-height: 0;
+            padding: 40px 30px 30px;
+        }
+
+        .pricing_card_heading {
+            grid-template-columns: 1fr;
+            gap: 18px;
+            min-height: 0;
+
+            h3 {
+                font-size: 26px;
+            }
+        }
+
+        .pricing_badge {
+            top: 8px;
+            left: 30px;
+            padding: 3px 15px;
+            font-size: 12px;
+        }
+
+        .pricing_price {
+            text-align: left;
+        }
+
+        .pricing_support_wrap {
+            padding: 40px 25px 45px;
+            border-radius: 30px;
+        }
+    }
+}
+
+@media (max-width: 450px) {
+    .pricing_page,
+.pricing_section {
+        .pricing_support_wrap .section_title h3 {
+            font-size: 40px;
+            line-height: 45px;
+        }
+
+        .pricing_contact_item {
+            padding: 20px 18px;
+        }
+    }
+}
+
+/* Sekcja cennika na stronie glownej — karty i typografia sa wspolne
+   z podstrona /cennik (selektory wyzej), tutaj tylko to, czym rozni sie
+   zajawka: trzy kolumny zamiast dwoch, naglowek z przyciskiem obok
+   i przypis o cenach wywolawczych. */
+.pricing_section {
+    background: $dgc-canvas;
+
+    .section_title {
+        margin-bottom: 0;
+    }
+
+    .pricing_section_btn {
+        text-align: right;
+
+        @media (max-width: 991px) {
+            margin-top: 25px;
+            text-align: left;
+        }
+    }
+
+    .pricing_grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-top: 55px;
+
+        @media (max-width: 991px) {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            margin-top: 40px;
+        }
+
+        @media (max-width: 767px) {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    /* Najdluzsza nazwa ("Ryczalt od przychodow ewidencjonowanych") lamie sie
+       na trzy linie, najkrotsza na jedna. Bez rezerwacji miejsca opisy i listy
+       w sasiednich kartach zaczynaly sie na roznych wysokosciach — roznica
+       siegala 52px. Rezerwujemy trzy linie tam, gdzie karty stoja obok siebie;
+       w ukladzie jednokolumnowym byloby to puste miejsce.
+       3.9em = 3 linie przy line-height: 1.3 ustawionym na tym naglowku. */
+    @media (min-width: 768px) {
+        .pricing_card_heading h3 {
+            min-height: 3.9em;
+        }
+    }
+
+    /* Zajawka ma o jedno zdanie wiecej niz /cennik — kto jest adresatem
+       pakietu. Na stronie glownej czytelnik jeszcze nie wie, ktory
+       rodzaj ksiegowosci go dotyczy. */
+    .pricing_card_for {
+        margin: 0 0 22px;
+        color: $dgc-ink;
+        font-size: 17px;
+        line-height: 27px;
+        opacity: 0.85;
+    }
+
+    .pricing_section_note {
+        max-width: 900px;
+        margin: 40px auto 0;
+        color: $dgc-ink;
+        font-size: 17px;
+        line-height: 29px;
+        text-align: center;
+        opacity: 0.85;
+
+        @media (max-width: 767px) {
+            margin-top: 30px;
+            font-size: 16px;
+            line-height: 27px;
+            text-align: left;
+        }
+    }
+}

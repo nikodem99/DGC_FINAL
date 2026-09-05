@@ -575,7 +575,7 @@
 			}
 
 			.give-rating label:last-child .icon {
-				color: #EBFFFF;
+				color: rgba(13, 68, 68, 0.28);
 			}
 
 			.give-rating:not(:hover) label input:checked~.icon,
@@ -584,8 +584,10 @@
 			}
 
 			.give-rating label input:focus:not(:checked)~.icon:last-child {
-				color: #EBFFFF;
-				text-shadow: 0 0 5px #D8BB2B;
+				color: rgba(13, 68, 68, 0.28);
+				text-shadow: none;
+				outline: 2px solid $dgc-brand;
+				outline-offset: 2px;
 			}
 
 			form {

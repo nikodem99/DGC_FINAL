@@ -1,25 +1,14 @@
 import React, { useState } from 'react';
+import { FAQ_OGOLNE } from '../../api/faq';
 
-const accordionData = [
-    {
-        title: 'What types of cases does your firm handle?',
-        content: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum exercitationem pariatur iure nemo esse repellendus est quo recusandae. Delectus, maxime.'
-    },
-    {
-        title: 'Before hiring a counsel, what kind of questions should I ask?',
-        content: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum exercitationem pariatur iure nemo esse repellendus est quo recusandae. Delectus, maxime.'
-    },
-    {
-        title: 'Before hiring a counsel, what kind of questions should I ask?',
-        content: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum exercitationem pariatur iure nemo esse repellendus est quo recusandae. Delectus, maxime.'
-    },
-    {
-        title: 'Before hiring a counsel, what kind of questions should I ask?',
-        content: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum exercitationem pariatur iure nemo esse repellendus est quo recusandae. Delectus, maxime.'
-    }
-];
 
-const FaqSection = () => {
+// Sekcja przyjmuje wlasny zestaw pytan i naglowek, zeby ta sama karuzela
+// pytan mogla stanac na /faq, na /about i pozniej na podstronach oferty.
+const FaqSection = ({
+    items = FAQ_OGOLNE,
+    title = 'Najczęstsze pytania',
+    hclass = 'wpo-faq-section section-padding',
+}) => {
     const [activeIndex, setActiveIndex] = useState(null);
 
     const handleToggle = (index) => {
@@ -27,12 +16,17 @@ const FaqSection = () => {
     }
 
     return (
-        <section className="wpo-faq-section section-padding">
+        <section className={hclass}>
             <div className="container">
                 <div className="row align-items-center">
-                    <div className="col-lg-8 offset-lg-2">
+                    {/* Naglowek dostaje pelna szerokosc kontenera. W kolumnie 8/12
+                        dluzszy tytul ("Pytania, ktore slyszymy najczesciej")
+                        potrzebowal 897px przy dostepnych 880 i lamal sie na dwie
+                        linie. Sam akordeon zostaje wezszy — tam wazniejsza jest
+                        dlugosc wiersza do czytania. */}
+                    <div className="col-12">
                         <div className="section_title">
-                            <h3>Frequently Asked Questions</h3>
+                            <h3>{title}</h3>
                         </div>
                     </div>
                     <div className="col-lg-8 offset-lg-2">
@@ -40,13 +34,17 @@ const FaqSection = () => {
                             <div className="row">
                                 <div className="col-lg-12 col-12">
                                     <div className="wpo-benefits-item">
-                                        {accordionData.map((accordion, index) => (
+                                        {items.map((accordion, index) => (
                                             <div
                                                 className={`accordion-item ${activeIndex === index ? 'active' : ''}`}
                                                 key={index}
                                             >
                                                 <h3 className="accordion-header">
-                                                    <button onClick={() => handleToggle(index)}>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleToggle(index)}
+                                                        aria-expanded={activeIndex === index}
+                                                    >
                                                         {accordion.title}
                                                     </button>
                                                 </h3>

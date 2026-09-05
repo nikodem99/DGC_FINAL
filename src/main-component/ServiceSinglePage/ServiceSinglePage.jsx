@@ -7,8 +7,6 @@ import PageTitle from '../../components/pagetitle/PageTitle'
 import Footer from '../../components/footer/Footer';
 import Scrollbar from '../../components/scrollbar/scrollbar'
 import ContactForm from './ServiceFrom'
-import simg1 from '../../images/service-single/img-1.jpg'
-import simg2 from '../../images/service-single/img-2.jpg'
 import logo from '../../images/logo-2.svg'
 
 const ServiceSinglePage = (props) => {
@@ -18,6 +16,7 @@ const ServiceSinglePage = (props) => {
 
     const { slug } = useParams()
     const serviceDetails = Services.find(item => item.slug === slug)
+    const relatedServices = Services.filter(item => item.slug !== slug).slice(0, 3)
 
     return (
         <Fragment>
@@ -27,62 +26,38 @@ const ServiceSinglePage = (props) => {
                 <div className="container">
                     <div className="row g-0">
                         <div className="col-lg-8 col-12 service_content">
-                            <div>
-                                <img src={serviceDetails.simage} alt="" />
+                            <article className="service_copy">
                                 <h2>{serviceDetails.title}</h2>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Metus dis posuere amet tincidunt
-                                    commodo, velit. Ipsum, hac nibh fermentum nisi, platea condimentum cursus velit dui.
-                                    Massa
-                                    volutpat odio facilisis purus sit elementum. Non, sed velit dictum quam. Id risus
-                                    pharetra
-                                    est, at rhoncus, nec ullamcorper tincidunt. Id aliquet duis sollicitudin diam, elit sit.
-                                    Et
-                                    nisi in libero facilisis sed est. Elit curabitur amet risus bibendum. Posuere et eget
-                                    orci,
-                                    tempor enim.</p>
-                                <p>Hac nibh fermentum nisi, platea condimentum cursus velit dui. Massa volutpat odio
-                                    facilisis
-                                    purus sit elementum. Non, sed velit dictum quam. Id risus pharetra est, at rhoncus, nec
-                                    ullamcorper tincidunt. Id aliquet duis sollicitudin diam, elit sit.</p>
-                            </div>
-                            <div className="row">
-                                <div className="col-lg-6 col-12">
-                                    <img src={simg1} alt="" />
-                                </div>
-                                <div className="col-lg-6 col-12">
-                                    <img src={simg2} alt="" />
-                                </div>
-                            </div>
-                            <div>
-                                <h3>Our Capabilities</h3>
-                                <p>Massa volutpat odio facilisis purus sit elementum. Non, sed velit dictum quam. Id risus
-                                    pharetra est, at rhoncus, nec ullamcorper tincidunt. Id aliquet duis sollicitudin diam.
-                                </p>
-                                <ul>
-                                    <li>Non saed velit dictum quam risus pharetra esta.</li>
-                                    <li>Id risus pharetra est, at rhoncus, nec ullamcorper tincidunt.</li>
-                                    <li>Hac nibh fermentum nisi, platea condimentum cursus.</li>
-                                    <li>Massa volutpat odio facilisis purus sit elementum.</li>
-                                    <li>Elit curabitur amet risus bibendum.</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h3>Our approach</h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat suspendisse aenean
-                                    tellus augue morbi risus. Sit morbi vitae morbi sed urna sed purus. Orci facilisi eros
-                                    sed pellentesque. Risus id sed tortor sed scelerisque. Vestibulum elit elementum, magna
-                                    id viverra non, velit. Pretium, eros, porttitor fusce auctor vitae id. Phasellus
-                                    scelerisque nibh eleifend vel enim mauris purus. Rutrum vel sem adipiscing nisi
-                                    vulputate molestie scelerisque molestie ultrices. Eu, fusce vulputate diam interdum
-                                    morbi ac a.
-                                </p>
+                                {serviceDetails.content.intro.map((paragraph, index) => (
+                                    <p key={`intro-${index}`}>{paragraph}</p>
+                                ))}
 
-                            </div>
+                                {serviceDetails.content.sections.map((section) => (
+                                    <section className="service_copy_section" key={section.title}>
+                                        <h3>{section.title}</h3>
+
+                                        {section.paragraphs?.map((paragraph, index) => (
+                                            <p key={`paragraph-${index}`}>{paragraph}</p>
+                                        ))}
+
+                                        {section.items?.length > 0 && (
+                                            <ul>
+                                                {section.items.map((item) => (
+                                                    <li key={item}>{item}</li>
+                                                ))}
+                                            </ul>
+                                        )}
+
+                                        {section.closing?.map((paragraph, index) => (
+                                            <p key={`closing-${index}`}>{paragraph}</p>
+                                        ))}
+                                    </section>
+                                ))}
+                            </article>
                             <div className="other-service">
-                                <h3>Related Service</h3>
+                                <h3>Powiązane usługi</h3>
                                 <div className="row">
-                                    {Services.slice(0, 3).map((serves, sitem) => (
+                                    {relatedServices.map((serves, sitem) => (
                                         <div className="col-lg-4 col-md-6 col-12" key={sitem}>
                                             <div className="service_card">
                                                 <div className="icon">
@@ -100,10 +75,19 @@ const ServiceSinglePage = (props) => {
                             </div>
                             <div className="cta_form_s2">
                                 <div className={"title"}>
-                                    <h3>Make An Appointment</h3>
-                                    <p>Get in touch with us to see how we can help you with your Problems.</p>
+                                    <h3>Skontaktuj się z nami</h3>
+                                    <p>Porozmawiajmy o zakresie obsługi dopasowanym do potrzeb Twojej
+                                        firmy. Odpowiadamy w ciągu 24 godzin roboczych.</p>
                                 </div>
-                                <ContactForm />
+                                {/* key={slug} wymusza przemontowanie przy przejsciu miedzy
+                                    uslugami. Bez tego React zostawilby ten sam komponent,
+                                    a podpowiedziany temat i wpisane dane zostalyby
+                                    z poprzedniej podstrony. */}
+                                <ContactForm
+                                    key={slug}
+                                    zrodlo="podstrona-oferty"
+                                    temat={serviceDetails.temat ?? ''}
+                                />
 
                             </div>
                         </div>

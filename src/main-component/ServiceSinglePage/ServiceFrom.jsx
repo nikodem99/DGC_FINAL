@@ -1,154 +1,191 @@
 import React, { useState } from 'react';
+import SimpleReactValidator from 'simple-react-validator';
+import { sendLead, KONTAKT_ZAPASOWY } from '../../lib/sendLead';
+import { TEMATY } from '../../lib/tematy';
+import { KOMUNIKATY, WALIDATORY } from '../../lib/walidacja';
 
-const ContactForm = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        department: '',
-        doctor: '',
-        message: ''
-    });
+// Formularz w karcie na podstronach oferty.
+//
+// Szablon zostawil tu formularz przychodni: "Select Department",
+// "Choose Doctor", "Say Details About Your Problem" — i przycisk, ktory
+// wypisywal dane do konsoli przegladarki. Zadne zgloszenie stad nie wychodzilo.
+//
+// Nie da sie tu po prostu wstawic ContactForm z /contact, bo cale ostylowanie
+// tej bialej karty (.cta_form_s2 w _service-single.scss) opiera sie na innym
+// markupie: etykieta nad polem, klasa .input-fild, .form_item i blad
+// pozycjonowany absolutnie pod polem. ContactForm ma same placeholdery
+// i .form-field. Dlatego markup zostaje szablonowy, a wspolne jest to,
+// co naprawde musi byc wspolne: wysylka (sendLead), lista tematow (TEMATY)
+// i reguly walidacji (walidacja.js).
 
-    const [formErrors, setFormErrors] = useState({
-        nameError: '',
-        emailError: '',
-        departmentError: '',
-        doctorError: '',
-        messageError: ''
-    });
+const PUSTY = { name: '', email: '', phone: '', subject: '', message: '', _gotcha: '' };
 
-    const validateForm = () => {
-        let isValid = true;
-        const errors = {
-            nameError: '',
-            emailError: '',
-            departmentError: '',
-            doctorError: '',
-            messageError: ''
-        };
+const ContactForm = ({ zrodlo = 'podstrona-oferty', temat = '' }) => {
+    // Temat podpowiedziany na podstawie ogladanej uslugi (Services.js).
+    // Pole zostaje edytowalne — podpowiedz ma oszczedzic klikniecie,
+    // a nie zdecydowac za pytajacego.
+    const [forms, setForms] = useState({ ...PUSTY, subject: temat });
+    const [wysylka, setWysylka] = useState(false);
+    const [wyslane, setWyslane] = useState(false);
+    const [blad, setBlad] = useState(null);
+    const [validator] = useState(new SimpleReactValidator({
+        className: 'errorMessage',
+        messages: KOMUNIKATY,
+        validators: WALIDATORY,
+    }));
+    // SimpleReactValidator trzyma stan bledow poza Reactem, wiec samo
+    // showMessages() niczego nie przerysuje. Licznik wymusza render.
+    const [, przerysuj] = useState(0);
 
-        if (formData.name.trim() === '') {
-            errors.nameError = 'Please enter your name';
-            isValid = false;
+    const zmiana = (e) => {
+        setForms({ ...forms, [e.target.name]: e.target.value });
+        if (validator.allValid()) {
+            validator.hideMessages();
+        } else {
+            validator.showMessages();
         }
-
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(formData.email)) {
-            errors.emailError = 'Please enter a valid email';
-            isValid = false;
-        }
-
-        if (formData.department.trim() === '') {
-            errors.departmentError = 'Please select a department';
-            isValid = false;
-        }
-
-        if (formData.doctor.trim() === '') {
-            errors.doctorError = 'Please choose a doctor';
-            isValid = false;
-        }
-
-        if (formData.message.trim() === '') {
-            errors.messageError = 'Please describe your problem';
-            isValid = false;
-        }
-
-        setFormErrors(errors);
-        return isValid;
     };
 
-    const handleInputChange = (event) => {
-        setFormData({ ...formData, [event.target.name]: event.target.value });
-    };
+    const wyslij = async (e) => {
+        e.preventDefault();
+        setWyslane(false);
+        setBlad(null);
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const isValid = validateForm();
-        if (isValid) {
-            // Handle form submission logic here
-            console.log('Form submitted:', formData);
-            // Reset form after submission if needed
-            setFormData({
-                name: '',
-                email: '',
-                department: '',
-                doctor: '',
-                message: ''
+        if (!validator.allValid()) {
+            validator.showMessages();
+            przerysuj((n) => n + 1);
+            return;
+        }
+        validator.hideMessages();
+
+        // pole-pulapka na boty: czlowiek go nie widzi, wiec zostaje puste
+        if (forms._gotcha) return;
+
+        setWysylka(true);
+        try {
+            await sendLead({
+                imie: forms.name.trim(),
+                email: forms.email.trim(),
+                telefon: forms.phone.trim(),
+                temat: forms.subject,
+                wiadomosc: forms.message.trim(),
+                zrodlo,
+                strona: typeof window !== 'undefined' ? window.location.pathname : '',
             });
+            setWyslane(true);
+            // Po udanej wysylce wracamy do podpowiedzianego tematu, nie do pustki.
+            setForms({ ...PUSTY, subject: temat });
+        } catch (err) {
+            setBlad(err.message);
+        } finally {
+            setWysylka(false);
         }
     };
 
     return (
-        <form id="myForm" onSubmit={handleSubmit}>
+        <form onSubmit={wyslij} className="contact-validation-active" noValidate>
             <div className="row">
                 <div className="col-lg-6 col-md-6 col-12 form_item">
-                    <label>Your Name</label>
+                    <label htmlFor="oferta-imie">Imię i nazwisko</label>
                     <input
+                        id="oferta-imie"
                         className="input-fild"
                         type="text"
                         name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        placeholder="Name"
+                        value={forms.name}
+                        onBlur={zmiana}
+                        onChange={zmiana}
+                        placeholder="Jan Kowalski"
                     />
-                    <span className="error">{formErrors.nameError}</span>
+                    {validator.message('name', forms.name, 'required|alpha_space')}
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 form_item">
-                    <label>Your Email</label>
+                    <label htmlFor="oferta-email">Adres e-mail</label>
                     <input
+                        id="oferta-email"
                         className="input-fild"
                         type="email"
                         name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="Email"
+                        value={forms.email}
+                        onBlur={zmiana}
+                        onChange={zmiana}
+                        placeholder="jan@twojafirma.pl"
                     />
-                    <span className="error">{formErrors.emailError}</span>
+                    {validator.message('email', forms.email, 'required|email')}
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 form_item">
-                    <label>Select Department</label>
-                    <select
-                        name="department"
-                        value={formData.department}
-                        onChange={handleInputChange}
+                    <label htmlFor="oferta-telefon">Telefon</label>
+                    <input
+                        id="oferta-telefon"
                         className="input-fild"
-                    >
-                        <option value="">Department</option>
-                        <option value="Subject 1">Subject 1</option>
-                        <option value="Subject 2">Subject 2</option>
-                        <option value="Subject 3">Subject 3</option>
-                    </select>
-                    <span className="error">{formErrors.departmentError}</span>
+                        type="tel"
+                        name="phone"
+                        value={forms.phone}
+                        onBlur={zmiana}
+                        onChange={zmiana}
+                        placeholder="601 234 567"
+                    />
+                    {validator.message('phone', forms.phone, 'required|telefon_pl')}
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 form_item">
-                    <label>Choose Doctor</label>
+                    <label htmlFor="oferta-temat">Czego dotyczy zapytanie?</label>
                     <select
-                        name="doctor"
-                        value={formData.doctor}
-                        onChange={handleInputChange}
+                        id="oferta-temat"
                         className="input-fild"
+                        name="subject"
+                        value={forms.subject}
+                        onBlur={zmiana}
+                        onChange={zmiana}
                     >
-                        <option value="">Choose Doctor</option>
-                        <option value="Doctor 1">Doctor 1</option>
-                        <option value="Doctor 2">Doctor 2</option>
-                        <option value="Doctor 3">Doctor 3</option>
+                        <option value="">Wybierz temat</option>
+                        {TEMATY.map((t) => (
+                            <option key={t} value={t}>{t}</option>
+                        ))}
                     </select>
-                    <span className="error">{formErrors.doctorError}</span>
+                    {validator.message('subject', forms.subject, 'required')}
                 </div>
                 <div className="col-12 form_item">
-                    <label>Say Details About Your Problem</label>
+                    <label htmlFor="oferta-wiadomosc">Twoja wiadomość</label>
                     <textarea
-                        name="message"
-                        value={formData.message}
-                        onChange={handleInputChange}
+                        id="oferta-wiadomosc"
                         className="input-fild"
-                        placeholder="Message.."
+                        name="message"
+                        value={forms.message}
+                        onBlur={zmiana}
+                        onChange={zmiana}
+                        placeholder="Napisz, czym zajmuje się Twoja firma i czego potrzebujesz."
                     ></textarea>
-                    <span className="error s2">{formErrors.messageError}</span>
+                    {validator.message('message', forms.message, 'required')}
                 </div>
-                <div className="col-12">
-                    <input type="submit" className="theme-btn" value="Send Message" />
-                </div>
+            </div>
+
+            {/* honeypot w postaci z dokumentacji Forminit */}
+            <input
+                type="hidden"
+                name="_gotcha"
+                value={forms._gotcha}
+                onChange={zmiana}
+                style={{ display: 'none' }}
+            />
+
+            <button type="submit" className="theme-btn" disabled={wysylka}>
+                {wysylka ? 'Wysyłanie…' : 'Wyślij zapytanie'}
+            </button>
+
+            <div className="form_status" role="status" aria-live="polite">
+                {wyslane && (
+                    <div className="success_message">
+                        Dziękujemy. Odezwiemy się w ciągu 24 godzin roboczych.
+                    </div>
+                )}
+                {blad && (
+                    <div className="error_message">
+                        {blad} Zadzwoń:{' '}
+                        <a href={KONTAKT_ZAPASOWY.telefonHref}>{KONTAKT_ZAPASOWY.telefon}</a>{' '}
+                        lub napisz na{' '}
+                        <a href={`mailto:${KONTAKT_ZAPASOWY.email}`}>{KONTAKT_ZAPASOWY.email}</a>.
+                    </div>
+                )}
             </div>
         </form>
     );

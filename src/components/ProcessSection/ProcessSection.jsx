@@ -2,10 +2,6 @@ import React from 'react';
 import SectionTitle from '../SectionTitle/SectionTitle';
 
 /* image */
-import Pross1 from '../../images/work/1.jpg'
-import Pross2 from '../../images/work/2.jpg'
-import Pross3 from '../../images/work/3.jpg'
-import Pross4 from '../../images/work/4.jpg'
 import Shape from '../../images/work/shape.svg'
 
 const ProcessSection = (props) => {
@@ -14,7 +10,7 @@ const ProcessSection = (props) => {
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-lg-9 col-12">
-                        <SectionTitle title={'Our Working Process'} subtitle={'How We Work'}/>
+                        <SectionTitle title={'Jak pracujemy'} subtitle={'Współpraca krok po kroku'}/>
                     </div>
                 </div>
                 <div className="work_wrapper">
@@ -22,52 +18,48 @@ const ProcessSection = (props) => {
                         <div className="col-xl-3 col-lg-6 col-md-6 col-12">
                             <div className="work_card">
                                 <div className="image">
-                                    <img src={Pross1} alt="" />
+                                    <div className="step_icon"><i className="ti-comments"></i></div>
                                         <span className="number">01</span>
                                 </div>
                                 <div className="text">
-                                    <h3>Make Appointment</h3>
-                                    <p>Amet usem turpis vestm hendrerit vestibulum molestie quis. Egestas ultricies
-                                        at placerat.</p>
+                                    <h3>Rozmowa i wycena</h3>
+                                    <p>Ustalamy zakres obsługi i cenę na podstawie liczby dokumentów, liczby pracowników i rodzaju działalności.</p>
                                 </div>
                             </div>
                         </div>
                         <div className="col-xl-3 col-lg-6 col-md-6 col-12">
                             <div className="work_card">
                                 <div className="image">
-                                    <img src={Pross2} alt="" />
+                                    <div className="step_icon"><i className="ti-write"></i></div>
                                         <span className="number">02</span>
                                 </div>
                                 <div className="text">
-                                    <h3>Get Consultant</h3>
-                                    <p>Amet usem turpis vestm hendrerit vestibulum molestie quis. Egestas ultricies
-                                        at placerat.</p>
+                                    <h3>Start i formalności</h3>
+                                    <p>Pomagamy wybrać formę działalności, zarejestrować firmę lub spółkę w KRS oraz zgłosić ją do urzędu skarbowego i ZUS.</p>
                                 </div>
                             </div>
                         </div>
                         <div className="col-xl-3 col-lg-6 col-md-6 col-12">
                             <div className="work_card">
                                 <div className="image">
-                                    <img src={Pross3} alt="" />
+                                    <div className="step_icon"><i className="ti-cloud-up"></i></div>
                                         <span className="number">03</span>
                                 </div>
                                 <div className="text">
-                                    <h3>Take Treatment</h3>
-                                    <p>Amet usem turpis vestm hendrerit vestibulum molestie quis. Egestas ultricies
-                                        at placerat.</p>
+                                    <h3>Dokumenty online</h3>
+                                    <p>Przesyłasz dokumenty wtedy, kiedy Ci wygodnie, bez dojazdów do biura i bez pilnowania godzin otwarcia.</p>
                                 </div>
                             </div>
                         </div>
                         <div className="col-xl-3 col-lg-6 col-md-6 col-12">
                             <div className="work_card">
                                 <div className="image">
-                                    <img src={Pross4} alt="" />
+                                    <div className="step_icon"><i className="ti-time"></i></div>
                                         <span className="number">04</span>
                                 </div>
                                 <div className="text">
-                                    <h3>Get Relief</h3>
-                                    <p>Amet usem turpis vestm hendrerit vestibulum molestie quis. Egestas ultricies
-                                        at placerat.</p>
+                                    <h3>Księgi i terminy</h3>
+                                    <p>Prowadzimy księgi i rozliczenia, pilnujemy terminów, a bieżący podgląd spraw firmy masz w Portalu Klienta.</p>
                                 </div>
                             </div>
                         </div>

@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import AllRoute from './main-component/router';
 import { ToastContainer } from 'react-toastify';
+import NewsletterPopup from './components/Newsletter/NewsletterPopup';
 
 // Paleta DGC dla wszystkich kontrolek MUI (formularze, przyciski, selecty).
 const dgcTheme = createTheme({
@@ -26,6 +27,7 @@ function App() {
     <ThemeProvider theme={dgcTheme}>
       <div className="App" id="scrool">
         <AllRoute />
+        <NewsletterPopup />
         <ToastContainer />
       </div>
     </ThemeProvider>

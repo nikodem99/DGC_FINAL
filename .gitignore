@@ -1,0 +1,19 @@
+node_modules/
+.pnpm-store/
+dist/
+.claude/
+
+# skompilowane artefakty SCSS — zrodlem jest sass/style.scss
+src/**/*.css.map
+src/sass/style.css
+src/style.css
+
+# klucze srodowiskowe — .env nie trafia do repo, wzorzec jest w .env.example
+.env
+.env.local
+.env.*.local
+
+# Oryginalne, nieskompresowane materialy filmowe. Nie trafiaja na strone —
+# w public/video/ leza wersje webowe. Trzymane poza repozytorium, zeby nie
+# ciagnac 45 MB przy kazdym klonowaniu.
+media-zrodlowe/

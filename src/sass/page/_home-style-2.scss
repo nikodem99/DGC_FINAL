@@ -205,7 +205,9 @@
             left: 0;
             top: 0;
             content: '';
-            background: $theme-primary-color;
+            /* ta sama ciemna plyta co w wariancie bazowym — zlote ikony potrzebuja ink,
+               na turkusie mialy 2,7:1 */
+            background: $dgc-ink;
             width: 100%;
             height: 100%;
             z-index: -1;

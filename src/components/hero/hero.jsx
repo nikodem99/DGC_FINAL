@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import VideoModal from '../ModalVideo/VideoModal';
+import HeroWideo from '../HeroWideo/HeroWideo';
 
 // image
-import Himg1 from '../../images/slider/1.png'
 import Hshape from '../../images/slider/shape.svg'
 
 const ClickHandler = () => {
@@ -20,22 +20,23 @@ const hero = () => {
                 </svg>
             </div>
             <div className="content">
-                <h2>We are Here for You</h2>
-                <h3>Helping People Lead
-                    Healthy & Happy Lives</h3>
-                <p>Nisi molestie fusce quis eget vitae. Aliquam senectus id
-                    placerat egestas sed sed venenatis nisl.
-                    Tincidunt faucibus facilisi vestibulum et ut congue in eget. Augue purus hendrerit tempus
-                    consequat ut sit.</p>
-                <Link onClick={ClickHandler} className="theme-btn theme-btn-gold" to="/about">Make
-                    Appointment</Link>
+                <h2>Biuro rachunkowe · Łódź · online</h2>
+                <h3>Twoja księgowość
+                    w dobrych rękach</h3>
+                <p>Obsługujemy jednoosobowe działalności, spółki i organizacje z całej Polski.
+                    W pełni online, bez dojazdów do biura, z ubezpieczeniem OC.
+                    Prowadzimy księgi nieprzerwanie od 2011 roku.</p>
+                <Link onClick={ClickHandler} className="theme-btn theme-btn-gold" to="/umow-konsultacje">Umów konsultację</Link>
             </div>
             <div className="image_content">
                 <div className="video">
                     <VideoModal />
                 </div>
                 <div className="image">
-                    <img src={Himg1} alt="" />
+                    {/* Zapetlony film zamiast statycznego zdjecia. Przycisk
+                        "Obejrzyj film" obok otwiera pelna wersje z dzwiekiem
+                        w modalu — dokladnie jak wczesniej. */}
+                    <HeroWideo />
                     <div className="bg_shape_2">
                         <img src={Hshape} alt="" />
                     </div>

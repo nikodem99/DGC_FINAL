@@ -12,7 +12,7 @@ const offerMenu = [
         link: '/oferta/rozliczenia-podatku/',
     },
     {
-        title: 'Rozliczenia kadrowo–płacowe pracowników',
+        title: 'Rozliczenia kadrowo-płacowe pracowników',
         link: '/oferta/rozliczenia-kadrowo-placowe-pracownikow/',
     },
     {

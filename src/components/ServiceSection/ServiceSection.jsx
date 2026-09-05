@@ -18,7 +18,7 @@ const ServiceSection = (props) => {
                 {showSectionTitle && (
                     <div className="row justify-content-center">
                         <div className="col-lg-9 col-12">
-                            <SectionTitle title={"Departmental Services"} subtitle={"Our Medical Services"} />
+                            <SectionTitle title={"Nasza oferta"} subtitle={"Usługi księgowe dla firm"} />
                         </div>
                     </div>
                 )}

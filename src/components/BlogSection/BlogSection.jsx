@@ -14,11 +14,11 @@ const BlogSection = (props) => {
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-lg-9 col-12">
-                        <SectionTitle title={"Our Blog"} subtitle={"Latest Post & Article"} />
+                        <SectionTitle title={"Porady"} subtitle={"Ostatnie wpisy"} />
                     </div>
                 </div>
                 <div className="row">
-                    {blogs.slice(0.3).map((bloge, bkye) => (
+                    {blogs.slice(0, 3).map((bloge, bkye) => (
                         <div className="col-lg-4 col-md-6 col-12" key={bkye}>
                             <div className="blog_card">
                                 <img src={bloge.screens} alt="" />

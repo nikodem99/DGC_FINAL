@@ -9,6 +9,9 @@
 
         h3 {
             display: inline-block;
+            /* gdy tytul mimo wszystko sie zlamie (wezsze ekrany), obie linie
+               maja wyjsc rowne zamiast jednej dlugiej i jednego slowa */
+            text-wrap: balance;
         }
     }
 

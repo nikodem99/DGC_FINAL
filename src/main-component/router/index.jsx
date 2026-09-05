@@ -17,13 +17,18 @@ import ProjectSingle from '../ProjectSingle/ProjectSingle';
 import ServicePages from '../ServicePage/ServicePage';
 import ServiceSinglePage from '../ServiceSinglePage/ServiceSinglePage';
 import BlogPage from '../BlogPage/BlogPage'
-import BlogPageLeft from '../BlogPageLeft/BlogPageLeft' 
+import BlogPageLeft from '../BlogPageLeft/BlogPageLeft'
 import BlogPageFullwidth from '../BlogPageFullwidth/BlogPageFullwidth'
 import BlogDetails from '../BlogDetails/BlogDetails'
 import BlogDetailsLeftSiide from '../BlogDetailsLeftSiide/BlogDetailsLeftSiide'
 import BlogDetailsFull from '../BlogDetailsFull/BlogDetailsFull'
 import ContactPage from '../ContactPage/ContactPage';
+import PricingPage from '../PricingPage/PricingPage';
 import ErrorPage from '../ErrorPage/ErrorPage';
+import DocumentTitle from '../../components/DocumentTitle/DocumentTitle';
+import KonsultacjaPage from '../KonsultacjaPage/KonsultacjaPage';
+import PolitykaPrywatnosciPage from '../PolitykaPrywatnosciPage/PolitykaPrywatnosciPage';
+import BanerZgod from '../../components/Zgody/BanerZgod';
 
 
 const AllRoute = () => {
@@ -31,6 +36,10 @@ const AllRoute = () => {
   return (
     <div className="App">
       <BrowserRouter>
+        <DocumentTitle />
+        {/* Baner musi siedziec w drzewie routera — uzywa <Link> do polityki
+            prywatnosci, a poza routerem <Link> wywala cala aplikacje. */}
+        <BanerZgod />
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="home" element={<Homepage />} />
@@ -58,7 +67,13 @@ const AllRoute = () => {
           <Route path='blog-single-left-sidebar/:slug' element={<BlogDetailsLeftSiide />} />
           <Route path='blog-single-fullwidth/:slug' element={<BlogDetailsFull />} />
           <Route path='contact' element={<ContactPage />} />
-          <Route path='404' element={<ErrorPage />} /> 
+          <Route path='cennik' element={<PricingPage />} />
+          {/* Podstrona spoza menu — prowadzi do niej przycisk z hero
+              i docelowo reklamy. Indeksowalna, bo ma byc strona
+              docelowa kampanii. */}
+          <Route path='umow-konsultacje' element={<KonsultacjaPage />} />
+          <Route path='polityka-prywatnosci' element={<PolitykaPrywatnosciPage />} />
+          <Route path='404' element={<ErrorPage />} />
         </Routes>
       </BrowserRouter>
 

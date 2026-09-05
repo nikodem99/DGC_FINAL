@@ -16,7 +16,7 @@ const TeamSection = (props) => {
                 {showSectionTitle && (
                     <div className="row justify-content-center">
                         <div className="col-lg-9 col-12">
-                            <SectionTitle title={'Our Team'} subtitle={'Meet Our Specialists'} />
+                            <SectionTitle title={'Nadzór merytoryczny'} subtitle={'Kto czuwa nad Twoimi sprawami'} />
                         </div>
                     </div>
                 )}

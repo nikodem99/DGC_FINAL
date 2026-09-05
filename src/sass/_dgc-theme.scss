@@ -135,7 +135,6 @@ html,
 }
 
 .rating i,
-.give-rating i,
 .fa-star,
 .product-rating i {
   color: var(--dgc-gold);
@@ -175,8 +174,8 @@ label.error,
   font-weight: 500;
 }
 
-.error::before,
-label.error::before,
+form .error::before,
+form label.error::before,
 .errorMessage::before {
   content: '';
   display: inline-block;
@@ -188,11 +187,29 @@ label.error::before,
   vertical-align: middle;
 }
 
+/* slot na komunikat istnieje zawsze, zeby nic nie skakalo — pusty nie ma kropki */
+form .error:empty::before {
+  content: none;
+}
+
 input.error,
 textarea.error,
 select.error,
+.form_control.error,
 .form-control.error {
   border-color: var(--dgc-highlight) !important;
+}
+
+/* Pas CTA ma turkusowe tlo — tam komunikat musi byc jasny, a kropka zlota,
+   bo ink i magenta sa na nim nieczytelne. */
+.cta_wrap .error,
+.cta_wrap .errorMessage {
+  color: var(--dgc-canvas) !important;
+}
+
+.cta_wrap form .error::before,
+.cta_wrap .errorMessage::before {
+  background: var(--dgc-gold);
 }
 
 /* --- Komponenty Bootstrapa uzywane przez szablon ---------------- */
@@ -215,4 +232,1899 @@ select.error,
   --bs-pagination-color: #{$dgc-ink};
   --bs-pagination-hover-color: #{$dgc-ink};
   --bs-pagination-focus-bg: #{$dgc-panel};
+}
+
+/* --- Siatka kart uslug ------------------------------------------- */
+/* Karty maja rowna wysokosc w rzedzie, a strzalka siada na dole niezaleznie
+   od dlugosci opisu. Selektor :has() lapie kazda kolumne z karta, wiec dziala
+   tak samo w siatce 3-kolumnowej, 6-kartowej i na stronie oferty. */
+.row > [class*="col-"]:has(> .service_card) {
+  display: flex;
+}
+
+.service_card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content p {
+    flex: 1 1 auto;
+  }
+
+  .content a {
+    margin-top: auto;
+  }
+}
+
+/* --- Przycisk odtwarzania w hero ---------------------------------- */
+/* .video to samo kolko (absolutnie pozycjonowane), wiec przycisk wypelnia je
+   w calosci, a podpis wisi pod nim. */
+.video-btn {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dgc-canvas);
+}
+
+.video-label {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: $base-font;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--dgc-canvas);
+  text-shadow: 0 2px 10px rgba(13, 68, 68, 0.65);
+  pointer-events: none;
+
+  /* Na mobile przycisk stoi przy lewej krawedzi kadru, wiec wysrodkowany
+     podpis wychodzilby poza zdjecie — rownamy go do lewej. */
+  @media (max-width: 991px) {
+    font-size: 14px;
+    top: calc(100% + 10px);
+    left: 6px;
+    transform: none;
+  }
+}
+
+/* --- Formularz zapytania w hero ----------------------------------- */
+.appointment_section,
+.appointment_section_s2 {
+
+  /* Szablon zakladal angielskie etykiety, sztywne 250px na pole i waskie
+     "Send". Polskie napisy sa dluzsze, wiec pasek dzieli wiersz sam.
+     Reguly szablonu siedza w .wrapper, wiec nadpisania musza tez. */
+  .wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    /* od gory: komunikat bledu rozpycha pole w dol, nie podnosi go w gore */
+    align-items: flex-start;
+    /* odstep pionowy dziala dopiero gdy pasek zawija sie na tablecie i mobile */
+    gap: 12px 18px;
+
+    /* szablon przelacza pasek na kolumne — wtedy os poprzeczna jest pozioma,
+       wiec bez stretch pola zwezalyby sie do szerokosci wlasnej tresci */
+    @media (max-width: 767px) {
+      align-items: stretch;
+    }
+
+    .form_item {
+      /* rowny podzial wiersza; min-width: 0 pozwala kolumnie zwezic sie
+         ponizej szerokosci wlasnej tresci */
+      flex: 1 1 0;
+      min-width: 0;
+      width: auto;
+      max-width: none;
+      padding-bottom: 0;
+
+      @media (max-width: 1199px) {
+        flex: 1 1 calc(50% - 9px);
+        width: auto;
+        max-width: none;
+      }
+
+      @media (max-width: 767px) {
+        /* w kolumnie flex-basis liczy sie w pionie — szerokosc daje stretch */
+        flex: 0 0 auto;
+        width: 100%;
+      }
+
+      /* szablon dawal polu sztywne 250px — wiecej niz miala jego kolumna,
+         wiec pola wchodzily jedno na drugie */
+      .form_control {
+        width: 100%;
+        max-width: none;
+        /* <select> respektowal globalne line-height: 16px i byl o 14px nizszy
+           od <input> — jawna wysokosc rownia wszystkie pola i przycisk */
+        height: 52px;
+        line-height: 30px;
+
+        @media (max-width: 1399px) {
+          width: 100%;
+        }
+      }
+
+      /* pusta etykieta stawia przycisk w linii z polami, bez magicznych liczb */
+      .label_spacer::after {
+        content: '\00a0';
+      }
+
+      .form_btn {
+        margin-top: 0;
+        /* rowno z polami: 20px tekstu + 2x10px paddingu + ramka */
+        height: 52px;
+        line-height: 52px;
+      }
+
+      /* miejsce na komunikat jest zarezerwowane zawsze, wiec jego pojawienie
+         sie niczego nie przesuwa */
+      .error {
+        display: block;
+        min-height: 22px;
+        margin: 6px 0 0;
+        font-size: 14px;
+        line-height: 16px;
+        font-weight: 500;
+      }
+    }
+
+    .form_item_submit {
+      flex: 0 0 auto;
+
+      @media (max-width: 1199px) {
+        flex: 0 0 auto;
+      }
+
+      @media (max-width: 767px) {
+        flex: 0 0 auto;
+        width: 100%;
+
+        .label_spacer {
+          display: none;
+        }
+
+        .form_btn {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .form_status {
+    flex-basis: 100%;
+  }
+}
+
+/* Potwierdzenie i blad wysylki — wspolne dla wszystkich trzech formularzy
+   strony (pasek pod nagłówkiem, pasek CTA, strona kontaktu). Ta sama skala
+   i kroj co tekst strony (Poppins 20/30), promien rowny polom formularza. */
+.form_status:empty {
+  display: none;
+}
+
+.success_message,
+.error_message {
+  margin-top: 18px;
+  padding: 20px 28px;
+  border-radius: 15px;
+  background: var(--dgc-panel);
+  color: var(--dgc-ink);
+  font-family: #{$base-font};
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 30px;
+  text-align: left;
+
+  @media (max-width: 767px) {
+    padding: 16px 20px;
+    font-size: 17px;
+    line-height: 26px;
+  }
+}
+
+.success_message {
+  border-left: 5px solid var(--dgc-brand);
+}
+
+.error_message {
+  border-left: 5px solid var(--dgc-highlight);
+
+  /* kontakt zapasowy ma byc klikalny, zeby zapytanie nie przepadlo
+     przez awarie wysylki */
+  a {
+    color: var(--dgc-ink);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    white-space: nowrap;
+
+    &:hover {
+      text-decoration-color: var(--dgc-gold);
+      text-decoration-thickness: 2px;
+    }
+  }
+}
+
+/* Etykieta widoczna tylko dla czytnikow ekranu. Pola paska wyceny nie maja
+   widocznych etykiet (nazwe niesie pierwsza opcja listy), wiec bez tego
+   czytnik przeczytalby trzy pola bez nazwy.
+   NIE uzywamy szablonowej .sr-only — ma display: none !important, wiec
+   usuwa element takze z drzewa dostepnosci i czytnik go nie przeczyta. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- Pasek wyceny (sekcja CTA) ------------------------------------ */
+
+/* Szablonowy .content mial sztywne 540px pod krotki angielski naglowek.
+   Nasz jest dluzszy, przez co lamal sie ciasno przy lewej krawedzi, a prawa
+   polowa pasa stala pusta. Naglowek dostaje pelna szerokosc, akapit zostaje
+   waski — dlugi wiersz tekstu zle sie czyta. */
+.cta_wrap .content {
+  max-width: none;
+
+  h2 {
+    /* bez ograniczenia szerokosci — tytul ma isc przez caly pas.
+       balance pilnuje, zeby przy weszszych oknach obie linie byly rowne */
+    max-width: none;
+    text-wrap: balance;
+  }
+
+  p {
+    max-width: 560px;
+  }
+}
+
+/* Natywna strzalka listy nachodzila na tekst — "Dokumentów miesięcznie*"
+   wchodzil pod nia i byl ucinany. Rezerwujemy na nia miejsce po prawej.
+   Prefiks .cta_wrap jest konieczny: regula szablonu jest zagniezdzona
+   glebiej i bez niego wygrywala. */
+.cta_wrap .cta_form .input_filled select {
+  padding-right: 46px;
+}
+
+/* Szablon dawal wszystkim czterem slotom rowne 30%. Etykiety maja rozna
+   dlugosc — "Dokumentów miesięcznie*" nie miescilo sie w tej samej
+   szerokosci co "Adres e-mail*". Proporcje dobrane pod realne napisy;
+   flex i tak sciska je zgodnie ze stosunkiem, wiec suma ponad 100%
+   jest tu w porzadku. */
+.cta_wrap .cta_form {
+  @media (min-width: 992px) {
+    .cta_pole_forma { width: 26%; }
+    .cta_pole_dokumenty { width: 32%; }
+    .cta_pole_email { width: 22%; }
+    .cta_pole_submit { width: 20%; }
+  }
+}
+
+/* Opinie roznia sie dlugoscia, wiec karty mialy rozna wysokosc i karuzela
+   skakala przy przewijaniu. Flex na sciezce slicka rozciaga wszystkie
+   slajdy do najwyzszego. */
+.testimonial_slider {
+  .slick-track {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .slick-slide {
+    height: auto;
+
+    > div,
+    .testimonial_card {
+      height: 100%;
+    }
+  }
+}
+
+/* --- Zaproszenie do wystawienia opinii w Google -------------------- */
+/* Wzor z manuqa.pl, ale w palecie DGC. Panel #EBFFFF zamiast ciemnego tla,
+   bo tuz pod ta sekcja idzie kolejny kolorowy pas — trzy ciemne bloki
+   jeden pod drugim zlewalyby sie w jedno. */
+/* Blok stoi teraz jako samodzielna sekcja (strona glowna pod opiniami,
+   /about pod pytaniami), wiec odstepy niesie sekcja, nie sam blok. */
+.opinie_cta_section {
+  padding-bottom: 60px;
+
+  @media (max-width: 991px) {
+    padding-bottom: 40px;
+  }
+}
+
+/* Dwie sekcje z pelnym paddingiem pod rzad daja 240px pustki. Tam, gdzie
+   nie ma miedzy nimi zmiany tla ani etykiety sekcji, jest to po prostu
+   dziura. Blok opinii ma juz wlasny padding dolny, wiec pytania pod nim
+   nie potrzebuja pelnego gornego. */
+/* (pas kontaktowy na /about to teraz ten sam .cta_section co na stronie
+   glownej — wariant s2 nie jest juz nigdzie uzywany) */
+
+/* Miedzy pytaniami a pasem kontaktowym bylo 240px pustki: 120px paddingu
+   sekcji pytan plus 100px szablonowego marginesu pasa. Ten margines mial
+   robic miejsce dla zdjecia wystajacego ponad pas — ale znak DGC jest
+   kwadratowy i miesci sie w calosci w srodku, wiec nie ma czego mijac.
+   Zerujemy margines; zostaje sam padding sekcji wyzej. */
+.wpo-faq-section + .cta_section {
+  margin-top: 0;
+}
+.opinie_cta_section + .wpo-faq-section {
+  padding-top: 40px;
+}
+
+/* Sekcja zespolu konczy sie tekstem pod avatarami, a blok opinii zaczyna
+   od razu ramka — 120px z sekcji zespolu w zupelnosci wystarcza. */
+/* Zespol i "Nadzor merytoryczny" to jeden blok o ludziach, wiec stoja
+   blizej siebie niz sasiedzi na reszcie strony. Sam section-padding dawal
+   tu 120px na dodatek do 40px zostawionych pod ramka branz. Selektor
+   sasiedztwa, zeby nie ruszyc tej sekcji na innych podstronach. */
+.zespol_section + .team_section_s2 {
+  padding-top: 60px;
+}
+
+.team_section_s2 + .opinie_cta_section {
+  padding-top: 0;
+}
+
+.opinie_cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+  /* Nastepna sekcja ma zdjecie wystajace ~170px ponad swoj gorny brzeg.
+     Przy 70px odstepu blok wchodzil pod nie. Mniej u gory, wiecej u dolu:
+     margines dolny przesuwa tez zdjecie, wiec luz rosnie podwojnie. */
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 50px 55px;
+  border-radius: 25px;
+  background: var(--dgc-panel);
+  border-top: 4px solid var(--dgc-gold);
+
+  @media (max-width: 991px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 35px;
+    padding: 40px 30px;
+  }
+
+  @media (max-width: 767px) {
+    padding: 32px 22px;
+  }
+}
+
+.opinie_cta_tresc {
+  max-width: 640px;
+
+  .opinie_cta_nad {
+    display: inline-block;
+    margin-bottom: 14px;
+    color: var(--dgc-ink);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    margin-bottom: 14px;
+    color: var(--dgc-ink);
+    font-size: clamp(30px, 1.6vw + 18px, 44px);
+    line-height: 1.2;
+  }
+
+  p {
+    margin-bottom: 28px;
+    color: var(--dgc-ink);
+    font-size: 18px;
+    line-height: 32px;
+  }
+
+}
+
+/* Szablon narzuca .theme-btn { text-transform: capitalize } — po angielsku
+   to poprawny title case, po polsku blad: "Zostaw Opinię W Google",
+   "Wyślij Zapytanie", "Umów Konsultację".
+   Wczesniej bylo to zdjete tylko w bloku opinii. Sprawdzone po kolei:
+   wszystkie etykiety przyciskow na stronie sa juz zapisane w kodzie
+   z poprawna polska wielkoscia liter, wiec CSS nie ma tu czego poprawiac
+   i regula moze zniknac wszedzie. */
+.theme-btn {
+  text-transform: none;
+}
+
+/* Kod QR na bialym polu z zapasem dookola — bez tego marginesu czytniki
+   telefonow miewaja klopot z odczytem. */
+.opinie_cta_qr {
+  flex: 0 0 auto;
+  text-align: center;
+  text-decoration: none;
+
+  &:hover img {
+    border-color: var(--dgc-gold);
+  }
+
+  img {
+    display: block;
+    width: 160px;
+    height: 160px;
+    padding: 12px;
+    border-radius: 16px;
+    background: var(--dgc-canvas);
+    border: 1px solid var(--dgc-line);
+  }
+
+  span {
+    display: block;
+    margin-top: 12px;
+    color: var(--dgc-ink);
+    font-size: 14px;
+    opacity: 0.75;
+  }
+
+  /* Na telefonie kod QR nie ma sensu — nikt nie skanuje ekranu, ktory
+     trzyma w rece. Zostaje sam przycisk. */
+  @media (max-width: 767px) {
+    display: none;
+  }
+}
+
+
+/* --- Pas kontaktowy pod opiniami --------------------------------- */
+/* Uklad prostokata ze zdjeciem zostaje taki, jak w szablonie — podmieniamy
+   sam plik. Zadnych nadpisan pozycji ani rozmiaru. */
+.cta_section .cta_wrapper {
+  /* Numer jest linkiem, ale ma wygladac jak naglowek, nie jak odnosnik. */
+  .text h3 a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--dgc-gold);
+    }
+  }
+
+  .cta_godziny {
+    margin: 10px 0 0;
+    color: var(--dgc-canvas);
+    font-size: 18px;
+    line-height: 28px;
+    opacity: 0.85;
+
+    @media (max-width: 991px) {
+      font-size: 16px;
+    }
+  }
+}
+
+/* --- Sekcja z formularzem (cennik, kontakt, podstrony oferty) ------ */
+/* Reguly z /contact daja .wpo-contact-form-area ujemny margines dolny
+   (-125px), zeby karta wchodzila na mape pod spodem. Poza strona kontaktu
+   mapy nie ma, wiec ten margines wciagalby stopke pod formularz. */
+.form_section {
+  padding: 0 0 110px;
+  background: var(--dgc-canvas);
+
+  @media (max-width: 767px) {
+    padding-bottom: 60px;
+  }
+
+  .wpo-contact-form-area {
+    margin-bottom: 0;
+    padding-bottom: 50px;
+
+    @media (max-width: 767px) {
+      padding-bottom: 30px;
+    }
+  }
+
+  /* Odstepy przepisane 1:1 z sekcji "Indywidualna oferta" na cenniku —
+     domyslne byly trzykrotnie wieksze (60px zamiast 20px) i naglowek
+     wisial w prozni. */
+  .section_title {
+    margin-bottom: 20px;
+  }
+
+  /* Naglowek w skali mniejszej niz glowny tytul podstrony (80px), zeby nie
+     konkurowal z sekcja stojaca bezposrednio nad nim. */
+  .section_title h3 {
+    max-width: 920px;
+    margin: 8px auto 0;
+    font-size: 60px;
+    line-height: 65px;
+    text-wrap: balance;
+
+    @media (max-width: 991px) {
+      font-size: 50px;
+      line-height: 56px;
+    }
+
+    @media (max-width: 575px) {
+      font-size: 40px;
+      line-height: 46px;
+    }
+  }
+
+  .form_section_lead {
+    max-width: 720px;
+    margin: 0 auto 42px;
+    color: var(--dgc-ink);
+    font-size: 18px;
+    line-height: 30px;
+    text-align: center;
+  }
+}
+
+/* Na stronie kontaktu pod formularzem jest mapa. Bez odstepu karta
+   formularza dotykala jej gornej krawedzi. */
+.wpo-contact-pg-section .form_section {
+  padding-bottom: 80px;
+
+  @media (max-width: 767px) {
+    padding-bottom: 50px;
+  }
+}
+
+
+/* --- Kafle kontaktowe na /contact --------------------------------- */
+/* Kafle mialy rozna wysokosc, bo zalezala od dlugosci tresci. Rownanie
+   przez rozciagniecie kolumn: teraz dowolna liczba linii w jednym kaflu
+   nie rozjezdza rzedu. */
+.office-info .row > [class*="col-"] {
+  display: flex;
+}
+
+.office-info-item {
+  width: 100%;
+}
+
+/* --- Menu na ciemnym nagloweku (podstrony) ------------------------ */
+/* Szablon maluje przy najechaniu i tekst, i pasek nad pozycja brandowym
+   turkusem. Na jasnym naglowku strony glownej to dziala, ale wariant s2
+   lezy na pasie w tym samym turkusie — kontrast 1:1 i napis znikal
+   (sprawdzone: kolor tekstu rgb(18,120,135) na tle rgb(18,120,135)).
+   Tutaj tekst zostaje w kanwie, a sygnalem jest zloty pasek. Zloto jako
+   akcent, nie jako kolor tekstu — zgodnie z zasadami palety. */
+.wpo-site-header.wpo-site-header-s2 {
+  /* Tylko pozycje GORNEGO paska. Wczesniej bylo tu "> ul li a", a potomny
+     selektor lapal takze linki w rozwijanym menu — te leza na bialym panelu
+     (#FDFCFC), wiec po najechaniu dostawaly kolor tla i znikaly. Rozwijane
+     menu zostaje przy szablonowym ciemnym tekscie ze zlota kreska. */
+  #navbar > ul > li > a:hover,
+  #navbar > ul > li > a:focus,
+  #navbar > ul > li > a.active {
+    color: var(--dgc-canvas);
+  }
+
+  @media screen and (min-width: 992px) {
+    #navbar > ul > li > a:before {
+      background: var(--dgc-gold);
+    }
+  }
+}
+
+/* Szablon sklada tytuly wpisow, "czytaj dalej" i naglowki widgetow
+   z text-transform: capitalize. Po angielsku to title case, po polsku wychodzi
+   "Rezerwy I Odpisy Aktualizujące — Kiedy Je Tworzyć" i "Ostatnie Wpisy".
+   Tytuly artykulow sa cytatem z bloga DGC i maja sie wyswietlac dokladnie tak,
+   jak zostaly opublikowane. Ten sam problem co z .theme-btn wyzej.
+   (Uppercase w pasku meta zostaje — wersaliki to nie to samo co title case
+   i po polsku sa poprawne.) */
+.wpo-blog-pg-section .post h3 a,
+.wpo-blog-pg-section .post a.read-more,
+.blog-sidebar .widget h3 {
+  text-transform: none;
+}
+
+/* --- Sekcja powitalna: menu i tekst kontra material po prawej ------ */
+/*
+ * Szablon przykleja prawa kolumne hero do krawedzi okna (stala szerokosc,
+ * odsuniecie od prawej) i sadza ja na samej gorze, pod przezroczystym
+ * naglowkiem. Rodzi to dwie kolizje, obie systemowe:
+ *
+ *  1. Menu wchodzilo na material. Lewa krawedz kolumny ucieka w lewo dwa
+ *     razy szybciej niz prawa krawedz menu, bo menu siedzi w wysrodkowanym
+ *     kontenerze. Zmierzone: uklad trzymal sie tylko powyzej ~1870px,
+ *     a na typowym laptopie menu nachodzilo o 100-290px.
+ *  2. Kolumna tekstu wchodzila pod material. Szablon zmniejsza ja skokowo,
+ *     ale te progi nie wiedza, gdzie zaczyna sie material, bo ten liczy sie
+ *     od prawej krawedzi okna.
+ *
+ * Material opuszczamy pod naglowek (ma 90-94px niezaleznie od szerokosci,
+ * wiec 118px daje staly zapas) i jednoczesnie zwezamy go o 96px. Przy
+ * proporcjach filmu 438:540 zdjecie 96px szerokosci to dokladnie 118px
+ * wysokosci, wiec dolna krawedz wraca tam, gdzie byla — inaczej material
+ * zachodzilby na pasek formularza nizej (zmierzone: 220px zamiast 102px).
+ *
+ * Zamiast powtarzac te same liczby w kilku regulach trzymamy je w zmiennych.
+ * Progi szablonu nie pokrywaja sie ze soba: margines tekstu zmienia sie przy
+ * 1399/1599/1749, szerokosc materialu przy 1199/1499, a jego odsuniecie od
+ * krawedzi przy 1649 — stad siedem przedzialow.
+ */
+@media (min-width: 992px) {
+  .hero_section {
+    --hero-material: 656px;   /* szablonowe 752 - 96 */
+    --hero-odsuniecie: 90px;
+    --hero-margines: 180px;
+    --hero-odstep: 40px;
+
+    @media (max-width: 1749px) { --hero-margines: 100px; }
+    @media (max-width: 1649px) { --hero-odsuniecie: 10px; }
+    @media (max-width: 1599px) { --hero-margines: 50px; }
+    @media (max-width: 1499px) { --hero-material: 504px; }  /* 600 - 96 */
+    @media (max-width: 1399px) { --hero-margines: 20px; }
+    @media (max-width: 1199px) { --hero-material: 404px; }  /* 500 - 96 */
+
+    .image_content {
+      top: 118px;
+      max-width: var(--hero-material);
+    }
+
+    /* Tekst konczy sie tam, gdzie realnie zaczyna sie material, a nie tam,
+       gdzie wypadl skokowy prog szablonu. */
+    .content {
+      max-width: min(
+        742px,
+        calc(100vw - var(--hero-odsuniecie) - var(--hero-material)
+             - var(--hero-odstep) - var(--hero-margines))
+      );
+    }
+  }
+}
+
+/* Film w tle sekcji powitalnej. Wchodzi dokladnie w miejsce zdjecia, ktore
+   tu wczesniej stalo — szablon nie nadawal mu zadnych wlasnych regul
+   (.image img byl pusty), wiec wystarczy powtorzyc zachowanie obrazka. */
+.hero_wideo {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Proporcje zgodne z przycietym plikiem (438x540). Podane wprost, zeby
+     miejsce bylo zarezerwowane, zanim plakat zdazy sie wczytac — inaczej
+     reszta sekcji podskakuje przy ladowaniu. */
+  aspect-ratio: 438 / 540;
+  object-fit: cover;
+  /* Film jest dekoracja: nie odbiera fokusu i nie reaguje na kursor,
+     zeby nie przechwytywal klikniec przeznaczonych dla przycisku
+     "Obejrzyj film", ktory na niego nachodzi. */
+  pointer-events: none;
+}
+
+/* --- /umow-konsultacje -------------------------------------------- */
+.konsultacja_section {
+  background: var(--dgc-canvas);
+
+  .konsultacja_wstep {
+    margin-bottom: 70px;
+
+    /* 80px jak naglowki sekcji na reszcie strony. Wersja 60px robila
+       z tej podstrony cos mniej waznego niz /about czy /cennik. */
+    h2 {
+      margin-bottom: 22px;
+      color: var(--dgc-ink);
+      font-size: 80px;
+      /* 1,15 zamiast 1,1: przy 88px polskie ogonki (ę, ą) z pierwszej linii
+         niemal dotykaly wersalikow z drugiej. Naglowek miesci sie teraz
+         w jednej linii, ale interlinia musi byc bezpieczna takze wtedy,
+         gdy zawinie sie na weszym ekranie. */
+      line-height: 92px;
+      text-wrap: balance;
+
+      @media (max-width: 1199px) {
+        font-size: 60px;
+        line-height: 72px;
+      }
+
+      @media (max-width: 991px) {
+        font-size: 44px;
+        line-height: 52px;
+      }
+
+      @media (max-width: 575px) {
+        font-size: 34px;
+        line-height: 42px;
+      }
+    }
+
+    /* Przy 760px akapit lamal sie tak, ze w ostatniej linii zostawaly dwa
+       slowa. Szersza kolumna miesci go w czterech pelnych liniach, a
+       text-wrap: pretty pilnuje, zeby na koncu nie zostawal sierotny wyraz
+       przy innych szerokosciach okna. */
+    > p {
+      max-width: 980px;
+      color: var(--dgc-ink);
+      font-size: 18px;
+      line-height: 32px;
+      text-wrap: pretty;
+    }
+  }
+
+  /* Cena i fakty obok siebie. Cena musi byc widoczna zanim ktokolwiek
+     zacznie wypelniac formularz — konsultacja jest platna i nie chcemy,
+     zeby kwota byla niespodzianka dopiero w rozmowie telefonicznej. */
+  .konsultacja_fakty {
+    display: flex;
+    gap: 40px;
+    margin-top: 40px;
+    padding: 34px 38px;
+    border-radius: 25px;
+    border-top: 4px solid var(--dgc-gold);
+    background: var(--dgc-panel);
+
+    @media (max-width: 991px) {
+      flex-direction: column;
+      gap: 28px;
+      padding: 28px 24px;
+    }
+  }
+
+  .konsultacja_cena {
+    flex: 0 0 auto;
+    max-width: 280px;
+
+    @media (max-width: 991px) {
+      max-width: none;
+    }
+
+    .konsultacja_cena_kwota {
+      display: block;
+      color: var(--dgc-brand);
+      font-size: 44px;
+      font-weight: 500;
+      line-height: 1.1;
+    }
+
+    .konsultacja_cena_opis {
+      display: block;
+      margin-top: 4px;
+      color: var(--dgc-ink);
+      font-size: 18px;
+    }
+
+    p {
+      margin: 12px 0 0;
+      color: var(--dgc-ink);
+      font-size: 15px;
+      line-height: 24px;
+      opacity: 0.85;
+    }
+  }
+
+  .konsultacja_fakty_lista {
+    flex: 1 1 0;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 30px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @media (max-width: 575px) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    li {
+      padding-left: 16px;
+      border-left: 3px solid var(--dgc-gold);
+    }
+
+    strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--dgc-ink);
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    span {
+      color: var(--dgc-ink);
+      font-size: 16px;
+      line-height: 24px;
+      opacity: 0.9;
+    }
+  }
+
+  .konsultacja_kroki {
+    margin-bottom: 70px;
+
+    h3 {
+      margin-bottom: 30px;
+      color: var(--dgc-ink);
+      font-size: 44px;
+      line-height: 50px;
+
+      @media (max-width: 575px) {
+        font-size: 32px;
+        line-height: 38px;
+      }
+    }
+
+    ol {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px 40px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: krok;
+
+      @media (max-width: 767px) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    li {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    /* Numeracja niesie tu tresc — kroki dzieja sie po kolei i wlasnie ta
+       kolejnosc tlumaczy, dlaczego formularz nie jest platnoscia. */
+    .konsultacja_krok_nr {
+      flex: 0 0 auto;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--dgc-brand);
+      color: var(--dgc-canvas);
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 44px;
+      text-align: center;
+    }
+
+    strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--dgc-ink);
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    p {
+      margin: 0;
+      color: var(--dgc-ink);
+      font-size: 17px;
+      line-height: 28px;
+    }
+  }
+
+  .konsultacja_kolumny {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px;
+    margin-bottom: 70px;
+
+    @media (max-width: 767px) {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+    }
+
+    h3 {
+      margin-bottom: 18px;
+      color: var(--dgc-ink);
+      font-size: 32px;
+      line-height: 40px;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      position: relative;
+      margin-bottom: 12px;
+      padding-left: 24px;
+      color: var(--dgc-ink);
+      font-size: 17px;
+      line-height: 28px;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 10px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--dgc-gold);
+      }
+    }
+  }
+
+  .konsultacja_stopka {
+    margin: 35px 0 0;
+    color: var(--dgc-ink);
+    font-size: 17px;
+    line-height: 28px;
+    text-align: center;
+
+    a {
+      color: var(--dgc-brand);
+      font-weight: 500;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+}
+
+/* Nota pod przyciskiem wysylki — zdanie o tym, ze formularz nie jest
+   platnoscia, musi byc czytelne, ale nie moze krzyczec mocniej niz sam
+   przycisk. */
+.form_nota {
+  margin: 18px 0 0;
+  color: var(--dgc-ink);
+  font-size: 15px;
+  line-height: 24px;
+  opacity: 0.85;
+}
+
+.etykieta_opc {
+  color: var(--dgc-ink);
+  font-size: 15px;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+/* Pole daty musi wygladac jak reszta pol w karcie. Bez tego Safari
+   i Chrome skladaja je wlasnym krojem i innej wysokosci niz sasiednie
+   selecty. */
+.cta_form_s2 input[type='date'] {
+  font-family: inherit;
+  line-height: normal;
+  min-height: 52px;
+}
+
+/* --- Karty "Ostatnie wpisy" na stronie glownej --------------------- */
+/* Szablon byl robiony pod krotkie angielskie tytuly ("Preserving Care
+   Strategy"). Polskie tytuly artykulow ksiegowych sa dwa razy dluzsze, wiec
+   kazda karta miala inna wysokosc, a strzalki wisialy na roznych poziomach.
+   Karty rownamy do siebie, tytul przycinamy do dwoch linii z wielokropkiem,
+   a strzalke spychamy na sam dol. */
+.blog_section {
+  .row > [class*='col-'] {
+    display: flex;
+  }
+
+  .blog_card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .content {
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+    }
+
+    /* Szablonowe 50px/38px lamalo tytuly na trzy, momentami cztery linie.
+       Mniejszy stopien mieści obecne tytuly w calosci w dwoch liniach,
+       a wielokropek wlacza sie dopiero przy naprawde dlugim. */
+    h3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      font-size: 34px;
+      line-height: 42px;
+
+      @media (max-width: 1399px) {
+        font-size: 30px;
+        line-height: 38px;
+      }
+    }
+
+    /* Strzalka na dol karty, zeby we wszystkich trzech byla na tej samej
+       wysokosci. `auto` zjada szablonowe margin-top: 30px, wiec zapas
+       odtwarzamy paddingiem na kontenerze tekstu. */
+    .content > a {
+      margin-top: auto;
+    }
+
+    h3 + a {
+      margin-top: auto;
+    }
+
+    /* Kropki-separatory miedzy data a autorem. Przy krotkim "Anne William"
+       oba wpisy miescily sie w jednej linii i kropka czytala sie jak
+       przecinek. "DGC Biuro Rachunkowe" zawija sie do drugiej linii i kropka
+       laduje na jej poczatku, wygladajac jak przypadkowy punktor. */
+    .content ul li {
+      padding-right: 20px;
+
+      &::before {
+        display: none;
+      }
+    }
+  }
+}
+
+/* --- Tresc artykulu ----------------------------------------------- */
+.wpo-blog-single-section {
+  .wpis_lista {
+    margin: 0 0 25px;
+    padding: 0;
+    list-style: none;
+
+    li {
+      position: relative;
+      margin-bottom: 12px;
+      padding-left: 24px;
+      color: var(--dgc-ink);
+      font-size: 18px;
+      line-height: 30px;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 12px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--dgc-brand);
+      }
+    }
+  }
+
+  /* Wyroznione ramki z artykulow ("Zasada ostroznosci", "Wazne"). Na starej
+     stronie stoja w zoltym pudelku z ikona ostrzezenia. */
+  .wpis_uwaga {
+    margin: 0 0 30px;
+    padding: 24px 28px;
+    border-radius: 15px;
+    border-left: 5px solid var(--dgc-gold);
+    background: var(--dgc-panel);
+
+    strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--dgc-ink);
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    p {
+      margin: 0;
+      color: var(--dgc-ink);
+      font-size: 18px;
+      line-height: 30px;
+    }
+  }
+
+  .wpis_zrodlo {
+    margin-top: 35px;
+    padding-top: 22px;
+    border-top: 1px solid var(--dgc-line);
+    color: var(--dgc-ink);
+    font-size: 16px;
+    line-height: 26px;
+    opacity: 0.85;
+  }
+
+  /* Tytuly srodkowe w tekscie — szablon skladal je wersalikami przez
+     capitalize, po polsku to blad (patrz .theme-btn wyzej). */
+  .wpo-blog-content h2,
+  .wpo-blog-content h3,
+  .more-posts .post-name {
+    text-transform: none;
+  }
+}
+
+/* --- Porady: kategorie i pusta lista ------------------------------ */
+/* Kategorie w pasku bocznym filtruja liste, wiec sa przyciskami, a nie
+   linkami. Szablon ostylowal tylko `ul a`, wiec przycisk trzeba sprowadzic
+   do wygladu tamtego linku: zdjac wlasne tlo, ramke i domyslny font,
+   ktorych <button> nie dziedziczy. */
+.blog-sidebar .category-widget ul button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--dgc-ink);
+  font-family: inherit;
+  font-size: 18px;
+  line-height: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  span {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    background-color: var(--dgc-panel);
+    font-size: 18px;
+    text-align: center;
+
+    @media (max-width: 767px) {
+      font-size: 14px;
+    }
+  }
+
+  &:hover {
+    color: var(--dgc-brand);
+  }
+}
+
+/* Wybrana kategoria musi byc widoczna, inaczej po kliknieciu nie wiadomo,
+   dlaczego lista sie skrocila. */
+.blog-sidebar .category-widget ul li.aktywna button {
+  color: var(--dgc-brand);
+  font-weight: 500;
+
+  span {
+    background-color: var(--dgc-gold-soft);
+  }
+}
+
+.blog_pusto {
+  margin: 0;
+  padding: 28px 30px;
+  border-radius: 15px;
+  border-left: 5px solid var(--dgc-gold);
+  background: var(--dgc-panel);
+  color: var(--dgc-ink);
+  font-size: 18px;
+  line-height: 30px;
+
+  button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--dgc-brand);
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+}
+
+/* --- Formularz na podstronach oferty ------------------------------ */
+/* Szablon mial tu <input type="submit">, a input nie renderuje
+   pseudoelementow — kolko ze strzalka z .theme-btn::before bylo wiec
+   niewidoczne. Po zamianie na <button> (potrzebny dla stanu "Wysyłanie…")
+   strzalka sie pojawila i weszla na tekst, bo .cta_form_s2 nadpisuje
+   padding skrotem i kasuje zapas 80px z prawej. Chowamy strzalke tak samo,
+   jak robi to formularz na /contact — oba maja wygladac jednakowo. */
+.cta_form_s2 .theme-btn::before {
+  display: none;
+}
+
+/* --- Newsletter --------------------------------------------------- */
+/* Uklad pionowy: pole nad przyciskiem, oba na pelna szerokosc. Tak wyglada
+   szablonowy widget w pasku bocznym oferty — w waskiej kolumnie ustawienie
+   pola i przycisku w jednym rzedzie sciska pole do kilku pikseli. */
+.newsletter_form {
+  input[type="email"] {
+    display: block;
+    width: 100%;
+    height: 52px;
+    margin-bottom: 14px;
+    padding: 10px 18px;
+    border: 1px solid var(--dgc-line);
+    border-radius: 10px;
+    background: var(--dgc-canvas);
+    color: var(--dgc-ink);
+    font-size: 17px;
+  }
+
+  button[type="submit"] {
+    display: block;
+    width: 100%;
+    height: 52px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--dgc-brand);
+    color: var(--dgc-canvas);
+    font-size: 17px;
+    font-weight: 500;
+
+    &:hover:not(:disabled) {
+      background: var(--dgc-brand-deep);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+    }
+  }
+
+  /* Zgoda marketingowa musi byc odrebna i domyslnie NIEzaznaczona —
+     zgoda z domyslnie zaznaczonego pola jest w swietle RODO niewazna. */
+  .newsletter_zgoda {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 14px;
+    color: var(--dgc-ink);
+    font-size: 14px;
+    line-height: 21px;
+    cursor: pointer;
+
+    input {
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--dgc-brand);
+    }
+  }
+
+  .newsletter_blad {
+    margin: 12px 0 0;
+    color: var(--dgc-ink);
+    font-size: 14px;
+    font-weight: 500;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin-right: 7px;
+      border-radius: 50%;
+      background: var(--dgc-highlight);
+      vertical-align: middle;
+    }
+  }
+}
+
+.newsletter_ok {
+  margin: 0;
+  padding: 16px 20px;
+  border-radius: 15px;
+  border-left: 5px solid var(--dgc-brand);
+  background: var(--dgc-panel);
+  color: var(--dgc-ink);
+  font-size: 17px;
+  line-height: 27px;
+}
+
+/* Sekcja na podstronie z poradami */
+.newsletter_section {
+  padding: 0 0 110px;
+
+  @media (max-width: 767px) {
+    padding-bottom: 60px;
+  }
+
+  .newsletter_box {
+    padding: 50px 55px 55px;
+    border-radius: 25px;
+    border-top: 4px solid var(--dgc-gold);
+    background: var(--dgc-panel);
+    text-align: center;
+
+    @media (max-width: 767px) {
+      padding: 35px 22px 40px;
+    }
+  }
+
+  .section_title {
+    margin-bottom: 16px;
+
+    h3 {
+      margin: 8px auto 0;
+      font-size: 50px;
+      line-height: 56px;
+      text-wrap: balance;
+
+      @media (max-width: 575px) {
+        font-size: 36px;
+        line-height: 42px;
+      }
+    }
+  }
+
+  .newsletter_lead {
+    max-width: 620px;
+    margin: 0 auto 30px;
+    color: var(--dgc-ink);
+    font-size: 18px;
+    line-height: 30px;
+  }
+
+  .newsletter_form {
+    max-width: 620px;
+    margin: 0 auto;
+    text-align: left;
+  }
+}
+
+/* Okno newslettera. Na desktopie srodek ekranu, na telefonie panel od dolu —
+   pelnoekranowe okno na telefonie Google traktuje jako natretna przeslone
+   i obniza za nia pozycje w wynikach. */
+.newsletter_popup {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 767px) {
+    align-items: flex-end;
+  }
+}
+
+.newsletter_popup_tlo {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 68, 68, 0.55);
+}
+
+.newsletter_popup_okno {
+  position: relative;
+  width: min(560px, calc(100% - 40px));
+  padding: 44px 44px 40px;
+  border-radius: 25px;
+  border-top: 4px solid var(--dgc-gold);
+  background: var(--dgc-canvas);
+  box-shadow: 0 24px 70px rgba(13, 68, 68, 0.25);
+
+  @media (max-width: 767px) {
+    width: 100%;
+    padding: 32px 22px 28px;
+    border-radius: 25px 25px 0 0;
+  }
+
+  .newsletter_popup_nad {
+    display: inline-block;
+    margin-bottom: 10px;
+    color: var(--dgc-ink);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    margin-bottom: 12px;
+    color: var(--dgc-ink);
+    font-size: 38px;
+    line-height: 44px;
+    text-wrap: balance;
+
+    @media (max-width: 575px) {
+      font-size: 30px;
+      line-height: 36px;
+    }
+  }
+
+  > p {
+    margin-bottom: 26px;
+    color: var(--dgc-ink);
+    font-size: 17px;
+    line-height: 28px;
+  }
+}
+
+.newsletter_popup_zamknij {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--dgc-ink);
+  font-size: 30px;
+  line-height: 1;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--dgc-panel);
+  }
+}
+
+/* Kto nie chce animacji, ten jej nie dostaje. */
+@media (prefers-reduced-motion: no-preference) {
+  .newsletter_popup_okno {
+    animation: dgc-popup 0.25s ease-out;
+  }
+
+  @keyframes dgc-popup {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* --- Zgody na tresci innych firm ---------------------------------- */
+.zgody_baner {
+  position: fixed;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  z-index: 10000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 26px 30px;
+  border-radius: 20px;
+  border-top: 4px solid var(--dgc-gold);
+  background: var(--dgc-canvas);
+  box-shadow: 0 18px 60px rgba(13, 68, 68, 0.28);
+
+  @media (max-width: 900px) {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+    padding: 22px 20px;
+  }
+
+  h2 {
+    margin-bottom: 8px;
+    color: var(--dgc-ink);
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  p {
+    margin: 0;
+    color: var(--dgc-ink);
+    font-size: 15px;
+    line-height: 24px;
+  }
+
+  a {
+    color: var(--dgc-ink);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+.zgody_lista {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+
+  li + li {
+    margin-top: 12px;
+  }
+
+  label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  input {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    margin-top: 3px;
+    accent-color: var(--dgc-brand);
+  }
+
+  strong {
+    display: block;
+    color: var(--dgc-ink);
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  span {
+    color: var(--dgc-ink);
+    font-size: 14px;
+    line-height: 21px;
+  }
+}
+
+/* Odrzucenie i akceptacja maja identyczny rozmiar i wage. Rozny wyglad
+   przyciskow to ciemny wzorzec, ktory organy nadzorcze traktuja jak brak
+   waznej zgody. */
+.zgody_baner_akcje {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+
+  @media (max-width: 900px) {
+    justify-content: flex-start;
+  }
+}
+
+.zgody_btn {
+  /* Identyczna szerokosc obu przyciskow, nie tylko "podobna" — rozny rozmiar
+     przycisku odrzucenia i akceptacji to klasyczny zarzut o ciemny wzorzec. */
+  min-width: 210px;
+  height: 48px;
+  padding: 0 22px;
+  border: 1px solid var(--dgc-brand);
+  border-radius: 12px;
+  background: var(--dgc-canvas);
+  color: var(--dgc-ink);
+  font-size: 16px;
+  font-weight: 500;
+
+  &:hover {
+    background: var(--dgc-panel);
+  }
+}
+
+.zgody_btn_glowny {
+  background: var(--dgc-brand);
+  color: var(--dgc-canvas);
+
+  &:hover {
+    background: var(--dgc-brand-deep);
+  }
+}
+
+.zgody_link {
+  height: 48px;
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  color: var(--dgc-ink);
+  font-size: 15px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Kafel w miejscu tresci, ktora czeka na zgode */
+.bramka_tresci {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 550px;
+  padding: 40px 24px;
+  background: var(--dgc-panel);
+
+  @media (max-width: 767px) {
+    min-height: 320px;
+  }
+
+  .bramka_tresci_srodek {
+    max-width: 520px;
+    text-align: center;
+  }
+
+  h3 {
+    margin-bottom: 12px;
+    color: var(--dgc-ink);
+    font-size: 34px;
+    line-height: 40px;
+  }
+
+  p {
+    margin-bottom: 26px;
+    color: var(--dgc-ink);
+    font-size: 17px;
+    line-height: 28px;
+  }
+
+  .theme-btn {
+    text-transform: none;
+  }
+}
+
+/* Odnosnik wycofania zgody w stopce — wyglada jak pozostale pozycje listy */
+.stopka_zgody {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--dgc-gold);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.22em;
+  }
+}
+
+/* --- Polityka prywatnosci ----------------------------------------- */
+.polityka_page {
+  .polityka_spis {
+    margin-bottom: 50px;
+    padding: 26px 30px;
+    border-radius: 20px;
+    border-left: 4px solid var(--dgc-gold);
+    background: var(--dgc-panel);
+
+    h2 {
+      margin-bottom: 12px;
+      font-size: 24px;
+      line-height: 30px;
+    }
+
+    ol {
+      margin: 0;
+      padding-left: 20px;
+      columns: 2;
+      column-gap: 40px;
+
+      @media (max-width: 767px) {
+        columns: 1;
+      }
+    }
+
+    li {
+      margin-bottom: 6px;
+      color: var(--dgc-ink);
+      font-size: 16px;
+      line-height: 26px;
+    }
+
+    a {
+      color: var(--dgc-ink);
+    }
+  }
+
+  .polityka_sekcja {
+    margin-bottom: 42px;
+    scroll-margin-top: 120px;
+
+    h2 {
+      margin-bottom: 16px;
+      font-size: 34px;
+      line-height: 42px;
+      text-wrap: balance;
+
+      @media (max-width: 575px) {
+        font-size: 28px;
+        line-height: 36px;
+      }
+    }
+
+    p,
+    li {
+      color: var(--dgc-ink);
+      font-size: 17px;
+      line-height: 30px;
+    }
+
+    p {
+      margin-bottom: 16px;
+    }
+
+    ul {
+      margin: 0 0 16px;
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+  }
+
+  /* Braki widoczne na pierwszy rzut oka — dokument z dziura nie moze
+     przejsc niezauwazony na produkcje. */
+  .do_uzupelnienia {
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: var(--dgc-gold-soft);
+    color: var(--dgc-ink);
+    font-size: 0.9em;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+}
+
+/* --- Sekcja zespolu na /about ------------------------------------- */
+.zespol_section {
+  background: var(--dgc-canvas);
+
+  /* Nizej stoi "Nadzor merytoryczny" z wlasnymi 120px u gory. Dwa razy
+     section-padding dawalo 240px czystej pustki. Zostawiamy 40px, przez co
+     przerwa (160px) trzyma sie rytmu z sekcji wyzej, gdzie funfact konczy
+     sie 30px odstepu i wchodzi w 120px zespolu. */
+  padding-bottom: 40px;
+
+  .zespol_foto {
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 18px 50px rgba(13, 68, 68, 0.14);
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    @media (max-width: 991px) {
+      max-width: 460px;
+      margin: 0 auto 40px;
+    }
+  }
+
+  /* Naglowek do lewej, tak jak tekst pod nim — domyslnie SectionTitle
+     jest wysrodkowany i rozjezdzal sie z akapitami. */
+  .section_title {
+    margin-bottom: 20px;
+    text-align: left;
+
+    h2 {
+      margin-left: 0;
+    }
+
+    h3 {
+      margin-top: 8px;
+      margin-left: 0;
+      margin-right: 0;
+      /* 80/80 — dokladnie jak h3 w sekcji "O nas" wyzej. Tamta ma ten sam
+         uklad (zdjecie obok kolumny tekstu), wiec musi brzmiec tak samo
+         mocno. Wczesniejsze 60px robilo z zespolu podsekcje. */
+      font-size: 80px;
+      line-height: 80px;
+      text-wrap: balance;
+
+      @media (max-width: 1199px) {
+        font-size: 60px;
+        line-height: 66px;
+      }
+
+      @media (max-width: 991px) {
+        font-size: 46px;
+        line-height: 52px;
+      }
+
+      @media (max-width: 575px) {
+        font-size: 36px;
+        line-height: 42px;
+      }
+    }
+  }
+
+  .zespol_opis {
+    margin-bottom: 18px;
+    color: var(--dgc-ink);
+    font-size: 18px;
+    line-height: 32px;
+  }
+
+  /* Cztery obietnice — najkonkretniejszy material, jaki DGC ma o sobie
+     napisany. Zlota kreska z lewej zamiast wypunktowania. */
+  .zespol_zapewniamy {
+    margin: 30px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 30px;
+
+    @media (max-width: 575px) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    li {
+      padding-left: 16px;
+      border-left: 3px solid var(--dgc-gold);
+    }
+
+    strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--dgc-ink);
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    span {
+      color: var(--dgc-ink);
+      font-size: 16px;
+      line-height: 26px;
+      opacity: 0.9;
+    }
+  }
+
+  .zespol_branze {
+    margin-top: 70px;
+    padding: 45px 50px 40px;
+    border-radius: 25px;
+    border-top: 4px solid var(--dgc-gold);
+    background: var(--dgc-panel);
+
+    @media (max-width: 767px) {
+      margin-top: 50px;
+      padding: 32px 22px 28px;
+    }
+
+    h3 {
+      margin-bottom: 10px;
+      color: var(--dgc-ink);
+      font-size: 44px;
+      line-height: 50px;
+      text-wrap: balance;
+
+      @media (max-width: 575px) {
+        font-size: 32px;
+        line-height: 38px;
+      }
+    }
+
+    > p {
+      margin-bottom: 22px;
+      color: var(--dgc-ink);
+      font-size: 18px;
+      line-height: 30px;
+    }
+
+    ul {
+      margin: 0 0 22px;
+      padding: 0;
+      list-style: none;
+      columns: 3;
+      column-gap: 40px;
+
+      @media (max-width: 991px) {
+        columns: 2;
+      }
+
+      @media (max-width: 575px) {
+        columns: 1;
+      }
+    }
+
+    li {
+      break-inside: avoid;
+      margin-bottom: 10px;
+      padding-left: 22px;
+      position: relative;
+      color: var(--dgc-ink);
+      font-size: 17px;
+      line-height: 27px;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 11px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--dgc-brand);
+      }
+    }
+  }
+
+  .zespol_branze_stopka {
+    margin: 0;
+    color: var(--dgc-ink);
+    font-size: 16px;
+    line-height: 27px;
+    opacity: 0.85;
+  }
 }

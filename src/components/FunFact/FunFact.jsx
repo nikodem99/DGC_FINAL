@@ -9,30 +9,30 @@ const FunFact = (props) => {
                 <div className="row">
                     <div className="col col-lg-3 col-md-6 col-sm-6 col-12">
                         <div className="item">
-                            <i className="flaticon-doctor"></i>
-                            <h3><CountUp end={250} enableScrollSpy />+</h3>
-                            <p>Qualified Doctors</p>
+                            <i className="ti-medall-alt"></i>
+                            <h3><CountUp end={15} enableScrollSpy /></h3>
+                            <p>Lat na rynku</p>
                         </div>
                     </div>
                     <div className="col col-lg-3 col-md-6 col-sm-6 col-12">
                         <div className="item">
-                            <i className="flaticon-businesswoman"></i>
-                            <h3><CountUp end={3020} enableScrollSpy />+</h3>
-                            <p> Satisfied Clients</p>
+                            <i className="ti-user"></i>
+                            <h3><CountUp end={10} enableScrollSpy /></h3>
+                            <p>Form prawnych w obsłudze</p>
                         </div>
                     </div>
                     <div className="col col-lg-3 col-md-6 col-sm-6 col-12">
                         <div className="item">
-                            <i className="flaticon-award"></i>
-                            <h3><CountUp end={25} enableScrollSpy />+</h3>
-                            <p>Award Winning</p>
+                            <i className="ti-cup"></i>
+                            <h3><CountUp end={4} enableScrollSpy /></h3>
+                            <p>Organizacje branżowe</p>
                         </div>
                     </div>
                     <div className="col col-lg-3 col-md-6 col-sm-6 col-12">
                         <div className="item">
-                            <i className="flaticon-customer-care"></i>
-                            <h3><CountUp end={24} enableScrollSpy />/<CountUp end={7} enableScrollSpy /></h3>
-                            <p>Client Support</p>
+                            <i className="ti-headphone-alt"></i>
+                            <h3><CountUp end={100} enableScrollSpy />%</h3>
+                            <p>Zdalnej obsługi kadr i płac</p>
                         </div>
                     </div>
                 </div>

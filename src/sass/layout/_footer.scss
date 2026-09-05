@@ -156,7 +156,7 @@
 
 
                     &:hover {
-                        color: $light;
+                        color: $dgc-canvas;
                     }
                 }
             }
@@ -189,9 +189,11 @@
                     background: $dgc-brand;
                     border-radius: 100px;
                     display: block;
+                    transition: all .3s;
 
                     &:hover {
-                        color: $light;
+                        background: $dgc-gold;
+                        color: $dgc-ink;
                     }
 
                 }
@@ -209,7 +211,7 @@
                 i {
                     margin-right: 10px;
                     font-size: 18px;
-                    color: $light;
+                    color: $dgc-gold;
                     padding-top: 5px;
                 }
 
@@ -254,6 +256,25 @@
                 text-align: center;
                 margin-bottom: 20px;
             }
+        }
+
+        .creator-credit {
+            margin: 0;
+            color: $dgc-canvas;
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 32px;
+            text-align: center;
+
+            a {
+                color: $dgc-canvas;
+                text-decoration: none;
+
+                &:hover {
+                    color: $dgc-gold;
+                }
+            }
+
         }
 
         ul {

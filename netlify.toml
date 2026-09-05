@@ -1,0 +1,20 @@
+# Konfiguracja wdrozenia na Netlify.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Vite 7 wymaga Node 20+. Na Node 18 build przewraca sie na
+  # "crypto.hash is not a function" — sprawdzone na tym projekcie.
+  # Netlify bez tej zmiennej moze uzyc starszej wersji domyslnej.
+  NODE_VERSION = "22"
+
+# Pliki filmow i grafik maja w nazwie stala sciezke, wiec cache trzymamy
+# krotko — inaczej po podmianie materialu klient przez tydzien widzialby
+# stara wersje. Skrypty i style Vite hashuje w nazwie, wiec te moga lezec
+# w cache dlugo (Netlify ustawia to samo).
+[[headers]]
+  for = "/video/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"

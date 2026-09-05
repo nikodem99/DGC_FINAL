@@ -1,152 +1,174 @@
-
 import React, { useState } from 'react';
+import { sendLead, KONTAKT_ZAPASOWY } from '../../lib/sendLead';
+import { TEMATY } from '../../lib/tematy';
+
+const PUSTY = { imie: '', email: '', telefon: '', temat: '', _gotcha: '' };
 
 const AppointmentForm = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        department: '',
-        doctor: '',
-    });
-
+    const [formData, setFormData] = useState(PUSTY);
     const [errors, setErrors] = useState({});
     const [submitted, setSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submissionError, setSubmissionError] = useState(null);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-        validate({ [name]: value });
-    };
+    const sprawdz = (pola) => {
+        const e = {};
 
-    const validate = (fieldValues = formData) => {
-        let tempErrors = { ...errors };
-
-        if ('name' in fieldValues)
-            tempErrors.name = fieldValues.name ? '' : 'Name is required';
-        if ('email' in fieldValues) {
-            tempErrors.email = fieldValues.email ? '' : 'Email is required';
-            if (fieldValues.email)
-                tempErrors.email = /\S+@\S+\.\S+/.test(fieldValues.email)
-                    ? ''
-                    : 'Email address is invalid';
+        if ('imie' in pola) {
+            e.imie = pola.imie.trim().length >= 3 ? '' : 'Podaj imię i nazwisko';
         }
-        if ('department' in fieldValues)
-            tempErrors.department = fieldValues.department
+        if ('email' in pola) {
+            if (!pola.email.trim()) e.email = 'Podaj adres e-mail';
+            else e.email = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(pola.email.trim())
                 ? ''
-                : 'Department is required';
-        if ('doctor' in fieldValues)
-            tempErrors.doctor = fieldValues.doctor ? '' : 'Doctor is required';
+                : 'Niepoprawny adres e-mail';
+        }
+        if ('telefon' in pola) {
+            const cyfry = pola.telefon.replace(/[^\d]/g, '');
+            if (!pola.telefon.trim()) e.telefon = 'Podaj numer telefonu';
+            else e.telefon = cyfry.length >= 9 ? '' : 'Niepoprawny numer telefonu';
+        }
+        if ('temat' in pola) {
+            e.temat = pola.temat ? '' : 'Wybierz temat';
+        }
 
-        setErrors(tempErrors);
-
-        if (fieldValues === formData)
-            return Object.values(tempErrors).every((x) => x === '');
+        return e;
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleChange = (evt) => {
+        const { name, value } = evt.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+        setErrors((prev) => ({ ...prev, ...sprawdz({ [name]: value }) }));
+    };
+
+    const handleBlur = (evt) => {
+        const { name, value } = evt.target;
+        setErrors((prev) => ({ ...prev, ...sprawdz({ [name]: value }) }));
+    };
+
+    const handleSubmit = async (evt) => {
+        evt.preventDefault();
         setSubmitted(false);
         setSubmissionError(null);
-        if (validate()) {
-            setIsSubmitting(true);
-            setTimeout(() => {
-                if (Math.random() > 0.5) {
-                    setSubmitted(true);
-                    setIsSubmitting(false);
-                    handleReset();
-                } else {
-                    setSubmissionError('Submission failed. Please try again.');
-                    setIsSubmitting(false);
-                }
-            }, 2000);
+
+        const wynik = sprawdz({
+            imie: formData.imie,
+            email: formData.email,
+            telefon: formData.telefon,
+            temat: formData.temat,
+        });
+        setErrors(wynik);
+
+        if (Object.values(wynik).some(Boolean)) return;
+
+        // pole-pulapka na boty: czlowiek go nie widzi, wiec zostaje puste
+        if (formData._gotcha) return;
+
+        setIsSubmitting(true);
+        try {
+            await sendLead({
+                imie: formData.imie.trim(),
+                email: formData.email.trim(),
+                telefon: formData.telefon.trim(),
+                temat: formData.temat,
+                zrodlo: 'pasek-naglowek',
+                strona: typeof window !== 'undefined' ? window.location.pathname : '',
+            });
+            setSubmitted(true);
+            setFormData(PUSTY);
+            setErrors({});
+        } catch (err) {
+            // sendLead rzuca gotowym komunikatem po polsku; rozne przyczyny
+            // maja rozna tresc, zeby "odczekaj chwile" nie wygladalo jak awaria
+            setSubmissionError(err.message);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
-    const handleReset = () => {
-        setFormData({
-            name: '',
-            email: '',
-            department: '',
-            doctor: '',
-        });
-        setErrors({});
-        setSubmitted(false);
-        setSubmissionError(null);
-    };
-
+    // Slot na komunikat renderuje sie zawsze — dzieki temu pojawienie sie bledu
+    // rozpycha pole w dol zamiast przesuwac caly pasek.
+    const pole = (id, name, label, extra = {}) => (
+        <div className="form_item">
+            <label htmlFor={`lead-${id}`}>{label}</label>
+            <input
+                id={`lead-${id}`}
+                name={name}
+                className={`form_control${errors[name] ? ' error' : ''}`}
+                value={formData[name]}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                aria-invalid={errors[name] ? 'true' : undefined}
+                aria-describedby={`lead-${id}-error`}
+                {...extra}
+            />
+            <p className="error" id={`lead-${id}-error`}>{errors[name] || ''}</p>
+        </div>
+    );
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
             <div className="wrapper">
+                {pole('imie', 'imie', 'Imię i nazwisko', { type: 'text', placeholder: 'Jan Kowalski' })}
+                {pole('email', 'email', 'Adres e-mail', { type: 'email', placeholder: 'jan@firma.pl' })}
+                {pole('telefon', 'telefon', 'Telefon', { type: 'tel', placeholder: '601 234 567' })}
+
                 <div className="form_item">
-                    <label>Your Name</label>
-                    <input
-                        type="text"
-                        name="name"
-                        placeholder="Name"
-                        className="form_control"
-                        value={formData.name}
-                        onChange={handleChange}
-                        onBlur={() => validate({ name: formData.name })}
-                    />
-                    {errors.name && <p className="error">{errors.name}</p>}
-                </div>
-                <div className="form_item">
-                    <label>Your Email</label>
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        className="form_control"
-                        value={formData.email}
-                        onChange={handleChange}
-                        onBlur={() => validate({ email: formData.email })}
-                    />
-                    {errors.email && <p className="error">{errors.email}</p>}
-                </div>
-                <div className="form_item">
-                    <label>Select Department</label>
+                    <label htmlFor="lead-temat">Czego szukasz?</label>
                     <select
-                        name="department"
-                        className="form_control"
-                        value={formData.department}
+                        id="lead-temat"
+                        name="temat"
+                        className={`form_control${errors.temat ? ' error' : ''}`}
+                        value={formData.temat}
                         onChange={handleChange}
-                        onBlur={() => validate({ department: formData.department })}
+                        onBlur={handleBlur}
+                        aria-invalid={errors.temat ? 'true' : undefined}
+                        aria-describedby="lead-temat-error"
                     >
-                        <option value="">Department</option>
-                        <option value="subject1">Subject 1</option>
-                        <option value="subject2">Subject 2</option>
-                        <option value="subject3">Subject 3</option>
+                        <option value="">Wybierz temat</option>
+                        {TEMATY.map((t) => (
+                            <option key={t} value={t}>{t}</option>
+                        ))}
                     </select>
-                    {errors.department && <p className="error">{errors.department}</p>}
+                    <p className="error" id="lead-temat-error">{errors.temat || ''}</p>
                 </div>
-                <div className="form_item">
-                    <label>Choose Doctor</label>
-                    <select
-                        name="doctor"
-                        className="form_control"
-                        value={formData.doctor}
-                        onChange={handleChange}
-                        onBlur={() => validate({ doctor: formData.doctor })}
-                    >
-                        <option value="">Doctor</option>
-                        <option value="subject1">Subject 1</option>
-                        <option value="subject2">Subject 2</option>
-                        <option value="subject3">Subject 3</option>
-                    </select>
-                    {errors.doctor && <p className="error">{errors.doctor}</p>}
+
+                {/* honeypot w postaci z dokumentacji Forminit — nazwa pola
+                    zgadza sie z ustawieniem w panelu */}
+                <input
+                    type="hidden"
+                    name="_gotcha"
+                    value={formData._gotcha}
+                    onChange={handleChange}
+                    style={{ display: 'none' }}
+                />
+
+                <div className="form_item form_item_submit">
+                    {/* pusta etykieta trzyma przycisk w jednej linii z polami */}
+                    <label className="label_spacer" aria-hidden="true"></label>
+                    <input
+                        className="form_btn"
+                        type="submit"
+                        value={isSubmitting ? 'Wysyłanie…' : 'Wyślij zapytanie'}
+                        disabled={isSubmitting}
+                    />
                 </div>
-                <div className="form_item">
-                    <input className="form_btn" type="submit" value="Send" disabled={isSubmitting} />
+
+                <div className="form_status" role="status" aria-live="polite">
+                    {submitted && (
+                        <div className="success_message">
+                            Dziękujemy. Odezwiemy się w ciągu 24 godzin roboczych.
+                        </div>
+                    )}
+                    {submissionError && (
+                        <div className="error_message">
+                            {submissionError} Zadzwoń:{' '}
+                            <a href={KONTAKT_ZAPASOWY.telefonHref}>{KONTAKT_ZAPASOWY.telefon}</a>{' '}
+                            lub napisz na{' '}
+                            <a href={`mailto:${KONTAKT_ZAPASOWY.email}`}>{KONTAKT_ZAPASOWY.email}</a>.
+                        </div>
+                    )}
                 </div>
-                {isSubmitting && <div className="loading_message">Submitting...</div>}
-                {submitted && <div className="success_message">Form submitted successfully!</div>}
-                {submissionError && <div className="error_message">{submissionError}</div>}
             </div>
         </form>
     );

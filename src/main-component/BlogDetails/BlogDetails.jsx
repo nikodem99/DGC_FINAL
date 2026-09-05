@@ -11,12 +11,14 @@ import logo from '../../images/logo-2.svg';
 const BlogDetails = (props) => {
 
     const { slug } = useParams()
-    const BlogDetails = blogs.find(item => item.slug === slug)
+    // Bez ?. wejscie na nieistniejacy adres wywalalo cala strone bialym
+    // ekranem, zanim BlogSingle zdazyl pokazac komunikat.
+    const wpis = blogs.find(item => item.slug === slug)
 
     return (
         <Fragment>
             <Navbar Logo={logo} hclass={'wpo-site-header wpo-site-header-s2'} />
-            <PageTitle pageTitle={BlogDetails.title} pagesub={'Blog Single'} />
+            <PageTitle pageTitle={wpis?.title ?? 'Nie znaleziono wpisu'} pagesub={'Porady'} />
             <BlogSingle />
             <Footer hclass={"wpo-site-footer_s2"}/>
             <Scrollbar />

@@ -1,21 +1,26 @@
 import { useState } from "react";
 import VideoModal from "../VideoModal/VideoModal";
 
-const VideoSection = () => {
+const VideoSection = ({ videoSrc = '/video/dgc-hero.mp4', poster = '/video/hero-plakat.jpg', videoId }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-        <div
+        <button
+          type="button"
           className="video-btn"
           onClick={() => setIsOpen(true)}
+          aria-label="Obejrzyj film o DGC"
         >
           <i className="flaticon-play"></i>
-        </div>
+        </button>
+        <span className="video-label">Obejrzyj film</span>
 
       <VideoModal
         isOpen={isOpen}
-        videoId="74DWwSxsVSs?si=qaPBPdX-wN9e8VH0"
+        videoSrc={videoSrc}
+        poster={poster}
+        videoId={videoId}
         onClose={() => setIsOpen(false)}
       />
     </>

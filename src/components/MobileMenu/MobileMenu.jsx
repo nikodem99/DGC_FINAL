@@ -24,6 +24,11 @@ const menus = [
         submenu: offerMenu,
     },
     {
+        id: 6,
+        title: 'Cennik',
+        link: '/cennik',
+    },
+    {
         id: 5,
         title: 'Porady',
         link: '/blog',

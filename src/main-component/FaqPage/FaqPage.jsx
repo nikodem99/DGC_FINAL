@@ -11,7 +11,7 @@ const ProjectPage = () => {
     return (
         <Fragment>
             <Navbar hclass={'wpo-site-header wpo-site-header-s2'} Logo={Logo} />
-            <PageTitle pageTitle={'Faq'} pagesub={'Faq'} />
+            <PageTitle pageTitle={'Najczęstsze pytania'} pagesub={'Najczęstsze pytania'} />
             <FaqSection />
             <Footer hclass={'wpo-site-footer_s2'} />
             <Scrollbar />

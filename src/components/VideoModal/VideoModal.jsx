@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import "./VideoModal.scss";
 
-const VideoModal = ({ isOpen, videoId, onClose }) => {
+const VideoModal = ({ isOpen, videoId, videoSrc, poster, onClose }) => {
   // Close on ESC key
   useEffect(() => {
     const handleEsc = (e) => {
@@ -19,7 +19,7 @@ const VideoModal = ({ isOpen, videoId, onClose }) => {
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen || !videoId) return null;
+  if (!isOpen || (!videoId && !videoSrc)) return null;
 
   return (
     <div className="videoModal">
@@ -30,13 +30,25 @@ const VideoModal = ({ isOpen, videoId, onClose }) => {
           ×
         </button>
 
-        <iframe
-          src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-          title="Video Player"
-          frameBorder="0"
-          allow="autoplay; encrypted-media"
-          allowFullScreen
-        />
+        {videoSrc ? (
+          // Plik hostowany u nas: nic sie nie pobiera, dopoki modal nie zostanie otwarty
+          <video
+            src={videoSrc}
+            poster={poster}
+            controls
+            autoPlay
+            playsInline
+            preload="none"
+          />
+        ) : (
+          <iframe
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+            title="Video Player"
+            frameBorder="0"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+          />
+        )}
       </div>
     </div>
   );

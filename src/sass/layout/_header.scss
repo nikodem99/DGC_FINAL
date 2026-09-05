@@ -1342,10 +1342,16 @@
 
 	.navbar-header .navbar-brand {
 		img {
-			max-width: 220px;
+			/* logotyp DGC ma szerszy lockup niz logo szablonu (264x60 vs 223x60),
+			   wiec szerokosci przeskalowane, zeby zachowac te sama wysokosc optyczna.
+			   min(..., 100%) jest tu konieczne: kolumna z logo ma ok. 203px, a przy
+			   oknie 1400px prog 1399px jeszcze nie dziala, wiec sztywne 250px
+			   wychodzilo poza kolumne i logo nachodzilo na menu. */
+			max-width: min(250px, 100%);
+			height: auto;
 
 			@media (max-width:1399px) {
-				max-width: 170px;
+				max-width: min(200px, 100%);
 			}
 		}
 	}
@@ -1392,7 +1398,7 @@
 @media(max-width: 440px) {
 	.wpo-site-header .navbar-header .navbar-brand {
 		img {
-			max-width: 170px;
+			max-width: 185px;
 		}
 	}
 }

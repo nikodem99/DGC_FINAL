@@ -129,11 +129,14 @@
 
             .form_btn {
                 color: #FDFCFC;
-                font-size: 20px;
+                /* 86px i "Send" z szablonu; polski napis potrzebuje szerokosci z tresci */
+                font-size: 17px;
                 font-weight: 500;
                 background: $theme-primary-color;
-                width: 86px;
+                width: auto;
                 height: 50px;
+                padding: 0 26px;
+                white-space: nowrap;
                 text-align: center;
                 line-height: 50px;
                 border-radius: 15px;
@@ -147,7 +150,7 @@
             }
 
             &:last-child {
-                max-width: 86px;
+                max-width: none;
                 padding-bottom: 0px;
             }
 
@@ -210,31 +213,41 @@
         position: relative;
         margin: 0 auto;
         margin-top: -100px;
+        /* centrowanie flexem zamiast line-height: metryki Themify roznia sie
+           od poprzedniego zestawu, sztywna interlinia zbijala glif w dol */
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         i {
-            font-size: 45px;
-            line-height: 120px;
+            font-size: 42px;
+            line-height: 1;
         }
 
     }
 
     .content {
         h2 {
-            font-size: 60px;
+            /* Szablon zakladal krotkie angielskie hasla ("Dental Care") — stad 60px
+               i sztywna interlinia 100px. Realne nazwy uslug DGC sa dluzsze, wiec:
+               skala plynna, interlinia proporcjonalna, a min-height rezerwuje dwie
+               linie, dzieki czemu opis i strzalka startuja rowno we wszystkich kartach. */
+            font-size: clamp(24px, 0.9vw + 18px, 32px);
             font-weight: 400;
-            line-height: 100px;
-            margin-top: 40px;
+            line-height: 1.3;
+            min-height: 2.6em;
+            margin-top: 26px;
+            margin-bottom: 14px;
+            text-wrap: balance;
 
             @media (max-width:1199px) {
-                font-size: 50px;
-                line-height: 70px;
-                margin-top: 30px;
+                margin-top: 22px;
             }
 
             @media (max-width:767px) {
-                font-size: 45px;
-                line-height: 50px;
-                margin-top: 40px;
+                font-size: 26px;
+                min-height: 0;
+                margin-top: 20px;
             }
         }
 
@@ -305,10 +318,6 @@
             border-radius: 20px;
             background: rgba(216, 187, 43, 0.16);
             box-shadow: inset 0 0 0 1px rgba(216, 187, 43, 0.55);
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            font-size: 14px;
-            font-weight: 500;
             padding: 5px 20px;
 
 
@@ -368,6 +377,7 @@
                 }
             }
 
+
             span {
                 color: $text-color;
                 font-size: 18px;
@@ -413,10 +423,14 @@
             background-size: cover;
 
             img {
-                mix-blend-mode: screen;
+                /* Slot szablonu zakladal wycinanke na ksztalcie i blendowanie na jasno.
+                   Przy realnej fotografii blend wyprałby ją do biala, wiec zdjete;
+                   kadr przesuniety w gore, zeby kwadratowe przyciecie nie ucielo glowy. */
                 width: 644px;
                 height: 643px;
                 object-fit: cover;
+                object-position: center 12%;
+                border-radius: 24px;
 
                 @media (max-width:1399px) {
                     width: 544px;
@@ -511,8 +525,26 @@
                 bottom: -60px;
             }
 
+            /* Przy realnym zdjeciu plakietka na mobile zaslaniala pol kadru —
+               zjezdza pod dolna krawedz i tylko ja muska. */
             @media (max-width:991px) {
-                bottom: 0px;
+                bottom: -34px;
+                right: auto;
+                left: 50%;
+                transform: translateX(-50%);
+                width: max-content;
+                max-width: none;
+                gap: 14px;
+
+                .text {
+                    white-space: nowrap;
+                    text-align: left;
+                }
+            }
+
+            @media (max-width:575px) {
+                padding: 12px 18px;
+                bottom: -30px;
             }
 
 
@@ -726,19 +758,17 @@
 }
 
 .work_wrapper {
-    margin: 0 -165px;
+    /* Szablon rozpycha ten pas o 165px poza kontener dla efektu szerokiej
+       sekcji. Progi 1560/1450 zakladaly bardzo szerokie ekrany, wiec przy
+       oknie ok. 1600px pas byl szerszy niz okno i strona dostawala poziomy
+       pasek przewijania. max() ogranicza rozepchanie do miejsca, ktore
+       faktycznie zostalo po bokach kontenera; 20px zapasu pokrywa szerokosc
+       pionowego paska przewijania, ktora przegladarka wlicza w 100vw. */
+    margin-inline: max(-165px, calc((100% - 100vw) / 2 + 20px));
     position: relative;
 
-    @media (max-width:1560px) {
-        margin: 0 -100px;
-    }
-
-    @media (max-width:1450px) {
-        margin: 0 -50px;
-    }
-
     @media (max-width:1399px) {
-        margin: 0;
+        margin-inline: 0;
     }
 
     .shape {
@@ -768,8 +798,34 @@
         margin: 0 auto;
         margin-bottom: 5px;
 
-        img {
+        img,
+        .step_icon {
             clip-path: polygon(0px 125.5px, 0px 125.5px, 1.6425841px 145.856816px, 6.3980768px 165.167808px, 14.0080887px 183.174592px, 24.2142304px 199.618784px, 36.7581125px 214.242px, 51.3813456px 226.785856px, 67.8255403px 236.991968px, 85.8323072px 244.601952px, 105.1432569px 249.357424px, 125.5px 251px, 125.5px 251px, 145.856816px 249.357424px, 165.167808px 244.601952px, 183.174592px 236.991968px, 199.618784px 226.785856px, 214.242px 214.242px, 226.785856px 199.618784px, 236.991968px 183.174592px, 244.601952px 165.167808px, 249.357424px 145.856816px, 251px 125.5px, 251px 125.5px, 250.863708px 119.9673732px, 250.462026px 114.6307736px, 249.805736px 109.4621224px, 248.905632px 104.4333408px, 247.7725px 99.51635px, 246.417128px 94.6830712px, 244.850304px 89.9054256px, 243.082816px 85.1553344px, 241.125452px 80.4047188px, 238.989px 75.6255px, 238.989px 75.6255px, 236.446064px 72.0285691px, 232.976152px 69.7791488px, 228.722808px 68.5182477px, 223.829576px 67.8868744px, 218.44px 67.5260375px, 212.697624px 67.0767456px, 206.745992px 66.1800073px, 200.728648px 64.4768312px, 194.789136px 61.6082259px, 189.071px 57.2152px, 189.071px 57.2152px, 184.393417px 51.72729733px, 181.241016px 45.92431864px, 179.255519px 39.97256791px, 178.078648px 34.03834912px, 177.352125px 28.28796625px, 176.717672px 22.88772328px, 175.817011px 18.00392419px, 174.291864px 13.80287296px, 171.783953px 10.45087357px, 167.935px 8.11423px, 167.935px 8.11423px, 163.791427px 6.59431287px, 159.693376px 5.22753536px, 155.615449px 4.01551129px, 151.532248px 2.95985448px, 147.418375px 2.06217875px, 143.248432px 1.32409792px, 138.997021px 0.74722581px, 134.638744px 0.33317624px, 130.148203px 0.08356303px, 125.5px 1.0333091782264E-31px, 125.5px 0px, 105.1432569px 1.6425841px, 85.8323072px 6.3980768px, 67.8255403px 14.0080887px, 51.3813456px 24.2142304px, 36.7581125px 36.7581125px, 24.2142304px 51.3813456px, 14.0080887px 67.8255403px, 6.3980768px 85.8323072px, 1.6425841px 105.1432569px, 2.0777228062889E-30px 125.5px);
+        }
+
+        .step_icon {
+            width: 251px;
+            height: 251px;
+            max-width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(18, 120, 135, 0.08);
+
+            i {
+                font-size: 74px;
+                line-height: 1;
+                color: $dgc-brand;
+            }
+
+            @media (max-width:575px) {
+                width: 220px;
+                height: 220px;
+
+                i {
+                    font-size: 62px;
+                }
+            }
         }
 
         span {
@@ -1320,7 +1376,8 @@
             transform: translate(-50%, -50%);
             font-size: 190px;
             z-index: -1;
-            color: #0D4444;
+            /* swiadomy jasny znak wodny na turkusie zamiast ciemnej plamy (2,11:1) */
+            color: rgba(253, 252, 252, 0.14);
 
             @media (max-width:991px) {
                 font-size: 100px;
@@ -1876,7 +1933,7 @@
             }
         }
         .error{
-            color: #0D4444;
+            color: $dgc-canvas;
         }
     }
 

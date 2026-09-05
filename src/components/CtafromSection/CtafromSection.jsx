@@ -7,8 +7,9 @@ const CtafromSection = (props) => {
             <div className="container">
                 <div className="cta_wrap">
                     <div className="content">
-                        <h2>Get A Free Consultation</h2>
-                        <p>Drop us a line! We are here to answer your questions 24/7</p>
+                        <h2>Sprawdź, ile kosztuje Twoja księgowość</h2>
+                        <p>Odpowiedz na dwa pytania, a odeślemy wycenę dopasowaną do Twojej firmy.
+                            Bezpłatnie i bez zobowiązań.</p>
                     </div>
                     <CtaForm/>
                 </div>
