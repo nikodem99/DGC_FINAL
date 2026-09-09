@@ -183,9 +183,9 @@
     border: 1px solid $dgc-line;
     padding: 50px 35px;
     padding-bottom: 30px;
-    box-shadow: 0px 4px 22px rgba(13, 68, 68, 0.07), 0px 0px 0px rgba(18, 120, 135, 0.05);
+    box-shadow: 0px 4px 22px rgba(13, 68, 68, 0.07), 0px 0px 0px rgba(13, 68, 68, 0.05);
     border-radius: 20px;
-    // filter: drop-shadow(0px 4px 22px rgba(13, 68, 68, 0.05)) drop-shadow(0px 0px 20px rgba(18, 120, 135, 0.05));
+    // filter: drop-shadow(0px 4px 22px rgba(13, 68, 68, 0.05)) drop-shadow(0px 0px 20px rgba(13, 68, 68, 0.05));
 
     @media (max-width:1199px) {
         padding: 40px 30px;
@@ -551,7 +551,7 @@
             .icon {
                 border-radius: 100px;
                 padding: 16px;
-                border: 1px solid rgb(18 120 135 / 88%);
+                border: 1px solid rgb(13 68 68 / 88%);
                 display: inline-block;
 
                 @media (max-width:575px) {
@@ -810,7 +810,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(18, 120, 135, 0.08);
+            background: rgba(13, 68, 68, 0.08);
 
             i {
                 font-size: 74px;
@@ -981,7 +981,7 @@
     .text {
         border-radius: 20px;
         border: 1px solid rgba(253, 252, 252, 0.20);
-        background: linear-gradient(140deg, rgba(18, 120, 135, 0.36) 13.65%, rgba(18, 120, 135, 0.18) 91.31%);
+        background: linear-gradient(140deg, rgba(13, 68, 68, 0.36) 13.65%, rgba(13, 68, 68, 0.18) 91.31%);
         box-shadow: 0px 20px 20px 0px rgba(13, 68, 68, 0.05);
         backdrop-filter: blur(10px);
         padding: 25px 35px;
@@ -1098,7 +1098,7 @@
     background: $dgc-panel;
     border: 1px solid $dgc-line;
     padding: 70px 55px;
-    box-shadow: 0px 4px 22px rgba(13, 68, 68, 0.07), 0px 0px 0px rgba(18, 120, 135, 0.05);
+    box-shadow: 0px 4px 22px rgba(13, 68, 68, 0.07), 0px 0px 0px rgba(13, 68, 68, 0.05);
     border-radius: 20px;
 
 
@@ -1299,7 +1299,7 @@
                 border-radius: 100%;
                 line-height: 175px;
                 text-align: center;
-                outline: 1px solid rgb(18 120 135 / 88%);
+                outline: 1px solid rgb(13 68 68 / 88%);
 
                 outline-offset: -20px;
                 color: $light;
@@ -1646,11 +1646,11 @@
     margin: 0 10px;
     background: $dgc-panel;
     border: 1px solid $dgc-line;
-    box-shadow: 0px 0px 22px rgba(13, 68, 68, 0.07), 0px 0px 0px rgba(18, 120, 135, 0.05);
+    box-shadow: 0px 0px 22px rgba(13, 68, 68, 0.07), 0px 0px 0px rgba(13, 68, 68, 0.05);
 
     border-radius: 20px;
     margin-bottom: 60px;
-    // filter: drop-shadow(0px 4px 22px rgba(13, 68, 68, 0.05)) drop-shadow(0px 0px 20px rgba(18, 120, 135, 0.05));
+    // filter: drop-shadow(0px 4px 22px rgba(13, 68, 68, 0.05)) drop-shadow(0px 0px 20px rgba(13, 68, 68, 0.05));
 
     @media (max-width:1399px) {
         margin: 0;

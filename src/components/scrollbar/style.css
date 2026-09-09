@@ -8,7 +8,7 @@ ul.smothscroll {
 
 
 ul.smothscroll a {
-    background-color:rgba(18, 120, 135, 0.7);
+    background-color:rgba(13, 68, 68, 0.7);
     width: 45px;
     height: 45px;
     line-height: 45px;
@@ -18,10 +18,10 @@ ul.smothscroll a {
     color: #FDFCFC;
     background-size: 200%,1px;
     background-position: 0;
-    border: 2px solid #127887;
+    border: 2px solid #0d4444;
 }
 ul.smothscroll a:hover {
-    background-color: #127887;
+    background-color: #0d4444;
     color: #FDFCFC;
 }
 

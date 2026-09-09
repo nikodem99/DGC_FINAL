@@ -2,7 +2,7 @@
    DGC — warstwa marki
 
    Paleta i jej zasady (wg wytycznych Kamila + logotyp DGC):
-   #127887  teal z logotypu — przyciski, ikony, elementy interaktywne
+   #0D4444  ciemna zielen z palety — przyciski, ikony, elementy interaktywne
    #0D4444  glebokie teal   — teksty i ciemne powierzchnie, nigdy tlo strony
    #D8BB2B  zloto           — akcenty, linie, numery, CTA; nigdy kolor tekstu
    #EBFFFF  jasny akwamaryn — tla boksow i grafik; nigdy tlo strony;
@@ -29,7 +29,7 @@
   /* Bootstrap ma wlasna niebieska palete — podpinamy ja pod nasza,
      zeby zaden nieostylowany komponent nie wrocil ze stockowym kolorem. */
   --bs-primary: #{$dgc-brand};
-  --bs-primary-rgb: 18, 120, 135;
+  --bs-primary-rgb: 13, 68, 68;
   --bs-danger: #{$dgc-highlight};
   --bs-danger-rgb: 181, 11, 80;
   --bs-body-color: #{$dgc-ink};
@@ -42,7 +42,7 @@
   --bs-link-hover-color: #{$dgc-ink};
   --bs-link-hover-color-rgb: 13, 68, 68;
   --bs-border-color: rgba(13, 68, 68, 0.18);
-  --bs-focus-ring-color: rgba(18, 120, 135, 0.18);
+  --bs-focus-ring-color: rgba(13, 68, 68, 0.18);
 }
 
 /* Tlo strony trzyma sam dokument. #root i .App musza zostac przezroczyste:
@@ -155,7 +155,7 @@ textarea:focus,
 select:focus,
 .form-control:focus {
   border-color: var(--dgc-brand);
-  box-shadow: 0 0 0 3px rgba(18, 120, 135, 0.14);
+  box-shadow: 0 0 0 3px rgba(13, 68, 68, 0.14);
   outline: 0;
 }
 
@@ -802,7 +802,7 @@ select.error,
 /* Szablon maluje przy najechaniu i tekst, i pasek nad pozycja brandowym
    turkusem. Na jasnym naglowku strony glownej to dziala, ale wariant s2
    lezy na pasie w tym samym turkusie — kontrast 1:1 i napis znikal
-   (sprawdzone: kolor tekstu rgb(18,120,135) na tle rgb(18,120,135)).
+   (kolor tekstu byl wtedy identyczny z tlem naglowka).
    Tutaj tekst zostaje w kanwie, a sygnalem jest zloty pasek. Zloto jako
    akcent, nie jako kolor tekstu — zgodnie z zasadami palety. */
 .wpo-site-header.wpo-site-header-s2 {

@@ -12,7 +12,7 @@ import NewsletterPopup from './components/Newsletter/NewsletterPopup';
 // Paleta DGC dla wszystkich kontrolek MUI (formularze, przyciski, selecty).
 const dgcTheme = createTheme({
   palette: {
-    primary: { main: '#127887', contrastText: '#FDFCFC' },
+    primary: { main: '#0D4444', contrastText: '#FDFCFC' },
     secondary: { main: '#0D4444', contrastText: '#FDFCFC' },
     error: { main: '#B50B50' },
     text: { primary: '#0D4444', secondary: 'rgba(13, 68, 68, 0.65)' },

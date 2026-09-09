@@ -238,7 +238,7 @@
 			&::before {
 				width: 120px;
 				height: 120px;
-				border: 1px solid #127887;
+				border: 1px solid $dgc-brand;
 				background: transparent;
 
 				@include media-query(1199px) {
@@ -528,7 +528,7 @@
 			top: 0;
 			width: 80%;
 			height: 100%;
-			background: var(--1, linear-gradient(91deg, #0D4444 0.54%, rgba(18, 120, 135, 0.00) 97.8%));
+			background: var(--1, linear-gradient(91deg, #0D4444 0.54%, rgba(13, 68, 68, 0.00) 97.8%));
 			content: "";
 			z-index: -1;
 		}

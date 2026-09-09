@@ -23,7 +23,18 @@ $heading-font: "Katibeh" ;
 
 // ---------------------------------------------------------------
 // DGC colour system
-// #127887  teal z logotypu  - przyciski, ikony, elementy interaktywne
+// Paleta od Kamila (Paleta-DGC + Paleta-alt-DGC, 09.2026). Kolory podstawowe
+// sa przepisane 1:1 z plikow; odcieni pochodnych uzywamy tylko tam, gdzie stan
+// interfejsu tego wymaga (hover, obramowania, delikatne tla).
+//
+//   #0D4444  Color 1  ciemna zielen  - tekst, przyciski, naglowek, ikony
+//   #B50B50  Color 2  amarant        - bledy i akcenty ostrzegawcze
+//   #D8BB2B  Color 3  zloto          - przycisk glowny, kreski akcentujace
+//   #EBFFFF  Color 4  jasny blekit   - tla sekcji i kart
+//   #FDFCFC  alt      biel           - tlo strony
+//
+// Wczesniej marka stala na #127887 — jasniejszej zieleni, ktorej w palecie
+// w ogole nie ma. To ona sprawiala, ze strona wygladala za jasno.
 // #0d4444  glebokie teal    - teksty i ciemne powierzchnie (nigdy tlo strony)
 // #d8bb2b  zloto            - akcenty, linie, numery (nigdy tekst)
 // #ebffff  jasny akwamaryn  - tla boksow i grafik (nigdy tlo strony)
@@ -32,8 +43,10 @@ $heading-font: "Katibeh" ;
 // ---------------------------------------------------------------
 
 $dgc-ink: #0d4444;
-$dgc-brand: #127887;
-$dgc-brand-deep: #0F626F;
+$dgc-brand: #0d4444;
+// Hover rozjasnia, a nie przyciemnia: marka stoi teraz na najciemniejszym
+// kolorze palety, wiec ciemniej juz sie nie da bez zejscia do czerni.
+$dgc-brand-deep: #136262;
 $dgc-gold: #d8bb2b;
 $dgc-gold-deep: #B99C18;
 $dgc-gold-soft: #F7EFD2;

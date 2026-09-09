@@ -221,8 +221,8 @@
 	-o-transition: all 1s;
 	-ms-transition: all 1s;
 	transition: all 1s;
-	-webkit-box-shadow: 0 -5px 15px #1278874a;
-	box-shadow: 0 -5px 15px #1278874a;
+	-webkit-box-shadow: 0 -5px 15px #0d44444a;
+	box-shadow: 0 -5px 15px #0d44444a;
 }
 
 .sticky-on {
@@ -550,7 +550,7 @@
 	-ms-border-radius: 50%;
 	border-radius: 50%;
 	fill: #FDFCFC;
-	filter: drop-shadow(0px 4px 22px rgba(13, 68, 68, 0.05)) drop-shadow(0px 0px 20px rgba(18, 120, 135, 0.05));
+	filter: drop-shadow(0px 4px 22px rgba(13, 68, 68, 0.05)) drop-shadow(0px 0px 20px rgba(13, 68, 68, 0.05));
 
 	@media(max-width:1200px) {
 		width: 50px;
@@ -1193,7 +1193,7 @@
 		}
 
 		.mobail-menu button {
-			background-color: rgb(18, 120, 135);
+			background-color: rgb(13, 68, 68);
 			width: 40px;
 			height: 35px;
 			border: 0;
@@ -1222,7 +1222,7 @@
 		}
 
 		#navbar {
-			background-color: rgb(18, 120, 135);
+			background-color: rgb(13, 68, 68);
 			display: block !important;
 			width: 300px;
 			height: 100%;
@@ -1555,7 +1555,7 @@
 	}
 
 	.navigation.sticky-header {
-		background: #127887;
+		background: $dgc-ink;
 
 		.header-right .cart-toggle-btn {
 			background-color: #FDFCFC30;
