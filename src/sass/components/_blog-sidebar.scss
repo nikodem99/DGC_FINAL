@@ -19,14 +19,14 @@
 	.widget {
 
 		h3 {
-			font-size: 40px;
+			font-size: 25px;
 			color: $dark-gray;
 			margin: 0 0 1.3em;
 			position: relative;
 			text-transform: capitalize;
 			font-family: $heading-font;
 			padding-bottom: 20px;
-			font-weight: 400;
+			font-weight: 600;
 
 			&:before {
 				content: "";
@@ -41,7 +41,9 @@
 
 			&:after {
 				content: "";
-				background-color: #EBFFFF;
+				background-color: $dgc-panel;
+
+				border: 1px solid var(--dgc-line);
 				width: 80%;
 				height: 4px;
 				position: absolute;
@@ -146,15 +148,17 @@
 					width: 40px;
 					height: 40px;
 					line-height: 44px;
-					background-color: #EBFFFF;
+					background-color: $dgc-panel;
+
+					border: 1px solid var(--dgc-line);
 					border-radius: 50%;
 				}
 			}
 		}
 
 		h4 {
-			font-size: 40px;
-			font-weight: 400;
+			font-size: 25px;
+			font-weight: 600;
 			margin-bottom: 10px;
 		}
 
@@ -213,6 +217,7 @@
 				height: 30px;
 				line-height: 30px;
 				background-color: $section-bg-color;
+				border: 1px solid var(--dgc-line);
 				text-align: center;
 				border-radius: 50%;
 				font-size: 18px;
@@ -258,7 +263,7 @@
 
 		.post h4 {
 			font-size: 18px;
-			font-weight: 500;
+			font-weight: 600;
 			line-height: 1.3em;
 			margin: 0 0 0.3em;
 			font-family: $base-font;
@@ -379,7 +384,9 @@
 			display: inline-block;
 			padding: 5px 18px;
 			color: $dark-gray;
-			background: #EBFFFF;
+			background: $dgc-panel;
+
+			border: 1px solid var(--dgc-line);
 			border-radius: 5px;
 		}
 
@@ -415,7 +422,7 @@
 		}
 
 		h2 {
-			font-size: 36px;
+			font-size: 29px;
 			font-weight: 700;
 			text-align: left;
 			color: $white;

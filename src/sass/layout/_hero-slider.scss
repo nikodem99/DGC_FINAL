@@ -13,7 +13,9 @@
 	overflow: hidden;
 
 	@include media-query(1199px) {
-		background: #EBFFFF;
+		background: $dgc-panel;
+
+		border: 1px solid var(--dgc-line);
 	}
 
 	.bg_shape {
@@ -84,14 +86,17 @@
 			padding: 0 10px;
 		}
 
-		h2 {
-			color: $dgc-ink;
+		.hero_nad {
+			/* Pastylka i naglowek stykaly sie krawedziami — odstep wynosil
+			   dokladnie 0px, przez co czytaly sie jak jeden blok. */
+			margin-bottom: 22px;
 			font-family: $base-font;
 			font-size: 20px;
-			font-weight: 400;
+			font-weight: 500;
 			border-radius: 20px;
-			background: rgba(216, 187, 43, 0.16);
-			box-shadow: inset 0 0 0 1px rgba(216, 187, 43, 0.55);
+			background: $dgc-accent;
+			color: $dgc-canvas;
+			box-shadow: none;
 			padding: 5px 20px;
 			display: inline-block;
 
@@ -100,25 +105,25 @@
 			}
 		}
 
-		h3 {
-			font-size: 100px;
-			font-weight: 400;
-			line-height: 100px;
+		h1 {
+			font-size: 70px;
+			font-weight: 600;
+			line-height: 1.06;
 			margin-bottom: 20px;
 
 			@include media-query(1399px) {
-				font-size: 80px;
-				line-height: 90px;
+				font-size: 48px;
+				line-height: 1.16;
 			}
 
 			@include media-query(1199px) {
-				font-size: 60px;
-				line-height: 60px;
+				font-size: 36px;
+				line-height: 1.16;
 			}
 
 			@include media-query(991px) {
-				font-size: 50px;
-				line-height: 50px;
+				font-size: 31px;
+				line-height: 1.16;
 				margin-bottom: 15px;
 			}
 
@@ -304,35 +309,35 @@
 
 			h2 {
 				color: $white;
-				font-size: 150px;
-				font-weight: 400;
-				line-height: 150px;
+				font-size: 105px;
+				font-weight: 600;
+				line-height: 1.06;
 				margin-bottom: 55px;
 
 				@media (max-width:1399px) {
-					font-size: 130px;
-					line-height: 130px;
+					font-size: 91px;
+					line-height: 1.06;
 				}
 
 				@media (max-width:1199px) {
-					font-size: 90px;
-					line-height: 90px;
+					font-size: 63px;
+					line-height: 1.06;
 				}
 
 				@media (max-width:991px) {
-					font-size: 80px;
-					line-height: 80px;
+					font-size: 48px;
+					line-height: 1.16;
 				}
 
 				@media (max-width:767px) {
-					font-size: 60px;
-					line-height: 60px;
+					font-size: 36px;
+					line-height: 1.16;
 					margin-bottom: 30px;
 				}
 
 				@media (max-width:575px) {
-					font-size: 45px;
-					line-height: 40px;
+					font-size: 28px;
+					line-height: 1.3;
 					margin-bottom: 30px;
 				}
 			}
@@ -456,16 +461,16 @@
 
 		h3 {
 			color: #FDFCFC;
-			font-size: 40px;
-			font-weight: 400;
+			font-size: 25px;
+			font-weight: 600;
 			margin-bottom: 0;
 
 			@media (max-width:1669px) {
-				font-size: 30px;
+				font-size: 24px;
 			}
 
 			@media (max-width:1399px) {
-				font-size: 25px;
+				font-size: 20px;
 			}
 		}
 
@@ -680,24 +685,24 @@
 		h2 {
 			margin: 0 0px 35px;
 			color: $white;
-			font-size: 100px;
-			font-weight: 400;
-			line-height: 100px;
+			font-size: 70px;
+			font-weight: 600;
+			line-height: 1.06;
 
 			@include media-query(1199px) {
-				font-size: 70px;
-				line-height: 70px;
+				font-size: 42px;
+				line-height: 1.16;
 			}
 
 			@include media-query(991px) {
-				font-size: 65px;
-				line-height: 65px;
+				font-size: 39px;
+				line-height: 1.16;
 				margin-bottom: 20px;
 			}
 
 			@include media-query(400px) {
-				font-size: 45px;
-				line-height: 45px;
+				font-size: 28px;
+				line-height: 1.3;
 			}
 
 

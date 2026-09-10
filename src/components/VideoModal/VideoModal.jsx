@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import "./VideoModal.scss";
 
 const VideoModal = ({ isOpen, videoId, videoSrc, poster, onClose }) => {
@@ -21,7 +22,11 @@ const VideoModal = ({ isOpen, videoId, videoSrc, poster, onClose }) => {
 
   if (!isOpen || (!videoId && !videoSrc)) return null;
 
-  return (
+  // Portal do <body>. Sekcja powitalna ma wlasny kontekst ukladania
+  // (position: relative + z-index), wiec modal renderowany w jej srodku
+  // byl przykrywany przez pasek z formularzem nizej — mimo z-index
+  // 9999999999, ktory dzialal tylko wewnatrz tamtego kontekstu.
+  return createPortal(
     <div className="videoModal">
       <div className="videoOverlay" onClick={onClose} />
 
@@ -50,7 +55,8 @@ const VideoModal = ({ isOpen, videoId, videoSrc, poster, onClose }) => {
           />
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

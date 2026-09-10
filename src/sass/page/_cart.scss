@@ -22,13 +22,13 @@
     .cart-wrap td,
     .cart-wrap th {
       width: 10%;
-      border-bottom: 1px solid #EBFFFF94;
+      border-bottom: 1px solid var(--dgc-line);
       text-align: center;
       font-weight: 400;
       color: #0D4444;
     }
     .cart-wrap th {
-      border-bottom: 1px solid #EBFFFF94;
+      border-bottom: 1px solid var(--dgc-line);
       padding: 40px 0;
     }
   
@@ -103,7 +103,7 @@
       line-height: 34px;
       color: #0D4444;
       font-size: 14px;
-      border: 1.5px solid #D8BB2B;
+      border: 1.5px solid #b50b50;
       border-radius: 4px;
       margin: 0 auto;
     }
@@ -298,7 +298,7 @@
   
     .cart-product-list {
       ul {
-        border-top: 1px solid #EBFFFF94;
+        border-top: 1px solid var(--dgc-line);
         padding-top: 20px;
   
         li {
@@ -312,8 +312,8 @@
           padding-bottom: 30px;
   
           &.cart-b {
-            border-top: 1px solid #EBFFFF94;
-            border-bottom: 1px solid #EBFFFF94;
+            border-top: 1px solid var(--dgc-line);
+            border-bottom: 1px solid var(--dgc-line);
             color: $theme-primary-color;
             padding-top: 30px;
             font-weight: 600;

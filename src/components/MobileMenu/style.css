@@ -155,5 +155,5 @@
 
 .responsivemenu a:not([href]):not([class]), 
 .responsivemenu a:not([href]):not([class]):hover{
- color: #EBFFFF;
+ color: #FDFCFC;
 }

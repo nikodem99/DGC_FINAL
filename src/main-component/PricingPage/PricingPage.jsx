@@ -5,7 +5,7 @@ import PageTitle from '../../components/pagetitle/PageTitle';
 import SectionTitle from '../../components/SectionTitle/SectionTitle';
 import Footer from '../../components/footer/Footer';
 import Scrollbar from '../../components/scrollbar/scrollbar';
-import Logo from '../../images/logo-2.svg';
+import Logo from '../../images/logo.svg';
 import packages from '../../api/pricing';
 import FormSection from '../../components/FormSection/FormSection.jsx';
 

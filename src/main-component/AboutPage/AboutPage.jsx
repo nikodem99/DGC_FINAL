@@ -15,7 +15,7 @@ import BlogSection from '../../components/BlogSection/BlogSection';
 import CtafromSection from '../../components/CtafromSection/CtafromSection';
 import Footer from '../../components/footer/Footer';
 import Scrollbar from '../../components/scrollbar/scrollbar';
-import Logo from '../../images/logo-2.svg'
+import Logo from '../../images/logo.svg'
 
 
 const AboutPage = () => {

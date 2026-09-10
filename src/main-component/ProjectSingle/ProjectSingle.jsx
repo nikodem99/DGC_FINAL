@@ -6,7 +6,7 @@ import Projects from '../../api/projects';
 import ContactForm from '../ServiceSinglePage/ServiceFrom';
 import Footer from '../../components/footer/Footer';
 import Scrollbar from '../../components/scrollbar/scrollbar'
-import logo from '../../images/logo-2.svg'
+import logo from '../../images/logo.svg'
 import Psing1 from '../../images/project-single/img-1.jpg'
 import Psing2 from '../../images/project-single/img-2.jpg'
 

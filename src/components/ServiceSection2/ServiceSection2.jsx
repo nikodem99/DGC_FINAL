@@ -28,7 +28,7 @@ const ServiceSection = (props) => {
                                     <i className={servic.icon}></i>
                                 </div>
                                 <div className="content">
-                                    <h2>{servic.title}</h2>
+                                    <h3>{servic.title}</h3>
                                     <p>{servic.description}</p>
                                     <Link onClick={ClickHandler} to={`/oferta/${servic.slug}/`}><i className="flaticon-right-arrow"></i></Link>
                                 </div>

@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 import blogs from '../../api/blogs.js'
 import Navbar from '../../components/Navbar/Navbar.jsx';
 import Footer from '../../components/footer/Footer.jsx';
-import logo from '../../images/logo-2.svg';
+import logo from '../../images/logo.svg';
 
 const BlogDetailsLeftSiide = () => {
 

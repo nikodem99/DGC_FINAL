@@ -21,7 +21,9 @@
             height: 100%;
             width: 110%;
             content: '';
-            background: #EBFFFF;
+            background: $dgc-panel;
+
+            border: 1px solid var(--dgc-line);
             z-index: -1;
 
             @media (max-width:1499px) {

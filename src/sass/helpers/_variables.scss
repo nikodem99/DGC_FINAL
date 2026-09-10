@@ -3,21 +3,12 @@
 	Fonts
 ----------------------------*/
 
-@font-face {
-    font-family: 'Katibeh';
-    src: url('../../fonts/Katibeh-Regular.woff2') format('woff2'),
-        url('../../fonts/Katibeh-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-
-
 // fonts
+// Jeden krój na cala strone — deklaracje @font-face siedza w _fonts.scss.
+// Poppins i Katibeh wypadly, powody opisane tam.
 $base-font-size: 15;
-$base-font: "Poppins", sans-serif;
-$heading-font: "Katibeh" ;
+$base-font: "Schibsted Grotesk", system-ui, sans-serif;
+$heading-font: "Schibsted Grotesk", system-ui, sans-serif;
 
 
 
@@ -29,15 +20,15 @@ $heading-font: "Katibeh" ;
 //
 //   #0D4444  Color 1  ciemna zielen  - tekst, przyciski, naglowek, ikony
 //   #B50B50  Color 2  amarant        - bledy i akcenty ostrzegawcze
-//   #D8BB2B  Color 3  zloto          - przycisk glowny, kreski akcentujace
-//   #EBFFFF  Color 4  jasny blekit   - tla sekcji i kart
+//   #b50b50  Color 3  zloto          - przycisk glowny, kreski akcentujace
+//   #EBFFFF  Color 4  jasny blekit   - wycofany z uzycia (wrzesien 2026)
 //   #FDFCFC  alt      biel           - tlo strony
 //
 // Wczesniej marka stala na #127887 — jasniejszej zieleni, ktorej w palecie
 // w ogole nie ma. To ona sprawiala, ze strona wygladala za jasno.
 // #0d4444  glebokie teal    - teksty i ciemne powierzchnie (nigdy tlo strony)
-// #d8bb2b  zloto            - akcenty, linie, numery (nigdy tekst)
-// #ebffff  jasny akwamaryn  - tla boksow i grafik (nigdy tlo strony)
+// #b50b50  zloto            - akcenty, linie, numery (nigdy tekst)
+// #fdfcfc  biel  - tla stron i kart; karty odroznia wlosowa obwodka
 // #fdfcfc  kanwa            - tlo strony i jasny tekst, bez ograniczen
 // #b50b50  magenta          - rezerwa na pojedyncze akcenty (nigdy tekst)
 // ---------------------------------------------------------------
@@ -47,12 +38,17 @@ $dgc-brand: #0d4444;
 // Hover rozjasnia, a nie przyciemnia: marka stoi teraz na najciemniejszym
 // kolorze palety, wiec ciemniej juz sie nie da bez zejscia do czerni.
 $dgc-brand-deep: #136262;
-$dgc-gold: #d8bb2b;
-$dgc-gold-deep: #B99C18;
-$dgc-gold-soft: #F7EFD2;
-$dgc-panel: #ebffff;
+// Zloto #b50b50 wypada ze strony calkowicie (decyzja Kamila, wrzesien 2026).
+// Rolę akcentu przejmuje amarant — ten sam #B50B50 co Color 2 w palecie.
+$dgc-accent: #b50b50;
+$dgc-accent-deep: #8e0840;
+// Delikatne tlo akcentowe (odznaki, znaczniki) — amarant na 12%.
+$dgc-accent-soft: rgba(181, 11, 80, 0.12);
+// Karty i sekcje stoja teraz na bieli, a odroznia je wlosowa obwodka
+// zamiast blekitnego wypelnienia. #EBFFFF znika ze strony.
+$dgc-panel: #fdfcfc;
 $dgc-canvas: #fdfcfc;
-$dgc-line: #d3e7e7;
+$dgc-line: rgba(13, 68, 68, 0.13);
 $dgc-highlight: #b50b50;
 
 // mapowanie na zmienne szablonu

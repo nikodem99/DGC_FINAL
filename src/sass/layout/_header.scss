@@ -27,7 +27,7 @@
 
 .topbar {
 	font-size: 16px;
-	color: #EBFFFF;
+	color: #FDFCFC;
 	margin: 0;
 }
 
@@ -53,7 +53,7 @@
 	font-size: 16px;
 	float: left;
 	padding: 15px 10px;
-	color: #EBFFFF;
+	color: #FDFCFC;
 	line-height: 1em;
 
 	@media(max-width:991px) {
@@ -85,7 +85,7 @@
 }
 
 .topbar .contact-info ul li a {
-	color: #EBFFFF;
+	color: #FDFCFC;
 }
 
 
@@ -761,7 +761,7 @@
 	.mini-cart-item {
 		padding-top: 15px;
 		margin-top: 15px;
-		border-top: 1px solid #EBFFFF;
+		border-top: 1px solid var(--dgc-line);
 	}
 
 	.mini-cart-item:first-child {
@@ -774,7 +774,7 @@
 	.mini-cart-item-image {
 		width: 50px;
 		height: 50px;
-		border: 2px solid #EBFFFF;
+		border: 2px solid var(--dgc-line);
 		float: left;
 		margin-right: 15px;
 	}
@@ -913,7 +913,7 @@
 }
 
 .header-search-area h3 {
-	font-size: 45px;
+	font-size: 28px;
 	margin: 0 0 1em;
 }
 
@@ -1341,17 +1341,49 @@
 	}
 
 	.navbar-header .navbar-brand {
+		/* Odsuniecie od krawedzi okna i lekkie opuszczenie. Logo stalo na 21px,
+		   czyli praktycznie przy samym brzegu. Wyrownanie do tresci hero (50px)
+		   bylo punktem wyjscia, dalsze 22px w prawo i 10px w dol to juz
+		   dopasowanie na oko, na prosbe klienta.
+		   Tylko od 992px — nizej logo jest wysrodkowane obok hamburgera,
+		   a padding zepchnalby je z osi. */
+		@media (min-width: 992px) {
+			padding-left: 52px;
+		}
+
 		img {
-			/* logotyp DGC ma szerszy lockup niz logo szablonu (264x60 vs 223x60),
-			   wiec szerokosci przeskalowane, zeby zachowac te sama wysokosc optyczna.
-			   min(..., 100%) jest tu konieczne: kolumna z logo ma ok. 203px, a przy
-			   oknie 1400px prog 1399px jeszcze nie dziala, wiec sztywne 250px
-			   wychodzilo poza kolumne i logo nachodzilo na menu. */
-			max-width: min(250px, 100%);
-			height: auto;
+			/* Logotyp klienta jest ukladem pietrowym (DGC nad podpisem),
+			   proporcja 772:346 czyli 2,23. Poprzedni plik byl poziomy (4,40),
+			   dlatego dalo sie go ograniczac szerokoscia. Teraz miara musi byc
+			   wysokosc — przy ograniczeniu szerokoscia znak rozpychal sie na
+			   cala wysokosc paska i dotykal obu krawedzi.
+			   64px zostawia po ~18px oddechu w pasku 100px.
+			   max-width pilnuje waskiej kolumny z logo (ok. 203px). */
+			height: 64px;
+			width: auto;
+			max-width: 100%;
+
+			/* Opuszczenie o 10px. Przez padding sie nie da — pasek wyrownuje
+			   zawartosc do srodka i po prostu go wchlania, przesuwajac przy
+			   okazji cala wysokosc naglowka. position: relative przesuwa sam
+			   obrazek, nie ruszajac ukladu ani wysokosci paska. */
+			position: relative;
+			top: 10px;
+
+			@media (max-width:991px) {
+				top: 0;
+			}
 
 			@media (max-width:1399px) {
-				max-width: min(200px, 100%);
+				height: 58px;
+			}
+
+			@media (max-width:991px) {
+				height: 52px;
+			}
+
+			@media (max-width:575px) {
+				height: 44px;
 			}
 		}
 	}
@@ -1548,27 +1580,34 @@
 
 .wpo-site-header-s2 {
 
+	/* Pasek tytulowy podstron jest teraz bialy, wiec menu musi byc ciemne.
+	   Wczesniej bylo biale, bo pasek byl ciemnozielony — po zmianie tla
+	   znikalo calkowicie. */
 	@media screen and (min-width: 992px) {
 		#navbar>ul>li>a {
-			color: $white;
+			color: $dgc-ink;
 		}
 	}
 
+	/* Przyklejony naglowek tez na bieli — inaczej po przewinieciu menu
+	   i logo znowu bylyby jasne na jasnym albo trzeba by przelaczac
+	   dwa komplety kolorow. */
 	.navigation.sticky-header {
-		background: $dgc-ink;
+		background: $dgc-canvas;
+		border-bottom: 1px solid var(--dgc-line);
 
 		.header-right .cart-toggle-btn {
-			background-color: #FDFCFC30;
-			color: $white;
+			background-color: rgba(13, 68, 68, 0.08);
+			color: $dgc-ink;
 		}
 
 		.header-right .search-toggle-btn {
-			background-color: #FDFCFC30;
-			color: $white;
+			background-color: rgba(13, 68, 68, 0.08);
+			color: $dgc-ink;
 		}
 
 		.cart-search-contact .fi {
-			color: $white;
+			color: $dgc-ink;
 		}
 
 		.header-search-form {

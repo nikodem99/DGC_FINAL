@@ -9,8 +9,10 @@ body {
     font-family: $base-font;
     color:$body-color;
     background-color: $body-bg-color;
-    font-size: 15px;
-    font-size: calc-rem-value(15);
+    /* 16,5px zamiast 15px i interlinia 1.7 — Schibsted Grotesk ma wieksza
+       wysokosc x niz Poppins, wiec przy 15px tekst czytal sie za drobno. */
+    font-size: 16.5px;
+    line-height: 1.7;
     overflow-x: hidden;
     @include media-query( 767px ) {
         font-size: 14px;
@@ -31,7 +33,7 @@ h5,
 h6 {
     color: $heading-color;
     font-family: $heading-font;
-    font-weight: 400;
+    font-weight: 600;
 }
 
 ul {
@@ -138,6 +140,7 @@ img{
     #c-success,
     #success {
         background-color: $dgc-panel;
+        border: 1px solid var(--dgc-line);
         border-left: 5px solid $dgc-brand;
         margin-bottom: 5px;
     }
@@ -145,6 +148,7 @@ img{
     #c-error,
     #error {
         background-color: $dgc-panel;
+        border: 1px solid var(--dgc-line);
         border-left: 5px solid $dgc-highlight;
     }
 }

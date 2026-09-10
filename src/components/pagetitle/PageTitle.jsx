@@ -8,7 +8,10 @@ const PageTitle = (props) => {
                 <div className="row">
                     <div className="col-12">
                         <div className="wpo-breadcumb-wrap">
-                            <h2>{props.pageTitle}</h2>
+                            {/* H1 podstrony. Wczesniej jedynym H1 w dokumencie byl ukryty
+                                placeholder z trescia "title"; po jego usunieciu
+                                podstrony zostalyby bez glownego naglowka. */}
+                            <h1>{props.pageTitle}</h1>
                             <ul>
                                 <li><Link to="/home">Strona główna</Link></li>
                                 <li>{props.pagesub}</li>

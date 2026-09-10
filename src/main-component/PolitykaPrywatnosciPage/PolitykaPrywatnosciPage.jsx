@@ -3,7 +3,7 @@ import Navbar from '../../components/Navbar/Navbar.jsx';
 import PageTitle from '../../components/pagetitle/PageTitle.jsx';
 import Footer from '../../components/footer/Footer.jsx';
 import Scrollbar from '../../components/scrollbar/scrollbar.jsx';
-import Logo from '../../images/logo-2.svg';
+import Logo from '../../images/logo.svg';
 import { SEKCJE, DO_UZUPELNIENIA } from '../../api/politykaPrywatnosci';
 
 // Braki oznaczamy wizualnie, a nie tylko w tekscie — dokument z dziura

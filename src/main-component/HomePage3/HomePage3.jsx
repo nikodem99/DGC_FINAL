@@ -15,7 +15,7 @@ import CtafromSection from '../../components/CtafromSection/CtafromSection.jsx';
 import Footer from '../../components/footer/Footer.jsx';
 import Scrollbar from '../../components/scrollbar/scrollbar.jsx';
 
-import Logo from '../../images/logo-2.svg'
+import Logo from '../../images/logo.svg'
 
 const HomePage3 = () => {
     return (

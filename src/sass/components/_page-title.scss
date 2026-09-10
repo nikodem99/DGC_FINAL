@@ -1,6 +1,9 @@
 .wpo-breadcumb-area {
-	background-color: $dgc-brand;
+	/* Bialy pasek zamiast ciemnozielonego. Pelnoekranowa plama koloru
+	   przytlaczala podstrony i gryzla sie z jasnymi sekcjami pod spodem. */
+	background-color: $dgc-canvas;
 	background-image: none;
+	border-bottom: 1px solid var(--dgc-line);
 	min-height: 500px;
 	position: relative;
 	display: flex;
@@ -27,22 +30,22 @@
 	.wpo-breadcumb-wrap {
 		text-align: center;
 
-		h2 {
-			font-size: 100px;
-			color: #FDFCFC;
-			line-height: 100px;
+		h1 {
+			font-size: 70px;
+			color: $dgc-ink;
+			line-height: 1.06;
 			margin-top: -10px;
 			margin-bottom: 0px;
-			font-weight: 400;
+			font-weight: 600;
 
 			@media(max-width: 991px) {
-				font-size: 80px;
-				line-height: 80px;
+				font-size: 48px;
+				line-height: 1.16;
 				margin-bottom: 0px;
 			}
 			@media(max-width: 767px) {
-				font-size: 35px;
-				line-height: 35px;
+				font-size: 28px;
+				line-height: 1.3;
 				margin-bottom: 0px;
 			}
 		}
@@ -52,7 +55,7 @@
 			li {
 				display: inline;
 				padding: 0px 5px;
-				color: rgba(253, 252, 252, 0.85);
+				color: rgba(13, 68, 68, 0.75);
 				position: relative;
 				font-size: 20px;
 
@@ -68,7 +71,7 @@
 
 				&:last-child {
 					span {
-						color: $dgc-canvas;
+						color: $dgc-ink;
 					}
 
 					&:after {
@@ -77,7 +80,7 @@
 				}
 
 				a {
-					color: rgba(253, 252, 252, 0.85);
+					color: rgba(13, 68, 68, 0.75);
 					font-size: 20px;
 					transition: all .3s;
 

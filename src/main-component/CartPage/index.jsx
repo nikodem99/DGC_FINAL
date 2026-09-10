@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import Navbar from '../../components/Navbar/Navbar';
 import PageTitle from "../../components/pagetitle/PageTitle";
 import Scrollbar from "../../components/scrollbar/scrollbar";
-import logo from '../../images/logo-2.svg';
+import logo from '../../images/logo.svg';
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {

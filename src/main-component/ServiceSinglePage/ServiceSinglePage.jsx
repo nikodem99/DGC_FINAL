@@ -7,7 +7,7 @@ import PageTitle from '../../components/pagetitle/PageTitle'
 import Footer from '../../components/footer/Footer';
 import Scrollbar from '../../components/scrollbar/scrollbar'
 import ContactForm from './ServiceFrom'
-import logo from '../../images/logo-2.svg'
+import logo from '../../images/logo.svg'
 
 const ServiceSinglePage = (props) => {
     const ClickHandler = () => {
@@ -64,7 +64,7 @@ const ServiceSinglePage = (props) => {
                                                     <i className={serves.icon}></i>
                                                 </div>
                                                 <div className="content">
-                                                    <h2>{serves.title}</h2>
+                                                    <h3>{serves.title}</h3>
                                                     <p>{serves.description}</p>
                                                     <Link onClick={ClickHandler} to={`/oferta/${serves.slug}/`}><i className="flaticon-right-arrow"></i></Link>
                                                 </div>

@@ -7,7 +7,7 @@
     .section_title {
         text-align: center;
 
-        h3 {
+        h2 {
             display: inline-block;
             /* gdy tytul mimo wszystko sie zlamie (wezsze ekrany), obie linie
                maja wyjsc rowne zamiast jednej dlugiej i jednego slowa */
@@ -142,8 +142,8 @@
 }
 
 .question-touch h2 {
-    font-size: 50px;
-    font-weight: 500;
+    font-size: 31px;
+    font-weight: 600;
     text-align: center;
     margin-top: 0;
     margin-bottom: 35px;
@@ -172,7 +172,7 @@
     outline: none;
     background: none;
     border-radius: 0;
-    border-bottom: 1px solid #EBFFFF;
+    border-bottom: 1px solid var(--dgc-line);
     box-shadow: none;
 }
 

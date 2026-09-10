@@ -4,7 +4,7 @@ import PageTitle from '../../components/pagetitle/PageTitle.jsx'
 import FaqSection from '../../components/FaqSection/FaqSection.jsx';
 import Footer from '../../components/footer/Footer.jsx';
 import Scrollbar from '../../components/scrollbar/scrollbar.jsx';
-import Logo from '../../images/logo-2.svg'
+import Logo from '../../images/logo.svg'
 
 
 const ProjectPage = () => {

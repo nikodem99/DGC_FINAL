@@ -16,12 +16,12 @@
 		}
 
 		h2 {
-			font-size: 55px;
-			font-weight: 400;
+			font-size: 34px;
+			font-weight: 600;
 			margin-bottom: 10px;
 
 			@media(max-width:575px) {
-				font-size: 40px;
+				font-size: 25px;
 			}
 		}
 	}
@@ -162,7 +162,9 @@
 			.office-info-icon {
 				width: 85px;
 				height: 85px;
-				background: #EBFFFF;
+				background: $dgc-panel;
+
+				border: 1px solid var(--dgc-line);
 				line-height: 110px;
 				text-align: center;
 				margin: 0 auto;
@@ -180,14 +182,14 @@
 
 			.office-info-text {
 				h2 {
-					font-size: 50px;
-					line-height: 50px;
-					font-weight: 400;
+					font-size: 31px;
+					line-height: 1.16;
+					font-weight: 600;
 					margin-top: 15px;
 					margin: 10px 0;
 
 					@media(max-width:767px) {
-						font-size: 40px;
+						font-size: 25px;
 					}
 				}
 

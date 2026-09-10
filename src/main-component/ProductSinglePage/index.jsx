@@ -9,7 +9,7 @@ import Product from './product'
 import api from "../../api";
 import ProductTabs from './alltab';
 import Footer from '../../components/footer/Footer';
-import logo from '../../images/logo-2.svg';
+import logo from '../../images/logo.svg';
 
 
 const ProductSinglePage =(props) => {

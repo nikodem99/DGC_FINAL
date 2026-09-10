@@ -30,21 +30,29 @@ const NewsletterPopup = () => {
             setOtwarte(true);
         };
 
-        // Okno nie wyskakuje na wejsciu. Czeka, az odwiedzajacy pokaze
-        // zainteresowanie: przewinie 40% strony albo spedzi na niej pol minuty.
-        // Natychmiastowe nachalne okno to zla praktyka, a na telefonach
-        // Google traktuje je jako czynnik obnizajacy pozycje w wynikach.
+        // Okno nie wyskakuje na wejsciu ani w trakcie czytania. Wczesniej
+        // odpalalo sie po przewinieciu 40% strony, co na stronie glownej
+        // wypadalo dokladnie na cenniku i opiniach — czyli tam, gdzie
+        // odwiedzajacy podejmuje decyzje. Teraz czeka na moment, w ktorym
+        // nikomu nie przerywa: albo dojechanie do konca strony, albo
+        // wyprowadzenie kursora poza okno (zamiar wyjscia).
         const naScroll = () => {
             const doKonca = document.documentElement.scrollHeight - window.innerHeight;
-            if (doKonca > 0 && window.scrollY / doKonca > 0.4) pokaz();
+            if (doKonca > 0 && window.scrollY / doKonca > 0.9) pokaz();
         };
 
-        const czasomierz = setTimeout(pokaz, 30000);
+        // Zamiar wyjscia dziala tylko na urzadzeniach z kursorem. Na telefonie
+        // nie ma czego wykrywac, tam zostaje samo dojechanie do konca.
+        const naWyjscie = (e) => {
+            if (e.clientY <= 0 && !e.relatedTarget) pokaz();
+        };
+
         window.addEventListener('scroll', naScroll, { passive: true });
+        document.addEventListener('mouseout', naWyjscie);
 
         return () => {
-            clearTimeout(czasomierz);
             window.removeEventListener('scroll', naScroll);
+            document.removeEventListener('mouseout', naWyjscie);
         };
     }, []);
 

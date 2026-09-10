@@ -41,7 +41,7 @@ body .container {
   background: #FDFCFC;
   box-shadow: 0 0 15px rgba(13, 68, 68, 0.03);
   padding: 0 15px;
-  font-family: "Katibeh";
+  font-family: "Schibsted Grotesk", system-ui, sans-serif;
 }
 .checkoutWrapper .checkoutCard button.collapseBtn i {
   float: right;

@@ -63,7 +63,9 @@
 /*6.3 service_section_s3 */
 
 .service_section_s3 {
-    background: #EBFFFF;
+    background: $dgc-panel;
+
+    border: 1px solid var(--dgc-line);
     padding-bottom: 90px;
 
     @media (max-width:991px) {
@@ -121,15 +123,15 @@
 
 
                 h3 {
-                    font-size: 90px;
+                    font-size: 63px;
 
                     @media (max-width:1199px) {
-                        font-size: 60px;
+                        font-size: 36px;
                     }
 
                     @media (max-width:991px) {
-                        font-size: 40px;
-                        line-height: 50px;
+                        font-size: 25px;
+                        line-height: 1.3;
                     }
                 }
             }

@@ -6,7 +6,7 @@ import PageTitle from '../../components/pagetitle/PageTitle.jsx'
 import BlogSingle from '../../components/BlogDetails/BlogSingle.jsx'
 import Scrollbar from '../../components/scrollbar/scrollbar.jsx'
 import Footer from '../../components/footer/Footer.jsx';
-import logo from '../../images/logo-2.svg';
+import logo from '../../images/logo.svg';
 
 const BlogDetailsFull = () => {
     const { slug } = useParams()

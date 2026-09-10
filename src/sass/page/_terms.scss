@@ -4,12 +4,12 @@
 
 .pf-terms-section {
     h4 {
-        font-size: 45px;
+        font-size: 28px;
         margin-bottom: 30px;
         margin-top: -20px;
 
         @media(max-width:991px) {
-            font-size: 35px;
+            font-size: 28px;
         }
     }
 
@@ -24,11 +24,11 @@
             padding-top: 30px;
 
             h2 {
-                font-size: 45px;
+                font-size: 28px;
                 margin-bottom: 20px;
 
                 @media(max-width:991px) {
-                    font-size: 35px;
+                    font-size: 28px;
                 }
 
 
@@ -81,7 +81,9 @@
         border: 1px solid $section-bg-color;
         padding: 5px 20px;
         margin-bottom: 20px;
-        background: #EBFFFF;
+        background: $dgc-panel;
+
+        border: 1px solid var(--dgc-line);
 
         .accordion-body {
             padding-left: 0;

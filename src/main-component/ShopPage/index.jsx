@@ -9,7 +9,7 @@ import Footer from "../../components/footer/Footer";
 import Scrollbar from "../../components/scrollbar/scrollbar";
 
 import api from "../../api";
-import Logo from "../../images/logo-2.svg";
+import Logo from "../../images/logo.svg";
 
 import { addToCart } from "../../store/slices/cartSlice";
 

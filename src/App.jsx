@@ -19,7 +19,7 @@ const dgcTheme = createTheme({
     background: { default: '#FDFCFC', paper: '#FDFCFC' },
     divider: 'rgba(13, 68, 68, 0.18)',
   },
-  typography: { fontFamily: '"Poppins", sans-serif' },
+  typography: { fontFamily: '"Schibsted Grotesk", system-ui, sans-serif' },
 });
 
 function App() {

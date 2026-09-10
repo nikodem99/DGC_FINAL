@@ -37,7 +37,9 @@
 			font-size: calc-rem-value(16);
 			font-weight: 600;
 			color: $dark-gray;
-			background: #EBFFFF;
+			background: $dgc-panel;
+
+			border: 1px solid var(--dgc-line);
 			display: block;
 			border: 0;
 

@@ -8,7 +8,7 @@ import { KONTAKT } from '../../api/kontakt';
 import {
     CENA, CZAS_TRWANIA, KROKI, CO_ZYSKUJESZ, JAK_SIE_PRZYGOTOWAC,
 } from '../../api/konsultacje';
-import logo from '../../images/logo-2.svg';
+import logo from '../../images/logo.svg';
 
 // Podstrona /umow-konsultacje.
 //

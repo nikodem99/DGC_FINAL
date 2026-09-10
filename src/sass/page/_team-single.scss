@@ -35,17 +35,17 @@
 
             h3 {
                 color: #FDFCFC;
-                font-size: 80px;
-                font-weight: 400;
+                font-size: 48px;
+                font-weight: 600;
                 margin-top: -30px;
                 margin-bottom: 0;
 
                 @media (max-width:1199px) {
-                    font-size: 60px;
+                    font-size: 36px;
                 }
 
                 @media (max-width:767px) {
-                    font-size: 45px;
+                    font-size: 28px;
                     margin-top: -10px;
                 }
             }
@@ -85,16 +85,16 @@
     }
 
     h2 {
-        font-size: 70px;
-        font-weight: 400;
+        font-size: 42px;
+        font-weight: 600;
         margin-bottom: 25px;
 
         @media (max-width:1199px) {
-            font-size: 50px;
+            font-size: 31px;
         }
 
         @media (max-width:575px) {
-            font-size: 40px;
+            font-size: 25px;
         }
     }
 
@@ -276,7 +276,9 @@
 
     .progres {
         border-radius: 4px;
-        background: #EBFFFF;
+        background: $dgc-panel;
+
+        border: 1px solid var(--dgc-line);
         height: 8px;
 
 

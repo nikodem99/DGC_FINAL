@@ -4,8 +4,8 @@
    Paleta i jej zasady (wg wytycznych Kamila + logotyp DGC):
    #0D4444  ciemna zielen z palety — przyciski, ikony, elementy interaktywne
    #0D4444  glebokie teal   — teksty i ciemne powierzchnie, nigdy tlo strony
-   #D8BB2B  zloto           — akcenty, linie, numery, CTA; nigdy kolor tekstu
-   #EBFFFF  jasny akwamaryn — tla boksow i grafik; nigdy tlo strony;
+   #b50b50  zloto           — akcenty, linie, numery, CTA; nigdy kolor tekstu
+   #FDFCFC  biel — tla stron, boksow i kart; karty odroznia wlosowa obwodka
                               jako tekst tylko na #0D4444
    #FDFCFC  kanwa           — tlo strony i jasny tekst, bez ograniczen
    #B50B50  magenta         — rezerwa na pojedyncze akcenty, nigdy tekst
@@ -18,9 +18,9 @@
   --dgc-ink: #{$dgc-ink};
   --dgc-brand: #{$dgc-brand};
   --dgc-brand-deep: #{$dgc-brand-deep};
-  --dgc-gold: #{$dgc-gold};
-  --dgc-gold-deep: #{$dgc-gold-deep};
-  --dgc-gold-soft: #{$dgc-gold-soft};
+  --dgc-accent: #{$dgc-accent};
+  --dgc-accent-deep: #{$dgc-accent-deep};
+  --dgc-accent-soft: #{$dgc-accent-soft};
   --dgc-panel: #{$dgc-panel};
   --dgc-canvas: #{$dgc-canvas};
   --dgc-line: #{$dgc-line};
@@ -65,18 +65,20 @@ html,
 }
 
 /* --- Przyciski -------------------------------------------------- */
-/* Podstawowy: teal z logotypu. Zloty wariant .theme-btn-gold zostaje
-   na jedno glowne CTA na ekranie. */
-.theme-btn-gold {
-  background: var(--dgc-gold) !important;
-  border-color: var(--dgc-gold) !important;
-  color: var(--dgc-ink) !important;
+/* Wariant akcentowy — jedno glowne CTA na ekranie.
+   Tekst bialy, nie ciemnozielony: przy zlotym tle ciemna zielen dawala
+   5,7:1, ale na amarancie to tylko 1,62:1. Kamil wprost zabrania tej pary
+   ("amarant i ciemna zielen nigdy jako para tekst i tlo"). */
+.theme-btn-accent {
+  background: var(--dgc-accent) !important;
+  border-color: var(--dgc-accent) !important;
+  color: var(--dgc-canvas) !important;
 
   &:hover,
   &:focus {
-    background: var(--dgc-gold-deep) !important;
-    border-color: var(--dgc-gold-deep) !important;
-    color: var(--dgc-ink) !important;
+    background: var(--dgc-accent-deep) !important;
+    border-color: var(--dgc-accent-deep) !important;
+    color: var(--dgc-canvas) !important;
   }
 }
 
@@ -105,15 +107,15 @@ html,
 /* --- Zloto jako jezyk akcentow ---------------------------------- */
 /* Podkreslenia naglowkow, kreski, gwiazdki ocen i numeracja. */
 .widget-title h3::after,
-.wpo-breadcumb-wrap h2::after,
-.section_title h3::after,
+.wpo-breadcumb-wrap h1::after,
+.section_title h2::after,
 .about_title h2::after {
-  background: var(--dgc-gold);
+  background: var(--dgc-accent);
 }
 
 /* Złota kreska pod tytułem — jedyny element marki obecny na KAŻDEJ podstronie,
    także tam, gdzie nie ma etykiet sekcji (kontakt, FAQ, blog). */
-.wpo-breadcumb-wrap h2::after,
+.wpo-breadcumb-wrap h1::after,
 .wpo-contact-title h2::after,
 .wpo-section-title.text-center h2::after {
   content: '';
@@ -122,12 +124,12 @@ html,
   height: 3px;
   margin: 14px auto 16px;
   border-radius: 2px;
-  background: var(--dgc-gold);
+  background: var(--dgc-accent);
 }
 
 /* Otwarta pozycja FAQ dostaje złoty znacznik zamiast samej zmiany tła. */
 .accordion-item:has(.accordion-button:not(.collapsed)) {
-  border-left: 3px solid var(--dgc-gold);
+  border-left: 3px solid var(--dgc-accent);
 }
 
 .accordion-button:not(.collapsed)::after {
@@ -137,14 +139,14 @@ html,
 .rating i,
 .fa-star,
 .product-rating i {
-  color: var(--dgc-gold);
+  color: var(--dgc-accent);
 }
 
 /* --- Linki ------------------------------------------------------ */
 /* Kolorem tekstu jest zawsze ink; sygnalem interakcji zlota kreska. */
-a:not(.theme-btn):not(.theme-btn-s2):not(.theme-btn-s3):not(.theme-btn-gold):not(.view-cart-btn):hover {
+a:not(.theme-btn):not(.theme-btn-s2):not(.theme-btn-s3):not(.theme-btn-accent):not(.view-cart-btn):hover {
   text-decoration: underline;
-  text-decoration-color: var(--dgc-gold);
+  text-decoration-color: var(--dgc-accent);
   text-decoration-thickness: 2px;
   text-underline-offset: 0.22em;
 }
@@ -209,7 +211,7 @@ select.error,
 
 .cta_wrap form .error::before,
 .cta_wrap .errorMessage::before {
-  background: var(--dgc-gold);
+  background: var(--dgc-accent);
 }
 
 /* --- Komponenty Bootstrapa uzywane przez szablon ---------------- */
@@ -412,7 +414,7 @@ select.error,
 
 /* Potwierdzenie i blad wysylki — wspolne dla wszystkich trzech formularzy
    strony (pasek pod nagłówkiem, pasek CTA, strona kontaktu). Ta sama skala
-   i kroj co tekst strony (Poppins 20/30), promien rowny polom formularza. */
+   i kroj co tekst strony, promien rowny polom formularza. */
 .form_status:empty {
   display: none;
 }
@@ -423,6 +425,7 @@ select.error,
   padding: 20px 28px;
   border-radius: 15px;
   background: var(--dgc-panel);
+  border: 1px solid var(--dgc-line);
   color: var(--dgc-ink);
   font-family: #{$base-font};
   font-size: 20px;
@@ -454,7 +457,7 @@ select.error,
     white-space: nowrap;
 
     &:hover {
-      text-decoration-color: var(--dgc-gold);
+      text-decoration-color: var(--dgc-accent);
       text-decoration-thickness: 2px;
     }
   }
@@ -540,7 +543,7 @@ select.error,
 }
 
 /* --- Zaproszenie do wystawienia opinii w Google -------------------- */
-/* Wzor z manuqa.pl, ale w palecie DGC. Panel #EBFFFF zamiast ciemnego tla,
+/* Wzor z manuqa.pl, ale w palecie DGC. Panel na bieli zamiast ciemnego tla,
    bo tuz pod ta sekcja idzie kolejny kolorowy pas — trzy ciemne bloki
    jeden pod drugim zlewalyby sie w jedno. */
 /* Blok stoi teraz jako samodzielna sekcja (strona glowna pod opiniami,
@@ -599,7 +602,8 @@ select.error,
   padding: 50px 55px;
   border-radius: 25px;
   background: var(--dgc-panel);
-  border-top: 4px solid var(--dgc-gold);
+  border: 1px solid var(--dgc-line);
+  border-top: 4px solid var(--dgc-accent);
 
   @media (max-width: 991px) {
     flex-direction: column;
@@ -629,7 +633,7 @@ select.error,
   h3 {
     margin-bottom: 14px;
     color: var(--dgc-ink);
-    font-size: clamp(30px, 1.6vw + 18px, 44px);
+    font-size: clamp(24px, 1.1vw + 15px, 30px);
     line-height: 1.2;
   }
 
@@ -661,7 +665,7 @@ select.error,
   text-decoration: none;
 
   &:hover img {
-    border-color: var(--dgc-gold);
+    border-color: var(--dgc-accent);
   }
 
   img {
@@ -700,7 +704,7 @@ select.error,
     text-decoration: none;
 
     &:hover {
-      color: var(--dgc-gold);
+      color: var(--dgc-accent);
     }
   }
 
@@ -747,21 +751,21 @@ select.error,
 
   /* Naglowek w skali mniejszej niz glowny tytul podstrony (80px), zeby nie
      konkurowal z sekcja stojaca bezposrednio nad nim. */
-  .section_title h3 {
+  .section_title h2 {
     max-width: 920px;
     margin: 8px auto 0;
-    font-size: 60px;
-    line-height: 65px;
+    font-size: 36px;
+    line-height: 1.16;
     text-wrap: balance;
 
     @media (max-width: 991px) {
-      font-size: 50px;
-      line-height: 56px;
+      font-size: 31px;
+      line-height: 1.16;
     }
 
     @media (max-width: 575px) {
-      font-size: 40px;
-      line-height: 46px;
+      font-size: 25px;
+      line-height: 1.3;
     }
   }
 
@@ -813,12 +817,12 @@ select.error,
   #navbar > ul > li > a:hover,
   #navbar > ul > li > a:focus,
   #navbar > ul > li > a.active {
-    color: var(--dgc-canvas);
+    color: var(--dgc-accent);
   }
 
   @media screen and (min-width: 992px) {
     #navbar > ul > li > a:before {
-      background: var(--dgc-gold);
+      background: var(--dgc-accent);
     }
   }
 }
@@ -834,6 +838,48 @@ select.error,
 .wpo-blog-pg-section .post a.read-more,
 .blog-sidebar .widget h3 {
   text-transform: none;
+}
+
+/* --- Logo ---------------------------------------------------------- */
+/* Rozmiar w naglowku ustawia _header.scss — tamta regula ma wyzsza
+   specyficznosc, wiec dublowanie jej tutaj tylko myli. Tu zostaje stopka. */
+/* W stopce znak stoi samodzielnie nad tekstem, wiec moze byc wiekszy. */
+.wpo-site-footer .about-widget .logo img,
+.wpo-site-footer_s2 .about-widget .logo img {
+  width: auto;
+  height: 76px;
+  max-width: 100%;
+}
+
+/* --- Typografia wg specyfikacji Kamila ----------------------------- */
+/* Jeden krój na calej stronie. Naglowki w grubosci 600 — Katibeh mial tylko
+   400, przez co byly ciensze od tekstu pod nimi. Tracking ujemny, bo
+   Schibsted Grotesk przy duzych stopniach domyslnie oddycha za szeroko.
+   Stopnie sa przeliczone u zrodla, w regulach poszczegolnych sekcji. */
+h1, h2, h3, h4, h5, h6 {
+  font-family: $heading-font;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Powyzej 40px litery trzeba scisnac mocniej, inaczej duze naglowki
+   rozjezdzaja sie optycznie. */
+.hero_section .content h1,
+.section_title h2,
+.about_title h3,
+.funfact_section h3,
+.cta_wrap h2,
+.konsultacja_wstep h2 {
+  letter-spacing: -0.03em;
+}
+
+/* Ikony fontowe musza zostac na swoich krojach — globalna podmiana rodziny
+   zamienilaby je w kwadraty. */
+[class*='ti-'],
+[class*='fa-'],
+[class*='flaticon-'],
+.fi {
+  font-family: themify, FontAwesome, flaticon_medically, sans-serif !important;
 }
 
 /* --- Sekcja powitalna: menu i tekst kontra material po prawej ------ */
@@ -922,27 +968,27 @@ select.error,
     h2 {
       margin-bottom: 22px;
       color: var(--dgc-ink);
-      font-size: 80px;
+      font-size: 48px;
       /* 1,15 zamiast 1,1: przy 88px polskie ogonki (ę, ą) z pierwszej linii
          niemal dotykaly wersalikow z drugiej. Naglowek miesci sie teraz
          w jednej linii, ale interlinia musi byc bezpieczna takze wtedy,
          gdy zawinie sie na weszym ekranie. */
-      line-height: 92px;
+      line-height: 1.16;
       text-wrap: balance;
 
       @media (max-width: 1199px) {
-        font-size: 60px;
-        line-height: 72px;
+        font-size: 36px;
+        line-height: 1.16;
       }
 
       @media (max-width: 991px) {
-        font-size: 44px;
-        line-height: 52px;
+        font-size: 27px;
+        line-height: 1.3;
       }
 
       @media (max-width: 575px) {
-        font-size: 34px;
-        line-height: 42px;
+        font-size: 27px;
+        line-height: 1.3;
       }
     }
 
@@ -968,8 +1014,9 @@ select.error,
     margin-top: 40px;
     padding: 34px 38px;
     border-radius: 25px;
-    border-top: 4px solid var(--dgc-gold);
+    border-top: 4px solid var(--dgc-accent);
     background: var(--dgc-panel);
+    border: 1px solid var(--dgc-line);
 
     @media (max-width: 991px) {
       flex-direction: column;
@@ -1026,7 +1073,7 @@ select.error,
 
     li {
       padding-left: 16px;
-      border-left: 3px solid var(--dgc-gold);
+      border-left: 3px solid var(--dgc-accent);
     }
 
     strong {
@@ -1051,12 +1098,12 @@ select.error,
     h3 {
       margin-bottom: 30px;
       color: var(--dgc-ink);
-      font-size: 44px;
-      line-height: 50px;
+      font-size: 27px;
+      line-height: 1.3;
 
       @media (max-width: 575px) {
-        font-size: 32px;
-        line-height: 38px;
+        font-size: 26px;
+        line-height: 1.3;
       }
     }
 
@@ -1125,8 +1172,8 @@ select.error,
     h3 {
       margin-bottom: 18px;
       color: var(--dgc-ink);
-      font-size: 32px;
-      line-height: 40px;
+      font-size: 26px;
+      line-height: 1.3;
     }
 
     ul {
@@ -1151,7 +1198,7 @@ select.error,
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: var(--dgc-gold);
+        background: var(--dgc-accent);
       }
     }
   }
@@ -1206,7 +1253,10 @@ select.error,
    Karty rownamy do siebie, tytul przycinamy do dwoch linii z wielokropkiem,
    a strzalke spychamy na sam dol. */
 .blog_section {
-  .row > [class*='col-'] {
+  /* Tylko kolumny z kartami. Wczesniej regula lapala kazda kolumne sekcji,
+     w tym te z tytulem — a tytul jako element flex kurczyl sie do wlasnej
+     tresci zamiast wypelnic kolumne i tracil wysrodkowanie. */
+  .row > [class*='col-']:has(.blog_card) {
     display: flex;
   }
 
@@ -1229,12 +1279,12 @@ select.error,
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      font-size: 34px;
-      line-height: 42px;
+      font-size: 27px;
+      line-height: 1.3;
 
       @media (max-width: 1399px) {
-        font-size: 30px;
-        line-height: 38px;
+        font-size: 24px;
+        line-height: 1.3;
       }
     }
 
@@ -1297,8 +1347,9 @@ select.error,
     margin: 0 0 30px;
     padding: 24px 28px;
     border-radius: 15px;
-    border-left: 5px solid var(--dgc-gold);
+    border-left: 5px solid var(--dgc-accent);
     background: var(--dgc-panel);
+    border: 1px solid var(--dgc-line);
 
     strong {
       display: block;
@@ -1360,6 +1411,7 @@ select.error,
     line-height: 30px;
     border-radius: 50%;
     background-color: var(--dgc-panel);
+    border: 1px solid var(--dgc-line);
     font-size: 18px;
     text-align: center;
 
@@ -1380,7 +1432,7 @@ select.error,
   font-weight: 500;
 
   span {
-    background-color: var(--dgc-gold-soft);
+    background-color: var(--dgc-accent-soft);
   }
 }
 
@@ -1388,7 +1440,7 @@ select.error,
   margin: 0;
   padding: 28px 30px;
   border-radius: 15px;
-  border-left: 5px solid var(--dgc-gold);
+  border-left: 5px solid var(--dgc-accent);
   background: var(--dgc-panel);
   color: var(--dgc-ink);
   font-size: 18px;
@@ -1503,6 +1555,7 @@ select.error,
   border-radius: 15px;
   border-left: 5px solid var(--dgc-brand);
   background: var(--dgc-panel);
+  border: 1px solid var(--dgc-line);
   color: var(--dgc-ink);
   font-size: 17px;
   line-height: 27px;
@@ -1519,8 +1572,9 @@ select.error,
   .newsletter_box {
     padding: 50px 55px 55px;
     border-radius: 25px;
-    border-top: 4px solid var(--dgc-gold);
+    border-top: 4px solid var(--dgc-accent);
     background: var(--dgc-panel);
+    border: 1px solid var(--dgc-line);
     text-align: center;
 
     @media (max-width: 767px) {
@@ -1531,15 +1585,15 @@ select.error,
   .section_title {
     margin-bottom: 16px;
 
-    h3 {
+    h2 {
       margin: 8px auto 0;
-      font-size: 50px;
-      line-height: 56px;
+      font-size: 31px;
+      line-height: 1.16;
       text-wrap: balance;
 
       @media (max-width: 575px) {
-        font-size: 36px;
-        line-height: 42px;
+        font-size: 29px;
+        line-height: 1.3;
       }
     }
   }
@@ -1586,7 +1640,7 @@ select.error,
   width: min(560px, calc(100% - 40px));
   padding: 44px 44px 40px;
   border-radius: 25px;
-  border-top: 4px solid var(--dgc-gold);
+  border-top: 4px solid var(--dgc-accent);
   background: var(--dgc-canvas);
   box-shadow: 0 24px 70px rgba(13, 68, 68, 0.25);
 
@@ -1609,13 +1663,13 @@ select.error,
   h3 {
     margin-bottom: 12px;
     color: var(--dgc-ink);
-    font-size: 38px;
-    line-height: 44px;
+    font-size: 30px;
+    line-height: 1.16;
     text-wrap: balance;
 
     @media (max-width: 575px) {
-      font-size: 30px;
-      line-height: 36px;
+      font-size: 24px;
+      line-height: 1.3;
     }
   }
 
@@ -1643,6 +1697,7 @@ select.error,
   &:hover,
   &:focus-visible {
     background: var(--dgc-panel);
+    border: 1px solid var(--dgc-line);
   }
 }
 
@@ -1673,7 +1728,7 @@ select.error,
   margin: 0 auto;
   padding: 26px 30px;
   border-radius: 20px;
-  border-top: 4px solid var(--dgc-gold);
+  border-top: 4px solid var(--dgc-accent);
   background: var(--dgc-canvas);
   box-shadow: 0 18px 60px rgba(13, 68, 68, 0.28);
 
@@ -1691,7 +1746,7 @@ select.error,
     margin-bottom: 8px;
     color: var(--dgc-ink);
     font-size: 24px;
-    line-height: 30px;
+    line-height: 1.3;
   }
 
   p {
@@ -1777,6 +1832,7 @@ select.error,
 
   &:hover {
     background: var(--dgc-panel);
+    border: 1px solid var(--dgc-line);
   }
 }
 
@@ -1808,6 +1864,7 @@ select.error,
   min-height: 550px;
   padding: 40px 24px;
   background: var(--dgc-panel);
+  border: 1px solid var(--dgc-line);
 
   @media (max-width: 767px) {
     min-height: 320px;
@@ -1821,8 +1878,8 @@ select.error,
   h3 {
     margin-bottom: 12px;
     color: var(--dgc-ink);
-    font-size: 34px;
-    line-height: 40px;
+    font-size: 27px;
+    line-height: 1.3;
   }
 
   p {
@@ -1849,7 +1906,7 @@ select.error,
 
   &:hover {
     text-decoration: underline;
-    text-decoration-color: var(--dgc-gold);
+    text-decoration-color: var(--dgc-accent);
     text-decoration-thickness: 2px;
     text-underline-offset: 0.22em;
   }
@@ -1861,13 +1918,14 @@ select.error,
     margin-bottom: 50px;
     padding: 26px 30px;
     border-radius: 20px;
-    border-left: 4px solid var(--dgc-gold);
+    border-left: 4px solid var(--dgc-accent);
     background: var(--dgc-panel);
+    border: 1px solid var(--dgc-line);
 
     h2 {
       margin-bottom: 12px;
       font-size: 24px;
-      line-height: 30px;
+      line-height: 1.3;
     }
 
     ol {
@@ -1899,13 +1957,13 @@ select.error,
 
     h2 {
       margin-bottom: 16px;
-      font-size: 34px;
-      line-height: 42px;
+      font-size: 27px;
+      line-height: 1.3;
       text-wrap: balance;
 
       @media (max-width: 575px) {
-        font-size: 28px;
-        line-height: 36px;
+        font-size: 22px;
+        line-height: 1.3;
       }
     }
 
@@ -1935,7 +1993,7 @@ select.error,
   .do_uzupelnienia {
     padding: 2px 8px;
     border-radius: 6px;
-    background: var(--dgc-gold-soft);
+    background: var(--dgc-accent-soft);
     color: var(--dgc-ink);
     font-size: 0.9em;
     font-weight: 600;
@@ -1976,34 +2034,34 @@ select.error,
     margin-bottom: 20px;
     text-align: left;
 
-    h2 {
+    .section_nad {
       margin-left: 0;
     }
 
-    h3 {
+    h2 {
       margin-top: 8px;
       margin-left: 0;
       margin-right: 0;
       /* 80/80 — dokladnie jak h3 w sekcji "O nas" wyzej. Tamta ma ten sam
          uklad (zdjecie obok kolumny tekstu), wiec musi brzmiec tak samo
          mocno. Wczesniejsze 60px robilo z zespolu podsekcje. */
-      font-size: 80px;
-      line-height: 80px;
+      font-size: 48px;
+      line-height: 1.16;
       text-wrap: balance;
 
       @media (max-width: 1199px) {
-        font-size: 60px;
-        line-height: 66px;
+        font-size: 36px;
+        line-height: 1.16;
       }
 
       @media (max-width: 991px) {
-        font-size: 46px;
-        line-height: 52px;
+        font-size: 29px;
+        line-height: 1.3;
       }
 
       @media (max-width: 575px) {
-        font-size: 36px;
-        line-height: 42px;
+        font-size: 29px;
+        line-height: 1.3;
       }
     }
   }
@@ -2031,7 +2089,7 @@ select.error,
 
     li {
       padding-left: 16px;
-      border-left: 3px solid var(--dgc-gold);
+      border-left: 3px solid var(--dgc-accent);
     }
 
     strong {
@@ -2054,8 +2112,9 @@ select.error,
     margin-top: 70px;
     padding: 45px 50px 40px;
     border-radius: 25px;
-    border-top: 4px solid var(--dgc-gold);
+    border-top: 4px solid var(--dgc-accent);
     background: var(--dgc-panel);
+    border: 1px solid var(--dgc-line);
 
     @media (max-width: 767px) {
       margin-top: 50px;
@@ -2065,13 +2124,13 @@ select.error,
     h3 {
       margin-bottom: 10px;
       color: var(--dgc-ink);
-      font-size: 44px;
-      line-height: 50px;
+      font-size: 27px;
+      line-height: 1.3;
       text-wrap: balance;
 
       @media (max-width: 575px) {
-        font-size: 32px;
-        line-height: 38px;
+        font-size: 26px;
+        line-height: 1.3;
       }
     }
 
