@@ -5,7 +5,9 @@ import About from '../../components/about/about';
 import ProcessSection from '../../components/ProcessSection/ProcessSection';
 import FunFact from '../../components/FunFact/FunFact';
 import TeamSection from '../../components/TeamSection/TeamSection';
+import { ZESPOL_BIURA } from '../../api/team';
 import ZespolSection from '../../components/ZespolSection/ZespolSection.jsx';
+import WMediach from '../../components/WMediach/WMediach.jsx';
 import FaqSection from '../../components/FaqSection/FaqSection.jsx';
 import OpinieCta from '../../components/OpinieCta/OpinieCta.jsx';
 import { FAQ_OGOLNE } from '../../api/faq';
@@ -30,11 +32,26 @@ const AboutPage = () => {
                 o ludziach, a przy samej gorze dwa zdjecia pod rzad (prezes
                 i zespol) konkurowaly ze soba. */}
             <ZespolSection />
-            <TeamSection hclass={'team_section_s2 section-padding'} />
+            {/* Ta sama kafelka i ten sam uklad co dotad — zmienila sie tylko
+                zawartosc i to, ze trzy widoczne karty da sie przeciagnac,
+                zeby pokazac pozostale trzy osoby. */}
+            <TeamSection
+                hclass={'team_section_s2 section-padding'}
+                osoby={ZESPOL_BIURA}
+                sliceEnd={ZESPOL_BIURA.length}
+                title={'Zespół'}
+                subtitle={'Poznaj osoby, z którymi pracujesz na co dzień'}
+                suwak={true}
+            />
             {/* Prosba o opinie kierowana do obecnych klientow. Stoi NAD pytaniami,
                 bo pas kontaktowy nizej ma zdjecie wystajace ~195px ponad swoj
                 gorny brzeg — miedzy nimi musi zostac sekcja z wlasnym
                 paddingiem, inaczej zdjecie wchodzi na blok. */}
+            {/* Rozmowa prezes w radiu stoi po zespole i przed prosba o opinie:
+                najpierw czytelnik poznaje ludzi, potem widzi ich na antenie,
+                a dopiero wtedy prosimy go o cokolwiek. */}
+            <WMediach />
+
             <OpinieCta />
             {/* Skrocony zestaw pytan — szesc najczestszych. Pelna lista
                 zostaje na /faq, zeby podstrona "O nas" nie zrobila sie

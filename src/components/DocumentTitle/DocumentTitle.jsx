@@ -1,82 +1,49 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import blogs from '../../api/blogs';
-import Services from '../../api/Services';
+import { metaDla, DOMENA, MARKA } from '../../seo/meta';
 
-const BRAND = 'DGC Biuro Rachunkowe';
-const HOME_TITLE = `${BRAND} · księgowość, kadry i płace dla firm`;
-
-// Tytuly stalych sciezek. Klucz bez ukosnika koncowego.
-const TITLES = {
-    '': HOME_TITLE,
-    '/home': HOME_TITLE,
-    '/home-2': HOME_TITLE,
-    '/home-3': HOME_TITLE,
-    '/about': 'O nas',
-    '/oferta': 'Oferta',
-    '/services': 'Oferta',
-    '/cennik': 'Cennik usług księgowych i kadrowo-płacowych',
-    '/blog': 'Porady',
-    '/blog-left-sidebar': 'Porady',
-    '/blog-fullwidth': 'Porady',
-    '/contact': 'Kontakt',
-    '/faq': 'Najczęstsze pytania',
-    '/team': 'Zespół',
-    '/project': 'Realizacje',
-    '/shop': 'Sklep',
-    '/cart': 'Koszyk',
-    '/checkout': 'Zamówienie',
-    '/order_received': 'Dziękujemy za zamówienie',
-    '/umow-konsultacje': 'Umów konsultację',
-    '/polityka-prywatnosci': 'Polityka prywatności',
-    '/404': 'Nie znaleziono strony',
+// Aktualizuje tytul i metatagi przy nawigacji WEWNATRZ aplikacji.
+//
+// Podzial obowiazkow z prerenderem (src/main.jsx):
+//   - prerender wpisuje komplet meta do statycznego HTML przy budowaniu
+//     i to widza roboty, ktore nie wykonuja JavaScriptu,
+//   - ten komponent podmienia je, gdy uzytkownik klika po serwisie bez
+//     przeladowania strony. Roboty tego nie potrzebuja, ale ludzie tak:
+//     inaczej po kliknieciu w menu w karcie przegladarki zostawalby tytul
+//     poprzedniej podstrony, a udostepnienie z poziomu przegladarki
+//     bralo by zly opis.
+//
+// Zrodlo jest jedno: src/seo/meta.js. Tutaj nie ma zadnych tekstow.
+const ustawMeta = (selektor, atrybut, wartosc) => {
+    let el = document.head.querySelector(selektor);
+    if (!el) {
+        el = document.createElement(selektor.startsWith('link') ? 'link' : 'meta');
+        const [, nazwa, klucz] = selektor.match(/\[(.+?)="(.+?)"\]/) || [];
+        if (nazwa) el.setAttribute(nazwa, klucz);
+        document.head.appendChild(el);
+    }
+    el.setAttribute(atrybut, wartosc);
 };
 
-// Sekcja nadrzedna dla sciezek ze slugiem — slug staje sie tytulem.
-const SECTIONS = {
-    'oferta': 'Oferta',
-    'service-single': 'Oferta',
-    'blog-single': 'Porady',
-    'blog-single-left-sidebar': 'Porady',
-    'blog-single-fullwidth': 'Porady',
-    'team-single': 'Zespół',
-    'project-single': 'Realizacje',
-    'shop-single': 'Sklep',
-};
-
-// Slugi maja teraz odpowiedniki w danych, wiec w karcie przegladarki moze
-// stac prawdziwy tytul zamiast sklejki ze sluga ("Cit estonski efektywna
-// stopa", "Biuro rachunkowe lodz"). Upiekszanie sluga zostaje jako awaryjne,
-// gdyby ktos wszedl na adres spoza danych.
-const ZE_SLUGA = [...blogs, ...Services].reduce((mapa, poz) => {
-    if (poz.slug) mapa[poz.slug] = poz.title;
-    return mapa;
-}, {});
-
-const prettify = (slug) => {
-    const czysty = decodeURIComponent(slug);
-    if (ZE_SLUGA[czysty]) return ZE_SLUGA[czysty];
-    const words = czysty.replace(/[-_]+/g, ' ').trim();
-    return words.charAt(0).toUpperCase() + words.slice(1);
-};
-
-export const titleFor = (pathname) => {
-    const path = pathname.replace(/\/+$/, '');
-    if (TITLES[path]) return TITLES[path] === HOME_TITLE ? HOME_TITLE : `${TITLES[path]} · ${BRAND}`;
-
-    const [, section, slug] = path.split('/');
-    if (slug && SECTIONS[section]) return `${prettify(slug)} · ${SECTIONS[section]} · ${BRAND}`;
-    if (SECTIONS[section]) return `${SECTIONS[section]} · ${BRAND}`;
-
-    return HOME_TITLE;
-};
-
-// Ustawia tytul karty przegladarki przy kazdej zmianie trasy.
 const DocumentTitle = () => {
     const { pathname } = useLocation();
 
     useEffect(() => {
-        document.title = titleFor(pathname);
+        const m = metaDla(pathname);
+
+        document.title = m.tytul;
+        ustawMeta('meta[name="description"]', 'content', m.opis);
+        ustawMeta('link[rel="canonical"]', 'href', m.kanoniczny);
+
+        ustawMeta('meta[property="og:title"]', 'content', m.tytul);
+        ustawMeta('meta[property="og:description"]', 'content', m.opis);
+        ustawMeta('meta[property="og:url"]', 'content', m.kanoniczny);
+        ustawMeta('meta[property="og:type"]', 'content', m.typ);
+        ustawMeta('meta[property="og:site_name"]', 'content', MARKA);
+        ustawMeta('meta[property="og:image"]', 'content', `${DOMENA}/og-dgc.jpg`);
+
+        ustawMeta('meta[name="twitter:title"]', 'content', m.tytul);
+        ustawMeta('meta[name="twitter:description"]', 'content', m.opis);
     }, [pathname]);
 
     return null;

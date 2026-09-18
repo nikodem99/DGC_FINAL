@@ -4,16 +4,7 @@ import PageTitle from '../../components/pagetitle/PageTitle.jsx';
 import Footer from '../../components/footer/Footer.jsx';
 import Scrollbar from '../../components/scrollbar/scrollbar.jsx';
 import Logo from '../../images/logo.svg';
-import { SEKCJE, DO_UZUPELNIENIA } from '../../api/politykaPrywatnosci';
-
-// Braki oznaczamy wizualnie, a nie tylko w tekscie — dokument z dziura
-// nie ma prawa wyjsc na produkcje niezauwazony.
-const zTlem = (tekst) => {
-    if (typeof tekst !== 'string' || !tekst.includes(DO_UZUPELNIENIA)) return tekst;
-    return tekst.split(DO_UZUPELNIENIA).flatMap((czesc, i) =>
-        i === 0 ? [czesc] : [<mark key={i} className="do_uzupelnienia">{DO_UZUPELNIENIA}</mark>, czesc]
-    );
-};
+import { SEKCJE } from '../../api/politykaPrywatnosci';
 
 const PolitykaPrywatnosciPage = () => {
     return (
@@ -37,13 +28,13 @@ const PolitykaPrywatnosciPage = () => {
                             {SEKCJE.map((s) => (
                                 <section className="polityka_sekcja" id={s.id} key={s.id}>
                                     <h2>{s.tytul}</h2>
-                                    {s.akapity?.map((a, i) => <p key={i}>{zTlem(a)}</p>)}
+                                    {s.akapity?.map((a, i) => <p key={i}>{a}</p>)}
                                     {s.lista && (
                                         <ul>
-                                            {s.lista.map((l, i) => <li key={i}>{zTlem(l)}</li>)}
+                                            {s.lista.map((l, i) => <li key={i}>{l}</li>)}
                                         </ul>
                                     )}
-                                    {s.akapityPo?.map((a, i) => <p key={`po-${i}`}>{zTlem(a)}</p>)}
+                                    {s.akapityPo?.map((a, i) => <p key={`po-${i}`}>{a}</p>)}
                                 </section>
                             ))}
                         </div>

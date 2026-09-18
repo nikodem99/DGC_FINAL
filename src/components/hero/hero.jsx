@@ -28,7 +28,7 @@ const hero = () => {
                 <p>Obsługujemy jednoosobowe działalności, spółki i organizacje z całej Polski.
                     W pełni online, bez dojazdów do biura, z ubezpieczeniem OC.
                     Prowadzimy księgi nieprzerwanie od 2011 roku.</p>
-                <Link onClick={ClickHandler} className="theme-btn theme-btn-accent" to="/umow-konsultacje">Umów konsultację</Link>
+                <Link onClick={ClickHandler} className="theme-btn theme-btn-accent" to="/umow-konsultacje/">Umów konsultację</Link>
             </div>
             <div className="image_content">
                 <div className="video">

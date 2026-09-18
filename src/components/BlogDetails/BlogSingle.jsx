@@ -54,7 +54,7 @@ const BlogSingle = (props) => {
                         <div className="col col-lg-8 col-12">
                             <p className="blog_pusto">
                                 Nie znaleźliśmy takiego wpisu.{' '}
-                                <Link onClick={ClickHandler} to="/blog">Wróć do porad</Link>
+                                <Link onClick={ClickHandler} to="/porady/">Wróć do porad</Link>
                             </p>
                         </div>
                     </div>
@@ -94,7 +94,7 @@ const BlogSingle = (props) => {
                                 <div className="more-posts">
                                     <div className="previous-post">
                                         {poprzedni && (
-                                            <Link onClick={ClickHandler} to={`/blog-single/${poprzedni.slug}`}>
+                                            <Link onClick={ClickHandler} to={`/porady/${poprzedni.slug}/`}>
                                                 <span className="post-control-link">Poprzedni wpis</span>
                                                 <span className="post-name">{poprzedni.title2}</span>
                                             </Link>
@@ -102,7 +102,7 @@ const BlogSingle = (props) => {
                                     </div>
                                     <div className="next-post">
                                         {nastepny && (
-                                            <Link onClick={ClickHandler} to={`/blog-single/${nastepny.slug}`}>
+                                            <Link onClick={ClickHandler} to={`/porady/${nastepny.slug}/`}>
                                                 <span className="post-control-link">Następny wpis</span>
                                                 <span className="post-name">{nastepny.title2}</span>
                                             </Link>

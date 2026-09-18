@@ -20,7 +20,7 @@ const Header = (props) => {
                             </div>
                             <div className="col-lg-2 col-md-6 col-6">
                                 <div className="navbar-header">
-                                    <Link onClick={ClickHandler} className="navbar-brand" to="/home"><img src={props.Logo}
+                                    <Link onClick={ClickHandler} className="navbar-brand" to="/"><img src={props.Logo}
                                         alt="logo" /></Link>
                                 </div>
                             </div>
@@ -29,9 +29,9 @@ const Header = (props) => {
                                     <button className="menu-close"><i className="ti-close"></i></button>
                                     <ul className="nav navbar-nav mb-2 mb-lg-0">
                                         <li>
-                                            <Link onClick={ClickHandler} to="/home">Strona główna</Link>
+                                            <Link onClick={ClickHandler} to="/">Strona główna</Link>
                                         </li>
-                                        <li><Link onClick={ClickHandler} to="/about">O nas</Link></li>
+                                        <li><Link onClick={ClickHandler} to="/o-nas/">O nas</Link></li>
                                         <li className="menu-item-has-children">
                                             <Link onClick={ClickHandler} to="/oferta/">Oferta</Link>
                                             <ul className="sub-menu">
@@ -42,9 +42,9 @@ const Header = (props) => {
                                                 ))}
                                             </ul>
                                         </li>
-                                        <li><Link onClick={ClickHandler} to="/cennik">Cennik</Link></li>
-                                        <li><Link onClick={ClickHandler} to="/blog">Porady</Link></li>
-                                        <li><Link onClick={ClickHandler} to="/contact">Kontakt</Link></li>
+                                        <li><Link onClick={ClickHandler} to="/cennik/">Cennik</Link></li>
+                                        <li><Link onClick={ClickHandler} to="/porady/">Porady</Link></li>
+                                        <li><Link onClick={ClickHandler} to="/kontakt/">Kontakt</Link></li>
                                     </ul>
                                 </div>
                             </div>

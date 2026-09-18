@@ -1,5 +1,12 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, } from "react-router-dom";
+// StaticRouter bierzemy z "react-router-dom", a NIE z "react-router".
+// Dwa powody: (1) w v7 sciezka "react-router-dom/server" zostala usunieta
+// z pola exports, wiec stare przyklady nie dzialaja; (2) doinstalowanie
+// osobnego pakietu "react-router" tworzy druga kopie modulu (mielismy
+// 7.18.3 na wierzchu i 7.18.2 zagniezdzony w react-router-dom), przez co
+// Routes i StaticRouter trafiaja do dwoch roznych kontekstow Reacta
+// i build wywala sie na invariancie. Jeden import, jedna kopia.
+import { BrowserRouter, StaticRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
 import Homepage from '../HomePage/HomePage'
 import HomePage2 from '../HomePage2/HomePage2';
 import HomePage3 from '../HomePage3/HomePage3';
@@ -31,11 +38,21 @@ import PolitykaPrywatnosciPage from '../PolitykaPrywatnosciPage/PolitykaPrywatno
 import BanerZgod from '../../components/Zgody/BanerZgod';
 
 
-const AllRoute = () => {
+// Przenosi /blog-single/<slug> na /porady/<slug> zachowujac nazwe artykulu.
+const PrzeniesArtykul = () => {
+  const { slug } = useParams();
+  return <Navigate to={`/porady/${slug}/`} replace />;
+};
+
+// Przy prerenderowaniu dostajemy sciezke w propsie i montujemy StaticRouter,
+// bo BrowserRouter potrzebuje window.history, ktorego w Node nie ma.
+const AllRoute = ({ sciezka }) => {
+  const Router = sciezka ? StaticRouter : BrowserRouter;
+  const propsRoutera = sciezka ? { location: sciezka } : {};
 
   return (
     <div className="App">
-      <BrowserRouter>
+      <Router {...propsRoutera}>
         <DocumentTitle />
         {/* Baner musi siedziec w drzewie routera — uzywa <Link> do polityki
             prywatnosci, a poza routerem <Link> wywala cala aplikacje. */}
@@ -45,7 +62,7 @@ const AllRoute = () => {
           <Route path="home" element={<Homepage />} />
           <Route path="home-2" element={<HomePage2 />} />
           <Route path="home-3" element={<HomePage3 />} />
-          <Route path="about" element={<AboutPage />} />
+          <Route path="o-nas" element={<AboutPage />} />
           <Route path="team" element={<TeamPage />} />
           <Route path="team-single/:slug" element={<TeamSinglePage />} />
           <Route path="shop" element={<ShopPage />} />
@@ -60,22 +77,30 @@ const AllRoute = () => {
           <Route path="oferta/:slug" element={<ServiceSinglePage />} />
           <Route path="project" element={<ProjectPage/>} />
           <Route path="project-single/:slug" element={<ProjectSingle />} />
-          <Route path='blog' element={<BlogPage/>} />
+          <Route path='porady' element={<BlogPage/>} />
           <Route path='blog-left-sidebar' element={<BlogPageLeft />} />
           <Route path='blog-fullwidth' element={<BlogPageFullwidth />} />
-          <Route path='blog-single/:slug' element={<BlogDetails />} />
+          <Route path='porady/:slug' element={<BlogDetails />} />
           <Route path='blog-single-left-sidebar/:slug' element={<BlogDetailsLeftSiide />} />
           <Route path='blog-single-fullwidth/:slug' element={<BlogDetailsFull />} />
-          <Route path='contact' element={<ContactPage />} />
+          <Route path='kontakt' element={<ContactPage />} />
           <Route path='cennik' element={<PricingPage />} />
           {/* Podstrona spoza menu — prowadzi do niej przycisk z hero
               i docelowo reklamy. Indeksowalna, bo ma byc strona
               docelowa kampanii. */}
           <Route path='umow-konsultacje' element={<KonsultacjaPage />} />
           <Route path='polityka-prywatnosci' element={<PolitykaPrywatnosciPage />} />
+          {/* Stare adresy z czasu budowy serwisu. Serwer robi na nie 301
+              (public/_redirects), ale gdyby ktos trafil tu nawigacja
+              wewnatrz aplikacji, ma zostac przeniesiony, a nie zobaczyc 404. */}
+          <Route path="about" element={<Navigate to="/o-nas/" replace />} />
+          <Route path="contact" element={<Navigate to="/kontakt/" replace />} />
+          <Route path="blog" element={<Navigate to="/porady/" replace />} />
+          <Route path="blog-single/:slug" element={<PrzeniesArtykul />} />
+
           <Route path='404' element={<ErrorPage />} />
         </Routes>
-      </BrowserRouter>
+      </Router>
 
     </div>
   );

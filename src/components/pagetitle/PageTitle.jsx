@@ -13,7 +13,7 @@ const PageTitle = (props) => {
                                 podstrony zostalyby bez glownego naglowka. */}
                             <h1>{props.pageTitle}</h1>
                             <ul>
-                                <li><Link to="/home">Strona główna</Link></li>
+                                <li><Link to="/">Strona główna</Link></li>
                                 <li>{props.pagesub}</li>
                             </ul>
                         </div>

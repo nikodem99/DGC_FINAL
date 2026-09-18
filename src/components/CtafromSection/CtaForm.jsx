@@ -151,7 +151,7 @@ const CtaForm = () => {
 
             <div className="input_filled cta_pole_submit">
                 <button type="submit" className="theme-btn-accent" disabled={isSubmitting}>
-                    {isSubmitting ? 'Wysyłanie…' : 'Policz moją cenę'}
+                    {isSubmitting ? 'Wysyłanie…' : 'Oblicz moją cenę'}
                 </button>
             </div>
         </form>

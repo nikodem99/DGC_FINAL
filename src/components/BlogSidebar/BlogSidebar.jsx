@@ -66,7 +66,7 @@ const BlogSidebar = (props) => {
                                     <img src={blog.screens} alt="" />
                                 </div>
                                 <div className="details">
-                                    <h4><Link onClick={ClickHandler} to={`/blog-single/${blog.slug}`}>{blog.title2}</Link></h4>
+                                    <h4><Link onClick={ClickHandler} to={`/porady/${blog.slug}/`}>{blog.title2}</Link></h4>
                                     <span className="date">{blog.create_at}</span>
                                 </div>
                             </div>

@@ -1,8 +1,0 @@
-# Router dziala po stronie przegladarki (BrowserRouter), wiec serwer nie ma
-# plikow /about, /cennik czy /oferta/uslugi-kadrowo-placowe. Bez tej reguly
-# Netlify zwraca 404 na kazdym adresie poza strona glowna — takze przy
-# odswiezeniu strony i przy wejsciu z linku w mailu.
-#
-# 200, a nie 301: adres w pasku ma zostac, a React ma sam dobrac widok.
-# Regula musi byc ostatnia, zeby nie przykrywala prawdziwych plikow.
-/*    /index.html   200

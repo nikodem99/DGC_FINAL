@@ -13,7 +13,7 @@ const Hero2 = () => {
                 <div className="wrapper">
                     <div className="content">
                         <h2>Caring For Your Healthy Life</h2>
-                        <Link onClick={ClickHandler} to="/about" className="theme-btn-s2">Make Appointment <i
+                        <Link onClick={ClickHandler} to="/o-nas/" className="theme-btn-s2">Make Appointment <i
                             className="flaticon-right-arrow"></i></Link>
                     </div>
                     <div className="image">

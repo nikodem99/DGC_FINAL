@@ -29,7 +29,7 @@ const BlogSection = (props) => {
                                         <li>{bloge.author}</li>
                                     </ul>
                                     <h3>{bloge.title}</h3>
-                                    <Link onClick={ClickHandler} to={`/blog-single/${bloge.slug}`}><i className="flaticon-right-arrow"></i></Link>
+                                    <Link onClick={ClickHandler} to={`/porady/${bloge.slug}/`}><i className="flaticon-right-arrow"></i></Link>
                                 </div>
                             </div>
                         </div>

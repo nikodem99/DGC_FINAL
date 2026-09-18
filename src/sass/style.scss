@@ -136,3 +136,7 @@ Version:        1.0.0
 
 // DGC — warstwa marki, ladowana na koncu
 @import "dgc-theme";
+
+// Warstwa dotykowa dla ekranow ponizej 992px. Musi byc ostatnia,
+// bo poprawia cele dotykowe ustawione we wszystkich arkuszach powyzej.
+@import "mobile";

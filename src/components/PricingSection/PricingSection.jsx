@@ -23,7 +23,7 @@ const PricingSection = (props) => {
                     </div>
                     <div className="col-lg-5 col-12">
                         <div className="pricing_section_btn">
-                            <Link onClick={ClickHandler} to="/cennik" className="theme-btn">
+                            <Link onClick={ClickHandler} to="/cennik/" className="theme-btn">
                                 Zobacz pełny cennik
                             </Link>
                         </div>
@@ -55,7 +55,7 @@ const PricingSection = (props) => {
                                     </li>
                                 ))}
                             </ul>
-                            <Link onClick={ClickHandler} className="pricing_card_link" to="/contact">
+                            <Link onClick={ClickHandler} className="pricing_card_link" to="/kontakt/">
                                 Zapytaj o wycenę <span aria-hidden="true">→</span>
                             </Link>
                         </article>

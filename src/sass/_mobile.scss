@@ -1,0 +1,195 @@
+/* ======================================================================
+   Warstwa dotykowa — wylacznie ponizej 992px, czyli tam, gdzie szablon
+   przelacza sie na menu mobilne. Desktop nie jest tu ruszany.
+
+   Powod: audyt na 375px wykazal od 14 do 27 samodzielnych elementow
+   klikalnych o wysokosci ponizej 44px na kazdej podstronie, czesc
+   ponizej 24px. WCAG 2.5.8 (poziom AA) wymaga minimum 24x24 px, a
+   wygodny standard dotykowy to 44x44 px.
+
+   Swiadomie NIE ruszamy odnosnikow stojacych w srodku zdania (np. podpis
+   autora w stopce): WCAG wyjmuje je spod tego wymogu, bo powiekszanie ich
+   rozbijaloby akapit.
+   ====================================================================== */
+
+@media (max-width: 991px) {
+
+    /* --- Przycisk otwierajacy menu -----------------------------------
+       Najwazniejszy element dotykowy na telefonie: bez niego nie ma
+       nawigacji. Mial 40x35. */
+    .showmenu .navbar-toggler.open-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+    }
+
+    .showmenu.mobail-menu {
+        width: 44px;
+        height: 44px;
+    }
+
+    /* Trzy kreski hamburgera maja wlasny margines dolny (margin: 0 auto 5px),
+       ktory przy wysrodkowaniu w pionie przesuwal caly znak w gore.
+       UWAGA: pierwotnie bylo tu samo "margin-bottom: 0" i ostatnia kreska
+       traciła przez to wysrodkowanie w poziomie — zjezdzala do lewej
+       krawedzi przycisku. Dlatego podajemy caly skrot, zamiast liczyc na
+       to, ze pozostale strony doziedzicza sie z reguly szablonu. */
+    .showmenu .navbar-toggler.open-btn span:last-child {
+        margin: 0 auto;
+    }
+
+    /* --- Pozycje menu mobilnego --------------------------------------
+       Dopiero po naprawieniu znacznikow w MobileMenu.jsx (byly <ul>
+       zamiast <li>) te reguly szablonu w ogole zaczynaja dzialac.
+       Szablonowe 10px paddingu daje 36px, wiec dokladamy do 44px. */
+    /* Selektor zaczyna sie od .mobileMenu swiadomie. Arkusz komponentu
+       (MobileMenu/style.css) wczytuje sie PO tym pliku, a ma te same
+       selektory ".responsivemenu li a" o tej samej specyficznosci, wiec
+       wygrywal kolejnoscia. Bez tego przedrostka ponizsze reguly nie
+       dzialaly wcale — wysokosc 44px brala sie przypadkiem z szablonowej
+       reguly @media(max-width:450px), czyli tylko na najwezszych ekranach. */
+    .mobileMenu .responsivemenu li a,
+    .mobileMenu .responsivemenu li p {
+        padding-top: 13px;
+        padding-bottom: 13px;
+        font-size: 15px;
+        line-height: 18px;
+        /* Szablon ma tu "text-transform: capitalize", co w polskim daje
+           "Strona Główna" i "O Nas". Wielka litera w kazdym slowie to regula
+           angielska; po polsku wielka jest tylko pierwsza. Na desktopie tego
+           nie bylo, wiec menu mobilne czytalo sie inaczej niz gorne. */
+        text-transform: none;
+    }
+
+    /* Strzalka rozwijajaca podmenu byla pozycjonowana na sztywno (top: 17px)
+       pod dawny, mniejszy padding — po jego zwiekszeniu przestala byc
+       w osi tekstu. */
+    .mobileMenu .responsivemenu li i {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .mobileMenu .responsivemenu ul.subMenu li a {
+        /* 13px z gory i z dolu + 18px wysokosci wiersza = 44px. Przy 11px
+           wychodzilo 40px, czyli cztery piksele za malo. */
+        padding-top: 13px;
+        padding-bottom: 13px;
+        font-size: 14px;
+        line-height: 18px;
+    }
+
+    /* Krzyzyk zamykajacy menu mial 38x40. To jedyny sposob zamkniecia
+       panelu poza klikaniem pozycji, wiec musi byc wygodny. */
+    .mobileMenu .menu-close .clox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+    }
+
+    /* --- Okruszki nawigacyjne ---------------------------------------- */
+    .wpo-breadcumb-wrap ul li a {
+        display: inline-block;
+        padding: 10px 0;
+    }
+
+    /* --- Stopka: lista odnosnikow i przycisk zgod --------------------- */
+    .wpo-site-footer .link-widget ul li a,
+    .wpo-site-footer_s2 .link-widget ul li a,
+    .wpo-site-footer .link-widget ul li .stopka_zgody,
+    .wpo-site-footer_s2 .link-widget ul li .stopka_zgody {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+    }
+
+    /* Ikony spolecznosciowe mialy 40x40. */
+    .wpo-site-footer .social-widget ul li a,
+    .wpo-site-footer_s2 .social-widget ul li a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+    }
+
+    /* --- Blog: strony i filtr kategorii ------------------------------ */
+    .pg-pagination li button {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .category-widget ul li button {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+        width: 100%;
+    }
+
+    .wpo-blog-content .entry-details a.read-more {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+    }
+
+    /* --- Spis tresci polityki prywatnosci ----------------------------
+       Dwadziescia odnosnikow po 20px jeden pod drugim to najgorszy
+       przypadek na calej stronie. */
+    .polityka_spis ol li a {
+        display: inline-block;
+        padding: 12px 0;
+    }
+
+    /* --- Karty cennika ------------------------------------------------ */
+    .pricing_card_link {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+    }
+
+    /* --- Numer telefonu w pasie kontaktowym --------------------------
+       Dotkniecie go wybiera numer, wiec to realny przycisk. */
+    .cta_wrapper .content .text h3 a {
+        display: inline-block;
+        padding: 7px 0;
+    }
+
+    /* --- Powrot na gore ----------------------------------------------- */
+    .header-menu ul.smothscroll li a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    /* --- Dane kontaktowe na /contact ---------------------------------
+       Numer i adres e-mail stoja samodzielnie w swoich akapitach, a ich
+       dotkniecie wybiera numer albo otwiera pocztę, wiec to realne
+       przyciski, a nie odnosniki w srodku zdania. Mialy 20px. */
+    .office-info-text p a {
+        display: inline-block;
+        padding: 12px 0;
+    }
+
+    /* --- Ostatnie wpisy na pasku bocznym bloga -----------------------
+       Brakowalo im dwoch pikseli do progu. */
+    .widget .posts .post .details h4 a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+    }
+
+    /* --- Lista pozostalych uslug na pasku bocznym /oferta/:slug ------
+       Cztery odnosniki nawigacyjne po 30px. Wyszly dopiero przy audycie
+       wypisujacym elementy, a nie tylko je liczacym. */
+    .services_widget ul li a {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+    }
+}

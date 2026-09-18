@@ -9,6 +9,7 @@ import PricingSection from '../../components/PricingSection/PricingSection';
 import Testimonial from '../../components/Testimonial/Testimonial';
 import CtaSection from '../../components/CtaSection/CtaSection';
 import TeamSection from '../../components/TeamSection/TeamSection';
+import { ZESPOL_BIURA } from '../../api/team';
 import FunFact from '../../components/FunFact/FunFact';
 import BlogSection from '../../components/BlogSection/BlogSection';
 import NewsletterSection from '../../components/Newsletter/NewsletterSection';
@@ -31,7 +32,16 @@ const HomePage = () => {
             <PricingSection hclass={'pricing_section section-padding'}/>
             <Testimonial tClass={'testimonial_section testimonial_section_slider'} />
             <CtaSection tClass={'cta_section'} />
-            <TeamSection hclass={'team_section section-padding'}/>
+            {/* Zespol biura zamiast nadzoru merytorycznego. Uklad bez zmian:
+                trzy karty widoczne, reszta po przeciagnieciu. */}
+            <TeamSection
+                hclass={'team_section section-padding'}
+                osoby={ZESPOL_BIURA}
+                sliceEnd={ZESPOL_BIURA.length}
+                title={'Zespół'}
+                subtitle={'Poznaj osoby, z którymi pracujesz na co dzień'}
+                suwak={true}
+            />
             <FunFact hclass={'funfact_section'} />
             <BlogSection tClass={'blog_section section-padding'}/>
             {/* Newsletter tuz po poradach: kto doczytal do artykulow, ten

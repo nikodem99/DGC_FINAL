@@ -45,7 +45,7 @@ const BanerZgod = () => {
                     chcemy też korzystać z plików służących do statystyk i marketingu, żeby
                     lepiej dopasować treści i mierzyć skuteczność działań. Zgodę możesz
                     w każdej chwili zmienić. Więcej w{' '}
-                    <Link to="/polityka-prywatnosci">polityce prywatności</Link>.
+                    <Link to="/polityka-prywatnosci/">polityce prywatności</Link>.
                 </p>
 
                 {szczegoly && (

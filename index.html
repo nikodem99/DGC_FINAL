@@ -7,10 +7,22 @@
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DGC Biuro Rachunkowe — księgowość, kadry i płace dla firm</title>
+    <!-- UWAGA: nie wpisuj tutaj znacznikow meta z opisem ani z danymi
+         Open Graph. Wtyczka prerenderujaca dokleja je na koniec sekcji head
+         osobno dla kazdej podstrony (zrodlo: src/seo/meta.js), wiec wpisane
+         tutaj pojawilyby sie po raz drugi, a przy dwoch opisach Google
+         ignoruje oba. Tytul jest wyjatkiem, bo jego wtyczka podmienia.
+         I nie wstawiaj tu przykladow w nawiasach ostrych: parser wtyczki
+         czyta je nawet wewnatrz komentarza i zamienia w prawdziwy znacznik.
+         Tak wlasnie powstal pusty opis na wszystkich 30 podstronach. -->
+    <title>DGC Biuro Rachunkowe · księgowość, kadry i płace dla firm</title>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <!-- Atrybut "prerender" wskazuje wtyczce vite-prerender-plugin, z ktorego
+         pliku wziac funkcje prerender(). Celowo na istniejacym skrypcie, a nie
+         przez opcje prerenderScript: w wersji 0.5.13 tamta opcja wtapia kod
+         prerendera w paczke pobierana przez przegladarke. -->
+    <script type="module" prerender src="/src/main.jsx"></script>
   </body>
 </html>

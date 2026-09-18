@@ -1,6 +1,4 @@
 import React, { Fragment, useState } from 'react';
-import List from "@mui/material/List";
-import ListItem from "@mui/material/List";
 import Collapse from "@mui/material/Collapse";
 import { NavLink } from "react-router-dom";
 import offerMenu from '../../api/offerMenu';
@@ -10,12 +8,12 @@ const menus = [
     {
         id: 1,
         title: 'Strona główna',
-        link: '/home',
+        link: '/',
     },
     {
         id: 88,
         title: 'O nas',
-        link: '/about',
+        link: '/o-nas/',
     },
     {
         id: 7,
@@ -26,29 +24,40 @@ const menus = [
     {
         id: 6,
         title: 'Cennik',
-        link: '/cennik',
+        link: '/cennik/',
     },
     {
         id: 5,
         title: 'Porady',
-        link: '/blog',
+        link: '/porady/',
     },
     {
         id: 89,
         title: 'Kontakt',
-        link: '/contact',
+        link: '/kontakt/',
     }
 
 
 ]
 
 
+// UWAGA na historie tego pliku: szablon importowal ListItem z
+// "@mui/material/List", czyli ten sam komponent co List. Kazda pozycja menu
+// renderowala sie wiec jako <ul>, a nie <li>. Skutki byly dwa: znaczniki byly
+// niepoprawne (<ul> w <ul> bez <li>, <a> bezposrednio w <ul>) i — wazniejsze —
+// caly blok stylow ".responsivemenu li a" nigdy sie nie stosowal, przez co
+// odnosniki mialy display: inline, zero paddingu i 16px wysokosci dotyku.
+// Dlatego uzywamy tu zwyklych <li> i <ul> zamiast komponentow MUI.
 const MobileMenu = () => {
 
     const [openId, setOpenId] = useState(0);
     const [menuActive, setMenuState] = useState(false);
 
+    // Klikniecie pozycji menu musi je zamknac. Bez tego panel zostawal
+    // otwarty nad nowa podstrona i trzeba go bylo zamykac recznie krzyzykiem.
     const ClickHandler = () => {
+        setMenuState(false);
+        setOpenId(0);
         window.scrollTo(10, 0);
     }
 
@@ -62,31 +71,29 @@ const MobileMenu = () => {
                 <ul className="responsivemenu">
                     {menus.map((item, mn) => {
                         return (
-                            <ListItem className={item.id === openId ? 'active' : null} key={mn}>
+                            <li className={item.id === openId ? 'active' : null} key={mn}>
                                 {item.submenu ?
                                     <Fragment>
                                         <p onClick={() => setOpenId(item.id === openId ? 0 : item.id)}>{item.title}
                                             <i className={item.id === openId ? 'fa fa-angle-up' : 'fa fa-angle-down'}></i>
                                         </p>
                                         <Collapse in={item.id === openId} timeout="auto" unmountOnExit>
-                                            <List className="subMenu">
-                                                <Fragment>
-                                                    {item.submenu.map((submenu, i) => {
-                                                        return (
-                                                            <ListItem key={i}>
-                                                                <NavLink onClick={ClickHandler} className="active"
-                                                                    to={submenu.link}>{submenu.title}</NavLink>
-                                                            </ListItem>
-                                                        )
-                                                    })}
-                                                </Fragment>
-                                            </List>
+                                            <ul className="subMenu">
+                                                {item.submenu.map((submenu, i) => {
+                                                    return (
+                                                        <li key={i}>
+                                                            <NavLink onClick={ClickHandler} className="active"
+                                                                to={submenu.link}>{submenu.title}</NavLink>
+                                                        </li>
+                                                    )
+                                                })}
+                                            </ul>
                                         </Collapse>
                                     </Fragment>
-                                    : <NavLink className="active"
+                                    : <NavLink onClick={ClickHandler} className="active"
                                         to={item.link}>{item.title}</NavLink>
                                 }
-                            </ListItem>
+                            </li>
                         )
                     })}
                 </ul>

@@ -43,7 +43,7 @@ const Hero3 = () => {
                                     <h2>Your Smile & Happiness is Our Mission</h2>
                                 </div>
                                 <div className="slide-btns">
-                                    <Link onClick={ClickHandler} to="/about" className="theme-btn-s2">Make Appointment <i
+                                    <Link onClick={ClickHandler} to="/o-nas/" className="theme-btn-s2">Make Appointment <i
                                         className="flaticon-right-arrow"></i></Link>
                                 </div>
                             </div>
@@ -68,7 +68,7 @@ const Hero3 = () => {
                                     <h2>Your Smile & Happiness is Our Mission</h2>
                                 </div>
                                 <div className="slide-btns">
-                                    <Link onClick={ClickHandler} to="/about" className="theme-btn-s2">Make Appointment <i
+                                    <Link onClick={ClickHandler} to="/o-nas/" className="theme-btn-s2">Make Appointment <i
                                         className="flaticon-right-arrow"></i></Link>
                                 </div>
                             </div>
@@ -93,7 +93,7 @@ const Hero3 = () => {
                                     <h2>Your Smile & Happiness is Our Mission</h2>
                                 </div>
                                 <div className="slide-btns">
-                                    <Link onClick={ClickHandler} to="/about" className="theme-btn-s2">Make Appointment <i
+                                    <Link onClick={ClickHandler} to="/o-nas/" className="theme-btn-s2">Make Appointment <i
                                         className="flaticon-right-arrow"></i></Link>
                                 </div>
                             </div>

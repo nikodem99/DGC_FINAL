@@ -13,7 +13,7 @@ export const FAQ_OGOLNE = [
     },
     {
         title: 'Prowadzę firmę poza Łodzią. Czy to problem?',
-        content: 'Nie. Obsługujemy firmy z całej Polski. Najwięcej klientów mamy z Łodzi i okolic — Pabianic, Zgierza, Aleksandrowa Łódzkiego — ale przy obsłudze online odległość nie ma znaczenia.'
+        content: 'Nie. Obsługujemy firmy z całej Polski. Najwięcej klientów mamy z Łodzi i okolic (Pabianic, Zgierza, Aleksandrowa Łódzkiego), ale przy obsłudze online odległość nie ma znaczenia.'
     },
     {
         title: 'Jakie firmy obsługujecie?',
@@ -21,7 +21,7 @@ export const FAQ_OGOLNE = [
     },
     {
         title: 'Ile kosztuje prowadzenie księgowości?',
-        content: 'Ryczałt i księga przychodów i rozchodów od 200 zł netto miesięcznie, pełna księgowość od 550 zł, wirtualne biuro 100 zł. To stawki wywoławcze przy obsłudze do 20 dokumentów w miesiącu — ostateczna cena zależy od ich liczby, formy prawnej i zakresu spraw kadrowych. Wycena jest bezpłatna i niezobowiązująca.'
+        content: 'Ryczałt i księga przychodów i rozchodów od 200 zł netto miesięcznie, pełna księgowość od 550 zł, wirtualne biuro 100 zł. To stawki wywoławcze przy obsłudze do 20 dokumentów w miesiącu, a ostateczna cena zależy od ich liczby, formy prawnej i zakresu spraw kadrowych. Wycena jest bezpłatna i niezobowiązująca.'
     },
     {
         title: 'Czy pomagacie założyć firmę lub spółkę?',
@@ -29,7 +29,7 @@ export const FAQ_OGOLNE = [
     },
     {
         title: 'Chcę zmienić biuro rachunkowe. Jak to wygląda?',
-        content: 'Biuro można zmienić także w trakcie roku. Potrzebne będzie wypowiedzenie dotychczasowej umowy, przekazanie nam dokumentacji oraz aktualizacja pełnomocnictw w urzędzie skarbowym i ZUS. Napisz albo zadzwoń — powiemy, co dokładnie będzie potrzebne w Twojej sytuacji, zanim cokolwiek wypowiesz.'
+        content: 'Biuro można zmienić także w trakcie roku. Potrzebne będzie wypowiedzenie dotychczasowej umowy, przekazanie nam dokumentacji oraz aktualizacja pełnomocnictw w urzędzie skarbowym i ZUS. Napisz albo zadzwoń, a powiemy, co dokładnie będzie potrzebne w Twojej sytuacji, zanim cokolwiek wypowiesz.'
     },
     {
         title: 'Kto odpowiada, jeśli w rozliczeniu pojawi się błąd?',
@@ -41,7 +41,7 @@ export const FAQ_OGOLNE = [
     },
     {
         title: 'Czy mogę liczyć na doradztwo podatkowe lub wsparcie prawne?',
-        content: 'Tak. Nad sprawami wymagającymi osobnych uprawnień czuwają współpracujący z nami radca prawny, doradcy podatkowi oraz biegła rewident — każde z nich z wpisem na własną listę zawodową.'
+        content: 'Tak. Nad sprawami wymagającymi osobnych uprawnień czuwają współpracujący z nami radca prawny, doradcy podatkowi oraz biegła rewident, każde z nich z wpisem na własną listę zawodową.'
     },
     {
         title: 'Jak się z Wami skontaktować?',

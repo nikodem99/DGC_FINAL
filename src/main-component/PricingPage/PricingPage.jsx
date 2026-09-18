@@ -69,7 +69,7 @@ const PricingPage = () => {
                                         <Link
                                             onClick={scrollToTop}
                                             className="pricing_card_link"
-                                            to="/contact"
+                                            to="/kontakt/"
                                         >
                                             Zapytaj o pakiet <span aria-hidden="true">→</span>
                                         </Link>

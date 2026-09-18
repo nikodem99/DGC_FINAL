@@ -1,0 +1,122 @@
+/* Suwak w sekcji zespolu. Warstwa dodatkowa — nie rusza .team_card
+   z _home-default.scss, zeby kafelka wygladala dokladnie tak jak dotad.
+   Tu jest wylacznie to, czego wymaga przelozenie jej do react-slick. */
+
+.team_suwak {
+    /* Slider jest jedynym dzieckiem .row i ma zajac cala jego szerokosc.
+       Bez tego flexowy .row sciska go do szerokosci tresci. */
+    > .slick-slider {
+        width: 100%;
+    }
+
+    /* Domyslnie slick ustawia slajdy jako float o roznej wysokosci. Przy
+       nazwiskach lamiacych sie na dwie linie dolne krawedzie kart by sie
+       rozjechaly, wiec przechodzimy na flex i rozciagamy slajdy. */
+    .slick-track {
+        display: flex;
+        align-items: stretch;
+    }
+
+    .slick-slide {
+        height: auto;
+
+        > div {
+            height: 100%;
+        }
+    }
+
+    /* Odstep miedzy kartami. .team_card ma juz 0 10px powyzej 1199px,
+       ale ponizej szablon zeruje padding — a w suwaku karty stoja obok
+       siebie na kazdej szerokosci, wiec odstep musi byc zawsze. */
+    .team_card {
+        padding: 0 12px;
+        margin-bottom: 0;
+        height: 100%;
+
+        @media (max-width: 1199px) {
+            padding: 0 10px;
+        }
+
+        @media (max-width: 575px) {
+            padding: 0 6px;
+        }
+    }
+
+    /* Slick nadaje slajdom outline po kliknieciu — przy przeciaganiu
+       kart wyglada to jak blad renderowania. */
+    .slick-slide:focus,
+    .slick-slide a:focus-visible {
+        outline: none;
+    }
+
+    .slick-list {
+        /* Cien i zielony ksztalt pod zdjeciem wystaja poza obrys karty;
+           domyslne overflow: hidden slicka scinaloby je na krawedziach. */
+        padding-bottom: 10px;
+    }
+
+    /* Kursor mowiacy, ze pas da sie przeciagnac — bez tego uzytkownik
+       nie wie, ze pod spodem sa jeszcze trzy osoby. */
+    .slick-list:not(.dragging) {
+        cursor: grab;
+    }
+
+    .slick-list.dragging {
+        cursor: grabbing;
+    }
+}
+
+/* Nazwisko osoby bez wlasnej podstrony. Szablon stylizuje wylacznie
+   .content h3 a, wiec wariant bez odnosnika musi dostac to samo
+   z osobna — inaczej spadlby do domyslnej wielkosci h3.
+   Wartosci przez zmienne CSS, nie SCSS: ten arkusz jest importowany
+   z komponentu, wiec nie widzi helpers/_variables.scss. */
+.team_card .content h3 .team_nazwa {
+    display: block;
+    color: var(--dgc-ink);
+    font-family: "Schibsted Grotesk", system-ui, sans-serif;
+    font-size: 31px;
+    font-weight: 600;
+    line-height: 1.16;
+    /* Nazwiska zespolu sa dluzsze niz "Igor Pasternak" i lamia sie na dwie
+       linie — balance rozklada je rowno zamiast zostawiac jedno slowo. */
+    text-wrap: balance;
+
+    @media (max-width: 1199px) {
+        font-size: 25px;
+        line-height: 1.3;
+    }
+}
+
+/* Nazwisko prezes ("Danuta Grabińska-Chłopaś") nie miesci sie w jednej
+   linii i lamie sie na dwie, podczas gdy pozostale nazwiska zajmuja jedna.
+   Skutek: jej stanowisko schodzilo nizej niz u reszty i rzad tracil wspolna
+   linie.
+
+   Zamiast rezerwowac sztywna wysokosc na dwie linie (co na waskich ekranach,
+   gdzie nikt sie nie lamie, dokladaloby pustke pod kazdym nazwiskiem),
+   dociskamy stanowisko do dolu karty. Karty i tak sa rownej wysokosci przez
+   flexowy tor slicka, wiec stanowiska same staja w jednej linii — a odstep
+   pojawia sie tylko tam i tylko wtedy, kiedy ktores nazwisko faktycznie
+   zajmie dwie linie. */
+/* Lancuch wysokosci: flexowy tor rozciaga .slick-slide do najwyzszego,
+   a te trzy reguly przenosza te wysokosc az do karty. */
+.team_suwak .team_slajd {
+    height: 100%;
+}
+
+.team_suwak .team_card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .content {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+
+        > span {
+            margin-top: auto;
+        }
+    }
+}

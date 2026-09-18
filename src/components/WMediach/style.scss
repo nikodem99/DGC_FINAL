@@ -1,0 +1,137 @@
+/* Sekcja "W mediach" na /o-nas. Zaslona z miniatura zamiast osadzonego
+   odtwarzacza — powody opisane w WMediach.jsx. */
+
+.wmediach_section {
+    background: var(--dgc-canvas);
+}
+
+.wmediach_ramka {
+    position: relative;
+    /* Proporcja 16:9 pilnowana przez aspect-ratio, a nie przez sztuczke
+       z paddingiem: dzieki temu wysokosc jest znana od razu i nic nie
+       podskakuje, gdy miniatura sie doczyta. */
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 18px 50px rgba(13, 68, 68, 0.16);
+    background: var(--dgc-ink);
+
+    iframe {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+}
+
+.wmediach_zaslona {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Przyciemnienie pojawia sie dopiero pod kursorem — miniatura ma byc
+       widoczna, a nie schowana za szyba. */
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(13, 68, 68, 0);
+        transition: background 0.25s ease;
+    }
+
+    &:hover::after,
+    &:focus-visible::after {
+        background: rgba(13, 68, 68, 0.22);
+    }
+
+    &:focus-visible {
+        outline: 3px solid var(--dgc-accent);
+        outline-offset: 3px;
+    }
+}
+
+/* Trojkat odtwarzania rysowany obramowaniem, bez dodatkowego pliku. */
+.wmediach_play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: var(--dgc-accent);
+    box-shadow: 0 10px 30px rgba(13, 68, 68, 0.3);
+    transition: transform 0.25s ease;
+
+    &::before {
+        content: '';
+        border-style: solid;
+        border-width: 15px 0 15px 25px;
+        border-color: transparent transparent transparent var(--dgc-canvas);
+        /* Trojkat wizualnie ciazy w lewo, wiec przesuwamy go o kilka
+           pikseli, zeby wygladal na wysrodkowany. */
+        margin-left: 6px;
+    }
+
+    @media (max-width: 575px) {
+        width: 64px;
+        height: 64px;
+
+        &::before {
+            border-width: 12px 0 12px 20px;
+            margin-left: 5px;
+        }
+    }
+}
+
+.wmediach_zaslona:hover .wmediach_play {
+    transform: translate(-50%, -50%) scale(1.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wmediach_zaslona::after,
+    .wmediach_play {
+        transition: none;
+    }
+
+    .wmediach_zaslona:hover .wmediach_play {
+        transform: translate(-50%, -50%);
+    }
+}
+
+.wmediach_podpis {
+    margin: 26px 0 0;
+    color: var(--dgc-ink);
+    font-size: 18px;
+    line-height: 30px;
+    text-align: center;
+    text-wrap: pretty;
+
+    @media (max-width: 575px) {
+        font-size: 16px;
+        line-height: 27px;
+    }
+}
+
+.wmediach_zastrzezenie {
+    margin: 10px 0 0;
+    color: var(--dgc-ink);
+    font-size: 15px;
+    line-height: 24px;
+    text-align: center;
+    opacity: 0.72;
+}

@@ -478,7 +478,14 @@
                     height: 380px;
                 }
 
-                @media (max-width:575px) {}
+                /* Blok byl pusty w szablonie. Ponizej 576px zdjecie schodzi do
+                   300px, a pierscien zostawal 380px i wystawal poza ekran —
+                   na 320px dawalo to 36px poziomego przewijania calej strony.
+                   Chowamy go tak samo jak .round-two nizej: to czysta
+                   dekoracja, a oba pierscienie maja znikac razem. */
+                @media (max-width:575px) {
+                    display: none;
+                }
             }
 
             .round-two {

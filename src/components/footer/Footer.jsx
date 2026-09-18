@@ -51,11 +51,11 @@ const Footer = (props) => {
                                     <h3>Nawigacja</h3>
                                 </div>
                                 <ul>
-                                    <li><Link onClick={ClickHandler} to="/home">Strona główna</Link></li>
-                                    <li><Link onClick={ClickHandler} to="/about">O nas</Link></li>
-                                    <li><Link onClick={ClickHandler} to="/oferta">Oferta</Link></li>
-                                    <li><Link onClick={ClickHandler} to="/cennik">Cennik</Link></li>
-                                    <li><Link onClick={ClickHandler} to="/blog">Porady</Link></li>
+                                    <li><Link onClick={ClickHandler} to="/">Strona główna</Link></li>
+                                    <li><Link onClick={ClickHandler} to="/o-nas/">O nas</Link></li>
+                                    <li><Link onClick={ClickHandler} to="/oferta/">Oferta</Link></li>
+                                    <li><Link onClick={ClickHandler} to="/cennik/">Cennik</Link></li>
+                                    <li><Link onClick={ClickHandler} to="/porady/">Porady</Link></li>
                                 </ul>
                             </div>
                         </div>
@@ -65,9 +65,9 @@ const Footer = (props) => {
                                     <h3>Przydatne</h3>
                                 </div>
                                 <ul>
-                                    <li><Link onClick={ClickHandler} to="/contact">Kontakt</Link></li>
-                                    <li><Link onClick={ClickHandler} to="/faq">Najczęstsze pytania</Link></li>
-                                    <li><Link onClick={ClickHandler} to="/polityka-prywatnosci">Polityka prywatności</Link></li>
+                                    <li><Link onClick={ClickHandler} to="/kontakt/">Kontakt</Link></li>
+                                    <li><Link onClick={ClickHandler} to="/faq/">Najczęstsze pytania</Link></li>
+                                    <li><Link onClick={ClickHandler} to="/polityka-prywatnosci/">Polityka prywatności</Link></li>
                                     <li>
                                         <button type="button" className="stopka_zgody" onClick={wycofajZgody}>
                                             Ustawienia prywatności

@@ -8,6 +8,9 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import AllRoute from './main-component/router';
 import { ToastContainer } from 'react-toastify';
 import NewsletterPopup from './components/Newsletter/NewsletterPopup';
+import { useEffect } from 'react';
+import { uruchomPomiary } from './lib/analityka';
+import { czyZgoda, nasluchujZgod } from './lib/zgody';
 
 // Paleta DGC dla wszystkich kontrolek MUI (formularze, przyciski, selecty).
 const dgcTheme = createTheme({
@@ -22,11 +25,21 @@ const dgcTheme = createTheme({
   typography: { fontFamily: '"Schibsted Grotesk", system-ui, sans-serif' },
 });
 
-function App() {
+function App({ sciezka }) {
+  // Pomiary startuja dopiero po zgodzie i tylko jesli sa wlaczone
+  // w src/lib/analityka.js. Nasluch jest potrzebny, bo uzytkownik moze
+  // wyrazic zgode juz po zaladowaniu strony — wtedy skrypty maja ruszyc
+  // bez przeladowania. Powtorne wywolanie jest bezpieczne, loader pilnuje,
+  // zeby nie dodac tego samego skryptu dwa razy.
+  useEffect(() => {
+    uruchomPomiary(czyZgoda);
+    return nasluchujZgod(() => uruchomPomiary(czyZgoda));
+  }, []);
+
   return (
     <ThemeProvider theme={dgcTheme}>
       <div className="App" id="scrool">
-        <AllRoute />
+        <AllRoute sciezka={sciezka} />
         <NewsletterPopup />
         <ToastContainer />
       </div>
