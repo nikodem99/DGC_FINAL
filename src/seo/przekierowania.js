@@ -12,25 +12,18 @@
 // Wszystkie adresy zrodlowe zweryfikowane zapytaniami HTTP do biurodgc.pl
 // 18.09.2026 — kazdy zwracal wtedy 200 albo 301, czyli zyje.
 
-// Slugi artykulow sa te same co na starej stronie (celowo, dla SEO),
-// zmienil sie tylko przedrostek: wczesniej katalog glowny, teraz /porady/.
-export const ARTYKULY = [
-    'rezerwy-odpisy',
-    'ksiegowanie-dotacji',
-    'rozliczenia-miedzyokresowe-kosztow',
-    'zamkniecie-roku-bledy',
-    'wynajem-mieszkania-firmie-najemca',
-    'dokument-sad',
-    'podatek-od-nieruchomosci',
-    'oplata-produktowa',
-    'system-sent',
-    'podatek-lesny',
-    'hodowla-pajakow-podatki',
-    'oplaty-srodowiskowe-wykaz-progi',
-    'oplata-paliwowa-opal',
-    'cit-estonski-efektywna-stopa',
-    'skladki-preferencyjne-2026',
-];
+// Artykulow NIE ma tutaj na liscie i to jest celowe.
+//
+// Wczesniej stalo tu recznie przepisane pietnascie slugow. Byly wiec dwa
+// miejsca z ta sama wiedza: to i src/api/blogs.js. Dopisanie artykulu
+// w jednym, a zapomnienie o drugim, konczy sie martwym przekierowaniem.
+//
+// Teraz generator (scripts/seo.mjs) czyta slugi prosto z src/api/blogs.js
+// i zestawia je z src/seo/stare-artykuly.js, czyli z pelna lista 388
+// adresow ze starego WordPressa. Dalej rozdziela je sam:
+//   - artykul JEST na nowej stronie  -> 301 na /porady/<slug>/,
+//   - artykulu NIE MA jeszcze        -> 301 na /porady/, czyli na liste.
+// Dopisanie artykulu do blogs.js wystarczy, reszta dzieje sie sama.
 
 // Pojedyncze adresy: [stary, nowy, opis do komentarza w pliku]
 export const PROSTE = [

@@ -7,12 +7,39 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { WSZYSTKIE_TRASY, NOINDEX, DOMENA, MARKA, metaDla } from '../src/seo/meta.js';
-import { ARTYKULY, PROSTE, GALEZIE, DO_KOSZA } from '../src/seo/przekierowania.js';
+import { PROSTE, GALEZIE, DO_KOSZA } from '../src/seo/przekierowania.js';
+import { ARTYKULY_ZE_STAREJ_STRONY } from '../src/seo/stare-artykuly.js';
 
 const DIST = 'dist';
 const dzis = new Date().toISOString().slice(0, 10);
 
 const doMapy = WSZYSTKIE_TRASY.filter((t) => !NOINDEX.includes(t));
+
+// --- Artykuly: co juz jest, a czego jeszcze nie ------------------------
+// Slugi czytamy z src/api/blogs.js SUROWO, wyrazeniem regularnym, zamiast
+// importowac ten plik. Powod jest prozaiczny: blogs.js zaczyna sie od
+// importow zdjec (.jpg), ktorych Node nie potrafi wczytac — to robota
+// Vite. Odczyt tekstem omija problem i nie wymaga drugiej listy.
+const zrodloBlogow = fs.readFileSync('src/api/blogs.js', 'utf8');
+const OPUBLIKOWANE = [...zrodloBlogow.matchAll(/slug:\s*'([^']+)'/g)].map((m) => m[1]);
+
+if (OPUBLIKOWANE.length === 0) {
+    // Gdyby ktos zmienil zapis w blogs.js (np. na cudzyslowy), regula wyzej
+    // przestanie lapac i po cichu wygenerowalaby przekierowania wysylajace
+    // WSZYSTKIE artykuly na liste. Lepiej zatrzymac budowanie.
+    throw new Error('Nie znalazlem zadnego sluga w src/api/blogs.js — sprawdz wyrazenie regularne w scripts/seo.mjs');
+}
+
+// Artykuly, ktore maja juz swoja podstrone: 301 pod wlasciwy adres.
+const ARTYKULY = OPUBLIKOWANE;
+
+// Artykuly ze starej strony, ktorych jeszcze nie przeniesiono: 301 na liste
+// porad. To swiadomy kompromis — nie odzyskuje pozycji tego konkretnego
+// tekstu, ale czlowiek z wyszukiwarki trafia na cos sensownego zamiast na
+// blad. Kazdy przeniesiony artykul sam znika z tej listy.
+const NA_LISTE = ARTYKULY_ZE_STAREJ_STRONY.filter((s) => !OPUBLIKOWANE.includes(s));
+
+console.log(`Artykuly: ${ARTYKULY.length} przeniesionych, ${NA_LISTE.length} czeka (301 na /porady/).`);
 
 // --- sitemap.xml -------------------------------------------------------
 // Priorytety celowo skromne i zroznicowane tylko tam, gdzie to cos znaczy.
@@ -148,6 +175,14 @@ const htaccess = `# Wygenerowane przez scripts/seo.mjs. Nie edytuj recznie —
 # Serwer docelowy: LiteSpeed (cyber_Folks), zgodny z Apache.
 
 Options -MultiViews
+
+# --- Ktory plik jest strona glowna ------------------------------------
+# Siatka bezpieczenstwa na wypadek, gdyby index.php starego WordPressa
+# zostal w public_html. Bez tej linii Apache moze podac jego, bo w
+# domyslnej kolejnosci DirectoryIndex php bywa przed html, i zamiast
+# nowej strony wyskoczylby biały ekran albo blad PHP.
+DirectoryIndex index.html
+
 RewriteEngine On
 
 # --- HTTPS ------------------------------------------------------------
@@ -163,8 +198,35 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 RewriteCond %{HTTP_HOST} ^www\\.(.+)$ [NC]
 RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
+# --- Zadnego PHP na tej domenie ---------------------------------------
+# Nowa strona jest w calosci statyczna. Nie ma tu ani jednego pliku .php,
+# wiec kazde zadanie o .php jest albo pomylka, albo proba dobrania sie
+# do czegos, czego nie powinno byc.
+#
+# To nie jest teoria. W public_html starej strony lezaly opt.php i
+# sendit.php, ktorych WordPress nie instaluje. Katalog wp-content
+# zostaje na serwerze (dla starych zdjec) i jest publicznie dostepny,
+# a wlasnie tam, zwykle w uploads/, laduja takie skrypty. Usuniecie
+# WordPressa ich nie unieszkodliwia, bo samodzielny skrypt nie
+# potrzebuje WordPressa, zeby sie wykonac.
+#
+# Gdyby kiedys pojawil sie na stronie formularz w PHP: usun te regule
+# albo zawez ja do samego wp-content.
+RewriteRule \.(php|phtml|phar|php[0-9])$ - [F,L]
+
 # --- Artykuly: z katalogu glownego starej strony do /porady/ -----------
 ${ARTYKULY.map((s) => `RewriteRule ^${s}/?$ /porady/${s}/ [R=301,L]`).join('\n')}
+
+# --- Artykuly jeszcze nieprzeniesione ----------------------------------
+# Stara strona miala ${ARTYKULY_ZE_STAREJ_STRONY.length} artykulow, nowa ma na razie ${ARTYKULY.length}.
+# Pozostale ${NA_LISTE.length} adresow jest w Google i ktos w nie wchodzi, wiec zamiast
+# bledu 404 dostaja 301 na liste porad. Adresy sa wypisane pojedynczo
+# (zgrupowane po 40 w jedna regule), a nie zlapane ogolna regula, zeby
+# literowka w adresie dalej konczyla sie uczciwym 404, a nie lista.
+#
+# Ta lista kurczy sie sama: slug dopisany do src/api/blogs.js trafia
+# do bloku wyzej i znika stad.
+${(() => { const g=[]; for (let i=0;i<NA_LISTE.length;i+=40) g.push(NA_LISTE.slice(i,i+40).join('|')); return g.map((x) => `RewriteRule ^(${x})/?$ /porady/ [R=301,L]`).join('\n'); })()}
 
 # --- Pojedyncze podstrony ---------------------------------------------
 ${PROSTE.map(([stary, nowy, opis]) => `# ${opis}\nRewriteRule ^${stary.slice(1)}/?$ ${nowy} [R=301,L]`).join('\n')}
@@ -189,6 +251,7 @@ ${DO_KOSZA.map((s) => `RewriteRule ^${s.slice(1)}(/.*)?$ - [R=404,L]`).join('\n'
 
 # --- Strona bledu -----------------------------------------------------
 ErrorDocument 404 /404/index.html
+ErrorDocument 403 /404/index.html
 
 # --- Pamiec podreczna -------------------------------------------------
 # Pliki z odciskiem w nazwie (assets) moga lezec w cache dlugo, HTML nie,
@@ -201,6 +264,16 @@ ErrorDocument 404 /404/index.html
   ExpiresByType image/jpeg "access plus 6 months"
   ExpiresByType image/png "access plus 6 months"
   ExpiresByType image/svg+xml "access plus 6 months"
+  # Favikona to wyjatek. Lezy pod stalym adresem, a przegladarki trzymaja
+  # ikony ostrzej niz reszte obrazkow, wiec przy polrocznym cache poprawiona
+  # ikona dociera do stalych goscie dopiero po miesiacach. Tydzien wystarczy,
+  # plik ma 525 bajtow.
+  <Files "favicon.svg">
+    ExpiresDefault "access plus 1 week"
+  </Files>
+  <Files "favicon.ico">
+    ExpiresDefault "access plus 1 week"
+  </Files>
   ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
 `;
@@ -217,6 +290,9 @@ const redirects = `# Wygenerowane przez scripts/seo.mjs ze src/seo/przekierowani
 # Kolejnosc ma znaczenie: pierwsze trafienie wygrywa.
 
 ${ARTYKULY.map((s) => `/${s}/*  /porady/${s}/  301!\n/${s}  /porady/${s}/  301!`).join('\n')}
+
+# Artykuly ze starej strony, ktorych jeszcze nie przeniesiono.
+${NA_LISTE.map((s) => `/${s}  /porady/  301!`).join('\n')}
 
 ${PROSTE.map(([stary, nowy, opis]) => `# ${opis}\n${stary}/*  ${nowy}  301!\n${stary}  ${nowy}  301!`).join('\n')}
 /blog-single/:slug  /porady/:slug/  301!
