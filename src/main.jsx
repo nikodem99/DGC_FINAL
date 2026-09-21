@@ -8,21 +8,39 @@ import { store } from "./store";
 // wykonuje sie takze w Node przy budowaniu (patrz prerender ponizej), a tam
 // nie ma ani document, ani createRoot.
 if (typeof document !== 'undefined') {
-    const [{ createRoot }, { PersistGate }, { persistor }] = await Promise.all([
-        import("react-dom/client"),
-        import("redux-persist/integration/react"),
-        import("./store"),
-    ]);
+    // UWAGA: to MUSI byc funkcja asynchroniczna wywolana od razu, a NIE
+    // `await` na najwyzszym poziomie modulu. Roznica jest niewidoczna
+    // lokalnie i katastrofalna po zbudowaniu.
+    //
+    // Rollup wydziela PersistGate do osobnego kawalka, a ten kawalek
+    // importuje z powrotem z main (bo potrzebuje Reacta, ktory tu siedzi).
+    // Przy `await` na najwyzszym poziomie modul main zatrzymuje sie w
+    // polowie wykonywania i czeka na ten kawalek, a kawalek czeka, az main
+    // skonczy sie wykonywac. Oba stoja w miejscu.
+    //
+    // Cisza absolutna: zero bledow w konsoli, wszystkie pliki pobrane z
+    // kodem 200. Strona wyglada poprawnie, bo widac prerenderowany HTML,
+    // ale React nigdy sie nie montuje i nic interaktywnego nie dziala.
+    //
+    // Funkcja asynchroniczna konczy wykonywanie modulu natychmiast, wiec
+    // kawalek dostaje to, po co przyszedl, i petla sie rozplata.
+    (async () => {
+        const [{ createRoot }, { PersistGate }, { persistor }] = await Promise.all([
+            import("react-dom/client"),
+            import("redux-persist/integration/react"),
+            import("./store"),
+        ]);
 
-    createRoot(document.getElementById("root")).render(
-        <StrictMode>
-            <Provider store={store}>
-                <PersistGate loading={null} persistor={persistor}>
-                    <App />
-                </PersistGate>
-            </Provider>
-        </StrictMode>
-    );
+        createRoot(document.getElementById("root")).render(
+            <StrictMode>
+                <Provider store={store}>
+                    <PersistGate loading={null} persistor={persistor}>
+                        <App />
+                    </PersistGate>
+                </Provider>
+            </StrictMode>
+        );
+    })();
 }
 
 // --- Prerenderowanie przy budowaniu ------------------------------------

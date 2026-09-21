@@ -60,6 +60,22 @@ const HeroWideo = ({ alt = 'Danuta Grabińska-Chłopaś, prezes zarządu DGC' })
         ref.current?.play().catch(() => {});
     };
 
+    // Zrodlo ustawiamy z JavaScriptu, a element ma preload="none". W tym
+    // ukladzie przegladarka potrafi w ogole nie zaczac pobierania: czeka na
+    // wyrazne polecenie, bo tak kazalismy. Skoro nic nie pobiera, nie ma
+    // czego odtworzyc, wiec onCanPlay nigdy nie zadziala i film stoi na
+    // plakacie. Samo `autoPlay` tego nie przelamuje, bo dotyczy momentu
+    // wczytania elementu, a nie pozniejszej podmiany zrodla.
+    //
+    // Dlatego po ustawieniu zrodla mowimy wprost: wczytaj i graj. play()
+    // ma wlasny catch, bo przegladarka ma prawo odmowic i wtedy zostaje
+    // plakat, czyli ten sam kadr.
+    useEffect(() => {
+        if (!zrodlo || !ref.current) return;
+        ref.current.load();
+        start();
+    }, [zrodlo]);
+
     // Przegladarka wstrzymuje film, gdy karta idzie w tlo, i sama go nie
     // wznawia po powrocie — bez tego uzytkownik, ktory na chwile przelaczyl
     // okno, wraca do zamrozonej klatki.
