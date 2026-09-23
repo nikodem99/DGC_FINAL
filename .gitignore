@@ -17,3 +17,6 @@ src/style.css
 # w public/video/ leza wersje webowe. Trzymane poza repozytorium, zeby nie
 # ciagnac 45 MB przy kazdym klonowaniu.
 media-zrodlowe/
+
+# smieci systemu macOS
+.DS_Store
