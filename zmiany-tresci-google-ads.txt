@@ -1,0 +1,96 @@
+LISTA ZMIAN TRESCI — biurodgc.pl
+Powod: polityka Google Ads „Dokumenty urzedowe i uslugi administracji publicznej”
+Stan na 23.09.2026.
+
+Pozycje 1-11: sweep zrodel wedlug listy czerwonej.
+Pozycje 12-13: niezalezny przeglad semantyczny (frazy bez czerwonych slow).
+Pozycja 14: decyzja zespolu kampanii, ostroznosc wobec klasyfikatora.
+
+Osobno, poza lista: z publicznej paczki JavaScript usunieto martwe dane
+czterech wspolpracownikow (radca prawny, dwoje doradcow podatkowych, biegla
+rewident) wraz z numerami wpisow na listy zawodowe. Nie byly renderowane na
+zadnej dostepnej stronie.
+
+1. /kontakt/, pasek na stronie głównej
+   (pozycja listy tematów)
+   BYLO: Rejestracja firmy lub spółki
+   JEST: Dopiero zakładam firmę
+
+2. /kontakt/, pasek na stronie głównej
+   (pozycja listy tematów)
+   BYLO: Doradztwo podatkowe
+   JEST: (pozycja usunięta z listy)
+
+3. / oraz /o-nas/ (krok 02)
+   (treść kroku procesu)
+   BYLO: Pomagamy wybrać formę działalności, zarejestrować firmę lub spółkę w KRS oraz zgłosić
+         ją do urzędu skarbowego i ZUS.
+   JEST: Pomagamy wybrać formę działalności i opodatkowania, a następnie przygotowujemy firmę
+         do rozliczeń od pierwszego dnia.
+
+4. /faq/ oraz sekcja FAQ na /o-nas/
+   (obietnica rejestracji spolki i deklaracja uprawnien do KRS)
+   BYLO: Czy pomagacie założyć firmę lub spółkę? → Tak. Obsługę zaczynamy od pomocy w wyborze
+         formy działalności i od rejestracji, razem ze zgłoszeniami do urzędu skarbowego i ZUS.
+         Jesteśmy podmiotem uprawnionym do rejestracji spółek w Krajowym Rejestrze Sądowym.
+   JEST: Zaczynam działalność. Od czego zaczniemy współpracę? → Doradzamy przy wyborze formy
+         działalności i opodatkowania, a następnie przygotowujemy firmę do rozliczeń od
+         pierwszego dnia: ustawiamy ewidencje, terminy i obieg dokumentów. Firmom szukającym
+         adresu oferujemy wirtualne biuro w Łodzi.
+
+5. /faq/ oraz sekcja FAQ na /o-nas/
+   (fraza "doradztwo podatkowe" w tytule pytania brzmi jak oferta DGC)
+   BYLO: Czy mogę liczyć na doradztwo podatkowe lub wsparcie prawne? → Tak. Nad sprawami
+   JEST: A jeśli sprawa wykracza poza księgowość? → Nad sprawami
+
+6. /umow-konsultacje/ (lista tematów)
+   (zalozenie firmy/spolki jako temat platnej konsultacji)
+   BYLO: Założenie firmy lub spółki
+   JEST: Start działalności i wybór formy
+
+7. /cennik/ (pakiet „Wirtualne biuro”)
+   (slowo "rejestracja" przy adresie; sens zachowany, bo adres siedziby to to samo)
+   BYLO: Adres do rejestracji firmy wraz z obsługą korespondencji.
+   JEST: Adres siedziby firmy wraz z obsługą korespondencji.
+
+8. /oferta/ (podstrony usług)
+   (tytul chroniony ustawa; DGC jako spolka nie jest doradca podatkowym)
+   BYLO: Doradztwo podatkowe
+   JEST: Wsparcie w rozliczeniach podatkowych
+
+9. /o-nas/
+   (wprost obietnica zakladania dzialalnosci i rejestracji spolek)
+   BYLO: a także osoby pracujące za granicą i rozliczające się w Polsce. Pomagamy przy
+         zakładaniu działalności i rejestracji spółek.
+   JEST: a także osoby pracujące za granicą i rozliczające się w Polsce. Doradzamy przy wyborze
+         formy działalności i opodatkowania.
+
+10. /o-nas/
+   (czyta sie jak stala usluga doradztwa podatkowego swiadczona przez DGC)
+   BYLO: Nad sprawami czuwa stale doradca podatkowy i radca prawny.
+   JEST: Przy sprawach wymagających osobnych uprawnień współpracujemy z radcą prawnym i biegłą
+         rewident.
+
+11. /o-nas/
+   (ZNALEZISKO SPOZA LISTY: "bierzemy na siebie udzial w kontrolach" to reprezentowanie przed urzedami)
+   BYLO: Masz własnego księgowego, a udział w kontrolach US, ZUS i PIP bierzemy na siebie.
+   JEST: Masz własnego księgowego, a przy kontrolach US, ZUS i PIP przygotowujemy dokumentację
+         i jesteśmy w kontakcie z urzędem.
+
+12. /oferta/ (podstrony usług)
+   (AUDYT: "wnioski" to doslowny przyklad z polityki Google; "wnioski o dofinansowanie" czyta sie jako skladanie pism do organu publicznego)
+   BYLO: Przygotowujemy dokumenty dla ZUS i urzędu skarbowego, rozliczamy PFRON oraz pomagamy
+         przy wnioskach o dofinansowanie.
+   JEST: Przygotowujemy deklaracje rozliczeniowe ZUS i zaliczki na podatek, prowadzimy
+         rozliczenia PFRON oraz dbamy, aby dokumentacja płacowa była kompletna i gotowa na
+         czas.
+
+13. / oraz /o-nas/ (sekcja „Jak pracujemy”, krok 02)
+   (AUDYT: "formalnosci" w naglowku o starcie firmy czyta sie jako obietnica zalatwienia spraw urzedowych, mimo braku czerwonego slowa)
+   BYLO: Start i formalności
+   JEST: Start i forma działalności
+
+14. /oferta/ (podstrony usług)
+   (slowo "rejestracja" obok "ZUS" flagowal klasyfikator na starym landingu; kontekstu nie czyta)
+   BYLO: rejestrację pracowników w ZUS
+   JEST: zgłoszenia i wyrejestrowania pracowników w ZUS

@@ -24,8 +24,8 @@ export const FAQ_OGOLNE = [
         content: 'Ryczałt i księga przychodów i rozchodów od 200 zł netto miesięcznie, pełna księgowość od 550 zł, wirtualne biuro 100 zł. To stawki wywoławcze przy obsłudze do 20 dokumentów w miesiącu, a ostateczna cena zależy od ich liczby, formy prawnej i zakresu spraw kadrowych. Wycena jest bezpłatna i niezobowiązująca.'
     },
     {
-        title: 'Czy pomagacie założyć firmę lub spółkę?',
-        content: 'Tak. Obsługę zaczynamy od pomocy w wyborze formy działalności i od rejestracji, razem ze zgłoszeniami do urzędu skarbowego i ZUS. Jesteśmy podmiotem uprawnionym do rejestracji spółek w Krajowym Rejestrze Sądowym.'
+        title: 'Zaczynam działalność. Od czego zaczniemy współpracę?',
+        content: 'Doradzamy przy wyborze formy działalności i opodatkowania, a następnie przygotowujemy firmę do rozliczeń od pierwszego dnia: ustawiamy ewidencje, terminy i obieg dokumentów. Firmom szukającym adresu oferujemy wirtualne biuro w Łodzi.'
     },
     {
         title: 'Chcę zmienić biuro rachunkowe. Jak to wygląda?',
@@ -40,8 +40,8 @@ export const FAQ_OGOLNE = [
         content: 'Tak. Sporządzamy listy płac i deklaracje do ZUS, prowadzimy sprawy PFRON oraz rozliczenia i sprawozdania do urzędu skarbowego i GUS. Kadry można prowadzić razem z księgowością albo osobno.'
     },
     {
-        title: 'Czy mogę liczyć na doradztwo podatkowe lub wsparcie prawne?',
-        content: 'Tak. Nad sprawami wymagającymi osobnych uprawnień czuwają współpracujący z nami radca prawny, doradcy podatkowi oraz biegła rewident, każde z nich z wpisem na własną listę zawodową.'
+        title: 'A jeśli sprawa wykracza poza księgowość?',
+        content: 'Nad sprawami wymagającymi osobnych uprawnień czuwają współpracujący z nami radca prawny, doradcy podatkowi oraz biegła rewident, każde z nich z wpisem na własną listę zawodową.'
     },
     {
         title: 'Jak się z Wami skontaktować?',

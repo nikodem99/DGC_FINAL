@@ -8,7 +8,7 @@
 
 export const ZESPOL_OPIS = [
     'DGC biuro rachunkowe tworzy doświadczony zespół certyfikowanych specjalistów do spraw księgowości oraz kadr i płac. Mamy wieloletnie doświadczenie zawodowe w zakresie rachunkowości zarządczej i finansowej.',
-    'Obsługujemy zarówno jednoosobowe działalności, jak i spółki prawa handlowego, a także osoby pracujące za granicą i rozliczające się w Polsce. Pomagamy przy zakładaniu działalności i rejestracji spółek.',
+    'Obsługujemy zarówno jednoosobowe działalności, jak i spółki prawa handlowego, a także osoby pracujące za granicą i rozliczające się w Polsce. Doradzamy przy wyborze formy działalności i opodatkowania.',
 ];
 
 // Pieciu obietnic z podstrony "Nasz zespol". To najkonkretniejszy material,
@@ -24,11 +24,11 @@ export const ZAPEWNIAMY = [
     },
     {
         tytul: 'Spokój',
-        opis: 'Masz własnego księgowego, a udział w kontrolach US, ZUS i PIP bierzemy na siebie.',
+        opis: 'Masz własnego księgowego, a przy kontrolach US, ZUS i PIP przygotowujemy dokumentację i jesteśmy w kontakcie z urzędem.',
     },
     {
         tytul: 'Wiedza',
-        opis: 'Nad sprawami czuwa stale doradca podatkowy i radca prawny.',
+        opis: 'Przy sprawach wymagających osobnych uprawnień współpracujemy z radcą prawnym i biegłą rewident.',
     },
 ];
 

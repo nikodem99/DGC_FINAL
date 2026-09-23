@@ -34,8 +34,8 @@ const ProcessSection = (props) => {
                                         <span className="number">02</span>
                                 </div>
                                 <div className="text">
-                                    <h3>Start i formalności</h3>
-                                    <p>Pomagamy wybrać formę działalności, zarejestrować firmę lub spółkę w KRS oraz zgłosić ją do urzędu skarbowego i ZUS.</p>
+                                    <h3>Start i forma działalności</h3>
+                                    <p>Pomagamy wybrać formę działalności i opodatkowania, a następnie przygotowujemy firmę do rozliczeń od pierwszego dnia.</p>
                                 </div>
                             </div>
                         </div>

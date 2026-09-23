@@ -26,7 +26,7 @@ export const CZAS_TRWANIA = '60 minut';
 // platna rozmowe, a nie na zwykle zapytanie ofertowe.
 export const TEMATY_KONSULTACJI = [
     'Wybór formy opodatkowania',
-    'Założenie firmy lub spółki',
+    'Start działalności i wybór formy',
     'Przekształcenie działalności w spółkę',
     'Rozliczenia VAT, PIT, CIT',
     'Kadry, płace i ZUS',

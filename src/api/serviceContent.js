@@ -77,7 +77,7 @@ const serviceContent = {
                 ],
             },
             {
-                title: 'Doradztwo podatkowe',
+                title: 'Wsparcie w rozliczeniach podatkowych',
                 paragraphs: [
                     'Pomagamy zrozumieć złożone przepisy i planować rozliczenia w sposób bezpieczny dla firmy. Analizujemy dostępne ulgi i rozwiązania, aby ograniczyć niepotrzebne obciążenia oraz wspierać długofalowy rozwój biznesu.',
                 ],
@@ -133,7 +133,7 @@ const serviceContent = {
                     'Nasz zespół przejmuje codzienne zadania związane z dokumentacją pracowniczą oraz rozliczeniami. Zakres usług może obejmować:',
                 ],
                 items: [
-                    'rejestrację pracowników w ZUS,',
+                    'zgłoszenia i wyrejestrowania pracowników w ZUS,',
                     'naliczanie wynagrodzeń oraz przygotowywanie przelewów,',
                     'sporządzanie pism i deklaracji do ZUS, US, PFRON oraz SOD PFRON,',
                     'obsługę umów o pracę i umów cywilnoprawnych,',
@@ -143,7 +143,7 @@ const serviceContent = {
                     'przygotowywanie sprawozdań do GUS.',
                 ],
                 closing: [
-                    'Outsourcing pozwala oszczędzić czas i ograniczyć koszty wewnętrznej obsługi. Przygotowujemy dokumenty dla ZUS i urzędu skarbowego, rozliczamy PFRON oraz pomagamy przy wnioskach o dofinansowanie.',
+                    'Outsourcing pozwala oszczędzić czas i ograniczyć koszty wewnętrznej obsługi. Przygotowujemy deklaracje rozliczeniowe ZUS i zaliczki na podatek, prowadzimy rozliczenia PFRON oraz dbamy, aby dokumentacja płacowa była kompletna i gotowa na czas.',
                 ],
             },
             {
@@ -175,7 +175,7 @@ const serviceContent = {
                     'W ramach outsourcingu oferujemy:',
                 ],
                 items: [
-                    'rejestrację pracowników w ZUS,',
+                    'zgłoszenia i wyrejestrowania pracowników w ZUS,',
                     'naliczanie wynagrodzeń i przygotowywanie przelewów,',
                     'sporządzanie deklaracji do ZUS i urzędu skarbowego,',
                     'przygotowywanie deklaracji PFRON i SOD PFRON,',

@@ -43,7 +43,7 @@ const pakiety = [
         title: 'Wirtualne biuro',
         krotki: 'Wirtualne biuro',
         price: '100 zł',
-        dlaKogo: 'Adres do rejestracji firmy wraz z obsługą korespondencji.',
+        dlaKogo: 'Adres siedziby firmy wraz z obsługą korespondencji.',
         features: [
             'Odbieranie korespondencji firmowej',
             'Powiadomienie o odebranej przesyłce',
