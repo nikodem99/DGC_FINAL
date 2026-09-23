@@ -19,19 +19,51 @@ const ClickHandler = () => {
     window.scrollTo(10, 0);
 }
 
+// Pogrubienia w tresci zapisujemy jako **tekst**. Skladamy je na elementy
+// Reacta, a nie przez wstrzykiwanie HTML: tresc artykulu nie ma jak wykonac
+// kodu, nawet gdyby kiedys trafiala tu z panelu albo z cudzego pliku.
+const Tekst = ({ x }) => {
+    if (typeof x !== 'string' || !x.includes('**')) return x;
+    // split z grupa przechwytujaca zwraca na przemian: tekst, pogrubienie,
+    // tekst, pogrubienie... wiec nieparzyste pozycje sa pogrubione.
+    return x.split(/\*\*(.+?)\*\*/g).map((czesc, i) =>
+        i % 2 ? <strong key={i}>{czesc}</strong> : czesc
+    );
+};
+
 // Jeden blok tresci. Typy opisane w blogContent.js.
 const Blok = ({ blok }) => {
     if (blok.t === 'h') return <h3>{blok.x}</h3>;
-    if (blok.t === 'p') return <p>{blok.x}</p>;
+    if (blok.t === 'p') return <p><Tekst x={blok.x} /></p>;
     if (blok.t === 'ul') return (
         <ul className="wpis_lista">
-            {blok.x.map((poz) => <li key={poz}>{poz}</li>)}
+            {blok.x.map((poz) => <li key={poz}><Tekst x={poz} /></li>)}
         </ul>
+    );
+    if (blok.t === 'tabela') return (
+        // Ramka z wlasnym przewijaniem. Bez niej szeroka tabela rozpycha
+        // cala strone w bok na telefonie.
+        <div className="wpis_tabela_ramka">
+            <table className="wpis_tabela">
+                {blok.h && (
+                    <thead>
+                        <tr>{blok.h.map((kol) => <th key={kol}>{kol}</th>)}</tr>
+                    </thead>
+                )}
+                <tbody>
+                    {blok.x.map((wiersz, i) => (
+                        <tr key={i}>
+                            {wiersz.map((kom, j) => <td key={j}><Tekst x={kom} /></td>)}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
     if (blok.t === 'uwaga') return (
         <aside className="wpis_uwaga">
             {blok.h && <strong>{blok.h}</strong>}
-            <p>{blok.x}</p>
+            <p><Tekst x={blok.x} /></p>
         </aside>
     );
     if (blok.t === 'zrodlo') return (

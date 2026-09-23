@@ -3,6 +3,8 @@ import blogImg1 from "../images/blog/img-1.jpg";
 import blogImg2 from "../images/blog/img-2.jpg";
 import blogImg3 from "../images/blog/img-3.jpg";
 
+import zamkniecieChecklista from "../images/blog/zamkniecie-roku-checklista.jpg";
+
 import blogSingleImg1 from "../images/blog-details/1.jpg";
 import blogSingleImg2 from "../images/blog-details/2.jpg";
 import blogSingleImg3 from "../images/blog-details/3.jpg";
@@ -25,6 +27,22 @@ import blogSingleImg3 from "../images/blog-details/3.jpg";
 // z tych pol, wiec liczby sa prawdziwe i same sie zaktualizuja.
 
 const blogs = [
+    {
+        id: '16',
+        title: 'Zamknięcie roku – checklista dla przedsiębiorcy',
+        title2: 'Zamknięcie roku – checklista dla przedsiębiorcy',
+        tag: 'Podatki',
+        slug: 'zamkniecie-roku-checklista',
+        screens: zamkniecieChecklista,
+        description: 'Koniec roku podatkowego to nie tylko formalność. To moment, w którym część decyzji jeszcze można podjąć, a po 31 grudnia już nie. Grudzień jest ostatnią chwilą na uporządkowanie rozliczeń z kontrahentami, przegląd niezapłaconych należności, inwentaryzację i decyzje dotyczące przyszłego roku.',
+        author: 'DGC Biuro Rachunkowe',
+        create_at: '22 września 2026',
+        archiveMonth: '2026-09',
+        archiveLabel: 'Wrzesień 2026',
+        blogSingleImg: zamkniecieChecklista,
+        blClass: 'format-standard-image',
+        animation: '1200',
+    },
     {
         id: '1',
         title: 'Rezerwy i odpisy aktualizujące – kiedy je tworzyć',

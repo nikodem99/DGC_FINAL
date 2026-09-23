@@ -144,6 +144,10 @@ const STRONY = {
         tytul: 'Wynajem mieszkania na firmę: najemca · DGC',
         opis: 'Kiedy czynsz za mieszkanie jest kosztem firmy, jak wygląda VAT przy lokalu dla pracownika i przy biurze oraz co z fakturą, mediami i kaucją.',
     },
+    '/porady/zamkniecie-roku-checklista': {
+        tytul: 'Zamknięcie roku – checklista dla przedsiębiorcy · DGC',
+        opis: 'Grudzień to ostatni moment na decyzje wpływające na rozliczenie roku. Sprawdź checklistę: faktury, ulga na złe długi, spis z natury i forma opodatkowania.',
+    },
     '/porady/zamkniecie-roku-bledy': {
         tytul: 'Błędy przy zamknięciu roku obrotowego · DGC',
         opis: 'Pięć błędów przy zamknięciu ksiąg: niepełna inwentaryzacja, brak rezerw, brak odpisów na należności, złe RMK i pominięte zdarzenia po dniu bilansowym.',

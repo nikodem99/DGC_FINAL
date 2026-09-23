@@ -14,6 +14,34 @@
 
 const tresci = {
 
+    'zamkniecie-roku-checklista': [
+        { t: 'p', x: 'Koniec roku podatkowego to nie tylko formalność. To moment, w którym część decyzji jeszcze można podjąć, a po 31 grudnia już nie. Grudzień jest więc ostatnią chwilą na uporządkowanie rozliczeń z kontrahentami, przegląd niezapłaconych należności, inwentaryzację i decyzje dotyczące przyszłego roku. Warto przejść przez te obszary, zanim kalendarz się przewróci, bo najwięcej problemów w kwietniu bierze się z rzeczy, które można było załatwić w grudniu.' },
+        { t: 'uwaga', h: 'Ważne', x: 'Zakupy robione w grudniu wyłącznie po to, żeby obniżyć podatek, to jeden z najczęściej kwestionowanych mechanizmów. Wydatek musi mieć **realny związek z przychodem albo z zabezpieczeniem jego źródła**. Sam fakt, że faktura wpadła przed końcem roku, nie czyni z niej kosztu.' },
+        { t: 'h', x: 'Krok 1 – rozliczenia z kontrahentami' },
+        { t: 'p', x: 'Sprawdź, czy wszystkie faktury sprzedażowe za wykonane usługi zostały wystawione. Przychód powstaje co do zasady **w dacie wykonania usługi lub wydania towaru, nie w dacie wystawienia faktury**, zaległa faktura nie przesuwa więc przychodu na przyszły rok. Po stronie kosztów sprawdź komplet faktur zakupowych: brakująca faktura to koszt, którego nie rozliczysz.' },
+        { t: 'h', x: 'Krok 2 – niezapłacone należności' },
+        { t: 'p', x: 'Jeżeli masz faktury sprzedażowe, których kontrahent nie zapłacił od dłuższego czasu, sprawdź możliwość zastosowania **ulgi na złe długi**. Pozwala ona skorygować podstawę opodatkowania i VAT należny od nieściągalnych wierzytelności po spełnieniu warunków ustawowych.' },
+        { t: 'h', x: 'Krok 3 – inwentaryzacja' },
+        { t: 'p', x: 'Przedsiębiorcy prowadzący podatkową księgę przychodów i rozchodów mają obowiązek sporządzić **spis z natury na koniec roku podatkowego**. Obejmuje on towary handlowe, materiały podstawowe i pomocnicze, półwyroby, produkcję w toku, wyroby gotowe, braki i odpady. Spis wpływa bezpośrednio na wysokość dochodu, więc nie jest to formalność do odhaczenia.' },
+        { t: 'h', x: 'Krok 4 – decyzje na przyszły rok' },
+        { t: 'p', x: 'Koniec roku to też moment na przemyślenie **formy opodatkowania**. Zmiana jest możliwa w terminie ustawowym na początku roku, ale decyzję najlepiej podjąć wcześniej, na podstawie danych za mijający rok. To samo dotyczy wyboru sposobu wpłaty zaliczek i ewentualnego przejścia na estoński CIT w spółkach.' },
+        { t: 'h', x: 'Checklista w pigułce' },
+        {
+            t: 'tabela',
+            h: ['Obszar', 'Co sprawdzić przed 31 grudnia'],
+            x: [
+                ['Sprzedaż', 'Wszystkie faktury za wykonane usługi wystawione'],
+                ['Koszty', 'Komplet faktur zakupowych zebrany'],
+                ['Należności', 'Ulga na złe długi przeanalizowana'],
+                ['Magazyn', 'Spis z natury zaplanowany (PKPiR)'],
+                ['Przyszły rok', 'Forma opodatkowania i zaliczki przemyślane'],
+            ],
+        },
+        { t: 'uwaga', h: 'DGC Biuro Rachunkowe', x: 'Z mojego doświadczenia wynika, że najwięcej problemów w kwietniu bierze się z rzeczy, które można było uporządkować w grudniu. W DGC przechodzę z klientami przez zamknięcie roku krok po kroku, żeby rozliczenie roczne było formalnością, a nie niespodzianką.' },
+        { t: 'zrodlo', x: 'Ustawa o PIT, w szczególności art. 14 i art. 22 · Ustawa o VAT, przepisy o uldze na złe długi · Rozporządzenie Ministra Finansów w sprawie prowadzenia PKPiR, przepisy o spisie z natury.' },
+    ],
+
+
     'rezerwy-odpisy': [
         { t: 'p', x: 'Jednym z podstawowych obowiązków jednostek prowadzących księgi rachunkowe jest prezentowanie rzeczywistej sytuacji majątkowej i finansowej przedsiębiorstwa. Oznacza to, że w księgach nie można wykazywać aktywów w zawyżonej wartości ani pomijać przewidywanych zobowiązań i ryzyk gospodarczych. Właśnie temu służą rezerwy oraz odpisy aktualizujące.' },
         { t: 'uwaga', h: 'Zasada ostrożności', x: 'Art. 7 ust. 1 ustawy o rachunkowości nakazuje uwzględnić wszystkie zmniejszenia wartości aktywów oraz wszystkie znane ryzyka i grożące straty. Firma nie może czekać na wystąpienie szkody — już samo prawdopodobieństwo powstania straty może wymagać rezerwy albo odpisu.' },

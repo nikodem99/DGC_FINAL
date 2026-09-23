@@ -1351,7 +1351,10 @@ h1, h2, h3, h4, h5, h6 {
     background: var(--dgc-panel);
     border: 1px solid var(--dgc-line);
 
-    strong {
+    /* Tylko BEZPOSREDNIE dziecko, czyli naglowek ramki. Bez znaku ">"
+       ta regula lapie takze pogrubienia w srodku zdania i rozbija je
+       na osobne linie, zostawiajac kropke na poczatku nastepnej. */
+    > strong {
       display: block;
       margin-bottom: 8px;
       color: var(--dgc-ink);
@@ -1364,6 +1367,45 @@ h1, h2, h3, h4, h5, h6 {
       color: var(--dgc-ink);
       font-size: 18px;
       line-height: 30px;
+    }
+  }
+
+  /* Tabele w tresci artykulu. Ramka ma wlasne przewijanie w poziomie,
+     bo bez niej szeroka tabela rozpycha cala strone w bok na telefonie. */
+  .wpis_tabela_ramka {
+    margin: 0 0 30px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .wpis_tabela {
+    width: 100%;
+    min-width: 460px;
+    border-collapse: collapse;
+    font-size: 17px;
+    line-height: 26px;
+
+    th {
+      padding: 14px 18px;
+      text-align: left;
+      font-weight: 500;
+      color: #fff;
+      background: var(--dgc-brand);
+    }
+
+    td {
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--dgc-line);
+      color: var(--dgc-ink);
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(odd) td {
+      background: var(--dgc-panel);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
     }
   }
 
