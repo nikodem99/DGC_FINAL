@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Teams from "../../api/team";
 import SectionTitle from "../SectionTitle/SectionTitle";
 import borderShape from '../../images/team/border-shape.svg'
 import './suwak.scss'
@@ -50,7 +49,7 @@ const TeamSection = (props) => {
         showSectionTitle = true,
         // Domyslnie lista nadzoru merytorycznego — dzieki temu strony,
         // ktore nie podaja wlasnej listy, dzialaja jak wczesniej.
-        osoby = Teams,
+        osoby = [],
         title = 'Nadzór merytoryczny',
         subtitle = 'Kto czuwa nad Twoimi sprawami',
         suwak = false,
@@ -67,9 +66,8 @@ const TeamSection = (props) => {
 
     const widoczne = osoby.slice(sliceStart, sliceEnd);
 
-    // Nazwisko jest odnosnikiem tylko wtedy, gdy osoba ma wlasna podstrone.
-    // Zespol biura jej nie ma, a podstrony /team-single to wciaz tresc
-    // z szablonu medycznego — linkowanie tam bylo by gorsze niz jego brak.
+    // Nazwisko nie jest odnosnikiem. Podstrony pojedynczych osob byly
+    // trescia z kupionego szablonu i zostaly usuniete razem z ich danymi.
     const karta = (team, klucz) => (
         <div className="team_card" key={klucz}>
             <div className="image">
@@ -79,11 +77,7 @@ const TeamSection = (props) => {
                 </div>
             </div>
             <div className="content">
-                <h3>
-                    {team.slug
-                        ? <Link onClick={ClickHandler} to={`/team-single/${team.slug}`}>{team.title}</Link>
-                        : <span className="team_nazwa">{team.title}</span>}
-                </h3>
+                <h3><span className="team_nazwa">{team.title}</span></h3>
                 {team.subtitle && <span>{team.subtitle}</span>}
             </div>
         </div>

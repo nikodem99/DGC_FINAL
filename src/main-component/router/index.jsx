@@ -8,11 +8,7 @@ import React from 'react';
 // i build wywala sie na invariancie. Jeden import, jedna kopia.
 import { BrowserRouter, StaticRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
 import Homepage from '../HomePage/HomePage'
-import HomePage2 from '../HomePage2/HomePage2';
-import HomePage3 from '../HomePage3/HomePage3';
 import AboutPage from '../AboutPage/AboutPage';
-import TeamPage from '../TeamPage/TeamPage';
-import TeamSinglePage from '../TeamSinglePage/TeamSinglePage';
 import ShopPage from '../ShopPage'
 import ProductSinglePage from '../ProductSinglePage';
 import CartPage from '../CartPage';
@@ -58,13 +54,15 @@ const AllRoute = ({ sciezka }) => {
             prywatnosci, a poza routerem <Link> wywala cala aplikacje. */}
         <BanerZgod />
         <Routes>
+          {/* Trasy /home-2, /home-3, /team i /team-single zostaly usuniete
+              23.09.2026. Byly resztkami kupionego szablonu, serwer i tak
+              zwracal na nie 404 (src/seo/przekierowania.js, DO_KOSZA), a
+              /team-single wyswietlalo dane wspolpracownikow razem z numerami
+              wpisow na listy zawodowe. Usuniecie tras wyrzuca te komponenty
+              z paczki, a nie tylko chowa je przed uzytkownikiem. */}
           <Route path="/" element={<Homepage />} />
           <Route path="home" element={<Homepage />} />
-          <Route path="home-2" element={<HomePage2 />} />
-          <Route path="home-3" element={<HomePage3 />} />
           <Route path="o-nas" element={<AboutPage />} />
-          <Route path="team" element={<TeamPage />} />
-          <Route path="team-single/:slug" element={<TeamSinglePage />} />
           <Route path="shop" element={<ShopPage />} />
           <Route path='shop-single/:slug' element={<ProductSinglePage />} />
           <Route path='cart' element={<CartPage />} />
