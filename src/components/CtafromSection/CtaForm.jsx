@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { sendLead, KONTAKT_ZAPASOWY } from '../../lib/sendLead';
+import { zgloszenieWyslane } from '../../lib/pomiar';
 
 // Formy prawne z materialow DGC — te same, ktore biuro wymienia jako
 // obslugiwane. "Dopiero zakładam firmę" jest tu celowo: poprzednia wersja
@@ -76,6 +77,7 @@ const CtaForm = () => {
                 zrodlo: 'pasek-cta',
                 strona: typeof window !== 'undefined' ? window.location.pathname : '',
             });
+            zgloszenieWyslane('kalkulator');
             setSubmitted(true);
             setFormData(PUSTY);
             setErrors({});

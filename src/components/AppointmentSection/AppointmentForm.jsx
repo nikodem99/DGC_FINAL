@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { sendLead, KONTAKT_ZAPASOWY } from '../../lib/sendLead';
+import { zgloszenieWyslane } from '../../lib/pomiar';
 import { TEMATY } from '../../lib/tematy';
 
 const PUSTY = { imie: '', email: '', telefon: '', temat: '', _gotcha: '' };
@@ -74,6 +75,7 @@ const AppointmentForm = () => {
                 zrodlo: 'pasek-naglowek',
                 strona: typeof window !== 'undefined' ? window.location.pathname : '',
             });
+            zgloszenieWyslane('kontakt', formData.temat);
             setSubmitted(true);
             setFormData(PUSTY);
             setErrors({});

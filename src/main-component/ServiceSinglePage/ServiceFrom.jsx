@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import { sendLead, KONTAKT_ZAPASOWY } from '../../lib/sendLead';
+import { zgloszenieWyslane } from '../../lib/pomiar';
 import { TEMATY } from '../../lib/tematy';
 import { KOMUNIKATY, WALIDATORY } from '../../lib/walidacja';
 
@@ -72,6 +73,7 @@ const ContactForm = ({ zrodlo = 'podstrona-oferty', temat = '' }) => {
                 zrodlo,
                 strona: typeof window !== 'undefined' ? window.location.pathname : '',
             });
+            zgloszenieWyslane('oferta', forms.subject);
             setWyslane(true);
             // Po udanej wysylce wracamy do podpowiedzianego tematu, nie do pustki.
             setForms({ ...PUSTY, subject: temat });

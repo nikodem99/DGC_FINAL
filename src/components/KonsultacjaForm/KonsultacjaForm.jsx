@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import { sendLead, KONTAKT_ZAPASOWY } from '../../lib/sendLead';
+import { zgloszenieWyslane } from '../../lib/pomiar';
 import { KOMUNIKATY, WALIDATORY } from '../../lib/walidacja';
 import {
     TEMATY_KONSULTACJI,
@@ -107,6 +108,7 @@ const KonsultacjaForm = ({ zrodlo = 'umow-konsultacje' }) => {
                 zrodlo,
                 strona: typeof window !== 'undefined' ? window.location.pathname : '',
             });
+            zgloszenieWyslane('konsultacja');
             setWyslane(true);
             setForms(PUSTY);
         } catch (err) {

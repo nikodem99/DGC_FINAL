@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import SimpleReactValidator from 'simple-react-validator';
 import { sendLead, KONTAKT_ZAPASOWY } from '../../lib/sendLead';
+import { zgloszenieWyslane } from '../../lib/pomiar';
 import { TEMATY } from '../../lib/tematy';
 import { KOMUNIKATY, WALIDATORY } from '../../lib/walidacja';
 
@@ -58,6 +59,7 @@ const ContactForm = ({ zrodlo = 'strona-kontaktu' }) => {
                 zrodlo,
                 strona: typeof window !== 'undefined' ? window.location.pathname : '',
             });
+            zgloszenieWyslane('kontakt', forms.subject);
             setSubmitted(true);
             setForms(PUSTY);
         } catch (err) {

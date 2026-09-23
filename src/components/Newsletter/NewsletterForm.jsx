@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { sendLead, KONTAKT_ZAPASOWY } from '../../lib/sendLead';
+import { zapisNaNewsletter } from '../../lib/pomiar';
 
 // Tresc zgody. RODO wymaga, zeby dalo sie wykazac, ze zostala udzielona,
 // wiec zapisujemy jej brzmienie razem ze znacznikiem czasu — samo "tak"
@@ -34,6 +35,7 @@ const NewsletterForm = ({ zrodlo = 'newsletter' }) => {
                 zrodlo,
                 strona: typeof window !== 'undefined' ? window.location.pathname : '',
             });
+            zapisNaNewsletter();
             setZapisany(true);
             setEmail('');
             setZgoda(false);
