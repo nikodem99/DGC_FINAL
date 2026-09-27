@@ -60,6 +60,15 @@ const Blok = ({ blok }) => {
             </table>
         </div>
     );
+    // Przyklad z praktyki. Osobny typ, a nie 'uwaga', bo to co innego:
+    // uwaga ostrzega, przyklad pokazuje. Gdyby oba wygladaly tak samo,
+    // artykul z trzema ramkami rozplywalby sie w jedna plame.
+    if (blok.t === 'przyklad') return (
+        <aside className="wpis_przyklad">
+            {blok.h && <strong>{blok.h}</strong>}
+            <p><Tekst x={blok.x} /></p>
+        </aside>
+    );
     if (blok.t === 'uwaga') return (
         <aside className="wpis_uwaga">
             {blok.h && <strong>{blok.h}</strong>}

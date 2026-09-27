@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import { sendLead, KONTAKT_ZAPASOWY } from '../../lib/sendLead';
+import { KONTAKT } from '../../api/kontakt';
 import { zgloszenieWyslane } from '../../lib/pomiar';
 import { TEMATY } from '../../lib/tematy';
 import { KOMUNIKATY, WALIDATORY } from '../../lib/walidacja';
@@ -173,6 +174,17 @@ const ContactForm = ({ zrodlo = 'podstrona-oferty', temat = '' }) => {
             <button type="submit" className="theme-btn" disabled={wysylka}>
                 {wysylka ? 'Wysyłanie…' : 'Wyślij zapytanie'}
             </button>
+
+            {/* Numer pod przyciskiem, zawsze widoczny. Wczesniej telefon
+                pojawial sie na tych podstronach WYLACZNIE w komunikacie
+                bledu wysylki, wiec dopoki formularz dzialal, nie bylo tu
+                czego kliknac. Podstrony oferty sa stronami docelowymi
+                kampanii, a klikniecie w numer liczy sie tam jako
+                pelnoprawny lead, zwlaszcza z telefonu. */}
+            <p className="form_stopka">
+                Wolisz porozmawiać? Zadzwoń:{' '}
+                <a href={KONTAKT.telefonHref}>{KONTAKT.telefon}</a>, {KONTAKT.godziny}.
+            </p>
 
             <div className="form_status" role="status" aria-live="polite">
                 {wyslane && (

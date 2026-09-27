@@ -3,6 +3,7 @@ import blogImg1 from "../images/blog/img-1.jpg";
 import blogImg2 from "../images/blog/img-2.jpg";
 import blogImg3 from "../images/blog/img-3.jpg";
 
+import spisZNatury from "../images/blog/spis-z-natury.jpg";
 import zamkniecieChecklista from "../images/blog/zamkniecie-roku-checklista.jpg";
 
 import blogSingleImg1 from "../images/blog-details/1.jpg";
@@ -27,6 +28,22 @@ import blogSingleImg3 from "../images/blog-details/3.jpg";
 // z tych pol, wiec liczby sa prawdziwe i same sie zaktualizuja.
 
 const blogs = [
+    {
+        id: '17',
+        title: 'Inwentaryzacja i spis z natury – jak zrobić to prawidłowo',
+        title2: 'Inwentaryzacja i spis z natury – jak zrobić to prawidłowo',
+        tag: 'Księgowość',
+        slug: 'spis-z-natury',
+        screens: spisZNatury,
+        description: 'Spis z natury to jedna z niewielu czynności księgowych, które trzeba wykonać fizycznie. Nie da się jej zrobić z systemu, bo jej sensem jest porównanie tego, co pokazuje ewidencja, z tym, co realnie stoi na magazynie. Spis na koniec roku wpływa bezpośrednio na wysokość dochodu.',
+        author: 'DGC Biuro Rachunkowe',
+        create_at: '23 września 2026',
+        archiveMonth: '2026-09',
+        archiveLabel: 'Wrzesień 2026',
+        blogSingleImg: spisZNatury,
+        blClass: 'format-standard-image',
+        animation: '1200',
+    },
     {
         id: '16',
         title: 'Zamknięcie roku – checklista dla przedsiębiorcy',

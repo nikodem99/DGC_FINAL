@@ -136,6 +136,10 @@ const STRONY = {
         tytul: 'Składki preferencyjne ZUS 2026 · DGC',
         opis: 'Obniżona podstawa 1 441,80 zł przez 24 miesiące, warunki skorzystania i liczenie okresu po uldze na start. Preferencja obejmuje tylko składki społeczne.',
     },
+    '/porady/spis-z-natury': {
+        tytul: 'Spis z natury – obowiązek, zakres i wycena · DGC',
+        opis: 'Spis z natury wpływa bezpośrednio na dochód. Sprawdź, kto ma obowiązek, co spisać, jak wycenić towary i dlaczego przepisanie stanów z systemu to błąd.',
+    },
     '/porady/system-sent': {
         tytul: 'System SENT: kogo obejmuje w 2026 · DGC',
         opis: 'Od 17 marca 2026 SENT obejmuje także odzież i obuwie. Sprawdź obowiązki wysyłającego, przewoźnika i odbierającego oraz rejestrację w PUESC.',

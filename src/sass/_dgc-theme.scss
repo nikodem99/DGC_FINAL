@@ -1203,7 +1203,21 @@ h1, h2, h3, h4, h5, h6 {
     }
   }
 
-  .konsultacja_stopka {
+  .form_stopka {
+  margin: 22px 0 0;
+  color: var(--dgc-ink);
+  font-size: 16px;
+  line-height: 26px;
+
+  a {
+    color: var(--dgc-brand);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+.konsultacja_stopka {
     margin: 35px 0 0;
     color: var(--dgc-ink);
     font-size: 17px;
@@ -1406,6 +1420,31 @@ h1, h2, h3, h4, h5, h6 {
 
     tbody tr:last-child td {
       border-bottom: 0;
+    }
+  }
+
+  /* Przyklad z praktyki. Chlodniejszy niz ramka "uwaga", zeby czytelnik
+     od razu widzial, ze to ilustracja, a nie ostrzezenie. */
+  .wpis_przyklad {
+    margin: 0 0 30px;
+    padding: 22px 26px;
+    border-radius: 15px;
+    border-left: 5px solid var(--dgc-brand);
+    background: #f4f8fa;
+
+    > strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--dgc-brand);
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    p {
+      margin: 0;
+      color: var(--dgc-ink);
+      font-size: 17px;
+      line-height: 29px;
     }
   }
 

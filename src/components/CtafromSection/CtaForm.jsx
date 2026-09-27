@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { sendLead, KONTAKT_ZAPASOWY } from '../../lib/sendLead';
+import { KONTAKT } from '../../api/kontakt';
 import { zgloszenieWyslane } from '../../lib/pomiar';
 
 // Formy prawne z materialow DGC — te same, ktore biuro wymienia jako
@@ -157,6 +158,15 @@ const CtaForm = () => {
                 </button>
             </div>
         </form>
+
+        {/* Ten sam powod co przy formularzu na podstronach oferty: numer
+            byl dostepny wylacznie w komunikacie bledu wysylki. Sekcja
+            kalkulatora stoi na stronie glownej i na /oferta/, czyli na
+            stronach docelowych kampanii. */}
+        <p className="form_stopka">
+            Wolisz porozmawiać? Zadzwoń:{' '}
+            <a href={KONTAKT.telefonHref}>{KONTAKT.telefon}</a>, {KONTAKT.godziny}.
+        </p>
 
         <div className="form_status" role="status" aria-live="polite">
             {submitted && (
