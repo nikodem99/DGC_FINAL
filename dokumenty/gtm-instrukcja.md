@@ -70,3 +70,31 @@ Mają odpalić się trzy tagi na zdarzeniu `lead_form_submit`. Kliknij też
 w numer telefonu i sprawdź, czy dalej odpala się „kontakt telefoniczny".
 
 Dopiero potem **Prześlij** i publikuj.
+
+---
+
+## Wynik: wdrożone 28.09.2026
+
+Opublikowane jako **wersja 15** kontenera GTM-5Z98MN2, o 15:03.
+Zawartość wersji: 13 tagów, 8 reguł, 33 zmienne.
+
+Potwierdzone w Tag Assistant przed publikacją: na zdarzeniu
+`lead_form_submit` odpalają się wszystkie trzy tagi, każdy raz:
+- `przesłanie formularza kontaktowego` (konwersja Google Ads)
+- `Enhanced conersions`
+- `przesłanie_form - GA4`
+
+Potwierdzone po publikacji, odczytem żywego kontenera z serwerów Google:
+- `lead_form_submit`, `newsletter_signup`, `form_type`, `form_topic` obecne
+- `wpcf7` — **0 wystąpień**, martwy warunek Contact Form 7 zniknął
+  z opublikowanej wersji, bo nie wisi na nim już żaden tag
+
+Konwersje trafiają do Google Ads bezpośrednio, tagami z etykietami.
+Nie trzeba niczego importować z GA4 ani tworzyć w panelu Ads.
+
+### Okres bez pomiaru
+
+Od 22.09.2026 (uruchomienie nowej strony) do 28.09.2026 (ta poprawka)
+konwersje z formularzy NIE były zliczane. Telefon, mail i zaangażowanie
+działały przez cały czas. Przy ocenie wyników kampanii z tego tygodnia
+trzeba to uwzględnić.
