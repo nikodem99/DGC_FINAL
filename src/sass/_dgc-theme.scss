@@ -2322,3 +2322,31 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   z-index: 2;
 }
+
+/* --- Stopka: obszar dotkniecia odnosnikow kontaktowych -------------- */
+/* Numer i adres mialy 22 px wysokosci, czyli polowe minimum dla celu
+   dotykowego (44 px). Na telefonie trafienie w nie kciukiem bylo loteria,
+   a to sa odnosniki, na ktorych wisza konwersje "kontakt telefoniczny"
+   i "kontakt mailowy".
+
+   UWAGA na rozwiazanie. Pierwsza proba uzywala paddingu skompensowanego
+   ujemnym marginesem. To NIE dziala przy elemencie inline: ujemne
+   marginesy pionowe nie zmniejszaja wysokosci wiersza, wiec stopka
+   rosla (wiersz z telefonem z 42 do 64 px).
+
+   Warstwa ::after jest pozycjonowana absolutnie, wiec w ogole nie bierze
+   udzialu w ukladzie. Powieksza sam obszar trafienia o 11 px w gore
+   i w dol. Wyglad i wysokosc stopki bez zmian. */
+.wpo-site-footer a[href^="tel:"],
+.wpo-site-footer a[href^="mailto:"] {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -11px;
+    bottom: -11px;
+  }
+}
