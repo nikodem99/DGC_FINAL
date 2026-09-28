@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -97,7 +97,27 @@ const testimonials = [
     },
 ]
 
+// Ile opinii widac naraz. Liczymy sami, a NIE przez opcje "responsive"
+// react-slicka — dokladnie z tego samego powodu co w TeamSection.jsx:
+// jej mechanizm nie ustawial breakpointu (state.breakpoint zostawal null),
+// mimo ze zapytanie medialne pasowalo. Telefon dostawal wiec dwie karty
+// na szerokosci ekranu, kazda ponizej 200 px, i tekst opinii lamal sie
+// po JEDNYM SLOWIE na linie.
+const ileOpinii = () => {
+    if (typeof window === 'undefined') return 2;
+    return window.innerWidth <= 991 ? 1 : 2;
+};
+
 const Testimonial = (props) => {
+
+    const [naRaz, setNaRaz] = useState(ileOpinii);
+
+    useEffect(() => {
+        const przelicz = () => setNaRaz(ileOpinii());
+        przelicz();
+        window.addEventListener('resize', przelicz);
+        return () => window.removeEventListener('resize', przelicz);
+    }, []);
 
     const settings = {
         dots: false,
@@ -105,16 +125,7 @@ const Testimonial = (props) => {
         infinite: true,
         arrows: false,
         speed: 300,
-        slidesToShow: 2,
         slidesToScroll: 1,
-        responsive: [
-            {
-                breakpoint: 991,
-                settings: {
-                    slidesToShow: 1,
-                }
-            },
-        ]
     };
 
     return (
@@ -127,7 +138,7 @@ const Testimonial = (props) => {
                     </div>
                 </div>
                 <div className="row testimonial_slider">
-                    <Slider {...settings}>
+                    <Slider {...settings} slidesToShow={naRaz}>
                         {testimonials.map((testitem, titem) => (
                             <div className="testimonial_card" key={titem}>
                                 <div className="icon">
