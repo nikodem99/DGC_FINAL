@@ -3,6 +3,7 @@ import blogImg1 from "../images/blog/img-1.jpg";
 import blogImg2 from "../images/blog/img-2.jpg";
 import blogImg3 from "../images/blog/img-3.jpg";
 
+import gastronomiaVat from "../images/blog/gastronomia-stawki-vat.jpg";
 import spisZNatury from "../images/blog/spis-z-natury.jpg";
 import zamkniecieChecklista from "../images/blog/zamkniecie-roku-checklista.jpg";
 
@@ -28,6 +29,22 @@ import blogSingleImg3 from "../images/blog-details/3.jpg";
 // z tych pol, wiec liczby sa prawdziwe i same sie zaktualizuja.
 
 const blogs = [
+    {
+        id: '18',
+        title: 'Gastronomia – stawki VAT na miejscu i na wynos',
+        title2: 'Gastronomia – stawki VAT na miejscu i na wynos',
+        tag: 'VAT',
+        slug: 'gastronomia-stawki-vat',
+        screens: gastronomiaVat,
+        description: 'W gastronomii VAT jest jednym z najtrudniejszych obszarów, bo o stawce nie decyduje wyłącznie rodzaj produktu, ale też sposób jego sprzedaży. Ta sama kanapka może mieć inną stawkę w zależności od tego, czy klient zje ją przy stoliku, czy zabierze ze sobą.',
+        author: 'DGC Biuro Rachunkowe',
+        create_at: '28 września 2026',
+        archiveMonth: '2026-09',
+        archiveLabel: 'Wrzesień 2026',
+        blogSingleImg: gastronomiaVat,
+        blClass: 'format-standard-image',
+        animation: '1200',
+    },
     {
         id: '17',
         title: 'Inwentaryzacja i spis z natury – jak zrobić to prawidłowo',

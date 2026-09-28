@@ -96,6 +96,10 @@ const STRONY = {
         tytul: 'Dokument SAD: kto tworzy i kiedy · DGC',
         opis: 'Kto składa zgłoszenie celne, w którym momencie powstaje dokument SAD i dlaczego jest podstawą ujęcia cła w wartości towaru oraz VAT od importu.',
     },
+    '/porady/gastronomia-stawki-vat': {
+        tytul: 'Gastronomia – stawki VAT na miejscu i na wynos · DGC',
+        opis: 'Ta sama kanapka może mieć różny VAT na miejscu i na wynos. Sprawdź, kiedy sprzedaż jest dostawą towaru, a kiedy usługą gastronomiczną, i co z kasą fiskalną.',
+    },
     '/porady/hodowla-pajakow-podatki': {
         tytul: 'Hodowla pająków na sprzedaż: podatki · DGC',
         opis: 'Dział specjalny produkcji rolnej, działalność rolnicza czy zwykła firma. Kwalifikacja decyduje o PIT-6, zasadach VAT i wymogach dokumentacji CITES.',
