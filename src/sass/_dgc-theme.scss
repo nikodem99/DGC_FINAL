@@ -1274,6 +1274,32 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
   }
 
+  /* Klikalna cala karta artykulu. Odnosnik zostaje JEDEN, w tytule, a jego
+     warstwa ::after rozciaga sie na cale kafelek. To jest poprawny wzorzec:
+     zagniezdzanie calej karty w <a> psuje HTML i odbiera czytnikom ekranu
+     sensowna nazwe odnosnika, a tutaj nazwa to tytul artykulu.
+     UWAGA: tresc karty NIE moze dostac position ani wyzszego z-index.
+     Po pierwsze przechwycilaby klikniecia z powrotem, po drugie inset: 0
+     liczy sie wzgledem najblizszego ustawionego rodzica, wiec warstwa
+     objelaby sama tresc zamiast calej karty. */
+  .blog_card {
+    position: relative;
+  }
+
+  /* position: static jest tu kluczowe. Szablon nadaje odnosnikom
+     position: relative, a wtedy inset: 0 liczy sie wzgledem samego
+     odnosnika i warstwa obejmuje tylko strzalke zamiast calej karty. */
+  .blog_card .karta_klik {
+    position: static;
+  }
+
+  .blog_card .karta_klik::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
   .blog_card {
     display: flex;
     flex-direction: column;
@@ -2267,4 +2293,31 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 27px;
     opacity: 0.85;
   }
+}
+
+/* --- Klikalna cala karta na liscie porad --------------------------- */
+/* Te reguly MUSZA stac na najwyzszym poziomie. Wczesniej siedzialy
+   w bloku .blog_section, czyli sekcji ze strony glownej, wiec Sass
+   skladal z nich ".blog_section .wpo-blog-pg-section ...", co nie
+   pasowalo do niczego i ::after w ogole sie nie tworzylo. */
+.wpo-blog-pg-section .post {
+  position: relative;
+}
+
+.wpo-blog-pg-section .post .karta_klik {
+  position: static;
+}
+
+.wpo-blog-pg-section .post .karta_klik::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* Odnosnik "Czytaj dalej" i tak prowadzi tam samo, ale musi zostac nad
+   warstwa, zeby dalo sie go najechac i zeby kursor sie nie gubil. */
+.wpo-blog-pg-section .post .read-more {
+  position: relative;
+  z-index: 2;
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../../images/logo-2.svg'
 import { wycofajZgody } from '../../lib/zgody';
+import { KONTAKT } from '../../api/kontakt';
 
 
 
@@ -83,10 +84,18 @@ const Footer = (props) => {
                                     <h3>Kontakt</h3>
                                 </div>
                                 <ul>
-                                    <li><i className="flaticon-email"></i><span>kontakt@biurodgc.pl</span>
+                                    {/* Numer i adres MUSZA byc odnosnikami. Jako zwykly
+                                        tekst nie da sie ich kliknac z telefonu, a w GTM
+                                        wisza na nich konwersje "kontakt telefoniczny"
+                                        i "kontakt mailowy" — bez odnosnika nie maja
+                                        z czego odpalic. Dane z api/kontakt.js, zeby nie
+                                        rozjechaly sie z reszta serwisu. */}
+                                    <li><i className="flaticon-email"></i>
+                                        <span><a href={`mailto:${KONTAKT.email}`}>{KONTAKT.email}</a></span>
                                     </li>
-                                    <li> <i className="flaticon-telephone"></i><span>+48 731 580 184
-                                        <br />pon.–pt. 8:00–16:00</span></li>
+                                    <li><i className="flaticon-telephone"></i>
+                                        <span><a href={KONTAKT.telefonHref}>+48 {KONTAKT.telefon}</a>
+                                        <br />{KONTAKT.godziny}</span></li>
                                     <li><i className="flaticon-location-1"></i><span>ul. Brukowa 8 <br/>
                                         91-341 Łódź</span></li>
                                 </ul>

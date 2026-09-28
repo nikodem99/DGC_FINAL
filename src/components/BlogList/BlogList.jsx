@@ -78,7 +78,7 @@ const BlogList = (props) => {
                                         </ul>
                                     </div>
                                     <div className="entry-details">
-                                        <h3><Link onClick={ClickHandler} to={`/porady/${blog.slug}/`}>{blog.title2}</Link></h3>
+                                        <h3><Link onClick={ClickHandler} to={`/porady/${blog.slug}/`} className="karta_klik">{blog.title2}</Link></h3>
                                         <p>{blog.description}</p>
                                         <Link onClick={ClickHandler} to={`/porady/${blog.slug}/`} className="read-more">Czytaj dalej</Link>
                                     </div>

@@ -28,8 +28,23 @@ const BlogSection = (props) => {
                                         <li>{bloge.create_at}</li>
                                         <li>{bloge.author}</li>
                                     </ul>
+                                    {/* Tytul zostaje zwyklym tekstem, a odnosnik siedzi
+                                        na strzalce. Wyglada to na drobiazg, ale jest
+                                        konieczne: h3 ma -webkit-line-clamp z overflow
+                                        hidden dla wielokropka w dlugich tytulach, a to
+                                        przycina takze warstwe klikalna ::after. Odnosnik
+                                        wewnatrz h3 rozciagalby sie wiec tylko na tekst.
+                                        Nazwe dla czytnikow ekranu daje aria-label, bo
+                                        sama strzalka nic nie mowi. */}
                                     <h3>{bloge.title}</h3>
-                                    <Link onClick={ClickHandler} to={`/porady/${bloge.slug}/`}><i className="flaticon-right-arrow"></i></Link>
+                                    <Link
+                                        onClick={ClickHandler}
+                                        to={`/porady/${bloge.slug}/`}
+                                        className="karta_klik"
+                                        aria-label={bloge.title}
+                                    >
+                                        <i className="flaticon-right-arrow" aria-hidden="true"></i>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
