@@ -23,27 +23,37 @@ const BlogSection = (props) => {
                             <div className="blog_card">
                                 <img src={bloge.screens} alt="" />
                                 <span>{bloge.tag}</span>
+                                {/* Warstwa klikalna na cala karte. Osobny, pusty
+                                    odnosnik zamiast rozciagania istniejacego: tamten
+                                    siedzi w h3 z overflow hidden albo ma wlasne
+                                    pozycjonowanie, wiec w obu przypadkach warstwa
+                                    bylaby przycieta. Nazwa dla czytnikow z aria-label. */}
+                                <Link
+                                    onClick={ClickHandler}
+                                    to={`/porady/${bloge.slug}/`}
+                                    className="karta_klik"
+                                    aria-label={bloge.title}
+                                />
                                 <div className="content">
                                     <ul>
                                         <li>{bloge.create_at}</li>
                                         <li>{bloge.author}</li>
                                     </ul>
-                                    {/* Tytul zostaje zwyklym tekstem, a odnosnik siedzi
-                                        na strzalce. Wyglada to na drobiazg, ale jest
-                                        konieczne: h3 ma -webkit-line-clamp z overflow
-                                        hidden dla wielokropka w dlugich tytulach, a to
-                                        przycina takze warstwe klikalna ::after. Odnosnik
-                                        wewnatrz h3 rozciagalby sie wiec tylko na tekst.
-                                        Nazwe dla czytnikow ekranu daje aria-label, bo
-                                        sama strzalka nic nie mowi. */}
                                     <h3>{bloge.title}</h3>
+                                    {/* Strzalka zostaje DOKLADNIE taka, jaka byla.
+                                        Ma wlasne pozycjonowanie z szablonu i proba
+                                        zrobienia z niej warstwy klikalnej wyrzucala ja
+                                        poza karte. Jest teraz ozdoba: aria-hidden
+                                        i tabIndex -1, zeby czytniki ekranu i klawiatura
+                                        nie trafialy na drugi, nieopisany odnosnik. */}
                                     <Link
                                         onClick={ClickHandler}
                                         to={`/porady/${bloge.slug}/`}
-                                        className="karta_klik"
-                                        aria-label={bloge.title}
+                                        className="karta_strzalka"
+                                        aria-hidden="true"
+                                        tabIndex={-1}
                                     >
-                                        <i className="flaticon-right-arrow" aria-hidden="true"></i>
+                                        <i className="flaticon-right-arrow"></i>
                                     </Link>
                                 </div>
                             </div>

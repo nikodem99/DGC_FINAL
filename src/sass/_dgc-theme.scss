@@ -1286,18 +1286,19 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
   }
 
-  /* position: static jest tu kluczowe. Szablon nadaje odnosnikom
-     position: relative, a wtedy inset: 0 liczy sie wzgledem samego
-     odnosnika i warstwa obejmuje tylko strzalke zamiast calej karty. */
-  .blog_card .karta_klik {
-    position: static;
-  }
-
-  .blog_card .karta_klik::after {
-    content: '';
+  /* Warstwa klikalna to SAM odnosnik, pusty i rozciagniety na karte.
+     Nie uzywamy tu ::after na istniejacym odnosniku, bo strzalka ma
+     wlasne pozycjonowanie z szablonu, a wymuszenie na niej position:
+     static wyrzucalo ja poza dolna krawedz karty. */
+  .blog_card > .karta_klik {
     position: absolute;
     inset: 0;
     z-index: 1;
+  }
+
+  /* Strzalka nad warstwa, zeby zachowala swoj stan po najechaniu. */
+  .blog_card .karta_strzalka {
+    z-index: 2;
   }
 
   .blog_card {
