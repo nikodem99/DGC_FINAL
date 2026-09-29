@@ -2337,8 +2337,13 @@ h1, h2, h3, h4, h5, h6 {
    Warstwa ::after jest pozycjonowana absolutnie, wiec w ogole nie bierze
    udzialu w ukladzie. Powieksza sam obszar trafienia o 11 px w gore
    i w dol. Wyglad i wysokosc stopki bez zmian. */
-.wpo-site-footer a[href^="tel:"],
-.wpo-site-footer a[href^="mailto:"] {
+/* Selektor po elemencie <footer>, a nie po klasie. Szablon ma dwa
+   warianty stopki, .wpo-site-footer i .wpo-site-footer_s2, i przez
+   pierwsza wersje tej reguly poprawka dzialala tylko na czesci podstron:
+   strona glowna, o nas i oferta mialy dobrze, a cennik, kontakt, porady,
+   artykul, FAQ, konsultacje i polityka dalej mialy niewidoczny numer. */
+footer a[href^="tel:"],
+footer a[href^="mailto:"] {
   position: relative;
 
   /* Bootstrap ustawia kazdy goly <a> na kolor linku, a w tym motywie kolor
