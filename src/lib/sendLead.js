@@ -69,13 +69,36 @@ async function wyslijPoczte(dane) {
                 fd.append(klucz, String(wartosc));
             }
         });
-        fd.append('_gotcha', '');
+        // UWAGA: pola-pulapki NIE wysylamy pustej.
+        //
+        // ModSecurity na cyber_Folks odrzuca kazde zadanie POST, w ktorym
+        // chocby jedno pole ma pusta wartosc — odpowiada wtedy HTTP 406
+        // i strona z komunikatem "Polaczenie zablokowane", a zadanie nigdy
+        // nie dochodzi do PHP. Sprawdzone na zywym serwerze: to samo
+        // zadanie z `_gotcha=x` przechodzi, z `_gotcha=` (puste) nie.
+        //
+        // Reszta pol jest wyzej odfiltrowana z pustych, wiec wystarczy nie
+        // dokladac tego jednego. Sprawdzenie pulapki w nadaj.php zostaje:
+        // zadanie, ktore JAWNIE przysle wypelnione `_gotcha`, dalej jest
+        // odrzucane jako bot.
 
         const odp = await fetch(NADAJNIK, { method: 'POST', body: fd });
 
         // Na podgladzie (Netlify, localhost) tego pliku po prostu nie ma.
         // To nie jest awaria, wiec nie zasmiecamy konsoli ostrzezeniem.
         if (odp.status === 404 || odp.status === 403) return false;
+
+        // Firewall hostingu odpowiada HTML-em, nie JSON-em. Bez tego
+        // rozroznienia awaria wygladalaby jak zwykly blad sieci i nikt
+        // by nie wiedzial, ze to serwer odbija wlasne zgloszenia.
+        const typ = odp.headers.get('content-type') || '';
+        if (!typ.includes('application/json')) {
+            console.error(
+                '[DGC] Nadajnik odbity przez firewall hostingu (HTTP ' + odp.status + '). ' +
+                'Powiadomienie o zgloszeniu NIE zostalo wyslane.'
+            );
+            return false;
+        }
 
         const tresc = await odp.json();
         if (tresc?.powod) console.warn('[DGC] Nadajnik:', tresc.powod);
