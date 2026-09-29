@@ -42,6 +42,50 @@ export const KONTAKT_ZAPASOWY = {
 
 const BLAD_OGOLNY = 'Nie udało się wysłać zgłoszenia.';
 
+// Wlasny nadajnik poczty na hostingu (public/nadaj.php). Wysyla dwie
+// wiadomosci: automatyczna odpowiedz do osoby, ktora zostawila zgloszenie,
+// i powiadomienie do biura.
+//
+// Dlaczego obok Forminit, a nie zamiast:
+//   - Forminit zostaje jako archiwum zgloszen i panel do przegladania,
+//   - ich autoresponder jest dopiero w planie Business (ok. 490 USD rocznie),
+//   - darmowy plan ma limit 100 zgloszen miesiecznie. Po jego przekroczeniu
+//     Forminit odrzuca zgloszenia, a wtedy powiadomienie z naszego nadajnika
+//     jest jedyna rzecza, ktora dociera do biura.
+//
+// Wywolanie jest CELOWO poza glownym torem: jego bledy nie moga wywrocic
+// wysylki, bo zgloszenie jest juz przyjete. Najgorsze, co sie stanie przy
+// awarii, to brak automatycznej odpowiedzi.
+const NADAJNIK = '/nadaj.php';
+
+// Zwraca true, gdy powiadomienie o zgloszeniu dotarlo do skrzynki biura.
+// NIGDY nie rzuca: to jest droga zapasowa i jej awaria nie moze wywrocic
+// wysylki ani wygenerowac halasu na podgladzie, gdzie PHP w ogole nie ma.
+async function wyslijPoczte(dane) {
+    try {
+        const fd = new FormData();
+        Object.entries(dane).forEach(([klucz, wartosc]) => {
+            if (wartosc !== undefined && wartosc !== null && wartosc !== '') {
+                fd.append(klucz, String(wartosc));
+            }
+        });
+        fd.append('_gotcha', '');
+
+        const odp = await fetch(NADAJNIK, { method: 'POST', body: fd });
+
+        // Na podgladzie (Netlify, localhost) tego pliku po prostu nie ma.
+        // To nie jest awaria, wiec nie zasmiecamy konsoli ostrzezeniem.
+        if (odp.status === 404 || odp.status === 403) return false;
+
+        const tresc = await odp.json();
+        if (tresc?.powod) console.warn('[DGC] Nadajnik:', tresc.powod);
+        return tresc?.ok === true;
+    } catch (err) {
+        console.warn('[DGC] Nadajnik nie odpowiedzial:', err.message);
+        return false;
+    }
+}
+
 // Komunikaty pisane dla osoby po drugiej stronie, nie dla programisty.
 const wgKodu = (kod) => {
     // Tryb Public dopuszcza jedno zgloszenie na 5 sekund (docs: Rate Limits).
@@ -81,12 +125,16 @@ const naE164 = (surowy) => {
  */
 export async function sendLead(dane) {
     if (!FORM_ID) {
-        // Swiadomie glosna awaria. Cichy sukces przy braku konfiguracji
-        // znaczylby, ze klient widzi podziekowanie, a zapytanie znika.
         console.error(
             '[DGC] Brak VITE_FORMINIT_FORM_ID — formularz nie jest podłączony. ' +
             'Wpisz identyfikator formularza z panelu Forminit do pliku .env.local.'
         );
+        // Nadal glosna awaria w konsoli, ale lead ma jeszcze jedna szanse:
+        // wlasna poczta nie zalezy od konfiguracji Forminit.
+        if (await wyslijPoczte(dane)) {
+            console.warn('[DGC] Brak konfiguracji Forminit, zgłoszenie poszło pocztą');
+            return { success: true, kanal: 'poczta' };
+        }
         throw new Error(BLAD_OGOLNY);
     }
 
@@ -125,6 +173,13 @@ export async function sendLead(dane) {
     // wysylke, gdy czlowiek-bot je wypelni (nie zjadamy wtedy limitu), ale
     // pole musi istniec, zeby ustawienie honeypota w panelu mialo sens.
     fd.append(HONEYPOT, '');
+
+    // Nadajnik rusza ROWNOLEGLE z Forminit, a nie po jego sukcesie.
+    // To jest cala istota drogi zapasowej: gdy Forminit odmowi, bo
+    // wyczerpal limit 100 zgloszen w miesiacu, wlasna poczta jest jedyna
+    // rzecza, ktora dostarcza lead do biura. Wywolanie po sukcesie
+    // Forminit nie ruszaloby dokladnie wtedy, kiedy jest potrzebne.
+    const poczta = wyslijPoczte(dane);
 
     let odpowiedz;
     try {
@@ -168,6 +223,14 @@ export async function sendLead(dane) {
             tresc?.error ?? '(brak treści)',
             tresc?.message ?? ''
         );
+
+        // Forminit odmowil. Zgloszenie i tak jest dostarczone, jesli
+        // powiadomienie doszlo na skrzynke biura — a o to w tym wszystkim
+        // chodzi. Dopiero gdy obie drogi zawioda, uzytkownik widzi blad.
+        if (await poczta) {
+            console.warn('[DGC] Forminit odmówił, zgłoszenie poszło pocztą na skrzynkę biura');
+            return { success: true, kanal: 'poczta' };
+        }
         throw new Error(wgKodu(kod));
     }
 

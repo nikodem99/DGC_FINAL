@@ -210,9 +210,15 @@ RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 # WordPressa ich nie unieszkodliwia, bo samodzielny skrypt nie
 # potrzebuje WordPressa, zeby sie wykonac.
 #
-# Gdyby kiedys pojawil sie na stronie formularz w PHP: usun te regule
-# albo zawez ja do samego wp-content.
-RewriteRule \.(php|phtml|phar|php[0-9])$ - [F,L]
+# Wyjatek: nadaj.php. To jedyny plik PHP w serwisie. Wysyla automatyczna
+# odpowiedz do osoby, ktora zostawila zgloszenie, i powiadomienie do biura
+# (zrodlo: public/nadaj.php). Regula MUSI stac przed blokada ponizej, bo
+# [L] konczy przetwarzanie regul dla tego jednego adresu i blokada go juz
+# nie zobaczy. Blokady NIE zdejmujemy w calosci: po starym WordPressie
+# zostal katalog wp-content, a wlasnie tam laduja podrzucone skrypty.
+RewriteRule ^nadaj\\.php$ - [L]
+
+RewriteRule \\.(php|phtml|phar|php[0-9])$ - [F,L]
 
 # --- Artykuly: z katalogu glownego starej strony do /porady/ -----------
 ${ARTYKULY.map((s) => `RewriteRule ^${s}/?$ /porady/${s}/ [R=301,L]`).join('\n')}
