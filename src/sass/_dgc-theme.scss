@@ -2341,6 +2341,17 @@ h1, h2, h3, h4, h5, h6 {
 .wpo-site-footer a[href^="mailto:"] {
   position: relative;
 
+  /* Bootstrap ustawia kazdy goly <a> na kolor linku, a w tym motywie kolor
+     linku to ink (#0d4444). Dokladnie taki sam jak tlo stopki, wiec numer
+     i adres znikaly. Zanim zrobilismy z nich odnosniki, byly zwyklym
+     tekstem i dziedziczyly kolor po <li>. Wracamy do tego dziedziczenia. */
+  color: inherit;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--dgc-canvas);
+  }
+
   &::after {
     content: '';
     position: absolute;
