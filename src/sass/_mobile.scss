@@ -193,3 +193,269 @@
         min-height: 44px;
     }
 }
+
+/* ======================================================================
+   RYTM PIONOWY NA TELEFONIE I TABLECIE (ponizej 992px)
+
+   Problem: odstepy miedzy sekcjami mierzone przy 375px szly od 40 do
+   214 px, bo kazda sekcja szablonu ma wlasny padding, a do tego dochodza
+   marginesy ostatniego elementu w srodku. Na oko wygladalo to na
+   przypadkowe skoki.
+
+   Zasada, wedlug ktorej sa dobrane ponizsze wartosci:
+
+     - kazda sekcja oddaje 40 px na gorze i 40 px na dole,
+       wiec kazdy styk dwoch sekcji daje 80 px,
+     - 80 px nie jest wymyslone: to najczestsza wartosc, jaka juz byla
+       w projekcie (szesc stykow na stronie glownej mialo 78-83 px),
+     - sekcje z wlasnym tlem (funfact, stopka) to pasma. Pasmo dostaje
+       40 px marginesu z zewnatrz, wiec z 40 px sasiada tez wychodzi 80.
+
+   Dlaczego padding-bottom rozni sie miedzy sekcjami: ostatni element
+   w srodku ma wlasny margines dolny, inny w kazdym komponencie. Przy
+   kazdej sekcji jest w komentarzu zmierzona wartosc tego marginesu.
+   Padding to po prostu 40 minus ta liczba. Wartosci pochodza z pomiaru
+   przy 375px, nie z oka.
+
+   Gdy dojdzie nowa sekcja: daj jej 40 px u gory i 40 px minus wewnetrzny
+   margines u dolu, a rytm sie zgodzi.
+
+   Zakres: do 991px. Wartosci sa dobrane pomiarem przy 375px; na
+   tablecie siatka jest dwukolumnowa, wiec kilka stykow wymaga tam
+   wlasnych wartosci i ma je w bloku ponizej.
+   ====================================================================== */
+
+@media (max-width: 991px) {
+
+    /* --- Naglowek podstrony -------------------------------------------
+       Mial sztywne height: 300px i wysrodkowanie w pionie, przez co pod
+       tytulem zostawalo 94 px pustki na kazdej podstronie. Przechodzi na
+       wysokosc z tresci. Gorne 95 px to miejsce na naglowek serwisu,
+       ktory lezy nad ta sekcja. */
+    .App .wpo-breadcumb-area {
+        height: auto;
+        min-height: 0;
+        padding-top: 108px;
+        /* Wewnetrzny margines dolny: 16 px (wiersz okruszkow) */
+        padding-bottom: 24px;
+    }
+
+    /* --- Strona glowna ------------------------------------------------- */
+
+    /* Sekcja powitalna: obrazek pod trescia ma margines dolny 50 px. */
+    .App .hero_section .image_content {
+        margin-bottom: 39px;
+    }
+
+    /* Formularz wyceny. Margines 80 px zastapiony paddingiem wrappera,
+       zeby liczyl sie tak samo jak w kazdej innej sekcji.
+       Wewnatrz: gora + 5 px (wiersz etykiety), dol + 20 px (margines
+       przycisku wysylki). */
+    .App .appointment_section {
+        margin-top: 0;
+    }
+
+    .App .appointment_section .wrapper {
+        padding-top: 35px;
+        padding-bottom: 20px;
+    }
+
+    /* Wewnetrzny margines dolny: 30 px */
+    .App .service_section_s2.section-padding {
+        padding-top: 40px;
+        padding-bottom: 10px;
+    }
+
+    /* Wewnetrzny margines dolny: 6 px */
+    .App .about_section.section-padding {
+        padding-top: 40px;
+        padding-bottom: 34px;
+    }
+
+    /* Wewnetrzny margines dolny: 6 px */
+    .App .partners_carousel_section {
+        padding-top: 40px;
+        padding-bottom: 34px;
+    }
+
+    /* Wewnetrzny margines dolny: 36 px */
+    .App .work_section.section-padding,
+    .App .work_section_s2.section-padding {
+        padding-top: 40px;
+        padding-bottom: 4px;
+    }
+
+    /* Wewnetrzny margines dolny: 4 px */
+    .App .pricing_section.section-padding {
+        padding-top: 40px;
+        padding-bottom: 36px;
+    }
+
+    /* Wewnetrzny margines dolny: 30 px */
+    .App .testimonial_section {
+        padding-top: 40px;
+        padding-bottom: 10px;
+    }
+
+    .App .opinie_cta_section {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+
+    /* Ciemna karta "Zadzwon do nas" siega krawedzi sekcji, wiec caly
+       odstep robi padding sekcji. Margines gorny zerujemy, bo na tablecie
+       szablon dokłada tu jeszcze 60 px i styk robil sie 140 px. */
+    .App .cta_section {
+        padding-top: 40px;
+        padding-bottom: 40px;
+        margin-top: 0;
+    }
+
+    /* Wewnetrzny margines dolny: 9 px */
+    .App .team_section.section-padding {
+        padding-top: 40px;
+        padding-bottom: 31px;
+    }
+
+    /* Pasmo z wlasnym tlem: odstep robia marginesy, nie padding. */
+    .App .funfact_section {
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+
+    /* Wewnetrzny margines dolny: 28 px */
+    .App .blog_section.section-padding {
+        padding-top: 40px;
+        padding-bottom: 12px;
+    }
+
+    .App .newsletter_section {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+
+    /* Ciemna karta wyceny siega krawedzi sekcji, jak przy cta_section.
+       Margines dolny 80 px zastapiony paddingiem plus marginesem stopki. */
+    .App .ctafrom_section {
+        padding-top: 40px;
+        padding-bottom: 40px;
+        margin-bottom: 0;
+    }
+
+    /* --- O nas ---------------------------------------------------------- */
+
+    .App .zespol_section {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+
+    /* Wewnetrzny margines dolny: 9 px */
+    .App .team_section_s2 {
+        padding-top: 40px;
+        padding-bottom: 31px;
+    }
+
+    /* Wewnetrzny margines dolny: 3 px */
+    .App .wmediach_section {
+        padding-top: 40px;
+        padding-bottom: 37px;
+    }
+
+    /* Wewnetrzny margines dolny: 20 px (ostatnia pozycja harmonijki) */
+    .App .wpo-faq-section.section-padding {
+        padding-top: 40px;
+        padding-bottom: 20px;
+    }
+
+    /* --- Oferta, pojedyncza usluga -------------------------------------
+       Ostatni kafelek paska bocznego mial margines dolny 50 px, ktory
+       przy jednej kolumnie na telefonie zostawal na samym koncu sekcji. */
+    .App .service_single .service_sidebar > .widget:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Wewnetrzny margines dolny po powyzszym: 19 px */
+    .App .service_single.section-padding {
+        padding-top: 40px;
+        padding-bottom: 21px;
+    }
+
+    /* --- Cennik --------------------------------------------------------- */
+
+    .App .pricing_intro.section-padding {
+        padding-top: 40px;
+    }
+
+    /* Wewnetrzny margines dolny: 30 px. Selektor z dwoma klasami, bo
+       na /kontakt/ ta sama sekcja stoi bez klasy form_section i konczy
+       sie mapa dosunieta do stopki. */
+    .App .wpo-contact-pg-section.form_section {
+        padding-bottom: 10px;
+    }
+
+    /* --- Kontakt -------------------------------------------------------
+       Wewnetrzny margines gorny: 40 px. Dolu nie ruszamy, bo mapa ma
+       dotykac stopki. */
+    .App > .wpo-contact-pg-section {
+        padding-top: 0;
+    }
+
+    /* --- Porady --------------------------------------------------------- */
+
+    .App .wpo-blog-pg-section,
+    .App .wpo-blog-single-section {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+
+    /* --- Umow konsultacje ----------------------------------------------- */
+
+    /* Wewnetrzny margines dolny: 4 px */
+    .App .konsultacja_section {
+        padding-top: 40px;
+        padding-bottom: 36px;
+    }
+
+    /* --- Polityka prywatnosci -------------------------------------------
+       Ostatnia sekcja tekstu ma margines dolny 42 px. */
+    .App .polityka_page .polityka_sekcja:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Wewnetrzny margines dolny po powyzszym: 21 px */
+    .App .polityka_page.section-padding {
+        padding-top: 40px;
+        padding-bottom: 19px;
+    }
+
+    /* --- Stopka ---------------------------------------------------------
+       Stopka to pasmo, wiec bierze swoje 40 px z marginesu. Wyjatek:
+       na /kontakt/ nad stopka stoi mapa, ktora ma do niej przylegac. */
+    .App > footer {
+        margin-top: 40px;
+    }
+
+    .App > .wpo-contact-pg-section + footer {
+        margin-top: 0;
+    }
+}
+
+/* ----------------------------------------------------------------------
+   Tablet, 768-991px. Rytm wyzej jest liczony przy 375px. Przy dwoch
+   kolumnach dwa styki wychodza szersze, bo wewnetrzne marginesy rosna.
+   Tylko te dwa maja tu wlasne wartosci, reszta trafia bez poprawek.
+   ---------------------------------------------------------------------- */
+
+@media (min-width: 768px) and (max-width: 991px) {
+
+    /* Formularz na /cennik/: 50 px paddingu karty plus 50 px marginesu
+       pod przyciskiem wysylki. Na /kontakt/ ta sama sekcja stoi bez klasy
+       form_section i konczy sie mapa, wiec jej to nie dotyczy. */
+    .App .wpo-contact-pg-section.form_section .wpo-contact-form-area {
+        padding-bottom: 30px;
+    }
+
+    .App .wpo-contact-pg-section.form_section .submit-area {
+        margin-bottom: 0;
+    }
+}
