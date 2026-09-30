@@ -36,8 +36,18 @@ declare(strict_types=1);
 
 // --- Konfiguracja ------------------------------------------------------
 
-/** Skrzynka biura. Jedyny adres, na ktory leci powiadomienie. */
+/** Skrzynka biura. Glowny odbiorca powiadomienia o zgloszeniu. */
 const BIURO = 'kontakt@biurodgc.pl';
+
+/**
+ * Drugi odbiorca powiadomienia, w kopii. Opiekun strony, zeby widzial
+ * zgloszenia bez zagladania do panelu Forminit i niezaleznie od jego
+ * limitu 100 zgloszen miesiecznie.
+ *
+ * Pusty lancuch wylacza kopie. NIE zgaduj tu adresu: pusty jest bezpieczny,
+ * bledny wysyla dane osobowe klientow pod nieznany adres.
+ */
+const OPIEKUN = '';
 
 /** Nadawca obu wiadomosci. Musi byc adresem w domenie tego serwera. */
 const NADAWCA = 'kontakt@biurodgc.pl';
@@ -341,16 +351,43 @@ function adresRolowy(string $email): bool {
  * wiec przy niepowodzeniu probujemy jeszcze raz bez niego.
  */
 function wyslij(string $do, string $tytul, string $tresc, array $naglowki): bool {
-    $n = implode("\r\n", $naglowki);
+    $n = implode("\r\n", array_merge($naglowki, [
+        'Content-Type: text/plain; charset=UTF-8',
+        'Content-Transfer-Encoding: base64',
+    ]));
     $cialo = chunk_split(base64_encode($tresc));
+    if (@mail($do, $tytul, $cialo, $n, '-f' . NADAWCA)) return true;
+    return @mail($do, $tytul, $cialo, $n);
+}
+
+/**
+ * Wiadomosc w dwoch wersjach naraz: czysty tekst i HTML. Program pocztowy
+ * bierze te, ktora umie pokazac.
+ *
+ * Wersja tekstowa nie jest tu formalnoscia. Czesc skrzynek pokazuje
+ * wylacznie ja, a filtry antyspamowe traktuja HTML bez tekstowego
+ * odpowiednika gorzej. Obie wersje musza niesc te sama tresc.
+ */
+function wyslijDwuczesciowy(string $do, string $tytul, string $tekst, string $html, array $naglowki): bool {
+    $granica = 'dgc-' . md5(uniqid('', true));
+    $n = implode("\r\n", array_merge($naglowki, [
+        'Content-Type: multipart/alternative; boundary="' . $granica . '"',
+    ]));
+    $cialo = "--$granica\r\n"
+        . "Content-Type: text/plain; charset=UTF-8\r\n"
+        . "Content-Transfer-Encoding: base64\r\n\r\n"
+        . chunk_split(base64_encode($tekst)) . "\r\n"
+        . "--$granica\r\n"
+        . "Content-Type: text/html; charset=UTF-8\r\n"
+        . "Content-Transfer-Encoding: base64\r\n\r\n"
+        . chunk_split(base64_encode($html)) . "\r\n"
+        . "--$granica--\r\n";
     if (@mail($do, $tytul, $cialo, $n, '-f' . NADAWCA)) return true;
     return @mail($do, $tytul, $cialo, $n);
 }
 
 $naglowkiWspolne = [
     'MIME-Version: 1.0',
-    'Content-Type: text/plain; charset=UTF-8',
-    'Content-Transfer-Encoding: base64',
     'From: ' . nadawca(),
     'X-Mailer: biurodgc.pl',
 ];
@@ -387,11 +424,16 @@ $trescBiuro .= "\n" . str_repeat('-', 48) . "\n"
 
 $naglowkiBiuro = array_merge($naglowkiWspolne, [
     'Reply-To: ' . $email,
+    // Kopia dla opiekuna strony, gdy adres jest ustawiony w konfiguracji.
     // To powiadomienie o leadzie, a nie odpowiedz na cudzy list. Wartosc
     // inna niz "no" jest dla filtrow sygnalem poczty maszynowej i potrafi
     // zepchnac wiadomosc poza skrzynke glowna (RFC 3834).
     'Auto-Submitted: no',
 ]);
+
+if (OPIEKUN !== '') {
+    $naglowkiBiuro[] = 'Cc: ' . OPIEKUN;
+}
 
 $poszloBiuro = wyslij(
     BIURO,
@@ -420,21 +462,83 @@ if (strncmp($zrodlo, 'newsletter', 10) === 0) {
     $pominietaOdpowiedz = 'limit';
 } else {
     $imieCzyste = imieDoPowitania($imie);
-    $powitanie = $imieCzyste !== '' ? "Dzien dobry, $imieCzyste," : 'Dzien dobry,';
+    $powitanie = $imieCzyste !== '' ? "Dzień dobry, $imieCzyste," : 'Dzień dobry,';
 
+    // Wersja tekstowa. Pelna tresc, bez skrotow: czesc skrzynek pokazuje
+    // wylacznie ja, a filtry antyspamowe patrza na nia tak samo uwaznie
+    // jak na HTML.
     $trescKlient = "$powitanie\n\n"
-        . "dziekujemy za kontakt. Twoja wiadomosc do nas dotarla.\n"
-        . "Odpowiemy na nia w godzinach pracy biura, zwykle tego samego\n"
-        . "albo nastepnego dnia roboczego.\n\n"
-        . "Jesli sprawa jest pilna, zadzwon: 731 580 184\n"
-        . "(poniedzialek do piatku, 8:00 do 16:00).\n\n"
+        . "dziękujemy za kontakt. Twoja wiadomość do nas dotarła.\n"
+        . "Odpowiemy na nią w godzinach pracy biura, zwykle tego samego\n"
+        . "albo następnego dnia roboczego.\n\n"
+        . "Jeśli sprawa jest pilna, zadzwoń: 731 580 184\n"
+        . "(poniedziałek do piątku, 8:00 do 16:00).\n\n"
         . "Pozdrawiamy\n"
-        . "DGC Biuro Rachunkowe Sp. z o.o.\n"
-        . "ul. Brukowa 8, 91-341 Lodz\n"
-        . "kontakt@biurodgc.pl, biurodgc.pl\n\n"
-        . str_repeat('-', 48) . "\n"
-        . "Ta wiadomosc zostala wyslana automatycznie, ale mozesz na nia\n"
-        . "odpowiedziec. Odpowiedz trafi na nasza skrzynke.\n";
+        . "DGC Biuro Rachunkowe\n\n"
+        . str_repeat('-', 56) . "\n"
+        . "DGC Biuro Rachunkowe spółka z ograniczoną odpowiedzialnością\n"
+        . "ul. Brukowa 8, 91-341 Łódź\n"
+        . "NIP: 9471976277 | REGON: 101073765\n"
+        . "E-mail: kontakt@biurodgc.pl | tel. 731 580 184\n"
+        . "https://biurodgc.pl/\n"
+        . "Oddział: ul. Toruńska 73, 62-600 Koło, tel. 510 002 230\n\n"
+        . "Ta wiadomość została wysłana automatycznie, ale możesz na nią\n"
+        . "odpowiedzieć. Odpowiedź trafi na naszą skrzynkę.\n";
+
+    // Wersja HTML. Uklad na tabelach i style pisane przy elementach, bo
+    // programy pocztowe nie czytaja arkuszy i slabo radza sobie z flexem.
+    // Logo lezy na wlasnej domenie: doklejanie obrazka do wiadomosci
+    // podnosi jej wage i czesciej wpada w filtry. Wiadomosc ma czytac sie
+    // tak samo dobrze, gdy skrzynka zablokuje obrazki, dlatego logo ma
+    // opis tekstowy, a zadna tresc nie siedzi w obrazku.
+    $logo = 'https://' . DOMENA . '/logo-mail.jpg';
+    $h = static function (string $t): string {
+        return htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    };
+
+    $trescHtml = '<!DOCTYPE html><html lang="pl"><head><meta charset="UTF-8">'
+        . '<meta name="viewport" content="width=device-width, initial-scale=1">'
+        . '<title>' . $h('Dziękujemy za wiadomość') . '</title></head>'
+        . '<body style="margin:0;padding:0;background:#fdfcfc;">'
+        . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fdfcfc;">'
+        . '<tr><td align="center" style="padding:32px 16px;">'
+        . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;background:#ffffff;border:1px solid rgba(13,68,68,0.13);border-radius:12px;">'
+
+        . '<tr><td style="padding:32px 32px 8px;">'
+        . '<img src="' . $h($logo) . '" width="200" height="116" alt="DGC Biuro Rachunkowe"'
+        . ' style="display:block;border:0;width:200px;height:auto;">'
+        . '</td></tr>'
+
+        . '<tr><td style="padding:16px 32px 0;font-family:Helvetica,Arial,sans-serif;font-size:16px;line-height:26px;color:#0d4444;">'
+        . '<p style="margin:0 0 16px;">' . $h($powitanie) . '</p>'
+        . '<p style="margin:0 0 16px;">dziękujemy za kontakt. Twoja wiadomość do nas dotarła.'
+        . ' Odpowiemy na nią w godzinach pracy biura, zwykle tego samego albo następnego dnia roboczego.</p>'
+        . '<p style="margin:0 0 24px;">Jeśli sprawa jest pilna, zadzwoń:'
+        . ' <a href="tel:+48731580184" style="color:#b50b50;text-decoration:none;font-weight:bold;">731&nbsp;580&nbsp;184</a>'
+        . '<br><span style="color:rgba(13,68,68,0.7);font-size:14px;">poniedziałek do piątku, 8:00 do 16:00</span></p>'
+        . '<p style="margin:0 0 4px;">Pozdrawiamy</p>'
+        . '<p style="margin:0 0 24px;font-weight:bold;">DGC Biuro Rachunkowe</p>'
+        . '</td></tr>'
+
+        . '<tr><td style="padding:0 32px;"><hr style="border:0;border-top:1px solid rgba(13,68,68,0.13);margin:0;"></td></tr>'
+
+        . '<tr><td style="padding:20px 32px 28px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:21px;color:rgba(13,68,68,0.75);">'
+        . '<strong style="color:#0d4444;">DGC Biuro Rachunkowe spółka z ograniczoną odpowiedzialnością</strong><br>'
+        . 'ul. Brukowa 8, 91-341 Łódź<br>'
+        . 'NIP: 9471976277 &nbsp;|&nbsp; REGON: 101073765<br>'
+        . '<a href="mailto:kontakt@biurodgc.pl" style="color:#0d4444;">kontakt@biurodgc.pl</a>'
+        . ' &nbsp;|&nbsp; <a href="tel:+48731580184" style="color:#0d4444;">731 580 184</a>'
+        . ' &nbsp;|&nbsp; <a href="https://biurodgc.pl/" style="color:#0d4444;">biurodgc.pl</a><br>'
+        . 'Oddział: ul. Toruńska 73, 62-600 Koło, tel. '
+        . '<a href="tel:+48510002230" style="color:#0d4444;">510 002 230</a>'
+        . '</td></tr>'
+
+        . '<tr><td style="padding:0 32px 28px;font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:19px;color:rgba(13,68,68,0.55);">'
+        . 'Ta wiadomość została wysłana automatycznie, ale możesz na nią odpowiedzieć.'
+        . ' Odpowiedź trafi na naszą skrzynkę.'
+        . '</td></tr>'
+
+        . '</table></td></tr></table></body></html>';
 
     $naglowkiKlient = array_merge($naglowkiWspolne, [
         'Reply-To: ' . NADAWCA,
@@ -445,10 +549,11 @@ if (strncmp($zrodlo, 'newsletter', 10) === 0) {
         'Precedence: bulk',
     ]);
 
-    $poszlaOdpowiedz = wyslij(
+    $poszlaOdpowiedz = wyslijDwuczesciowy(
         $email,
-        temat('Dziekujemy za wiadomosc, DGC Biuro Rachunkowe'),
+        temat('Dziękujemy za wiadomość, DGC Biuro Rachunkowe'),
         $trescKlient,
+        $trescHtml,
         $naglowkiKlient
     );
 }
