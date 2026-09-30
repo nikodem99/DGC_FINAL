@@ -70,8 +70,8 @@ const WMediach = ({ hclass = 'wmediach_section section-padding' }) => {
                         </p>
                         {!gra && (
                             <p className="wmediach_zastrzezenie">
-                                Odtworzenie wczyta film z serwisu YouTube. Do tego momentu
-                                nie wysyłamy tam żadnych danych.
+                                Film wczyta się z YouTube dopiero po kliknięciu.
+                                Wcześniej nie trafiają tam żadne dane.
                             </p>
                         )}
                     </div>
