@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import BlogSidebar from '../BlogSidebar/BlogSidebar.jsx'
-import blogs from '../../api/blogs.js'
+import { uzyjWpisow } from '../../api/uzyjWpisow.js'
 import { NA_STRONE } from '../../api/stronicowanie.js'
 
 // Ile numerow stron pokazujemy wokol biezacej. Przy 376 wpisach jest 76
@@ -33,6 +33,7 @@ const ClickHandler = () => {
 }
 
 const BlogList = (props) => {
+    const blogs = uzyjWpisow();
     const [wybranyMiesiac, setWybranyMiesiac] = useState('all');
     const [wybranaKategoria, setWybranaKategoria] = useState('all');
 

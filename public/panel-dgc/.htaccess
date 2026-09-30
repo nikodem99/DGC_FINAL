@@ -1,0 +1,13 @@
+# Panel redakcyjny. Ten katalog nie ma prawa trafic do wyszukiwarki
+# ani pokazywac swojej zawartosci.
+
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow, noarchive"
+</IfModule>
+
+Options -Indexes
+
+# Poza index.php i generator.php nie ma tu nic do pobrania.
+<FilesMatch "\.(json|log|bak|tmp|md)$">
+  Require all denied
+</FilesMatch>

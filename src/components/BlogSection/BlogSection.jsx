@@ -1,13 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import SectionTitle from "../SectionTitle/SectionTitle";
-import blogs from '../../api/blogs'
+import { uzyjWpisow } from '../../api/uzyjWpisow.js'
 
 const ClickHandler = () => {
     window.scrollTo(10, 0);
 }
 
 const BlogSection = (props) => {
+    const blogs = uzyjWpisow();
 
     return (
         <section className={"" + props.tClass}>

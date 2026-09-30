@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom'
-import blogs from '../../api/blogs.js';
+import { uzyjWpisow } from '../../api/uzyjWpisow.js';
 import { zPamieci, wczytaj } from '../../api/tresci.js';
 import BlogSidebar from '../BlogSidebar/BlogSidebar.jsx'
 
@@ -83,6 +83,7 @@ const Blok = ({ blok }) => {
 };
 
 const BlogSingle = (props) => {
+    const blogs = uzyjWpisow();
     const { slug } = useParams()
     const wpis = blogs.find(item => item.slug === slug)
 

@@ -3,13 +3,14 @@ import Navbar from '../../components/Navbar/Navbar.jsx'
 import PageTitle from '../../components/pagetitle/PageTitle.jsx'
 import Scrollbar from '../../components/scrollbar/scrollbar.jsx'
 import { useParams } from 'react-router-dom'
-import blogs from '../../api/blogs.js'
+import { uzyjWpisow } from '../../api/uzyjWpisow.js'
 import BlogSingle from '../../components/BlogDetails/BlogSingle.jsx'
 import Footer from '../../components/footer/Footer.jsx';
 import logo from '../../images/logo.svg';
 
 const BlogDetails = (props) => {
 
+    const blogs = uzyjWpisow();
     const { slug } = useParams()
     // Bez ?. wejscie na nieistniejacy adres wywalalo cala strone bialym
     // ekranem, zanim BlogSingle zdazyl pokazac komunikat.

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'
-import blogs from '../../api/blogs'
+import { uzyjWpisow } from '../../api/uzyjWpisow.js'
 
 const ClickHandler = () => {
     window.scrollTo(10, 0);
@@ -9,7 +9,7 @@ const ClickHandler = () => {
 // Kategorie i miesiace licza sie z wpisow, a nie sa wpisane recznie.
 // Szablon mial tu siedem kategorii przychodni (Neurology, Urology, HIV/AIDS…)
 // z liczbami wzietymi z sufitu — po dodaniu wpisu nikt by ich nie poprawil.
-const policz = (klucz, etykieta) => Object.values(blogs.reduce((zebrane, blog) => {
+const policz = (blogs, klucz, etykieta) => Object.values(blogs.reduce((zebrane, blog) => {
     const wartosc = blog[klucz];
     if (!wartosc) return zebrane;
 
@@ -20,10 +20,14 @@ const policz = (klucz, etykieta) => Object.values(blogs.reduce((zebrane, blog) =
     return zebrane;
 }, {}));
 
-const kategorie = policz('tag', (blog) => blog.tag);
-const miesiace = policz('archiveMonth', (blog) => blog.archiveLabel);
-
 const BlogSidebar = (props) => {
+    // Liczniki musza siedziec W komponencie, a nie na poziomie modulu.
+    // Po dodaniu artykulu z panelu lista doczytuje sie z serwera i wtedy
+    // liczby maja sie przeliczyc, a nie zostac z chwili budowania.
+    const blogs = uzyjWpisow();
+    const kategorie = policz(blogs, 'tag', (blog) => blog.tag);
+    const miesiace = policz(blogs, 'archiveMonth', (blog) => blog.archiveLabel);
+
     const [lokalnyMiesiac, setLokalnyMiesiac] = useState('all');
     const selectedMonth = props.selectedMonth ?? lokalnyMiesiac;
     const wybranaKategoria = props.selectedCategory ?? 'all';

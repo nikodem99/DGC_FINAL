@@ -202,3 +202,79 @@ for (const plik of fs.readdirSync(zrodloTresci)) {
 }
 
 console.log(`Dane dla panelu: ${wpisy.length} wpisow w dane/wpisy.json, ${skopiowane} plikow tresci`);
+
+// --- szablon listy porad i pojedynczej karty ----------------------------
+//
+// Panel po dodaniu wpisu musi odswiezyc strony listy, inaczej nowy artykul
+// nie mialby ani jednego odnosnika z HTML-a i powtorzylby sie problem,
+// ktory wlasnie rozwiazalismy stronicowaniem.
+//
+// Karte wycinamy z gotowej listy i zamieniamy w niej wartosci PIERWSZEGO
+// wpisu na znaczniki. Wartosci bierzemy z wpisy.json, wiec wiemy dokladnie,
+// czego szukac — nie zgadujemy po ksztalcie HTML-a.
+
+const listaHtmlSciezka = path.join(DIST, 'porady', 'index.html');
+if (fs.existsSync(listaHtmlSciezka) && wpisy.length) {
+    let lista = fs.readFileSync(listaHtmlSciezka, 'utf8');
+    const bledyListy = [];
+
+    const podmienWLiscie = (opis, wzor, czym) => {
+        if (!wzor.test(lista)) { bledyListy.push(opis); return; }
+        lista = lista.replace(wzor, czym);
+    };
+
+    podmienWLiscie('tytul', /<title>[\s\S]*?<\/title>/, '<title>@@TYTUL_STRONY@@</title>');
+    podmienWLiscie('opis', /<meta name="description" content="[^"]*">/, '<meta name="description" content="@@OPIS@@">');
+    podmienWLiscie('kanoniczny', /<link rel="canonical" href="[^"]*">/, '<link rel="canonical" href="@@KANONICZNY@@">');
+    podmienWLiscie('og:title', /<meta property="og:title" content="[^"]*">/, '<meta property="og:title" content="@@TYTUL_STRONY@@">');
+    podmienWLiscie('og:description', /<meta property="og:description" content="[^"]*">/, '<meta property="og:description" content="@@OPIS@@">');
+    podmienWLiscie('og:url', /<meta property="og:url" content="[^"]*">/, '<meta property="og:url" content="@@KANONICZNY@@">');
+
+    // Karty: wszystko od pierwszej karty do stronicowania.
+    const poczatekKart = lista.indexOf('<div class="wpo-blog-content">') + '<div class="wpo-blog-content">'.length;
+    const poczatekStron = lista.indexOf('<div class="pagination-wrapper');
+    if (poczatekKart > 0 && poczatekStron > poczatekKart) {
+        const kartyHtml = lista.slice(poczatekKart, poczatekStron);
+
+        // Pojedyncza karta = pierwsza z nich.
+        const drugaKarta = kartyHtml.indexOf('<div class="post ', 10);
+        let karta = drugaKarta > 0 ? kartyHtml.slice(0, drugaKarta) : kartyHtml;
+
+        const w = wpisy[0];
+        const zamien = (co, na) => {
+            if (!co) return;
+            karta = karta.split(co).join(na);
+        };
+        zamien(w.obrazek, '@@OBRAZEK@@');
+        zamien(`/porady/${w.slug}/`, '@@ADRES@@');
+        zamien(w.title, '@@TYTUL@@');
+        zamien(w.description, '@@OPIS@@');
+        zamien(w.create_at, '@@DATA@@');
+        zamien(w.tag, '@@TAG@@');
+        zamien(w.author, '@@AUTOR@@');
+
+        for (const z of ['@@OBRAZEK@@', '@@ADRES@@', '@@TYTUL@@', '@@OPIS@@', '@@DATA@@', '@@TAG@@']) {
+            if (!karta.includes(z)) bledyListy.push(`karta bez znacznika ${z}`);
+        }
+
+        lista = lista.slice(0, poczatekKart) + '@@KARTY@@' + lista.slice(poczatekStron);
+        podmienWLiscie(
+            'stronicowanie',
+            /<div class="pagination-wrapper[\s\S]*?<\/nav><\/div>/,
+            '@@STRONICOWANIE@@'
+        );
+
+        if (bledyListy.length) {
+            console.error('[szablon] lista porad: budowa strony sie zmienila:');
+            for (const b of bledyListy) console.error(`  - ${b}`);
+            process.exit(1);
+        }
+
+        fs.writeFileSync(path.join(DIST, 'dane', 'szablon', 'lista.html'), lista);
+        fs.writeFileSync(path.join(DIST, 'dane', 'szablon', 'karta.html'), karta);
+        console.log(`Szablon listy: dane/szablon/lista.html (${Math.round(lista.length / 1024)} kB) i karta.html (${karta.length} B)`);
+    } else {
+        console.error('[szablon] nie znalazlem obszaru kart na liscie porad');
+        process.exit(1);
+    }
+}

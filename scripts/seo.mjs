@@ -218,6 +218,16 @@ RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 # zostal katalog wp-content, a wlasnie tam laduja podrzucone skrypty.
 RewriteRule ^nadaj\\.php$ - [L]
 
+# Wyjatek drugi: panel redakcyjny. Katalog nazywa wlasciciel strony i ma
+# byc nieoczywisty, wiec nie znamy go tutaj z nazwy. Dopuszczamy wiec
+# katalog zaczynajacy sie od "panel-" i tylko dwa pliki w srodku.
+#
+# Dlaczego tak waskie: gdyby regula brzmiala "dowolny katalog", to po
+# starym WordPressie zostal wp-content, ktory tez jest katalogiem
+# pierwszego poziomu i wlasnie tam laduja podrzucone skrypty. Prefiks
+# "panel-" sprawia, ze wp-content nie moze sie tu zmiescic.
+RewriteRule ^panel-[a-z0-9-]+/(index|generator)\\.php$ - [L]
+
 RewriteRule \\.(php|phtml|phar|php[0-9])$ - [F,L]
 
 # --- Artykuly: z katalogu glownego starej strony do /porady/ -----------

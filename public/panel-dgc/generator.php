@@ -1,0 +1,480 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * Generator stron dla panelu redakcyjnego DGC.
+ *
+ * Panel stoi na hostingu, gdzie nie ma Node'a, wiec nie przebuduje aplikacji
+ * Reacta. Sklada wiec strone artykulu sam, z szablonu, ktory wypadl
+ * z ostatniego budowania (scripts/szablon.mjs).
+ *
+ * Zasada: ten plik NIE opisuje wygladu. Wyglad siedzi w szablonach
+ * dane/szablon/*.html, a tutaj sa tylko podstawienia. Dzieki temu zmiana
+ * stylu strony nie wymaga dotykania PHP — wystarczy wgrac nowa paczke.
+ *
+ * Jedyne miejsce, ktore MUSI byc zgodne z Reactem, to zamiana blokow tresci
+ * na HTML (funkcja blokiNaHtml). Odpowiada jeden do jednego komponentowi
+ * Blok z src/components/BlogDetails/BlogSingle.jsx. Gdy tam dojdzie nowy
+ * typ bloku, trzeba go dopisac takze tutaj.
+ */
+
+// --- sciezki ------------------------------------------------------------
+// Wszystko liczone od katalogu panelu, zeby dalo sie go nazwac dowolnie.
+
+define('KORZEN', dirname(__DIR__));
+define('DANE', KORZEN . '/dane');
+define('SZABLONY', DANE . '/szablon');
+define('PORADY', KORZEN . '/porady');
+define('DOMENA', 'https://biurodgc.pl');
+
+/** Kategorie ze starego bloga. Zamknieta lista, zeby nie powstawaly literowki. */
+const KATEGORIE = ['VAT', 'CIT', 'PIT', 'Podatki', 'Księgowość', 'Rachunkowość', 'Kadry', 'Płace'];
+
+const MIESIACE = [1 => 'stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca',
+    'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'];
+const MIESIACE_ET = [1 => 'Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
+    'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
+
+/** Ile wpisow na stronie listy. MUSI zgadzac sie z src/api/stronicowanie.js. */
+const NA_STRONE = 5;
+
+// --- drobne pomocnicze --------------------------------------------------
+
+function h(string $t): string {
+    return htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+/** Tekst bloku: uciekamy znaki HTML, a potem **pogrubienie** na <strong>. */
+function tekstBloku(string $t): string {
+    $bezpieczny = h($t);
+    return preg_replace('/\*\*(.+?)\*\*/u', '<strong>$1</strong>', $bezpieczny) ?? $bezpieczny;
+}
+
+/**
+ * Zapis atomowy: najpierw plik tymczasowy, potem podmiana nazwy.
+ * Bez tego przerwany zapis zostawialby polowe strony albo polowe JSON-a,
+ * a to jest plik, z ktorego czyta cala reszta serwisu.
+ */
+function zapiszAtomowo(string $sciezka, string $tresc): bool {
+    $katalog = dirname($sciezka);
+    if (!is_dir($katalog) && !@mkdir($katalog, 0755, true)) return false;
+    $tymczasowy = $sciezka . '.tmp-' . bin2hex(random_bytes(6));
+    if (@file_put_contents($tymczasowy, $tresc) === false) return false;
+    if (!@rename($tymczasowy, $sciezka)) { @unlink($tymczasowy); return false; }
+    return true;
+}
+
+/** Nazwa adresowa z tytulu: same male litery, cyfry i myslniki. */
+function naSlug(string $t): string {
+    $od = ['ą','ć','ę','ł','ń','ó','ś','ź','ż','Ą','Ć','Ę','Ł','Ń','Ó','Ś','Ź','Ż'];
+    $na = ['a','c','e','l','n','o','s','z','z','a','c','e','l','n','o','s','z','z'];
+    $t = str_replace($od, $na, $t);
+    $t = mb_strtolower($t, 'UTF-8');
+    $t = preg_replace('/[^a-z0-9]+/u', '-', $t) ?? '';
+    return trim($t, '-');
+}
+
+// --- tresc: prosty zapis tekstowy na bloki ------------------------------
+
+/**
+ * Zamienia tekst wpisany w panelu na bloki tresci.
+ *
+ * Format jest celowo ubogi, bo pisza w nim ksiegowe, a nie programisci:
+ *
+ *   zwykly akapit                    -> akapit
+ *   ## Naglowek                      -> naglowek sekcji
+ *   - punkt                          -> lista (kolejne linie sie skleja)
+ *   > Tytul | tresc                  -> ramka z uwaga
+ *   ! Tytul | tresc                  -> ramka z przykladem
+ *   zrodlo: tekst                    -> podstawa prawna na koncu
+ *   **pogrubienie**                  -> pogrubienie w dowolnym miejscu
+ *
+ * Pusta linia konczy akapit. Czego nie da sie rozpoznac, to akapit —
+ * zasada jest taka, ze zle wpisany znacznik ma dac brzydki tekst,
+ * a nie pusta strone.
+ */
+function blokiZTekstu(string $tekst): array {
+    $tekst = str_replace(["\r\n", "\r"], "\n", $tekst);
+    $linie = explode("\n", $tekst);
+
+    $bloki = [];
+    $akapit = [];
+    $lista = [];
+
+    $domknijAkapit = function () use (&$akapit, &$bloki) {
+        $t = trim(implode(' ', $akapit));
+        if ($t !== '') $bloki[] = ['t' => 'p', 'x' => $t];
+        $akapit = [];
+    };
+    $domknijListe = function () use (&$lista, &$bloki) {
+        if ($lista) $bloki[] = ['t' => 'ul', 'x' => $lista];
+        $lista = [];
+    };
+
+    foreach ($linie as $linia) {
+        $l = trim($linia);
+
+        if ($l === '') { $domknijAkapit(); $domknijListe(); continue; }
+
+        if (str_starts_with($l, '## ')) {
+            $domknijAkapit(); $domknijListe();
+            $bloki[] = ['t' => 'h', 'x' => trim(substr($l, 3))];
+            continue;
+        }
+        if (str_starts_with($l, '- ')) {
+            $domknijAkapit();
+            $lista[] = trim(substr($l, 2));
+            continue;
+        }
+        if (str_starts_with($l, '> ') || str_starts_with($l, '! ')) {
+            $domknijAkapit(); $domknijListe();
+            $typ = $l[0] === '>' ? 'uwaga' : 'przyklad';
+            $reszta = trim(substr($l, 2));
+            $czesci = explode('|', $reszta, 2);
+            if (count($czesci) === 2) {
+                $bloki[] = ['t' => $typ, 'h' => trim($czesci[0]), 'x' => trim($czesci[1])];
+            } else {
+                $bloki[] = ['t' => $typ, 'x' => $reszta];
+            }
+            continue;
+        }
+        if (preg_match('/^(zrodlo|źródło|podstawa prawna)\s*:\s*(.+)$/ui', $l, $m)) {
+            $domknijAkapit(); $domknijListe();
+            $bloki[] = ['t' => 'zrodlo', 'x' => trim($m[2])];
+            continue;
+        }
+
+        $domknijListe();
+        $akapit[] = $l;
+    }
+    $domknijAkapit();
+    $domknijListe();
+
+    return $bloki;
+}
+
+/** Droga powrotna: bloki na tekst do pola edycji. */
+function tekstZBlokow(array $bloki): string {
+    $czesci = [];
+    foreach ($bloki as $b) {
+        $t = $b['t'] ?? 'p';
+        if ($t === 'h') { $czesci[] = '## ' . ($b['x'] ?? ''); continue; }
+        if ($t === 'ul') {
+            $linie = [];
+            foreach (($b['x'] ?? []) as $poz) $linie[] = '- ' . $poz;
+            $czesci[] = implode("\n", $linie);
+            continue;
+        }
+        if ($t === 'uwaga' || $t === 'przyklad') {
+            $znak = $t === 'uwaga' ? '>' : '!';
+            $czesci[] = isset($b['h']) && $b['h'] !== ''
+                ? "$znak {$b['h']} | {$b['x']}"
+                : "$znak {$b['x']}";
+            continue;
+        }
+        if ($t === 'zrodlo') { $czesci[] = 'Źródło: ' . ($b['x'] ?? ''); continue; }
+        if ($t === 'tabela') {
+            // Tabel panel nie tworzy, ale gdy wpis ja ma, nie wolno jej zgubic
+            // przy edycji. Zostaje jako znacznik, ktory przy zapisie odtwarzamy.
+            $czesci[] = '[tabela zachowana z poprzedniej wersji]';
+            continue;
+        }
+        $czesci[] = $b['x'] ?? '';
+    }
+    return implode("\n\n", $czesci);
+}
+
+// --- bloki na HTML ------------------------------------------------------
+//
+// Odpowiednik komponentu Blok z BlogSingle.jsx. Kazda zmiana tam wymaga
+// zmiany tutaj, inaczej artykul dodany z panelu bedzie wygladal inaczej
+// niz artykul z paczki.
+
+function blokiNaHtml(array $bloki): string {
+    $out = '';
+    foreach ($bloki as $b) {
+        $t = $b['t'] ?? 'p';
+
+        if ($t === 'h') {
+            $out .= '<h3>' . h((string)($b['x'] ?? '')) . '</h3>';
+        } elseif ($t === 'p') {
+            $out .= '<p>' . tekstBloku((string)($b['x'] ?? '')) . '</p>';
+        } elseif ($t === 'ul') {
+            $out .= '<ul class="wpis_lista">';
+            foreach (($b['x'] ?? []) as $poz) $out .= '<li>' . tekstBloku((string)$poz) . '</li>';
+            $out .= '</ul>';
+        } elseif ($t === 'tabela') {
+            $out .= '<div class="wpis_tabela_ramka"><table class="wpis_tabela">';
+            if (!empty($b['h'])) {
+                $out .= '<thead><tr>';
+                foreach ($b['h'] as $kol) $out .= '<th>' . h((string)$kol) . '</th>';
+                $out .= '</tr></thead>';
+            }
+            $out .= '<tbody>';
+            foreach (($b['x'] ?? []) as $wiersz) {
+                $out .= '<tr>';
+                foreach ($wiersz as $kom) $out .= '<td>' . tekstBloku((string)$kom) . '</td>';
+                $out .= '</tr>';
+            }
+            $out .= '</tbody></table></div>';
+        } elseif ($t === 'przyklad' || $t === 'uwaga') {
+            $klasa = $t === 'uwaga' ? 'wpis_uwaga' : 'wpis_przyklad';
+            $out .= '<aside class="' . $klasa . '">';
+            if (!empty($b['h'])) $out .= '<strong>' . h((string)$b['h']) . '</strong>';
+            $out .= '<p>' . tekstBloku((string)($b['x'] ?? '')) . '</p></aside>';
+        } elseif ($t === 'zrodlo') {
+            $out .= '<p class="wpis_zrodlo"><strong>Podstawa prawna:</strong> ' . h((string)($b['x'] ?? '')) . '</p>';
+        }
+    }
+    return $out;
+}
+
+// --- dane ---------------------------------------------------------------
+
+function wczytajWpisy(): array {
+    $plik = DANE . '/wpisy.json';
+    if (!is_file($plik)) return [];
+    $d = json_decode((string)file_get_contents($plik), true);
+    return is_array($d) && isset($d['wpisy']) && is_array($d['wpisy']) ? $d['wpisy'] : [];
+}
+
+function zapiszWpisy(array $wpisy): bool {
+    return zapiszAtomowo(
+        DANE . '/wpisy.json',
+        (string)json_encode(['wersja' => count($wpisy) . '-' . time(), 'wpisy' => $wpisy], JSON_UNESCAPED_UNICODE)
+    );
+}
+
+function wczytajTresc(string $slug): array {
+    $plik = DANE . '/tresci/' . $slug . '.json';
+    if (!is_file($plik)) return [];
+    $d = json_decode((string)file_get_contents($plik), true);
+    return is_array($d) ? $d : [];
+}
+
+// --- skladanie stron ----------------------------------------------------
+
+function szablon(string $nazwa): ?string {
+    $plik = SZABLONY . '/' . $nazwa;
+    return is_file($plik) ? (string)file_get_contents($plik) : null;
+}
+
+/**
+ * Kontrola aktualnosci szablonu. Szablon niesie odwolania do plikow
+ * /assets/... z odciskiem. Jesli ktoregos nie ma na dysku, znaczy, ze
+ * wgrano nowa wersje strony, a szablon zostal stary — wtedy generowana
+ * strona ladowalaby nieistniejace style i wygladala jak goly tekst.
+ */
+function szablonAktualny(string $html, ?string &$powod = null): bool {
+    if (!preg_match_all('#/assets/([A-Za-z0-9_.\-]+)#', $html, $m)) return true;
+    foreach (array_unique($m[1]) as $plik) {
+        if (!is_file(KORZEN . '/assets/' . $plik)) {
+            $powod = $plik;
+            return false;
+        }
+    }
+    return true;
+}
+
+function podstaw(string $szablon, array $pola): string {
+    return str_replace(
+        array_map(static fn($k) => '@@' . $k . '@@', array_keys($pola)),
+        array_values($pola),
+        $szablon
+    );
+}
+
+/** Blok "poprzedni / nastepny wpis" pod artykulem. */
+function sasiedziHtml(array $wpisy, int $nr): string {
+    $poprzedni = $wpisy[$nr - 1] ?? null;
+    $nastepny = $wpisy[$nr + 1] ?? null;
+    if (!$poprzedni && !$nastepny) return '';
+
+    $out = '<div class="more-posts">';
+    $out .= '<div class="previous-post">';
+    if ($poprzedni) {
+        $out .= '<a href="/porady/' . h($poprzedni['slug']) . '/">'
+            . '<span class="post-control-link">Poprzedni wpis</span>'
+            . '<span class="post-name">' . h($poprzedni['title']) . '</span></a>';
+    }
+    $out .= '</div><div class="next-post">';
+    if ($nastepny) {
+        $out .= '<a href="/porady/' . h($nastepny['slug']) . '/">'
+            . '<span class="post-control-link">Następny wpis</span>'
+            . '<span class="post-name">' . h($nastepny['title']) . '</span></a>';
+    }
+    $out .= '</div></div>';
+    return $out;
+}
+
+/** Sklada i zapisuje strone jednego artykulu. */
+function zapiszStroneArtykulu(array $wpis, array $bloki, array $wpisy, int $nr, ?string &$blad = null): bool {
+    $szab = szablon('artykul.html');
+    if ($szab === null) { $blad = 'brak szablonu artykulu — wgraj aktualna paczke strony'; return false; }
+    if (!szablonAktualny($szab, $czego)) {
+        $blad = "szablon jest starszy niz wgrana strona (brakuje /assets/$czego) — popros opiekuna o nowa paczke";
+        return false;
+    }
+
+    $adres = DOMENA . '/porady/' . $wpis['slug'] . '/';
+    $html = podstaw($szab, [
+        'TYTUL_STRONY' => h($wpis['title'] . ' · DGC'),
+        'OPIS'         => h($wpis['description']),
+        'KANONICZNY'   => h($adres),
+        'SLUG'         => h($wpis['slug']),
+        'ZIARNO'       => str_replace('<', '\\u003c', (string)json_encode($bloki, JSON_UNESCAPED_UNICODE)),
+        'TYTUL'        => h($wpis['title']),
+        'OBRAZEK'      => h($wpis['obrazek']),
+        'AUTOR'        => h($wpis['author']),
+        'DATA'         => h($wpis['create_at']),
+        'TAG'          => h($wpis['tag']),
+        'TRESC'        => blokiNaHtml($bloki),
+        'SASIEDZI'     => sasiedziHtml($wpisy, $nr),
+    ]);
+
+    if (!zapiszAtomowo(PORADY . '/' . $wpis['slug'] . '/index.html', $html)) {
+        $blad = 'nie udalo sie zapisac strony artykulu';
+        return false;
+    }
+    return true;
+}
+
+/** Przebudowa wszystkich stron listy porad. */
+function odswiezListy(array $wpisy, ?string &$blad = null): int {
+    $szabLista = szablon('lista.html');
+    $szabKarta = szablon('karta.html');
+    if ($szabLista === null || $szabKarta === null) { $blad = 'brak szablonu listy'; return 0; }
+
+    $stron = max(1, (int)ceil(count($wpisy) / NA_STRONE));
+    $zapisane = 0;
+
+    for ($nr = 1; $nr <= $stron; $nr++) {
+        $naStronie = array_slice($wpisy, ($nr - 1) * NA_STRONE, NA_STRONE);
+
+        $karty = '';
+        foreach ($naStronie as $w) {
+            $karty .= podstaw($szabKarta, [
+                'OBRAZEK' => h($w['obrazek']),
+                'ADRES'   => '/porady/' . h($w['slug']) . '/',
+                'TYTUL'   => h($w['title']),
+                'OPIS'    => h($w['description']),
+                'DATA'    => h($w['create_at']),
+                'TAG'     => h($w['tag']),
+                'AUTOR'   => h($w['author']),
+            ]);
+        }
+
+        $adres = $nr === 1 ? DOMENA . '/porady/' : DOMENA . "/porady/strona/$nr/";
+        $tytul = $nr === 1
+            ? 'Porady księgowe i podatkowe · DGC Biuro Rachunkowe'
+            : "Porady księgowe i podatkowe, strona $nr · DGC";
+        $opis = $nr === 1
+            ? 'Artykuły o księgowości, podatkach i kadrach od biura rachunkowego DGC z Łodzi.'
+            : "Artykuły o księgowości, podatkach i kadrach, strona $nr z $stron. Biuro rachunkowe DGC z Łodzi.";
+
+        $html = podstaw($szabLista, [
+            'TYTUL_STRONY'   => h($tytul),
+            'OPIS'           => h($opis),
+            'KANONICZNY'     => h($adres),
+            'KARTY'          => $karty,
+            'STRONICOWANIE'  => stronicowanieHtml($nr, $stron),
+        ]);
+
+        $cel = $nr === 1 ? PORADY . '/index.html' : PORADY . "/strona/$nr/index.html";
+        if (zapiszAtomowo($cel, $html)) $zapisane++;
+    }
+
+    // Strony, ktorych juz nie ma (bo wpisow ubylo), trzeba usunac.
+    $katStron = PORADY . '/strona';
+    if (is_dir($katStron)) {
+        foreach (scandir($katStron) ?: [] as $poz) {
+            if (!ctype_digit($poz)) continue;
+            if ((int)$poz > $stron) {
+                @unlink("$katStron/$poz/index.html");
+                @rmdir("$katStron/$poz");
+            }
+        }
+    }
+
+    return $zapisane;
+}
+
+/** Stronicowanie: pierwsza, ostatnia, biezaca i po dwie sasiednie. */
+function stronicowanieHtml(int $biezaca, int $stron): string {
+    if ($stron <= 1) return '';
+
+    $numery = [];
+    if ($stron <= 7) {
+        $numery = range(1, $stron);
+    } else {
+        $zbior = [1, $stron, $biezaca];
+        for ($i = 1; $i <= 2; $i++) {
+            if ($biezaca - $i > 1) $zbior[] = $biezaca - $i;
+            if ($biezaca + $i < $stron) $zbior[] = $biezaca + $i;
+        }
+        $zbior = array_unique($zbior);
+        sort($zbior);
+        $poprzedni = 0;
+        foreach ($zbior as $n) {
+            if ($poprzedni && $n - $poprzedni > 1) $numery[] = '...';
+            $numery[] = $n;
+            $poprzedni = $n;
+        }
+    }
+
+    $adres = static fn(int $n): string => $n <= 1 ? '/porady/' : "/porady/strona/$n/";
+
+    $out = '<div class="pagination-wrapper pagination-wrapper-left"><nav aria-label="Strony wpisów"><ul class="pg-pagination">';
+    $out .= '<li>' . ($biezaca === 1
+        ? '<span class="pg-nieczynne" aria-hidden="true"><i class="fi ti-angle-left"></i></span>'
+        : '<a href="' . $adres($biezaca - 1) . '" aria-label="Poprzednia strona"><i class="fi ti-angle-left"></i></a>') . '</li>';
+
+    foreach ($numery as $n) {
+        if ($n === '...') {
+            $out .= '<li class="pg-przerwa" aria-hidden="true"><span>…</span></li>';
+            continue;
+        }
+        $klasa = $n === $biezaca ? ' class="active"' : '';
+        $biezacyAtr = $n === $biezaca ? ' aria-current="page"' : '';
+        $out .= "<li$klasa><a href=\"{$adres($n)}\" aria-label=\"Strona $n\"$biezacyAtr>$n</a></li>";
+    }
+
+    $out .= '<li>' . ($biezaca === $stron
+        ? '<span class="pg-nieczynne" aria-hidden="true"><i class="fi ti-angle-right"></i></span>'
+        : '<a href="' . $adres($biezaca + 1) . '" aria-label="Następna strona"><i class="fi ti-angle-right"></i></a>') . '</li>';
+
+    return $out . '</ul></nav></div>';
+}
+
+/** Mapa strony: adresy stale z ostatniego budowania plus wszystkie artykuly. */
+function odswiezMape(array $wpisy): bool {
+    $plik = KORZEN . '/sitemap.xml';
+    if (!is_file($plik)) return false;
+
+    $stary = (string)file_get_contents($plik);
+    // Zostawiamy wszystko, co NIE jest artykulem ani strona listy,
+    // a artykuly i strony listy budujemy od nowa z aktualnych danych.
+    preg_match_all('#<url>\s*<loc>([^<]+)</loc>.*?</url>#s', $stary, $m, PREG_SET_ORDER);
+    $stale = [];
+    foreach ($m as $wpis) {
+        $loc = $wpis[1];
+        if (str_contains($loc, '/porady/') && $loc !== DOMENA . '/porady/') continue;
+        if ($loc === DOMENA . '/porady/') continue;
+        $stale[] = $wpis[0];
+    }
+
+    $dzis = date('Y-m-d');
+    $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
+    foreach ($stale as $u) $xml .= $u . "\n";
+    $xml .= "<url><loc>" . DOMENA . "/porady/</loc><lastmod>$dzis</lastmod></url>\n";
+    $stron = max(1, (int)ceil(count($wpisy) / NA_STRONE));
+    for ($nr = 2; $nr <= $stron; $nr++) {
+        $xml .= "<url><loc>" . DOMENA . "/porady/strona/$nr/</loc><lastmod>$dzis</lastmod></url>\n";
+    }
+    foreach ($wpisy as $w) {
+        $xml .= "<url><loc>" . DOMENA . "/porady/" . h($w['slug']) . "/</loc><lastmod>$dzis</lastmod></url>\n";
+    }
+    $xml .= "</urlset>\n";
+
+    return zapiszAtomowo($plik, $xml);
+}
