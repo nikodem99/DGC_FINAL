@@ -68,12 +68,6 @@ const WMediach = ({ hclass = 'wmediach_section section-padding' }) => {
                             o zmianach w rozliczeniach VAT i o tym, co powinni o nich wiedzieć
                             przedsiębiorcy.
                         </p>
-                        {!gra && (
-                            <p className="wmediach_zastrzezenie">
-                                Film wczyta się z YouTube dopiero po kliknięciu.
-                                Wcześniej nie trafiają tam żadne dane.
-                            </p>
-                        )}
                     </div>
                 </div>
             </div>
