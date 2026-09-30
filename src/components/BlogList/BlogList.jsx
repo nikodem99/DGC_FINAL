@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import BlogSidebar from '../BlogSidebar/BlogSidebar.jsx'
 import blogs from '../../api/blogs.js'
-
-// Ile wpisow na jednej stronie. Przy pietnastu artykulach daje trzy strony.
-const NA_STRONE = 5;
+import { NA_STRONE } from '../../api/stronicowanie.js'
 
 // Ile numerow stron pokazujemy wokol biezacej. Przy 376 wpisach jest 76
 // stron i wypisanie wszystkich dawalo scianę cyfr na cala szerokosc,
@@ -37,7 +35,21 @@ const ClickHandler = () => {
 const BlogList = (props) => {
     const [wybranyMiesiac, setWybranyMiesiac] = useState('all');
     const [wybranaKategoria, setWybranaKategoria] = useState('all');
-    const [strona, setStrona] = useState(1);
+
+    // Numer strony bierze sie z ADRESU, a nie ze stanu komponentu.
+    //
+    // Wczesniej byl to useState i przyciski, wiec przejscie na strone 2
+    // nie zmienialo adresu. Dla robota Google znaczylo to, ze lista porad
+    // ma piec artykulow, a pozostale 371 sa osiagalne tylko z mapy strony.
+    // Audyt na zywej stronie zmierzyl mediane glebokosci klikniecia na 188.
+    //
+    // Filtry kategorii i miesiaca zostaja w stanie: one zawezaja widok
+    // i nie musza byc indeksowane osobno, a ich wlasne adresy tworzylyby
+    // setki stron z ta sama trescia w roznych kombinacjach.
+    const { nr: nrZAdresu } = useParams();
+    const nawiguj = useNavigate();
+    const zAdresu = Number.parseInt(nrZAdresu ?? '1', 10);
+    const strona = Number.isFinite(zAdresu) && zAdresu > 0 ? zAdresu : 1;
 
     const widoczne = blogs.filter((blog) => (
         (wybranyMiesiac === 'all' || blog.archiveMonth === wybranyMiesiac) &&
@@ -55,14 +67,12 @@ const BlogList = (props) => {
     // zawezeniu listy uzytkownik ladowalby w jej srodku.
     const zmienFiltr = (ustaw) => (wartosc) => {
         ustaw(wartosc);
-        setStrona(1);
+        if (strona !== 1) nawiguj('/porady/');
     };
 
-    const idzDoStrony = (nr) => {
-        if (nr < 1 || nr > stron) return;
-        setStrona(nr);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+    // Adres strony listy. Pierwsza to /porady/, bo dwa adresy z ta sama
+    // trescia bylyby duplikatem.
+    const adresStrony = (nr) => (nr <= 1 ? '/porady/' : `/porady/strona/${nr}/`);
 
     return (
         <section className="wpo-blog-pg-section section-padding">
@@ -78,7 +88,7 @@ const BlogList = (props) => {
                                         onClick={() => {
                                             setWybranyMiesiac('all');
                                             setWybranaKategoria('all');
-                                            setStrona(1);
+                                            if (strona !== 1) nawiguj('/porady/');
                                         }}
                                     >
                                         Pokaż wszystkie
@@ -117,14 +127,19 @@ const BlogList = (props) => {
                                     <nav aria-label="Strony wpisów">
                                         <ul className="pg-pagination">
                                             <li>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => idzDoStrony(biezaca - 1)}
-                                                    disabled={biezaca === 1}
-                                                    aria-label="Poprzednia strona"
-                                                >
-                                                    <i className="fi ti-angle-left"></i>
-                                                </button>
+                                                {biezaca === 1 ? (
+                                                    <span className="pg-nieczynne" aria-hidden="true">
+                                                        <i className="fi ti-angle-left"></i>
+                                                    </span>
+                                                ) : (
+                                                    <Link
+                                                        to={adresStrony(biezaca - 1)}
+                                                        onClick={ClickHandler}
+                                                        aria-label="Poprzednia strona"
+                                                    >
+                                                        <i className="fi ti-angle-left"></i>
+                                                    </Link>
+                                                )}
                                             </li>
                                             {numeryStron(biezaca, stron).map((nr) => (
                                                 typeof nr === 'string' ? (
@@ -133,26 +148,31 @@ const BlogList = (props) => {
                                                     </li>
                                                 ) : (
                                                     <li key={nr} className={nr === biezaca ? 'active' : undefined}>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => idzDoStrony(nr)}
+                                                        <Link
+                                                            to={adresStrony(nr)}
+                                                            onClick={ClickHandler}
                                                             aria-label={`Strona ${nr}`}
                                                             aria-current={nr === biezaca ? 'page' : undefined}
                                                         >
                                                             {nr}
-                                                        </button>
+                                                        </Link>
                                                     </li>
                                                 )
                                             ))}
                                             <li>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => idzDoStrony(biezaca + 1)}
-                                                    disabled={biezaca === stron}
-                                                    aria-label="Następna strona"
-                                                >
-                                                    <i className="fi ti-angle-right"></i>
-                                                </button>
+                                                {biezaca === stron ? (
+                                                    <span className="pg-nieczynne" aria-hidden="true">
+                                                        <i className="fi ti-angle-right"></i>
+                                                    </span>
+                                                ) : (
+                                                    <Link
+                                                        to={adresStrony(biezaca + 1)}
+                                                        onClick={ClickHandler}
+                                                        aria-label="Następna strona"
+                                                    >
+                                                        <i className="fi ti-angle-right"></i>
+                                                    </Link>
+                                                )}
                                             </li>
                                         </ul>
                                     </nav>

@@ -28,6 +28,7 @@ export const kanoniczny = (sciezka) => {
 // i przeszly kontrole redakcyjna: 120-158 znakow, tytul do 60 znakow,
 // bez myslnika (klient go nie chce), separator to srodkowa kropka.
 import { WPISY } from './wpisy.js';
+import { ileStron } from '../api/stronicowanie.js';
 
 const STRONY = {
     '/cennik': {
@@ -44,7 +45,7 @@ const STRONY = {
     },
     '/kontakt': {
         tytul: 'Kontakt · DGC Biuro Rachunkowe',
-        opis: 'Biuro rachunkowe DGC, ul. Brukowa 8 w Łodzi. Telefon 731 580 184 czynny od poniedziałku do piątku 8:00 do 16:00. Na maile odpowiadamy w dobę roboczą.',
+        opis: 'Biuro rachunkowe DGC, ul. Brukowa 8 w Łodzi. Telefon 731 580 184 czynny od poniedziałku do piątku, 8:00-16:00. Na maile odpowiadamy w dobę roboczą.',
     },
     '/o-nas': {
         tytul: 'O nas i zespół · DGC Biuro Rachunkowe',
@@ -183,7 +184,24 @@ const Z_WPISOW = Object.fromEntries(
     Object.entries(WPISY).map(([slug, m]) => [`/porady/${slug}`, m])
 );
 
-const WSZYSTKO = { ...Z_WPISOW, ...STRONY };
+// Kolejne strony listy porad. Musza miec wlasne adresy i wlasny HTML,
+// inaczej robot Google widzi na /porady/ tylko pierwsza piatke artykulow
+// i do reszty nie ma jak dojsc inaczej niz przez mape strony. Audyt na
+// zywej stronie pokazal mediane glebokosci klikniecia na poziomie 188.
+//
+// Strona pierwsza celowo NIE dostaje wlasnego adresu: jest nia /porady/.
+// Dwa adresy z ta sama trescia to duplikat.
+const LICZBA_STRON = ileStron(Object.keys(WPISY).length);
+
+const STRONY_LISTY = {};
+for (let nr = 2; nr <= LICZBA_STRON; nr++) {
+    STRONY_LISTY[`/porady/strona/${nr}`] = {
+        tytul: `Porady księgowe i podatkowe, strona ${nr} · DGC`,
+        opis: `Artykuły o księgowości, podatkach i kadrach, strona ${nr} z ${LICZBA_STRON}. Biuro rachunkowe DGC z Łodzi.`,
+    };
+}
+
+const WSZYSTKO = { ...Z_WPISOW, ...STRONY_LISTY, ...STRONY };
 
 // Trasy, ktore maja trafic do prerenderu i do mapy strony.
 export const WSZYSTKIE_TRASY = Object.keys(WSZYSTKO);

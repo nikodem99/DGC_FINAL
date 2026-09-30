@@ -485,7 +485,7 @@ if (strncmp($zrodlo, 'newsletter', 10) === 0) {
         . "Odpowiemy na nią w godzinach pracy biura, zwykle tego samego\n"
         . "albo następnego dnia roboczego.\n\n"
         . "Jeśli sprawa jest pilna, zadzwoń: 731 580 184\n"
-        . "(poniedziałek do piątku, 8:00 do 16:00).\n\n"
+        . "(poniedziałek-piątek, 8:00-16:00).\n\n"
         . "Pozdrawiamy\n"
         . "DGC Biuro Rachunkowe\n\n"
         . str_repeat('-', 56) . "\n"
@@ -528,7 +528,7 @@ if (strncmp($zrodlo, 'newsletter', 10) === 0) {
         . ' Odpowiemy na nią w godzinach pracy biura, zwykle tego samego albo następnego dnia roboczego.</p>'
         . '<p style="margin:0 0 24px;">Jeśli sprawa jest pilna, zadzwoń:'
         . ' <a href="tel:+48731580184" style="color:#b50b50;text-decoration:none;font-weight:bold;">731&nbsp;580&nbsp;184</a>'
-        . '<br><span style="color:rgba(13,68,68,0.7);font-size:14px;">poniedziałek do piątku, 8:00 do 16:00</span></p>'
+        . '<br><span style="color:rgba(13,68,68,0.7);font-size:14px;">poniedziałek-piątek, 8:00-16:00</span></p>'
         . '<p style="margin:0 0 4px;">Pozdrawiamy</p>'
         . '<p style="margin:0 0 24px;font-weight:bold;">DGC Biuro Rachunkowe</p>'
         . '</td></tr>'

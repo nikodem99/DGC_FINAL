@@ -76,6 +76,9 @@ const AllRoute = ({ sciezka }) => {
           <Route path="project" element={<ProjectPage/>} />
           <Route path="project-single/:slug" element={<ProjectSingle />} />
           <Route path='porady' element={<BlogPage/>} />
+          {/* Kolejne strony listy. Osobny adres zamiast stanu w JavaScripcie,
+              zeby robot mial po czym przejsc do starszych artykulow. */}
+          <Route path='porady/strona/:nr' element={<BlogPage/>} />
           <Route path='blog-left-sidebar' element={<BlogPageLeft />} />
           <Route path='blog-fullwidth' element={<BlogPageFullwidth />} />
           <Route path='porady/:slug' element={<BlogDetails />} />
