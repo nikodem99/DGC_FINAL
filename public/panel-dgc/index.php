@@ -225,10 +225,14 @@ function zapiszWpis(array $wpisy): array {
     $wpisy = $bezNiego;
 
     // Kopia poprzedniej wersji, zeby dalo sie cofnac zla zmiane.
+    // Katalog tworzymy sami: przy pierwszej edycji jeszcze go nie ma,
+    // a bez niego kopia nie powstawala po cichu i nie bylo do czego wracac.
     if ($slugStary !== '') {
         $stary = DANE . '/tresci/' . $slug . '.json';
         if (is_file($stary)) {
-            @copy($stary, DANE . '/kopie/' . $slug . '-' . date('Ymd-His') . '.json');
+            $katKopii = DANE . '/kopie';
+            if (!is_dir($katKopii)) @mkdir($katKopii, 0755, true);
+            @copy($stary, $katKopii . '/' . $slug . '-' . date('Ymd-His') . '.json');
         }
     }
 
