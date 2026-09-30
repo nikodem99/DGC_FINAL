@@ -119,7 +119,10 @@ for (const a of surowe) {
 // a dotychczasowe pietnascie ma stac na gorze jako najnowsze.
 nowe.sort((a, b) => (a.data < b.data ? 1 : a.data > b.data ? -1 : 0));
 
-const OBRAZKI = ['blogImg1', 'blogImg2', 'blogImg3', 'blogImg4', 'blogImg5', 'blogImg6'];
+// Jedna okladka dla wszystkich przeniesionych artykulow. Rotacja po
+// szesciu plikach szablonu nie mialaby sensu, bo to byly zaslepki
+// z wypisanym rozmiarem, a nie rozne zdjecia.
+const OBRAZKI = ['okladka'];
 
 const wpisy = nowe.map((w, i) => {
     const obr = OBRAZKI[i % OBRAZKI.length];
