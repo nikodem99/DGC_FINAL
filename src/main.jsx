@@ -3,6 +3,7 @@ import { Provider } from "react-redux";
 
 import App from "./App";
 import { store } from "./store";
+import { wczytaj, wczytajZiarno } from "./api/tresci.js";
 
 // Start w przegladarce. Import jest dynamiczny i warunkowy, bo ten sam plik
 // wykonuje sie takze w Node przy budowaniu (patrz prerender ponizej), a tam
@@ -24,6 +25,12 @@ if (typeof document !== 'undefined') {
     //
     // Funkcja asynchroniczna konczy wykonywanie modulu natychmiast, wiec
     // kawalek dostaje to, po co przyszedl, i petla sie rozplata.
+    // Tresc artykulu, ktora prerender wkleil do HTML-a. Musi trafic do
+    // pamieci ZANIM React cokolwiek narysuje, inaczej pierwsze rysowanie
+    // po stronie przegladarki bylo by puste i hydracja zglosilaby rozjazd
+    // wzgledem gotowego HTML-a.
+    wczytajZiarno();
+
     (async () => {
         const [{ createRoot }, { PersistGate }, { persistor }] = await Promise.all([
             import("react-dom/client"),
@@ -74,6 +81,26 @@ export async function prerender(data) {
     const m = metaDla(sciezka);
     const obrazek = `${DOMENA}/og-dgc.jpg`;
 
+    // Strona artykulu: tresc czytamy z dysku i wkladamy do pamieci PRZED
+    // renderowaniem, bo renderToString jest synchroniczne i nie zaczekaloby
+    // na zadne pobieranie. Dzieki temu gotowy HTML niesie pelny tekst.
+    let ziarno = null;
+    const dopasowanie = sciezka.match(/^\/porady\/([^/]+)\/?$/);
+    if (dopasowanie) {
+        const slugWpisu = decodeURIComponent(dopasowanie[1]);
+        // Sciezke skladamy sami. Modul node:path po zbundlowaniu gubi
+        // metode join (namespace trafia tu owiniety), a zwykly lancuch
+        // dziala tak samo i nie ma czego zgubic.
+        try {
+            const bloki = await wczytaj(slugWpisu);
+            ziarno = { slug: slugWpisu, bloki };
+        } catch (e) {
+            // Brak tresci to blad, a nie stan. Mowimy o tym glosno przy
+            // budowaniu, zeby pusty artykul nie przeszedl niezauwazony.
+            console.warn(`[prerender] brak tresci dla /porady/${slugWpisu}: ${e.message}`);
+        }
+    }
+
     const html = renderToString(
         <Provider store={store}>
             <App sciezka={sciezka} />
@@ -100,6 +127,16 @@ export async function prerender(data) {
 
     if (m.noindex) {
         elements.add({ type: 'meta', props: { name: 'robots', content: 'noindex, follow' } });
+    }
+
+    // Ziarno tresci dla przegladarki. "<" uciekamy, bo ciag "</script>"
+    // w srodku danych zamknalby znacznik i rozsypal strone.
+    if (ziarno) {
+        elements.add({
+            type: 'script',
+            props: { type: 'application/json', id: 'dgc-tresc', 'data-slug': ziarno.slug },
+            children: JSON.stringify(ziarno.bloki).replace(/</g, '\\u003c'),
+        });
     }
 
     // Dane strukturalne tylko na stronie glownej i na kontakcie — powtarzanie

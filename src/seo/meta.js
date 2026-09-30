@@ -27,6 +27,8 @@ export const kanoniczny = (sciezka) => {
 // Tytul i opis kazdej podstrony. Opisy powstaly z tresci tych podstron
 // i przeszly kontrole redakcyjna: 120-158 znakow, tytul do 60 znakow,
 // bez myslnika (klient go nie chce), separator to srodkowa kropka.
+import { WPISY } from './wpisy.js';
+
 const STRONY = {
     '/cennik': {
         tytul: 'Cennik usług księgowych · DGC Biuro Rachunkowe',
@@ -171,8 +173,20 @@ const STRONY = {
     },
 };
 
+// Artykuly przeniesione ze starej strony. Tytuly i opisy sa generowane
+// ze zrodla wpisow (scripts/przenies-artykuly.mjs), bo jest ich 376
+// i reczne utrzymywanie takiej listy skonczyloby sie rozjazdem.
+//
+// Wpisy recznie napisane wyzej MAJA PIERWSZENSTWO: to dla nich ktos
+// dobieral tytul pod wyszukiwarke i tego nie nadpisujemy automatem.
+const Z_WPISOW = Object.fromEntries(
+    Object.entries(WPISY).map(([slug, m]) => [`/porady/${slug}`, m])
+);
+
+const WSZYSTKO = { ...Z_WPISOW, ...STRONY };
+
 // Trasy, ktore maja trafic do prerenderu i do mapy strony.
-export const WSZYSTKIE_TRASY = Object.keys(STRONY);
+export const WSZYSTKIE_TRASY = Object.keys(WSZYSTKO);
 
 // Adresy, ktore istnieja, ale nie maja byc indeksowane.
 export const NOINDEX = ['/404'];
@@ -186,7 +200,7 @@ const DOMYSLNY = {
 // od przegladarki, zeby dalo sie ja wolac takze w Node przy budowaniu.
 export const metaDla = (sciezka) => {
     const czysta = (sciezka || '/').replace(/\/+$/, '') || '/';
-    const wpis = STRONY[czysta] || DOMYSLNY;
+    const wpis = WSZYSTKO[czysta] || DOMYSLNY;
     return {
         tytul: wpis.tytul,
         opis: wpis.opis,

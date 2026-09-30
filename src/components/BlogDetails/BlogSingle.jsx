@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom'
 import blogs from '../../api/blogs.js';
-import tresci from '../../api/blogContent.js';
+import { zPamieci, wczytaj } from '../../api/tresci.js';
 import BlogSidebar from '../BlogSidebar/BlogSidebar.jsx'
 
 // Strona pojedynczego wpisu.
@@ -13,7 +13,8 @@ import BlogSidebar from '../BlogSidebar/BlogSidebar.jsx'
 // ktory nic nie robil, oraz "Previous / Next Post" z lorem ipsum zamiast
 // tytulow. Nic z tego nie zostalo.
 //
-// Tresc leci z blogContent.js, a sasiednie wpisy z kolejnosci w blogs.js.
+// Tresc leci z api/tresci.js, a sasiednie wpisy z kolejnosci w blogs.js.
+// Tresci NIE ma w paczce JavaScriptu, powod opisany w api/tresci.js.
 
 const ClickHandler = () => {
     window.scrollTo(10, 0);
@@ -31,7 +32,7 @@ const Tekst = ({ x }) => {
     );
 };
 
-// Jeden blok tresci. Typy opisane w blogContent.js.
+// Jeden blok tresci. Typy opisane w api/tresci.js.
 const Blok = ({ blok }) => {
     if (blok.t === 'h') return <h3>{blok.x}</h3>;
     if (blok.t === 'p') return <p><Tekst x={blok.x} /></p>;
@@ -85,6 +86,26 @@ const BlogSingle = (props) => {
     const { slug } = useParams()
     const wpis = blogs.find(item => item.slug === slug)
 
+    // Haki musza stac przed jakimkolwiek wyjsciem z komponentu, inaczej
+    // przy wejsciu na nieistniejacy adres React zobaczy inna liczbe hakow
+    // niz przy poprzednim rysowaniu i przerwie renderowanie.
+    //
+    // Przy pierwszym wejsciu tresc jest juz w pamieci, bo prerender wstawil
+    // ja do HTML-a. Zapytanie leci dopiero przy przeskoku na inny artykul
+    // wewnatrz serwisu.
+    const [bloki, setBloki] = useState(() => zPamieci(slug) ?? null);
+
+    useEffect(() => {
+        const gotowe = zPamieci(slug);
+        if (gotowe) { setBloki(gotowe); return; }
+        let aktualny = true;
+        setBloki(null);
+        wczytaj(slug)
+            .then((b) => { if (aktualny) setBloki(b); })
+            .catch(() => { if (aktualny) setBloki([]); });
+        return () => { aktualny = false; };
+    }, [slug]);
+
     // Wejscie na nieistniejacy adres nie moze wywalic calej strony bialym
     // ekranem — szablon czytal tu wprost .blogSingleImg z undefined.
     if (!wpis) {
@@ -104,7 +125,6 @@ const BlogSingle = (props) => {
         );
     }
 
-    const bloki = tresci[wpis.slug] ?? [];
     const nr = blogs.findIndex(item => item.slug === slug);
     const poprzedni = blogs[nr - 1];
     const nastepny = blogs[nr + 1];
@@ -126,9 +146,11 @@ const BlogSingle = (props) => {
                                         <li><i className="fi flaticon-tag"></i> {wpis.tag}</li>
                                     </ul>
                                 </div>
-                                <h2>{wpis.title2}</h2>
+                                <h2>{wpis.title2 ?? wpis.title}</h2>
 
-                                {bloki.map((blok, i) => <Blok blok={blok} key={i} />)}
+                                {bloki === null
+                                    ? <p className="wpis_ladowanie">Wczytywanie tresci artykulu…</p>
+                                    : bloki.map((blok, i) => <Blok blok={blok} key={i} />)}
                             </article>
 
                             {(poprzedni || nastepny) && (
@@ -137,7 +159,7 @@ const BlogSingle = (props) => {
                                         {poprzedni && (
                                             <Link onClick={ClickHandler} to={`/porady/${poprzedni.slug}/`}>
                                                 <span className="post-control-link">Poprzedni wpis</span>
-                                                <span className="post-name">{poprzedni.title2}</span>
+                                                <span className="post-name">{poprzedni.title2 ?? poprzedni.title}</span>
                                             </Link>
                                         )}
                                     </div>
@@ -145,7 +167,7 @@ const BlogSingle = (props) => {
                                         {nastepny && (
                                             <Link onClick={ClickHandler} to={`/porady/${nastepny.slug}/`}>
                                                 <span className="post-control-link">Następny wpis</span>
-                                                <span className="post-name">{nastepny.title2}</span>
+                                                <span className="post-name">{nastepny.title2 ?? nastepny.title}</span>
                                             </Link>
                                         )}
                                     </div>

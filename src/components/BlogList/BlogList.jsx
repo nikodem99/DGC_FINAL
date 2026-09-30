@@ -6,6 +6,30 @@ import blogs from '../../api/blogs.js'
 // Ile wpisow na jednej stronie. Przy pietnastu artykulach daje trzy strony.
 const NA_STRONE = 5;
 
+// Ile numerow stron pokazujemy wokol biezacej. Przy 376 wpisach jest 76
+// stron i wypisanie wszystkich dawalo scianę cyfr na cala szerokosc,
+// nie do uzycia ani myszka, ani palcem. Pokazujemy pierwsza, ostatnia,
+// biezaca i po dwie sasiednie, a dziury zaznaczamy wielokropkiem.
+const WOKOL = 2;
+
+const numeryStron = (biezaca, stron) => {
+    if (stron <= 7) return Array.from({ length: stron }, (_, i) => i + 1);
+    const zbior = new Set([1, stron, biezaca]);
+    for (let i = 1; i <= WOKOL; i++) {
+        if (biezaca - i > 1) zbior.add(biezaca - i);
+        if (biezaca + i < stron) zbior.add(biezaca + i);
+    }
+    const kolejno = [...zbior].sort((a, b) => a - b);
+    const wynik = [];
+    let poprzedni = 0;
+    for (const nr of kolejno) {
+        if (poprzedni && nr - poprzedni > 1) wynik.push(`przerwa-${nr}`);
+        wynik.push(nr);
+        poprzedni = nr;
+    }
+    return wynik;
+};
+
 const ClickHandler = () => {
     window.scrollTo(10, 0);
 }
@@ -78,7 +102,7 @@ const BlogList = (props) => {
                                         </ul>
                                     </div>
                                     <div className="entry-details">
-                                        <h3><Link onClick={ClickHandler} to={`/porady/${blog.slug}/`} className="karta_klik">{blog.title2}</Link></h3>
+                                        <h3><Link onClick={ClickHandler} to={`/porady/${blog.slug}/`} className="karta_klik">{blog.title2 ?? blog.title}</Link></h3>
                                         <p>{blog.description}</p>
                                         <Link onClick={ClickHandler} to={`/porady/${blog.slug}/`} className="read-more">Czytaj dalej</Link>
                                     </div>
@@ -102,17 +126,23 @@ const BlogList = (props) => {
                                                     <i className="fi ti-angle-left"></i>
                                                 </button>
                                             </li>
-                                            {Array.from({ length: stron }, (_, i) => i + 1).map((nr) => (
-                                                <li key={nr} className={nr === biezaca ? 'active' : undefined}>
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => idzDoStrony(nr)}
-                                                        aria-label={`Strona ${nr}`}
-                                                        aria-current={nr === biezaca ? 'page' : undefined}
-                                                    >
-                                                        {nr}
-                                                    </button>
-                                                </li>
+                                            {numeryStron(biezaca, stron).map((nr) => (
+                                                typeof nr === 'string' ? (
+                                                    <li key={nr} className="pg-przerwa" aria-hidden="true">
+                                                        <span>…</span>
+                                                    </li>
+                                                ) : (
+                                                    <li key={nr} className={nr === biezaca ? 'active' : undefined}>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => idzDoStrony(nr)}
+                                                            aria-label={`Strona ${nr}`}
+                                                            aria-current={nr === biezaca ? 'page' : undefined}
+                                                        >
+                                                            {nr}
+                                                        </button>
+                                                    </li>
+                                                )
                                             ))}
                                             <li>
                                                 <button
