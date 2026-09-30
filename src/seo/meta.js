@@ -91,6 +91,10 @@ const STRONY = {
         tytul: 'Usługi kadrowo-płacowe · outsourcing kadr i płac · DGC',
         opis: 'Outsourcing kadr i płac dla firm z Łodzi i całej Polski, także online. ZUS, wynagrodzenia, umowy, PFRON i GUS oraz indywidualna wycena obsługi.',
     },
+    '/porady/salon-fryzjerski-kosmetyczny-podatki': {
+        tytul: 'Salon fryzjerski i kosmetyczny: podatki i kasa · DGC',
+        opis: 'Kasa fiskalna od pierwszej wizyty bez limitu obrotu, 8 i 23 procent VAT przy jednej wizycie, ryczałt 8,5 i 3 procent oraz sprzedaż kosmetyków obok usługi.',
+    },
     '/porady/cit-estonski-efektywna-stopa': {
         tytul: 'CIT estoński: efektywna stopa podatku · DGC',
         opis: 'Skąd biorą się efektywne stawki około 20 i 25 procent, jak działa odliczenie 90 i 70 procent w PIT wspólnika i kiedy realny podatek jest wyższy.',

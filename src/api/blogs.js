@@ -32,6 +32,22 @@ import zamkniecieChecklista from "../images/blog/zamkniecie-roku-checklista.jpg"
 
 const blogs = [
     {
+        id: '19',
+        title: 'Salon fryzjerski i kosmetyczny – podatki, kasa i sprzedaż kosmetyków',
+        title2: 'Salon fryzjerski i kosmetyczny – podatki, kasa i sprzedaż kosmetyków',
+        tag: 'Podatki',
+        slug: 'salon-fryzjerski-kosmetyczny-podatki',
+        screens: okladka,
+        description: 'W salonie fryzjerskim i kosmetycznym kasa fiskalna jest obowiązkowa od pierwszej wizyty, bez limitu obrotu. Do tego dwie stawki VAT przy jednej wizycie i inne rozliczenie usługi niż sprzedaży kosmetyku z półki.',
+        author: 'DGC Biuro Rachunkowe',
+        create_at: '30 września 2026',
+        archiveMonth: '2026-09',
+        archiveLabel: 'Wrzesień 2026',
+        blogSingleImg: okladka,
+        blClass: 'format-standard-image',
+        animation: '1200',
+    },
+    {
         id: '18',
         title: 'Gastronomia – stawki VAT na miejscu i na wynos',
         title2: 'Gastronomia – stawki VAT na miejscu i na wynos',

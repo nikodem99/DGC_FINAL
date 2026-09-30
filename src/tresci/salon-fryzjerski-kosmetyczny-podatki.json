@@ -1,0 +1,43 @@
+[
+{"t":"p","x":"Salon fryzjerski i gabinet kosmetyczny wyglądają w rozliczeniach podobnie, ale mają kilka pułapek, które w innych branżach nie występują. Kasa fiskalna jest obowiązkowa od pierwszej wizyty, stawka VAT zależy od tego, co dokładnie robisz klientowi, a sprzedaż kosmetyków z półki rozlicza się inaczej niż sama usługa. Poniżej to, co trzeba ustawić na starcie i czego pilnować później."},
+
+{"t":"uwaga","h":"Najważniejsze na początek","x":"W salonie fryzjerskim i kosmetycznym **kasa fiskalna jest obowiązkowa od pierwszej sprzedaży**. Nie ma tu limitu 20 000 zł obrotu, który zwalnia w innych branżach. Nie ma też znaczenia, czy jesteś podatnikiem VAT, czy korzystasz ze zwolnienia."},
+
+{"t":"h","x":"Kasa fiskalna: pierwsza rzecz do załatwienia"},
+{"t":"p","x":"Usługi fryzjerskie, kosmetyczne i kosmetologiczne są na liście, przy której zwolnienie z ewidencjonowania nie przysługuje w ogóle. Oznacza to, że **kasa musi stać w salonie, zanim obsłużysz pierwszego klienta**, nawet jeśli planujesz obrót rzędu kilku tysięcy złotych rocznie."},
+{"t":"p","x":"Kasa musi być urządzeniem online, czyli takim, które łączy się z Centralnym Repozytorium Kas i samo przesyła dane. Starsze kasy z papierową albo elektroniczną kopią nie spełniają już tego wymogu w tej branży."},
+{"t":"p","x":"Przy zakupie pierwszej kasy przysługuje ulga: **90 procent ceny netto, nie więcej niż 700 zł na jedno urządzenie**. Warunkiem jest rozpoczęcie ewidencjonowania w obowiązującym terminie i zgłoszenie kasy do urzędu skarbowego. O ulgę występuje się w deklaracji VAT, a podatnik zwolniony z VAT składa osobny wniosek."},
+
+{"t":"h","x":"VAT: usługa to nie to samo co kosmetyk z półki"},
+{"t":"p","x":"To jest miejsce, w którym najczęściej robi się bałagan. **Usługa i towar mają różne stawki**, a w salonie sprzedaje się jedno i drugie, często przy tej samej wizycie."},
+{"t":"tabela","h":["Co sprzedajesz","Stawka VAT"],"x":[
+["Strzyżenie, farbowanie, modelowanie i inne usługi fryzjerskie","8%"],
+["Zabiegi pielęgnacyjne twarzy i ciała, manicure, pedicure, stylizacja brwi i rzęs, depilacja","8%"],
+["Tatuaż, piercing, solarium, masaż relaksacyjny, medycyna estetyczna","23%"],
+["Szampon, odżywka, krem i inne kosmetyki sprzedane klientowi","23%"]
+]},
+{"t":"uwaga","h":"Nie cała branża beauty ma 8 procent","x":"Obniżona stawka na część usług kosmetycznych obowiązuje **od 1 kwietnia 2024 roku** i dotyczy wyłącznie zabiegów wymienionych w przepisach. Tatuaż, piercing, solarium, masaże i zabiegi z zakresu medycyny estetycznej zostały przy 23 procentach. Jeśli salon robi jedno i drugie, na paragonie muszą pojawić się dwie stawki."},
+{"t":"p","x":"Osobna sprawa to **zwolnienie podmiotowe z VAT do 200 000 zł** rocznego obrotu. Salon może z niego korzystać, bo usługi fryzjerskie i kosmetyczne nie są z tego zwolnienia wyłączone. Trzeba tylko pamiętać, że **zwolnienie z VAT nie zwalnia z kasy fiskalnej** — to są dwie niezależne sprawy i mylenie ich kończy się karą."},
+
+{"t":"h","x":"Ryczałt czy zasady ogólne"},
+{"t":"p","x":"Przy usługach fryzjerskich i kosmetycznych ryczałt od przychodów ewidencjonowanych wynosi **8,5 procent**. Przy sprzedaży towarów handlowych, czyli kosmetyków kupionych po to, żeby je odsprzedać, stawka to **3 procent**."},
+{"t":"przyklad","h":"Przykład z praktyki","x":"Salon w miesiącu wykonał usługi za 18 000 zł i sprzedał kosmetyki za 2 000 zł. Na ryczałcie podatek liczy się osobno: 8,5 procent od 18 000 zł i 3 procent od 2 000 zł. Wrzucenie całości do jednej stawki zawyża albo zaniża podatek, a przy kontroli jest to pierwsza rzecz, którą widać w ewidencji."},
+{"t":"p","x":"Stąd praktyczny wniosek: **ewidencja przychodów musi rozdzielać usługi od towarów**. To samo dotyczy raportów z kasy fiskalnej, dlatego warto od początku poprawnie zaprogramować grupy towarowe w urządzeniu, zamiast prostować to później."},
+{"t":"p","x":"Ryczałt nie zawsze wygrywa. Salon z dużymi kosztami, na przykład po remoncie lokalu, przy zakupie foteli, myjek czy urządzeń kosmetycznych, może wyjść lepiej na zasadach ogólnych albo na podatku liniowym, bo tam koszty pomniejszają podstawę opodatkowania. Przy ryczałcie koszty nie mają znaczenia."},
+
+{"t":"h","x":"Sprzedaż kosmetyków obok usługi"},
+{"t":"p","x":"Kosmetyk odsprzedany klientowi to **towar handlowy**, a nie element usługi. Trzeba go ująć w ewidencji zakupów, sprzedać z właściwą stawką VAT i wykazać osobno w rozliczeniu. Inaczej wygląda sytuacja, gdy preparat zostaje zużyty podczas zabiegu: wtedy jest kosztem wykonania usługi i nie ma osobnej sprzedaży."},
+{"t":"p","x":"Granica przebiega w momencie wydania. Farba użyta do koloryzacji jest częścią usługi. Ta sama farba sprzedana klientce do domu jest sprzedażą towaru z 23 procentami VAT."},
+
+{"t":"h","x":"Co ustawić na starcie, żeby nie prostować później"},
+{"t":"ul","x":[
+"Kasa online kupiona i zgłoszona **przed pierwszą wizytą**, z poprawnie zaprogramowanymi grupami towarowymi",
+"Rozdzielone w ewidencji przychody z usług i ze sprzedaży kosmetyków",
+"Świadoma decyzja o formie opodatkowania, policzona na liczbach, a nie wybrana odruchowo",
+"Sprawdzone, czy któraś z wykonywanych usług nie wypada poza obniżoną stawkę VAT",
+"Pilnowany limit 200 000 zł, jeśli korzystasz ze zwolnienia podmiotowego z VAT"
+]},
+{"t":"p","x":"Jeśli prowadzisz salon albo dopiero go otwierasz i chcesz mieć to poukładane od pierwszego miesiąca, **napisz do nas**. Sprawdzimy, która forma opodatkowania wychodzi u Ciebie taniej, i ustawimy ewidencję tak, żeby usługi i kosmetyki nie mieszały się ze sobą."},
+
+{"t":"zrodlo","x":"Ustawa z 11 marca 2004 r. o podatku od towarów i usług (załącznik nr 3), rozporządzenie Ministra Finansów w sprawie zwolnień z obowiązku prowadzenia ewidencji przy zastosowaniu kas rejestrujących, ustawa z 20 listopada 1998 r. o zryczałtowanym podatku dochodowym od niektórych przychodów osiąganych przez osoby fizyczne. Stan na wrzesień 2026 r."}
+]
