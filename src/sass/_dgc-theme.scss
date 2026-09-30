@@ -589,6 +589,26 @@ select.error,
   padding-top: 0;
 }
 
+/* Zespol konczy sie podpisami pod avatarami, a "W mediach" zaczyna sie
+   naglowkiem sekcji. Obie sekcje maja po 120px z section-padding, wiec
+   styk wychodzil 249px, przy 100-140px na kazdym innym styku tej
+   podstrony. To jest ta dziura, ktora widac na desktopie.
+   Zmierzone przy 1440px: 130px z dolu zespolu + 120px z gory "W mediach".
+   Po zmianie 120px, czyli tyle co reszta.
+
+   Tylko desktop: ponizej 992px rytm ustawia src/sass/_mobile.scss i tam
+   ten styk ma juz swoje 80px. Selektor sasiedztwa, zeby nie ruszyc tych
+   sekcji tam, gdzie stoja obok czegos innego. */
+@media (min-width: 992px) {
+  .team_section_s2:has(+ .wmediach_section) {
+    padding-bottom: 50px;
+  }
+
+  .team_section_s2 + .wmediach_section {
+    padding-top: 60px;
+  }
+}
+
 .opinie_cta {
   display: flex;
   align-items: center;
