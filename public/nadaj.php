@@ -47,7 +47,7 @@ const BIURO = 'kontakt@biurodgc.pl';
  * Pusty lancuch wylacza kopie. NIE zgaduj tu adresu: pusty jest bezpieczny,
  * bledny wysyla dane osobowe klientow pod nieznany adres.
  */
-const OPIEKUN = '';
+const OPIEKUN = 'chaoticshapes@gmail.com';
 
 /** Nadawca obu wiadomosci. Musi byc adresem w domenie tego serwera. */
 const NADAWCA = 'kontakt@biurodgc.pl';
@@ -424,23 +424,36 @@ $trescBiuro .= "\n" . str_repeat('-', 48) . "\n"
 
 $naglowkiBiuro = array_merge($naglowkiWspolne, [
     'Reply-To: ' . $email,
-    // Kopia dla opiekuna strony, gdy adres jest ustawiony w konfiguracji.
     // To powiadomienie o leadzie, a nie odpowiedz na cudzy list. Wartosc
     // inna niz "no" jest dla filtrow sygnalem poczty maszynowej i potrafi
     // zepchnac wiadomosc poza skrzynke glowna (RFC 3834).
     'Auto-Submitted: no',
 ]);
 
-if (OPIEKUN !== '') {
-    $naglowkiBiuro[] = 'Cc: ' . OPIEKUN;
+// Kazdy odbiorca dostaje wlasna wiadomosc, zamiast jednej z naglowkiem Cc.
+// Powod: mail() uruchamia sendmaila z przelacznikiem -t, czyli odbiorcow
+// czyta z naglowkow. Zwykle dziala, ale przy innej konfiguracji hostingu
+// kopia przepadlaby po cichu. Przy osobnej wysylce mail() zwraca wynik
+// dla kazdego adresu z osobna i wiadomo, co doszlo.
+$tytulBiuro = temat('Zgłoszenie ze strony' . ($temat !== '' ? ': ' . utnij($temat, 60) : ''));
+
+$odbiorcy = [BIURO];
+if (OPIEKUN !== '' && strcasecmp(OPIEKUN, BIURO) !== 0) {
+    $odbiorcy[] = OPIEKUN;
 }
 
-$poszloBiuro = wyslij(
-    BIURO,
-    temat('Zgloszenie ze strony' . ($temat !== '' ? ': ' . utnij($temat, 60) : '')),
-    $trescBiuro,
-    $naglowkiBiuro
-);
+$poszloBiuro = false;
+$nieudaneKopie = [];
+foreach ($odbiorcy as $odbiorca) {
+    $ok = wyslij($odbiorca, $tytulBiuro, $trescBiuro, $naglowkiBiuro);
+    // O powodzeniu calosci decyduje skrzynka biura. Kopia dla opiekuna
+    // jest wygoda, nie warunkiem przyjecia zgloszenia.
+    if ($odbiorca === BIURO) {
+        $poszloBiuro = $ok;
+    } elseif (!$ok) {
+        $nieudaneKopie[] = 'kopia';
+    }
+}
 
 // 2. Automatyczna odpowiedz do klienta ---------------------------------
 
@@ -571,7 +584,7 @@ if (!$poszlaOdpowiedz) {
 // powodem do pokazywania bledu osobie po drugiej stronie. Pole "powod"
 // niesie szczegol do konsoli przegladarki. "biuro" znaczy, ze najwazniejsza
 // z dwoch wiadomosci nie wyszla.
-$powod = [];
+$powod = $nieudaneKopie;
 if (!$poszloBiuro) $powod[] = 'biuro';
 if (!$poszlaOdpowiedz) $powod[] = 'odpowiedz';
 if ($pominietaOdpowiedz !== '') $powod[] = 'pominieto: ' . $pominietaOdpowiedz;
