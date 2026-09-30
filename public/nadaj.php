@@ -216,11 +216,11 @@ $wiadomosc = poleWielolinijkowe('wiadomosc');
 $dodatkowe = [];
 foreach ([
     'formaPrawna'       => 'Forma prawna',
-    'dokumenty'         => 'Dokumentow miesiecznie',
+    'dokumenty'         => 'Dokumentów miesięcznie',
     'dataKonsultacji'   => 'Data konsultacji',
-    'przedzial'         => 'Przedzial godzin',
+    'przedzial'         => 'Przedział godzin',
     'formaKonsultacji'  => 'Forma konsultacji',
-    'formaDzialalnosci' => 'Forma dzialalnosci',
+    'formaDzialalnosci' => 'Forma działalności',
 ] as $kluczPola => $etykieta) {
     $v = pole($kluczPola);
     if ($v !== '') $dodatkowe[$etykieta] = $v;
@@ -394,9 +394,9 @@ $naglowkiWspolne = [
 
 // 1. Powiadomienie do biura -------------------------------------------
 
-$trescBiuro = "Nowe zgloszenie ze strony biurodgc.pl\n"
+$trescBiuro = "Nowe zgłoszenie ze strony biurodgc.pl\n"
     . str_repeat('-', 48) . "\n\n"
-    . ($imie !== ''    ? "Imie i nazwisko: $imie\n" : '')
+    . ($imie !== ''    ? "Imię i nazwisko: $imie\n" : '')
     . "E-mail: $email\n"
     . ($telefon !== '' ? "Telefon: $telefon\n" : '')
     . ($firma !== ''   ? "Firma: $firma\n" : '')
@@ -409,7 +409,7 @@ foreach ($dodatkowe as $etykieta => $v) {
 if ($wiadomosc !== '') {
     // Wciecie, zeby tresc od uzytkownika nie mogla udawac kolejnej
     // linii naglowkowej tego podsumowania.
-    $trescBiuro .= "\nWiadomosc:\n  " . str_replace("\n", "\n  ", $wiadomosc) . "\n";
+    $trescBiuro .= "\nWiadomość:\n  " . str_replace("\n", "\n  ", $wiadomosc) . "\n";
 }
 
 if ($zgoda !== '') {
@@ -420,7 +420,7 @@ $trescBiuro .= "\n" . str_repeat('-', 48) . "\n"
     . ($zrodlo !== '' ? "Formularz: $zrodlo\n" : '')
     . ($strona !== '' ? "Podstrona: $strona\n" : '')
     . 'Data: ' . date('Y-m-d H:i:s') . "\n\n"
-    . "Odpowiadajac na tego maila piszesz prosto do klienta.\n";
+    . "Odpowiadając na tego maila piszesz prosto do klienta.\n";
 
 $naglowkiBiuro = array_merge($naglowkiWspolne, [
     'Reply-To: ' . $email,
