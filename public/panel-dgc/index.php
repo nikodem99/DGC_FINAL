@@ -196,6 +196,12 @@ function zapiszWpis(array $wpisy): array {
         }
     }
 
+    // Zdjecie: nowe wgrane, albo dotychczasowe, albo okladka firmowa.
+    $bladZdjecia = null;
+    $wgrane = isset($_FILES['zdjecie']) ? zapiszObrazek($_FILES['zdjecie'], $bladZdjecia) : null;
+    if ($bladZdjecia !== null) return [$bladZdjecia, '', $wpisy];
+    $obrazek = $wgrane ?: ((string)($_POST['obrazek_biezacy'] ?? '') ?: domyslnaOkladka($wpisy));
+
     $slug = $slugStary !== '' ? $slugStary : naSlug($tytul);
     if ($slug === '') return ['Z tego tytułu nie da się zrobić adresu. Dodaj w nim litery.', '', $wpisy];
 
@@ -215,7 +221,7 @@ function zapiszWpis(array $wpisy): array {
         'create_at' => "$dzien " . MIESIACE[$mies] . " $rok",
         'archiveMonth' => sprintf('%04d-%02d', $rok, $mies),
         'archiveLabel' => MIESIACE_ET[$mies] . " $rok",
-        'obrazek' => (string)($_POST['obrazek'] ?? '') ?: domyslnaOkladka($wpisy),
+        'obrazek' => $obrazek,
     ];
 
     // Podmiana albo dopisanie, potem sortowanie od najnowszego.
@@ -384,10 +390,10 @@ function widokFormularza(?array $wpis, string $tresc, string $blad): void {
     if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
     echo '<h1>' . ($nowy ? 'Nowy artykuł' : 'Edycja artykułu') . '</h1>';
 
-    echo '<form method="post"><input type="hidden" name="co" value="zapisz">';
+    echo '<form method="post" enctype="multipart/form-data"><input type="hidden" name="co" value="zapisz">';
     echo '<input type="hidden" name="token" value="' . h(token()) . '">';
     echo '<input type="hidden" name="slug_stary" value="' . h($wpis['slug'] ?? '') . '">';
-    if (!$nowy) echo '<input type="hidden" name="obrazek" value="' . h($wpis['obrazek'] ?? '') . '">';
+    echo '<input type="hidden" name="obrazek_biezacy" value="' . h($wpis['obrazek'] ?? '') . '">';
 
     echo '<label for="tytul">Tytuł</label>';
     echo '<input id="tytul" type="text" name="tytul" maxlength="160" required value="' . h($wpis['title'] ?? '') . '">';
@@ -425,6 +431,17 @@ function widokFormularza(?array $wpis, string $tresc, string $blad): void {
         . '<code>**tekst**</code> pogrubia w dowolnym miejscu.'
         . '</div>';
     echo '<textarea id="tresc" name="tresc" required>' . h($tresc) . '</textarea>';
+
+    echo '<label for="zdjecie">Zdjęcie artykułu</label>';
+    $biezace = $wpis['obrazek'] ?? '';
+    if ($biezace !== '') {
+        echo '<p class="male" style="margin:-2px 0 8px">Teraz jest ustawione to zdjęcie. Zostanie, jeśli nie wybierzesz nowego.</p>';
+        echo '<img src="' . h($biezace) . '" alt="" style="max-width:280px;border-radius:8px;border:1px solid var(--linia);display:block;margin-bottom:10px">';
+    } else {
+        echo '<p class="male" style="margin:-2px 0 8px">Jeśli nie wybierzesz zdjęcia, artykuł dostanie okładkę z logo DGC.</p>';
+    }
+    echo '<input id="zdjecie" type="file" name="zdjecie" accept="image/jpeg,image/png,image/webp">';
+    echo '<p class="male">JPG, PNG albo WEBP, do 5 MB. Najlepiej poziome, mniej więcej dwa razy szersze niż wyższe. Większe zdjęcia zmniejszamy automatycznie.</p>';
 
     echo '<p style="margin-top:22px"><button class="przycisk akcent" type="submit">Zapisz i opublikuj</button> '
         . '<a class="przycisk lekki" href="?">Anuluj</a></p>';

@@ -1,0 +1,7 @@
+# Katalog na zdjecia wgrane przez panel. Nic poza obrazkami nie ma prawa
+# stad wyjsc. Blokada PHP z glownego .htaccess dziala tu niezaleznie,
+# to jest druga warstwa, nie jedyna.
+<FilesMatch "\.(php|phtml|phar|php[0-9]|sh|pl|cgi|html?|js)$">
+  Require all denied
+</FilesMatch>
+Options -Indexes -ExecCGI

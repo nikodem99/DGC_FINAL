@@ -18,6 +18,20 @@ declare(strict_types=1);
  * typ bloku, trzeba go dopisac takze tutaj.
  */
 
+// Funkcje wprowadzone w PHP 8.0. Hosting prawdopodobnie ma nowsza wersje,
+// ale gdyby kiedys zjechal na 7.4, panel ma dzialac dalej, a nie wywalac
+// sie bledem o nieznanej funkcji przy pierwszym zapisie.
+if (!function_exists('str_starts_with')) {
+    function str_starts_with(string $h, string $i): bool {
+        return $i === '' || strncmp($h, $i, strlen($i)) === 0;
+    }
+}
+if (!function_exists('str_contains')) {
+    function str_contains(string $h, string $i): bool {
+        return $i === '' || strpos($h, $i) !== false;
+    }
+}
+
 // --- sciezki ------------------------------------------------------------
 // Wszystko liczone od katalogu panelu, zeby dalo sie go nazwac dowolnie.
 
@@ -477,4 +491,105 @@ function odswiezMape(array $wpisy): bool {
     $xml .= "</urlset>\n";
 
     return zapiszAtomowo($plik, $xml);
+}
+
+// --- wgrywanie zdjec ----------------------------------------------------
+
+const MAX_OBRAZEK = 5 * 1024 * 1024;
+const DOZWOLONE_TYPY = [IMAGETYPE_JPEG => 'jpg', IMAGETYPE_PNG => 'png', IMAGETYPE_WEBP => 'webp'];
+
+/**
+ * Przyjmuje wgrane zdjecie i zwraca jego adres, albo null przy bledzie.
+ *
+ * O typie pliku decyduje JEGO ZAWARTOSC (getimagesize), a nie rozszerzenie
+ * ani naglowek przyslany przez przegladarke — oba da sie podrobic w minute.
+ * Nazwa pliku jest losowa, zeby nie dalo sie nadpisac cudzego zdjecia ani
+ * przemycic nazwy ze sciezka w srodku.
+ *
+ * Dodatkowa warstwa, niezalezna od tego kodu: .htaccess serwisu odmawia
+ * uruchomienia PHP wszedzie poza katalogiem panelu, wiec plik .php wgrany
+ * tu jako "zdjecie" i tak nie ma jak sie wykonac.
+ */
+function zapiszObrazek(array $plik, ?string &$blad = null): ?string {
+    if (($plik['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) return null;
+
+    if (($plik['error'] ?? 1) !== UPLOAD_ERR_OK) {
+        $blad = 'Nie udało się wgrać pliku. Spróbuj ponownie.';
+        return null;
+    }
+    if (!is_uploaded_file($plik['tmp_name'])) {
+        $blad = 'Nieprawidłowy plik.';
+        return null;
+    }
+    if (($plik['size'] ?? 0) > MAX_OBRAZEK) {
+        $blad = 'Zdjęcie jest za duże. Maksimum to 5 MB.';
+        return null;
+    }
+
+    $info = @getimagesize($plik['tmp_name']);
+    if ($info === false || !isset(DOZWOLONE_TYPY[$info[2]])) {
+        $blad = 'To nie jest zdjęcie. Dozwolone formaty: JPG, PNG i WEBP.';
+        return null;
+    }
+
+    [$szer, $wys] = $info;
+    if ($szer < 400 || $wys < 200) {
+        $blad = "Zdjęcie jest za małe ($szer na $wys pikseli). Potrzebne co najmniej 400 na 200.";
+        return null;
+    }
+
+    $rozszerzenie = DOZWOLONE_TYPY[$info[2]];
+    $nazwa = date('Y-m') . '-' . bin2hex(random_bytes(8)) . '.' . $rozszerzenie;
+    $katalog = DANE . '/obrazki';
+    if (!is_dir($katalog) && !@mkdir($katalog, 0755, true)) {
+        $blad = 'Nie udało się utworzyć katalogu na zdjęcia.';
+        return null;
+    }
+
+    // Zdjecia z telefonu potrafia miec 4000 pikseli szerokosci i kilka MB.
+    // Na stronie i tak wyswietla sie najwyzej 868, wiec zmniejszamy — bez
+    // tego kazdy odwiedzajacy artykul ciagnalby kilka megabajtow.
+    $cel = $katalog . '/' . $nazwa;
+    if ($szer > 1400 && function_exists('imagecreatetruecolor') && $rozszerzenie !== 'webp') {
+        if (zmniejsz($plik['tmp_name'], $cel, $info[2], $szer, $wys, 1400)) {
+            @chmod($cel, 0644);
+            return '/dane/obrazki/' . $nazwa;
+        }
+    }
+
+    if (!@move_uploaded_file($plik['tmp_name'], $cel)) {
+        $blad = 'Nie udało się zapisać zdjęcia.';
+        return null;
+    }
+    @chmod($cel, 0644);
+    return '/dane/obrazki/' . $nazwa;
+}
+
+/** Zmniejszenie do zadanej szerokosci. Gdy biblioteki brak, wraca false. */
+function zmniejsz(string $zrodlo, string $cel, int $typ, int $szer, int $wys, int $doSzerokosci): bool {
+    // Swiadomie bez konstrukcji match: jest dopiero w PHP 8.0, a przy
+    // starszej wersji plik nie sparsowalby sie w ogole i padlby caly panel,
+    // nie tylko zmniejszanie zdjec.
+    if ($typ === IMAGETYPE_JPEG) {
+        $obraz = @imagecreatefromjpeg($zrodlo);
+    } elseif ($typ === IMAGETYPE_PNG) {
+        $obraz = @imagecreatefrompng($zrodlo);
+    } else {
+        $obraz = false;
+    }
+    if (!$obraz) return false;
+
+    $nowaSzer = $doSzerokosci;
+    $nowaWys = (int)round($wys * ($doSzerokosci / $szer));
+    $maly = imagecreatetruecolor($nowaSzer, $nowaWys);
+    if ($typ === IMAGETYPE_PNG) {
+        imagealphablending($maly, false);
+        imagesavealpha($maly, true);
+    }
+    imagecopyresampled($maly, $obraz, 0, 0, 0, 0, $nowaSzer, $nowaWys, $szer, $wys);
+
+    $ok = $typ === IMAGETYPE_PNG ? imagepng($maly, $cel, 6) : imagejpeg($maly, $cel, 82);
+    imagedestroy($obraz);
+    imagedestroy($maly);
+    return (bool)$ok;
 }
