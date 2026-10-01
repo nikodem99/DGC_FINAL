@@ -2407,3 +2407,13 @@ footer a[href^="mailto:"] {
   opacity: 0.35;
   cursor: default;
 }
+
+/* Wysokosc wyliczana z proporcji.
+   Po dolozeniu atrybutow width i height do obrazkow (scripts/wydajnosc.mjs)
+   ta regula jest obowiazkowa: bez niej obrazek ograniczony przez max-width
+   zachowywalby wysokosc z atrybutu i zostalby rozciagniety w pionie.
+   Atrybuty sa po to, zeby przegladarka znala proporcje i zarezerwowala
+   miejsce, zanim plik sie pobierze — inaczej uklad strony przeskakuje. */
+img {
+  height: auto;
+}

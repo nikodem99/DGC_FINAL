@@ -344,6 +344,16 @@ function zapiszStroneArtykulu(array $wpis, array $bloki, array $wpisy, int $nr, 
     // budowaniu strony (src/main.jsx). Bez nich artykul dodany z panelu
     // bylby jedynym w serwisie, ktory nie mowi Google, ze jest artykulem.
     $isoData = isoZDaty($wpis['create_at']);
+
+    // Wymiary zdjecia. Przegladarka rezerwuje dzieki nim miejsce, zanim plik
+    // sie pobierze, wiec uklad strony nie przeskakuje. Czytamy je z pliku,
+    // bo kazde wgrane zdjecie ma inne.
+    $wymiaryObrazka = [868, 514];
+    $plikObrazka = KORZEN . '/' . ltrim($wpis['obrazek'], '/');
+    if (is_file($plikObrazka)) {
+        $info = @getimagesize($plikObrazka);
+        if ($info !== false) $wymiaryObrazka = [$info[0], $info[1]];
+    }
     $schemat = '<script type="application/ld+json">' . json_encode([
         '@context' => 'https://schema.org',
         '@type' => 'Article',
@@ -377,6 +387,8 @@ function zapiszStroneArtykulu(array $wpis, array $bloki, array $wpisy, int $nr, 
         'ZIARNO'       => str_replace('<', '\\u003c', (string)json_encode($bloki, JSON_UNESCAPED_UNICODE)),
         'TYTUL'        => h($wpis['title']),
         'OBRAZEK'      => h($wpis['obrazek']),
+        'OBRAZEK_W'    => (string)$wymiaryObrazka[0],
+        'OBRAZEK_H'    => (string)$wymiaryObrazka[1],
         'AUTOR'        => h($wpis['author']),
         'DATA'         => h($wpis['create_at']),
         'TAG'          => h($wpis['tag']),

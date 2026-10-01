@@ -88,10 +88,14 @@ podmien('tytul w okruszkach', /<h1>[\s\S]*?<\/h1>/, '<h1>@@TYTUL@@</h1>');
 
 // --- artykul -----------------------------------------------------------
 
+// Obrazek razem z wymiarami. Wymiary sa znacznikami, bo zdjecie wgrane
+// z panelu ma inne proporcje niz okladka firmowa, a zle wymiary oznaczaja
+// przeskok ukladu dokladnie tam, gdzie mialy mu zapobiec.
 podmien(
     'obrazek',
-    /<div class="entry-media"><img src="[^"]*" alt="[^"]*"><\/div>/,
-    '<div class="entry-media"><img src="@@OBRAZEK@@" alt=""></div>'
+    /<div class="entry-media"><img[^>]*><\/div>/,
+    '<div class="entry-media"><img width="@@OBRAZEK_W@@" height="@@OBRAZEK_H@@"'
+    + ' decoding="async" src="@@OBRAZEK@@" alt=""></div>'
 );
 
 podmien(
@@ -114,7 +118,7 @@ podmien('sasiedzi', /<div class="more-posts">[\s\S]*?<\/div><\/div><\/div>/, '@@
 
 const ZNACZNIKI = [
     '@@TYTUL_STRONY@@', '@@OPIS@@', '@@KANONICZNY@@', '@@SLUG@@', '@@ZIARNO@@',
-    '@@TYTUL@@', '@@OBRAZEK@@', '@@AUTOR@@', '@@DATA@@', '@@TAG@@', '@@TRESC@@', '@@SASIEDZI@@',
+    '@@TYTUL@@', '@@OBRAZEK@@', '@@OBRAZEK_W@@', '@@OBRAZEK_H@@', '@@AUTOR@@', '@@DATA@@', '@@TAG@@', '@@TRESC@@', '@@SASIEDZI@@',
     '@@SCHEMAT@@',
 ];
 for (const z of ZNACZNIKI) {
@@ -168,7 +172,9 @@ for (const m of blogsJs.matchAll(/\{\s*id:[\s\S]*?\n {4}\},/g)) {
     const strona = path.join(DIST, 'porady', slug, 'index.html');
     if (fs.existsSync(strona)) {
         const t = fs.readFileSync(strona, 'utf8');
-        const o = t.match(/<div class="entry-media"><img src="([^"]*)"/);
+        // Znacznik ma teraz tez wymiary i decoding, wiec nie szukamy src
+        // tuz po <img, tylko gdziekolwiek w srodku znacznika.
+        const o = t.match(/<div class="entry-media"><img[^>]*\ssrc="([^"]*)"/);
         if (o) obrazek = o[1];
     }
 
