@@ -75,6 +75,22 @@ setki stron z cudzym tytułem.
 To samo dotyczy `blokiNaHtml()` w `panel-dgc/generator.php` — to odpowiednik
 komponentu `Blok`. Dodajesz nowy typ bloku w React, dodaj go też tam.
 
+Drugie takie lustro to `podobneHtml()` w generatorze i wybór trzech wpisów
+w `BlogSidebar.jsx` (blok „Podobne wpisy” w pasku bocznym). Obie strony muszą
+wybierać te same artykuły w tej samej kolejności, bo inaczej artykuł dodany
+z panelu po wczytaniu Reacta podmieniłby ten blok na inny.
+
+Dwie kontrole trzymają tę parę razem:
+
+- **budowanie** przerywa się, jeśli szablon ma pole `@@COŚ@@`, którego nie ma
+  w `generator.php`. Widać to od razu, a nie dopiero przy dodawaniu artykułu;
+- **panel** nie zapisze strony, w której został niepodmieniony napis
+  `@@COŚ@@`, i powie, że paczka strony jest nowsza niż pliki panelu.
+
+Dlatego przy zmianie szablonu wgrywa się **razem** paczkę strony i
+`generator.php`. W odwrotnej kolejności panel po prostu odmówi zapisu —
+nic się nie zepsuje, ale biuro zobaczy komunikat o aktualizacji.
+
 ---
 
 ## Panel
