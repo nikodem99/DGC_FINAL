@@ -258,6 +258,13 @@ function zapiszWpis(array $wpisy): array {
     }
 
     // Sasiedzi maja teraz inne odnosniki "poprzedni/nastepny".
+    //
+    // Nie przebudowujemy calej kategorii, choc nowy wpis wchodzi do bloku
+    // "Podobne wpisy" u swoich sasiadow z tej samej kategorii. Tam bywa
+    // blisko stu artykulow, a zapis stu stron przy kazdym zapisie trwalby
+    // zbyt dlugo na tym hostingu. Tamte strony dalej pokazuja trzy wpisy
+    // z WLASCIWEJ kategorii, tylko nie te najnowsze, a po wczytaniu listy
+    // z serwera przegladarka i tak podmienia je na aktualne.
     foreach ([$nr - 1, $nr + 1] as $sasiad) {
         if (!isset($wpisy[$sasiad])) continue;
         $s = $wpisy[$sasiad];

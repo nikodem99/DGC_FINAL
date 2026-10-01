@@ -28,6 +28,53 @@ const BlogSidebar = (props) => {
     const kategorie = policz(blogs, 'tag', (blog) => blog.tag);
     const miesiace = policz(blogs, 'archiveMonth', (blog) => blog.archiveLabel);
 
+    // Trzy wpisy w pasku bocznym.
+    //
+    // Na liscie porad pokazujemy najnowsze. Na stronie artykulu dobieramy
+    // z TEJ SAMEJ kategorii, i to nie trzy najnowsze, a trzy nastepne po
+    // biezacym — z zawinieciem na poczatek kategorii.
+    //
+    // Dlaczego nie najnowsze trzy: wczesniej na wszystkich 377 stronach
+    // wisialy te same trzy wpisy. Przy "trzech najnowszych w kategorii"
+    // bylyby te same w obrebie kategorii, czyli 96 stron Plac wskazywaloby
+    // jeden i ten sam artykul. Przesuwane okno daje kazdemu wpisowi inna
+    // trojke, a kazdy artykul dostaje odnosniki z trzech innych stron.
+    // Sasiedzi w kategorii sa tez zwykle z tego samego okresu, a w podatkach
+    // to znaczy: z tych samych przepisow.
+    //
+    // Kolejnosc jest wyliczana, a nie losowa — ta sama zasada siedzi
+    // w panelu (podobneHtml w panel-dgc/generator.php), zeby artykul
+    // dodany z panelu mial dokladnie to samo, co przyslalby React.
+    const polecane = (() => {
+        if (!props.slug) return blogs.slice(0, 3);
+
+        const biezacy = blogs.find((b) => b.slug === props.slug);
+        if (!biezacy) return blogs.slice(0, 3);
+
+        // Poprzedni i nastepny wpis stoja juz pod artykulem, w bloku
+        // "Poprzedni / Nastepny wpis". Gdyby weszly tu drugi raz, ten sam
+        // artykul widnialby na stronie dwa razy i jedno z trzech miejsc
+        // w pasku bocznym przepadaloby. Przy ulozeniu wpisow zdarzalo sie
+        // to na stu stronach z 377.
+        const nr = blogs.indexOf(biezacy);
+        const pominiete = new Set([blogs[nr - 1]?.slug, blogs[nr + 1]?.slug]);
+
+        const wKategorii = blogs.filter((b) => b.tag === biezacy.tag);
+        const start = wKategorii.findIndex((b) => b.slug === props.slug);
+
+        const okno = [];
+        for (let i = 1; i < wKategorii.length && okno.length < 3; i += 1) {
+            const kandydat = wKategorii[(start + i) % wKategorii.length];
+            if (!pominiete.has(kandydat.slug)) okno.push(kandydat);
+        }
+        if (okno.length === 3) return okno;
+
+        // Kategoria liczy mniej niz cztery wpisy — dokladamy najnowszymi,
+        // zeby blok nigdy nie byl krotszy ani pusty.
+        const dolozone = blogs.filter((b) => b.slug !== props.slug && !okno.includes(b));
+        return [...okno, ...dolozone].slice(0, 3);
+    })();
+
     const [lokalnyMiesiac, setLokalnyMiesiac] = useState('all');
     const selectedMonth = props.selectedMonth ?? lokalnyMiesiac;
     const wybranaKategoria = props.selectedCategory ?? 'all';
@@ -62,9 +109,9 @@ const BlogSidebar = (props) => {
                     </ul>
                 </div>
                 <div className="widget recent-post-widget">
-                    <h3>Ostatnie wpisy</h3>
+                    <h3>{props.slug ? 'Podobne wpisy' : 'Ostatnie wpisy'}</h3>
                     <div className="posts">
-                        {blogs.slice(0, 3).map((blog) => (
+                        {polecane.map((blog) => (
                             <div className="post" key={blog.id}>
                                 <div className="img-holder">
                                     <img src={blog.screens} alt="" />

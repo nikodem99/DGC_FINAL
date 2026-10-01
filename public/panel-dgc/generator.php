@@ -329,6 +329,95 @@ function sasiedziHtml(array $wpisy, int $nr): string {
     return $out;
 }
 
+/**
+ * Wymiary zdjecia z pliku. Przegladarka rezerwuje dzieki nim miejsce,
+ * zanim plik sie pobierze, wiec uklad strony nie przeskakuje.
+ */
+function wymiaryZdjecia(string $adres): array {
+    $plik = KORZEN . '/' . ltrim($adres, '/');
+    if (is_file($plik)) {
+        $info = @getimagesize($plik);
+        if ($info !== false) return [(int)$info[0], (int)$info[1]];
+    }
+    // getimagesize nie czyta SVG, a okladka firmowa jest w SVG — i ma
+    // dokladnie te proporcje. Ten sam zapas sluzy zdjeciom nieczytelnym.
+    return [868, 514];
+}
+
+/**
+ * Trzy "podobne wpisy" w pasku bocznym.
+ *
+ * Zasada jest ta sama co w src/components/BlogSidebar/BlogSidebar.jsx:
+ * bierzemy trzy wpisy NASTEPNE po biezacym w jego kategorii, zawijajac na
+ * poczatek kategorii, a gdy kategoria liczy mniej niz cztery wpisy,
+ * dokladamy najnowszymi. Przesuwane okno zamiast trzech najnowszych, bo
+ * inaczej wszystkie strony w kategorii wskazywalyby jeden i ten sam wpis.
+ * Pomijamy przy tym poprzedni i nastepny wpis, bo te stoja juz w bloku
+ * pod artykulem (sasiedziHtml wyzej).
+ *
+ * Jesli zasada zmieni sie w komponencie, trzeba ja zmienic rowniez tutaj —
+ * inaczej artykul dodany z panelu bedzie jedynym w serwisie, ktory po
+ * wczytaniu Reacta podmieni ten blok na inny.
+ */
+function podobneHtml(array $wpisy, int $nr): string {
+    $biezacy = $wpisy[$nr] ?? null;
+    if ($biezacy === null) return '';
+
+    $tag = (string)($biezacy['tag'] ?? '');
+    $slug = (string)($biezacy['slug'] ?? '');
+
+    $wKategorii = [];
+    foreach ($wpisy as $w) {
+        if ((string)($w['tag'] ?? '') === $tag) $wKategorii[] = $w;
+    }
+
+    $start = 0;
+    foreach ($wKategorii as $i => $w) {
+        if ((string)($w['slug'] ?? '') === $slug) { $start = $i; break; }
+    }
+
+    $pominiete = [];
+    foreach ([$nr - 1, $nr + 1] as $sasiad) {
+        if (isset($wpisy[$sasiad])) $pominiete[] = (string)($wpisy[$sasiad]['slug'] ?? '');
+    }
+
+    $ile = count($wKategorii);
+    $okno = [];
+    for ($i = 1; $i < $ile && count($okno) < 3; $i++) {
+        $kandydat = $wKategorii[($start + $i) % $ile];
+        if (in_array((string)($kandydat['slug'] ?? ''), $pominiete, true)) continue;
+        $okno[] = $kandydat;
+    }
+
+    if (count($okno) < 3) {
+        $uzyte = [$slug];
+        foreach ($okno as $w) $uzyte[] = (string)($w['slug'] ?? '');
+        foreach ($wpisy as $w) {
+            if (count($okno) >= 3) break;
+            if (in_array((string)($w['slug'] ?? ''), $uzyte, true)) continue;
+            $okno[] = $w;
+        }
+    }
+
+    $out = '';
+    foreach ($okno as $w) {
+        $obrazek = (string)($w['obrazek'] ?? '');
+        [$szer, $wys] = wymiaryZdjecia($obrazek);
+        // data-discover to atrybut, ktory React Router dokleja do odnosnikow.
+        // Bez niego przegladarka dostalaby inny HTML, niz React oczekuje przy
+        // podlaczaniu sie do gotowej strony.
+        $out .= '<div class="post">'
+            . '<div class="img-holder"><img width="' . $szer . '" height="' . $wys . '"'
+            . ' loading="lazy" decoding="async" src="' . h($obrazek) . '" alt=""></div>'
+            . '<div class="details">'
+            . '<h4><a href="/porady/' . h((string)($w['slug'] ?? '')) . '/" data-discover="true">'
+            . h((string)($w['title'] ?? '')) . '</a></h4>'
+            . '<span class="date">' . h((string)($w['create_at'] ?? '')) . '</span>'
+            . '</div></div>';
+    }
+    return $out;
+}
+
 /** Sklada i zapisuje strone jednego artykulu. */
 function zapiszStroneArtykulu(array $wpis, array $bloki, array $wpisy, int $nr, ?string &$blad = null): bool {
     $szab = szablon('artykul.html');
@@ -345,15 +434,8 @@ function zapiszStroneArtykulu(array $wpis, array $bloki, array $wpisy, int $nr, 
     // bylby jedynym w serwisie, ktory nie mowi Google, ze jest artykulem.
     $isoData = isoZDaty($wpis['create_at']);
 
-    // Wymiary zdjecia. Przegladarka rezerwuje dzieki nim miejsce, zanim plik
-    // sie pobierze, wiec uklad strony nie przeskakuje. Czytamy je z pliku,
-    // bo kazde wgrane zdjecie ma inne.
-    $wymiaryObrazka = [868, 514];
-    $plikObrazka = KORZEN . '/' . ltrim($wpis['obrazek'], '/');
-    if (is_file($plikObrazka)) {
-        $info = @getimagesize($plikObrazka);
-        if ($info !== false) $wymiaryObrazka = [$info[0], $info[1]];
-    }
+    // Wymiary zdjecia czytamy z pliku, bo kazde wgrane zdjecie ma inne.
+    $wymiaryObrazka = wymiaryZdjecia((string)$wpis['obrazek']);
     $schemat = '<script type="application/ld+json">' . json_encode([
         '@context' => 'https://schema.org',
         '@type' => 'Article',
@@ -394,6 +476,7 @@ function zapiszStroneArtykulu(array $wpis, array $bloki, array $wpisy, int $nr, 
         'TAG'          => h($wpis['tag']),
         'TRESC'        => blokiNaHtml($bloki),
         'SASIEDZI'     => sasiedziHtml($wpisy, $nr),
+        'PODOBNE'      => podobneHtml($wpisy, $nr),
     ]);
 
     if (!zapiszAtomowo(PORADY . '/' . $wpis['slug'] . '/index.html', $html)) {

@@ -111,6 +111,16 @@ podmien(
 // Tytul artykulu i cala tresc az do konca <article>.
 podmien('tytul i tresc', /<h2>[\s\S]*?<\/article>/, '<h2>@@TYTUL@@</h2>@@TRESC@@</article>');
 
+// Podobne wpisy w pasku bocznym. Dobierane z tej samej kategorii, wiec
+// kazdy artykul ma tam inna trojke — panel musi je skladac sam, inaczej
+// kazdy wpis dodany z panelu dostalby trojke artykulu wzorcowego.
+podmien(
+    'podobne wpisy',
+    /<div class="widget recent-post-widget">[\s\S]*?(?=<div class="widget month-widget">)/,
+    '<div class="widget recent-post-widget"><h3>Podobne wpisy</h3>'
+    + '<div class="posts">@@PODOBNE@@</div></div>'
+);
+
 // Sasiedzi. Panel zna kolejnosc wpisow, wiec zbuduje ten blok sam.
 podmien('sasiedzi', /<div class="more-posts">[\s\S]*?<\/div><\/div><\/div>/, '@@SASIEDZI@@');
 
@@ -118,7 +128,7 @@ podmien('sasiedzi', /<div class="more-posts">[\s\S]*?<\/div><\/div><\/div>/, '@@
 
 const ZNACZNIKI = [
     '@@TYTUL_STRONY@@', '@@OPIS@@', '@@KANONICZNY@@', '@@SLUG@@', '@@ZIARNO@@',
-    '@@TYTUL@@', '@@OBRAZEK@@', '@@OBRAZEK_W@@', '@@OBRAZEK_H@@', '@@AUTOR@@', '@@DATA@@', '@@TAG@@', '@@TRESC@@', '@@SASIEDZI@@',
+    '@@TYTUL@@', '@@OBRAZEK@@', '@@OBRAZEK_W@@', '@@OBRAZEK_H@@', '@@AUTOR@@', '@@DATA@@', '@@TAG@@', '@@TRESC@@', '@@SASIEDZI@@', '@@PODOBNE@@',
     '@@SCHEMAT@@',
 ];
 for (const z of ZNACZNIKI) {
