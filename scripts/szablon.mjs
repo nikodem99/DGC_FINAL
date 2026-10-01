@@ -304,3 +304,33 @@ if (fs.existsSync(listaHtmlSciezka) && wpisy.length) {
         process.exit(1);
     }
 }
+
+// --- czy panel zna wszystkie pola szablonu -----------------------------
+//
+// Szablony sa wyciagane tutaj, a wypelnia je PHP w panelu. Dolozenie pola
+// po tej stronie i zapomnienie o drugiej dawaloby na zywej stronie goly
+// napis @@PODOBNE@@. Panel ma na to wlasnego straznika (zostalZnacznik),
+// ale on tylko odmawia zapisu — a to widac dopiero, gdy biuro probuje
+// dodac artykul. Tutaj to samo widac od razu, przy budowaniu.
+
+const GENERATOR = path.join(KORZEN, 'public', 'panel-dgc', 'generator.php');
+if (fs.existsSync(GENERATOR)) {
+    const php = fs.readFileSync(GENERATOR, 'utf8');
+    const nieznane = [];
+
+    for (const plik of ['artykul.html', 'lista.html', 'karta.html']) {
+        const tresc = fs.readFileSync(path.join(DIST, 'dane', 'szablon', plik), 'utf8');
+        for (const znacznik of new Set(tresc.match(/@@[A-Z_]+@@/g) ?? [])) {
+            const nazwa = znacznik.slice(2, -2);
+            if (!new RegExp(`'${nazwa}'\\s*=>`).test(php)) nieznane.push(`${plik}: ${znacznik}`);
+        }
+    }
+
+    if (nieznane.length) {
+        console.error('[szablon] panel nie umie wypelnic tych pol:');
+        for (const n of nieznane) console.error(`  - ${n}`);
+        console.error('  Dopisz je w public/panel-dgc/generator.php (tablica w podstaw()).');
+        process.exit(1);
+    }
+    console.log('Panel zna wszystkie pola szablonow.');
+}

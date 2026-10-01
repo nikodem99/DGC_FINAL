@@ -298,6 +298,18 @@ function szablonAktualny(string $html, ?string &$powod = null): bool {
     return true;
 }
 
+/**
+ * Czy w gotowej stronie zostal niepodmieniony znacznik @@...@@.
+ *
+ * To strazik na wypadek, gdy paczka strony bedzie nowsza niz panel: ktos
+ * doda do szablonu nowe pole (jak @@PODOBNE@@), a panel go nie zna i wpisze
+ * na zywa strone goly napis @@PODOBNE@@. Lepiej nie zapisac strony i o tym
+ * powiedziec, niz opublikowac taka strone.
+ */
+function zostalZnacznik(string $html): ?string {
+    return preg_match('/@@[A-Z_]+@@/', $html, $t) ? $t[0] : null;
+}
+
 function podstaw(string $szablon, array $pola): string {
     return str_replace(
         array_map(static fn($k) => '@@' . $k . '@@', array_keys($pola)),
@@ -479,6 +491,14 @@ function zapiszStroneArtykulu(array $wpis, array $bloki, array $wpisy, int $nr, 
         'PODOBNE'      => podobneHtml($wpisy, $nr),
     ]);
 
+    $znacznik = zostalZnacznik($html);
+    if ($znacznik !== null) {
+        $blad = "szablon artykulu ma pole $znacznik, ktorego ten panel nie zna"
+            . ' — wgrana paczka strony jest nowsza niz panel, popros opiekuna'
+            . ' o aktualizacje plikow panelu';
+        return false;
+    }
+
     if (!zapiszAtomowo(PORADY . '/' . $wpis['slug'] . '/index.html', $html)) {
         $blad = 'nie udalo sie zapisac strony artykulu';
         return false;
@@ -526,6 +546,13 @@ function odswiezListy(array $wpisy, ?string &$blad = null): int {
             'KARTY'          => $karty,
             'STRONICOWANIE'  => stronicowanieHtml($nr, $stron),
         ]);
+
+        $znacznik = zostalZnacznik($html);
+        if ($znacznik !== null) {
+            $blad = "szablon listy ma pole $znacznik, ktorego ten panel nie zna"
+                . ' — popros opiekuna o aktualizacje plikow panelu';
+            return $zapisane;
+        }
 
         $cel = $nr === 1 ? PORADY . '/index.html' : PORADY . "/strona/$nr/index.html";
         if (zapiszAtomowo($cel, $html)) $zapisane++;
