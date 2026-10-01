@@ -78,6 +78,14 @@ function zapiszAtomowo(string $sciezka, string $tresc): bool {
     return true;
 }
 
+/** "30 wrzesnia 2026" -> "2026-09-30". Dane strukturalne wymagaja ISO. */
+function isoZDaty(string $polska): string {
+    if (!preg_match('/^(\d{1,2})\s+(\S+)\s+(\d{4})$/u', trim($polska), $m)) return '';
+    $nr = array_search(mb_strtolower($m[2], 'UTF-8'), MIESIACE, true);
+    if ($nr === false) return '';
+    return sprintf('%04d-%02d-%02d', (int)$m[3], (int)$nr, (int)$m[1]);
+}
+
 /** Nazwa adresowa z tytulu: same male litery, cyfry i myslniki. */
 function naSlug(string $t): string {
     $od = ['ą','ć','ę','ł','ń','ó','ś','ź','ż','Ą','Ć','Ę','Ł','Ń','Ó','Ś','Ź','Ż'];
@@ -331,7 +339,37 @@ function zapiszStroneArtykulu(array $wpis, array $bloki, array $wpisy, int $nr, 
     }
 
     $adres = DOMENA . '/porady/' . $wpis['slug'] . '/';
+
+    // Dane strukturalne. Odpowiednik tego, co prerender wstawia przy
+    // budowaniu strony (src/main.jsx). Bez nich artykul dodany z panelu
+    // bylby jedynym w serwisie, ktory nie mowi Google, ze jest artykulem.
+    $isoData = isoZDaty($wpis['create_at']);
+    $schemat = '<script type="application/ld+json">' . json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'Article',
+        'headline' => $wpis['title'],
+        'description' => $wpis['description'],
+        'image' => DOMENA . $wpis['obrazek'],
+        'datePublished' => $isoData,
+        'dateModified' => $isoData,
+        'inLanguage' => 'pl-PL',
+        'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => $adres],
+        'author' => ['@type' => 'Organization', 'name' => 'DGC Biuro Rachunkowe', 'url' => DOMENA],
+        'publisher' => ['@id' => DOMENA . '/#organizacja'],
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
+
+    $schemat .= '<script type="application/ld+json">' . json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => [
+            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Strona główna', 'item' => DOMENA . '/'],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Porady', 'item' => DOMENA . '/porady/'],
+            ['@type' => 'ListItem', 'position' => 3, 'name' => $wpis['title'], 'item' => $adres],
+        ],
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
+
     $html = podstaw($szab, [
+        'SCHEMAT'      => $schemat,
         'TYTUL_STRONY' => h($wpis['title'] . ' · DGC'),
         'OPIS'         => h($wpis['description']),
         'KANONICZNY'   => h($adres),

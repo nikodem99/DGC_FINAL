@@ -22,6 +22,12 @@ export const DANE_FIRMY = {
     '@context': 'https://schema.org',
     '@type': 'AccountingService',
     '@id': 'https://biurodgc.pl/#organizacja',
+    // Logo i obrazek: Google pokazuje je w panelu wiedzy i w wynikach
+    // rozszerzonych. Plik logo-mail.jpg powstal na potrzeby autoodpowiedzi
+    // z formularzy i ma znak na kolorze marki, czyli dokladnie to, czego
+    // ten schemat oczekuje. Nie dokladamy trzeciego pliku z logo.
+    logo: 'https://biurodgc.pl/logo-mail.jpg',
+    image: 'https://biurodgc.pl/og-dgc.jpg',
     name: 'DGC Biuro Rachunkowe Sp. z o.o.',
     alternateName: 'DGC Biuro Rachunkowe',
     url: 'https://biurodgc.pl/',

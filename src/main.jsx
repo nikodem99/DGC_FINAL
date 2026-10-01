@@ -79,7 +79,8 @@ export async function prerender(data) {
 
     const sciezka = new URL(data.url, DOMENA).pathname;
     const m = metaDla(sciezka);
-    const obrazek = `${DOMENA}/og-dgc.jpg`;
+    const obrazek_domyslny = `${DOMENA}/og-dgc.jpg`;
+    const obrazek = obrazek_domyslny;
 
     // Strona artykulu: tresc czytamy z dysku i wkladamy do pamieci PRZED
     // renderowaniem, bo renderToString jest synchroniczne i nie zaczekaloby
@@ -148,6 +149,92 @@ export async function prerender(data) {
             props: { type: 'application/ld+json' },
             children: JSON.stringify(DANE_FIRMY),
         });
+    }
+
+    const schemat = (dane) => elements.add({
+        type: 'script',
+        props: { type: 'application/ld+json' },
+        children: JSON.stringify(dane),
+    });
+
+    const okruszki = (pozycje) => schemat({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: pozycje.map((p, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: p.nazwa,
+            item: `${DOMENA}${p.adres}`,
+        })),
+    });
+
+    // --- Artykul ---------------------------------------------------------
+    // Bez tego zadna z 377 stron artykulow nie mowi Google, ze jest
+    // artykulem, kto go napisal ani kiedy. Audyt wykazal to jako najwieksza
+    // pojedyncza strate w calej sekcji porad.
+    if (dopasowanie && ziarno) {
+        const { WPISY } = await import('./seo/wpisy.js');
+        const wpis = WPISY[ziarno.slug];
+
+        // Adres obrazka bierzemy z WYRENDEROWANEGO HTML-a, bo tam stoi juz
+        // nazwa z odciskiem, ktorej na tym etapie nie znamy z zadnego innego
+        // zrodla.
+        const zHtml = html.match(/<div class="entry-media"><img src="([^"]+)"/);
+        const obrazek = zHtml ? `${DOMENA}${zHtml[1]}` : obrazek_domyslny;
+
+        if (wpis) {
+            schemat({
+                '@context': 'https://schema.org',
+                '@type': 'Article',
+                headline: wpis.nazwa || wpis.tytul,
+                description: wpis.opis,
+                image: obrazek,
+                datePublished: wpis.data || undefined,
+                dateModified: wpis.data || undefined,
+                inLanguage: 'pl-PL',
+                mainEntityOfPage: { '@type': 'WebPage', '@id': m.kanoniczny },
+                author: { '@type': 'Organization', name: MARKA, url: DOMENA },
+                publisher: { '@id': `${DOMENA}/#organizacja` },
+            });
+        }
+
+        okruszki([
+            { nazwa: 'Strona główna', adres: '/' },
+            { nazwa: 'Porady', adres: '/porady/' },
+            { nazwa: wpis?.nazwa || 'Artykuł', adres: `/porady/${ziarno.slug}/` },
+        ]);
+    }
+
+    // --- Okruszki na pozostalych podstronach ------------------------------
+    const CZESCI = {
+        '/o-nas': 'O nas', '/oferta': 'Oferta', '/cennik': 'Cennik',
+        '/kontakt': 'Kontakt', '/porady': 'Porady', '/faq': 'Najczęstsze pytania',
+        '/umow-konsultacje': 'Umów konsultację', '/polityka-prywatnosci': 'Polityka prywatności',
+    };
+    if (!dopasowanie && CZESCI[sciezka]) {
+        okruszki([
+            { nazwa: 'Strona główna', adres: '/' },
+            { nazwa: CZESCI[sciezka], adres: `${sciezka}/` },
+        ]);
+    }
+
+    // --- Pytania i odpowiedzi --------------------------------------------
+    // Strona ma dziesiec prawdziwych par pytanie-odpowiedz, wiec schemat
+    // opisuje to, co na niej realnie jest, a nie dopisuje czegokolwiek.
+    if (sciezka === '/faq') {
+        const { default: faq } = await import('./api/faq.js');
+        const pozycje = (Array.isArray(faq) ? faq : []).filter((p) => p.title && p.content);
+        if (pozycje.length) {
+            schemat({
+                '@context': 'https://schema.org',
+                '@type': 'FAQPage',
+                mainEntity: pozycje.map((p) => ({
+                    '@type': 'Question',
+                    name: p.title,
+                    acceptedAnswer: { '@type': 'Answer', text: p.content },
+                })),
+            });
+        }
     }
 
     return { html, head: { lang: 'pl', title: m.tytul, elements } };

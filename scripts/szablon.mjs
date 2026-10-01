@@ -73,6 +73,15 @@ podmien(
     '<script type="application/json" id="dgc-tresc" data-slug="@@SLUG@@">@@ZIARNO@@</script>'
 );
 
+// --- dane strukturalne -------------------------------------------------
+// Na stronie artykulu stoja dwa bloki JSON-LD: Article i BreadcrumbList.
+// Oba niosa tytul, date i adres, wiec panel musi je skladac sam.
+podmien(
+    'dane strukturalne',
+    /(<script type="application\/ld\+json">[\s\S]*?<\/script>\s*){1,3}/,
+    '@@SCHEMAT@@'
+);
+
 // --- naglowek podstrony ------------------------------------------------
 
 podmien('tytul w okruszkach', /<h1>[\s\S]*?<\/h1>/, '<h1>@@TYTUL@@</h1>');
@@ -106,6 +115,7 @@ podmien('sasiedzi', /<div class="more-posts">[\s\S]*?<\/div><\/div><\/div>/, '@@
 const ZNACZNIKI = [
     '@@TYTUL_STRONY@@', '@@OPIS@@', '@@KANONICZNY@@', '@@SLUG@@', '@@ZIARNO@@',
     '@@TYTUL@@', '@@OBRAZEK@@', '@@AUTOR@@', '@@DATA@@', '@@TAG@@', '@@TRESC@@', '@@SASIEDZI@@',
+    '@@SCHEMAT@@',
 ];
 for (const z of ZNACZNIKI) {
     if (!html.includes(z)) bledy.push(`brak znacznika ${z} w gotowym szablonie`);
