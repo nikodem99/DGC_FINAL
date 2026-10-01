@@ -7,6 +7,13 @@
 
 Options -Indexes
 
+# Glowny .htaccess serwisu ma DirectoryIndex index.html — zabezpieczenie
+# przed index.php po starym WordPressie. Przez to katalog panelu nie mial
+# czego pokazac pod samym adresem i zwracal 403, a regula ErrorDocument
+# podstawiala strone 404, czyli z zewnatrz wygladalo to na pusta strone.
+# Tutaj, i tylko tutaj, przywracamy index.php.
+DirectoryIndex index.php
+
 # Poza index.php i generator.php nie ma tu nic do pobrania.
 <FilesMatch "\.(json|log|bak|tmp|md)$">
   Require all denied
