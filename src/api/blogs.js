@@ -8,6 +8,7 @@
 // jest znak firmowy na kolorze marki niz zaslepka z szablonu.
 import okladka from "../images/blog/okladka-dgc.svg";
 
+import programistaB2b from "../images/blog/programista-b2b-ryczalt.jpg";
 import salonFryzjerski from "../images/blog/salon-fryzjerski.jpg";
 import gastronomiaVat from "../images/blog/gastronomia-stawki-vat.jpg";
 import spisZNatury from "../images/blog/spis-z-natury.jpg";
@@ -32,6 +33,22 @@ import zamkniecieChecklista from "../images/blog/zamkniecie-roku-checklista.jpg"
 // z tych pol, wiec liczby sa prawdziwe i same sie zaktualizuja.
 
 const blogs = [
+    {
+        id: '20',
+        title: 'Programista na B2B – jaka stawka ryczałtu i kiedy się opłaca',
+        title2: 'Programista na B2B – jaka stawka ryczałtu i kiedy się opłaca',
+        tag: 'PIT',
+        slug: 'programista-b2b-ryczalt',
+        screens: programistaB2b,
+        description: 'Usługi IT na ryczałcie to 12% albo 8,5%, a różnica wynosi tysiące złotych rocznie. Sprawdź, od czego zależy klasyfikacja i kiedy lepsza jest liniówka.',
+        author: 'DGC Biuro Rachunkowe',
+        create_at: '4 października 2026',
+        archiveMonth: '2026-10',
+        archiveLabel: 'Październik 2026',
+        blogSingleImg: programistaB2b,
+        blClass: 'format-standard-image',
+        animation: '1200',
+    },
     {
         id: '19',
         title: 'Salon fryzjerski i kosmetyczny – podatki, kasa i sprzedaż kosmetyków',

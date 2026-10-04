@@ -91,6 +91,10 @@ const STRONY = {
         tytul: 'Usługi kadrowo-płacowe · outsourcing kadr i płac · DGC',
         opis: 'Outsourcing kadr i płac dla firm z Łodzi i całej Polski, także online. ZUS, wynagrodzenia, umowy, PFRON i GUS oraz indywidualna wycena obsługi.',
     },
+    '/porady/programista-b2b-ryczalt': {
+        tytul: 'Programista na B2B: jaka stawka ryczałtu · DGC',
+        opis: 'Usługi IT na ryczałcie to 12% albo 8,5%, a różnica wynosi tysiące złotych rocznie. Sprawdź, od czego zależy klasyfikacja i kiedy lepsza jest liniówka.',
+    },
     '/porady/salon-fryzjerski-kosmetyczny-podatki': {
         tytul: 'Salon fryzjerski i kosmetyczny: podatki i kasa · DGC',
         opis: 'Kasa fiskalna od pierwszej wizyty bez limitu obrotu, 8 i 23 procent VAT przy jednej wizycie, ryczałt 8,5 i 3 procent oraz sprzedaż kosmetyków obok usługi.',

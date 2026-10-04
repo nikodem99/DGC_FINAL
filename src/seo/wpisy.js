@@ -9,6 +9,12 @@
 // tytuly rozrozniane rokiem. Powod w naglowku skryptu.
 
 export const WPISY = {
+    'programista-b2b-ryczalt': {
+        tytul: 'Programista na B2B – jaka stawka ryczałtu i kiedy się opłaca · DGC',
+        opis: 'Usługi IT na ryczałcie to 12% albo 8,5%, a różnica wynosi tysiące złotych rocznie. Sprawdź, od czego zależy klasyfikacja i kiedy lepsza jest liniówka.',
+        data: '2026-10-04',
+        nazwa: 'Programista na B2B – jaka stawka ryczałtu i kiedy się opłaca',
+    },
     'salon-fryzjerski-kosmetyczny-podatki': {
         tytul: 'Salon fryzjerski i kosmetyczny – podatki, kasa i sprzedaż… · DGC',
         opis: 'W salonie fryzjerskim i kosmetycznym kasa fiskalna jest obowiązkowa od pierwszej wizyty, bez limitu obrotu.',
