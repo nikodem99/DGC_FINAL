@@ -88,8 +88,31 @@ Dwie kontrole trzymają tę parę razem:
   `@@COŚ@@`, i powie, że paczka strony jest nowsza niż pliki panelu.
 
 Dlatego przy zmianie szablonu wgrywa się **razem** paczkę strony i
-`generator.php`. W odwrotnej kolejności panel po prostu odmówi zapisu —
-nic się nie zepsuje, ale biuro zobaczy komunikat o aktualizacji.
+`generator.php`. Z nowym panelem odwrotna kolejność jest bezpieczna: panel
+odmówi zapisu i wyświetli komunikat o aktualizacji.
+
+**Ten strażnik działa dopiero od chwili, gdy nowy `generator.php` stoi na
+serwerze.** Jeśli wgrasz samą paczkę, a panel zostanie stary, to stary kod
+nie zna ani nowego pola, ani strażnika — wstawi na stronę goły napis
+`@@PODOBNE@@` i zapisze ją bez ostrzeżenia. Zdarzyło się to raz, 4 października
+2026, na dwóch stronach. Kolejność ma znaczenie: **najpierw pliki panelu,
+potem paczka strony.**
+
+### Zapis w panelu nadpisuje ręcznie dobrane meta
+
+Piętnaście artykułów ma w `src/seo/meta.js` ręcznie napisany tytuł i opis pod
+wyszukiwarkę, krótszy i inaczej sformułowany niż tytuł samego artykułu. Panel
+tego pliku nie zna — składa tytuł jako `tytuł artykułu · DGC`, a opis bierze
+z `description` wpisu.
+
+Skutek: zapisanie takiego artykułu w panelu, nawet bez żadnej zmiany w treści,
+podmienia dobrane meta na wersję ogólną. Strona dalej działa i jest poprawna,
+ale tytuł i opis w wynikach wyszukiwania robią się dłuższe i mniej celne.
+
+Nie jest to zepsute, tylko świadomie proste: od chwili uruchomienia panelu to
+biuro jest właścicielem tekstu. Gdyby kiedyś miało to przeszkadzać, trzeba
+przenieść pola `tytulMeta` i `opisMeta` do `dane/wpisy.json` (w
+`scripts/szablon.mjs`) i czytać je w `zapiszStroneArtykulu()`.
 
 ---
 
