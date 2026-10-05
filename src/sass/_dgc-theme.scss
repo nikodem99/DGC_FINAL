@@ -2497,3 +2497,47 @@ img {
         }
     }
 }
+
+
+/* Kropki suwaka zespolu.
+   Szablon ostylowal .slick-dots wylacznie w sekcji opinii, a suwak zespolu
+   mial je wylaczone — bo przesuwal sie sam. Po zdjeciu autoplaya kropki sa
+   jedynym sposobem obejrzenia pozostalych osob, wiec musza wygladac jak te
+   w opiniach: kolka zamiast golych numerow, ktore react-slick wstawia
+   domyslnie. Odstep nad nimi, zeby nie dotykaly kart. */
+.team_section .slick-dots,
+.team_section_s2 .slick-dots {
+  position: static;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    margin: 0;
+    width: auto;
+    height: auto;
+  }
+
+  button {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    padding: 0;
+    border: 0;
+    border-radius: 100%;
+    background-color: var(--dgc-line);
+    text-indent: -9999px;
+    overflow: hidden;
+
+    &:hover {
+      background-color: var(--dgc-brand);
+    }
+  }
+
+  li.slick-active button {
+    background-color: var(--dgc-brand);
+  }
+}

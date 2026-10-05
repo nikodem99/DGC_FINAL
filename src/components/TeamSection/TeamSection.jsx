@@ -27,15 +27,20 @@ const ileKart = () => {
 
 // Reszta ustawien jak w suwaku opinii (Testimonial.jsx). Przeciaganie mysza
 // i palcem dziala z domyslnych wartosci react-slicka (draggable, swipe,
-// touchMove), a autoplay zatrzymuje sie pod kursorem.
+// touchMove).
+//
+// Suwak NIE przesuwa sie juz sam. Wczesniej chodzil co 4,5 sekundy bez
+// kropek, bez strzalek i bez sposobu zatrzymania — przy 375 px widac jedna
+// z szesciu osob, wiec jedynym sposobem obejrzenia reszty bylo czekanie,
+// az przejada obok. Tresc, ktora rusza sie dluzej niz piec sekund i nie da
+// sie jej zatrzymac, to naruszenie WCAG 2.2.2, a przy czytaniu nazwisk
+// i stanowisk ruch po prostu przeszkadza. Zamiast tego sa kropki: widac,
+// ile jest kart, i mozna przejsc do kazdej — takze klawiatura.
 const USTAWIENIA_SUWAKA = {
-    dots: false,
+    dots: true,
     arrows: false,
     infinite: true,
-    autoplay: true,
-    // Wolniej niz w opiniach: tam jest tekst do przeczytania, tu twarze,
-    // ktore maja sie przesuwac spokojnie, a nie migac.
-    autoplaySpeed: 4500,
+    autoplay: false,
     speed: 600,
     slidesToScroll: 1,
     swipeToSlide: true,

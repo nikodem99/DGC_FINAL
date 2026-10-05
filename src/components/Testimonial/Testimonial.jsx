@@ -119,9 +119,13 @@ const Testimonial = (props) => {
         return () => window.removeEventListener('resize', przelicz);
     }, []);
 
+    // Suwak opinii nie przesuwa sie juz sam — tu jest tekst do przeczytania,
+    // a przy 375 px widac jedna z dwunastu opinii. Ruchu nie dalo sie ani
+    // zatrzymac, ani cofnac (zero kropek, zero strzalek), wiec opinia znikala
+    // w polowie zdania. Kropki daja kontrole i pokazuja, ile tego jest.
     const settings = {
-        dots: false,
-        autoplay: true,
+        dots: true,
+        autoplay: false,
         infinite: true,
         arrows: false,
         speed: 300,
