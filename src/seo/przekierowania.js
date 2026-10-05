@@ -32,6 +32,12 @@ export const PROSTE = [
     ['/about', '/o-nas/', 'angielska sciezka z okresu budowy, link poszedl do grafika'],
     ['/contact', '/kontakt/', 'angielska sciezka z okresu budowy'],
     ['/blog', '/porady/', 'angielska sciezka z okresu budowy'],
+    // Ten sam artykul lezal pod dwoma adresami: 50 z 55 blokow tresci bylo
+    // identycznych co do bajtu, oba mialy ten sam opis i oba wskazywaly
+    // same siebie jako kanoniczne. Zostal adres z poprawnym "koszt",
+    // a ten byl juz zaindeksowany, wiec nie moze dawac 404.
+    ['/porady/pulapka-na-myszy-a-koszty-podatkowy', '/porady/pulapka-na-myszy-a-koszt-podatkowy/',
+     'zdublowany artykul o pulapce na myszy'],
 ];
 
 // Cale galezie starej strony na WordPressie. Sprawdzone: wszystkie zwracaja

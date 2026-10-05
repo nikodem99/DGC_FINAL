@@ -507,12 +507,6 @@ export const WPISY = {
         data: '2025-09-23',
         nazwa: 'Zarządzanie nieruchomościami',
     },
-    'pulapka-na-myszy-a-koszty-podatkowy': {
-        tytul: 'Pułapka na myszy a koszty podatkowy · DGC',
-        opis: 'Czy pułapka na myszy może być kosztem uzyskania przychodu? Sprawdź, zanim odliczysz',
-        data: '2025-09-20',
-        nazwa: 'Pułapka na myszy a koszty podatkowy',
-    },
     'jak-rozwiazac-umowe-zawarta-na-czas-nieokreslony': {
         tytul: 'Jak rozwiązać umowę zawartą na czas nieokreślony? · DGC',
         opis: 'Jak rozwiązać umowę zawartą na czas nieokreślony? Przewodnik nie tylko dla przedsiębiorców',
@@ -670,7 +664,7 @@ export const WPISY = {
         nazwa: 'Zużycie materiałów i energii a koszty działalności',
     },
     'sprawozdanie-finansowe': {
-        tytul: 'Sprawozdanie finansowe (2025) · DGC',
+        tytul: 'Sprawozdanie finansowe (czerwiec 2025) · DGC',
         opis: 'Sprawozdanie finansowe Twojej firmy – Klucz do przejrzystości i decyzji! Ekspert wyjaśnia!',
         data: '2025-06-17',
         nazwa: 'Sprawozdanie finansowe',
@@ -868,7 +862,7 @@ export const WPISY = {
         nazwa: 'Terminy składania rocznych PIT-ów',
     },
     'obowiazek-sporzadzenia-sprawozdania-finansowego-co-musisz-wiedziec': {
-        tytul: 'Sprawozdanie finansowe (2025) · obowiazek-sp · DGC',
+        tytul: 'Sprawozdanie finansowe (luty 2025) · DGC',
         opis: 'Obowiązek sporządzenia sprawozdania finansowego – co musisz wiedzieć? Sprawozdanie finansowe to kluczowy dokument dla każdego przedsiębiorcy prowadzącego…',
         data: '2025-02-15',
         nazwa: 'Sprawozdanie finansowe',
@@ -1282,19 +1276,19 @@ export const WPISY = {
         nazwa: 'Minimalne wynagrodzenie w 2024 roku',
     },
     'informacja-w-sprawie-najnizszej-podstawy-wymiaru-skladek-oraz-kwot-skladek-na-ubezpieczenia-spoleczne-w-roku-2024-dla-niektorych-grup-ubezpieczonych-3': {
-        tytul: 'Informacja w sprawie najniższej podstawy wymiaru składek oraz… (2024) · DGC',
+        tytul: 'Informacja w sprawie najniższej podstawy wymiaru składek oraz… (1) · DGC',
         opis: 'Osoby, które prowadzą działalność gospodarczą na mniejszą skalę (opłacają „mały ZUS plus”).',
         data: '2024-01-11',
         nazwa: 'Informacja w sprawie najniższej podstawy wymiaru składek oraz kwot składek na ubezpieczenia społeczne w roku 2024 dla niektórych grup ubezpieczonych.',
     },
     'informacja-w-sprawie-najnizszej-podstawy-wymiaru-skladek-oraz-kwot-skladek-na-ubezpieczenia-spoleczne-w-roku-2024-dla-niektorych-grup-ubezpieczonych-2': {
-        tytul: 'Informacja w sprawie najniższej podstawy wymiaru składek oraz… (2024) · informacja-w · DGC',
+        tytul: 'Informacja w sprawie najniższej podstawy wymiaru składek oraz… (2) · DGC',
         opis: 'oraz osoby współpracujące z osobami prowadzącymi pozarolniczą działalność albo z osobami korzystającymi z „ulgi na start”.',
         data: '2024-01-08',
         nazwa: 'Informacja w sprawie najniższej podstawy wymiaru składek oraz kwot składek na ubezpieczenia społeczne w roku 2024 dla niektórych grup ubezpieczonych.',
     },
     'informacja-w-sprawie-najnizszej-podstawy-wymiaru-skladek-oraz-kwot-skladek-na-ubezpieczenia-spoleczne-w-roku-2024-dla-niektorych-grup-ubezpieczonych': {
-        tytul: 'Informacja w sprawie najniższej podstawy wymiaru składek oraz… (2024) · informacja-w · DGC',
+        tytul: 'Informacja w sprawie najniższej podstawy wymiaru składek oraz… (3) · DGC',
         opis: 'Osoby, które prowadzą pozarolniczą działalność gospodarczą na podstawie Prawa przedsiębiorców lub innych przepisów szczególnych przez okres pierwszych 24…',
         data: '2024-01-06',
         nazwa: 'Informacja w sprawie najniższej podstawy wymiaru składek oraz kwot składek na ubezpieczenia społeczne w roku 2024 dla niektórych grup ubezpieczonych.',
@@ -1468,7 +1462,7 @@ export const WPISY = {
         nazwa: 'Rodzaje wydatków do odliczenia',
     },
     'postawa-wymiaru-zasilku-chorobowego-dla-ubezpieczonych-niebedacych-pracownikami-cd': {
-        tytul: 'Postawa wymiaru zasiłku chorobowego – dla ubezpieczonych… (2023) · DGC',
+        tytul: 'Postawa wymiaru zasiłku chorobowego – dla ubezpieczonych… (wrzesien 2023) · DGC',
         opis: 'Jeżeli niezdolność do pracy ubezpieczonego, dla którego nie została określona najniższa podstawa wymiaru składek, powstała przed upływem pełnego…',
         data: '2023-09-14',
         nazwa: 'Postawa wymiaru zasiłku chorobowego – dla ubezpieczonych niebędących pracownikami cd.',
@@ -1486,7 +1480,7 @@ export const WPISY = {
         nazwa: 'Ulga na dzieci PIT 2023 Dla kogo ulga na dzieci?',
     },
     'podstawowe-zasady-kontroli-prawidlowosci-wykorzystywania-zwolnien-lekarskich-od-pracy-informacja-dla-pracodawcow': {
-        tytul: 'Podstawowe zasady kontroli prawidłowości wykorzystywania… (2023) · DGC',
+        tytul: 'Podstawowe zasady kontroli prawidłowości wykorzystywania… (1) · DGC',
         opis: 'Pracodawcy są uprawnieni do przeprowadzania kontroli prawidłowości wykorzystywania przez pracowników zwolnień lekarskich od pracy z powodu choroby lub…',
         data: '2023-08-31',
         nazwa: 'Podstawowe zasady kontroli prawidłowości wykorzystywania zwolnień lekarskich od pracy – informacja dla pracodawców',
@@ -1516,7 +1510,7 @@ export const WPISY = {
         nazwa: 'Jak obliczyć ulgę?',
     },
     'postawa-wymiaru-zasilku-chorobowego-dla-ubezpieczonych-niebedacych-pracownikami-niezdolnosc-do-pracy': {
-        tytul: 'Postawa wymiaru zasiłku chorobowego – dla ubezpieczonych… (2023) · postawa-wymi · DGC',
+        tytul: 'Postawa wymiaru zasiłku chorobowego – dla ubezpieczonych… (sierpien 2023) · DGC',
         opis: 'Podstawę wymiaru zasiłku przysługującego ubezpieczonemu niebędącemu pracownikiem stanowi przeciętny miesięczny przychód, od którego opłacana jest składka na…',
         data: '2023-08-10',
         nazwa: 'Postawa wymiaru zasiłku chorobowego – dla ubezpieczonych niebędących pracownikami, niezdolność do pracy',
@@ -1528,7 +1522,7 @@ export const WPISY = {
         nazwa: 'Komu przysługuje zasiłek chorobowy?',
     },
     'podstawowe-zasady-kontroli-prawidlowosci-wykorzystywania-zwolnien-lekarskich-od-pracy-informacja-dla-pracodawcow-2': {
-        tytul: 'Podstawowe zasady kontroli prawidłowości wykorzystywania… (2023) · podstawowe-z · DGC',
+        tytul: 'Podstawowe zasady kontroli prawidłowości wykorzystywania… (2) · DGC',
         opis: 'Jeśli pracodawca przeprowadza kontrolę w miejscu zamieszkania lub pobytu i kontrolujący nie zastanie pracownika w domu, kontrolę należy w miarę możliwości…',
         data: '2023-08-07',
         nazwa: 'Podstawowe zasady kontroli prawidłowości wykorzystywania zwolnień lekarskich od pracy – informacja dla pracodawców',
@@ -1900,7 +1894,7 @@ export const WPISY = {
         nazwa: 'Spółka partnerska',
     },
     'co-sie-zmienia-dla-przedsiebiorcy-od-stycznia-2023-2': {
-        tytul: 'Co się zmienia dla przedsiębiorcy od stycznia 2023? (2023) · DGC',
+        tytul: 'Co się zmienia dla przedsiębiorcy od stycznia 2023? (1) · DGC',
         opis: 'Przedsiębiorco czy wiesz co się zmienia dla Ciebie od 01.01.2023? Jeśli jesteś przedsiębiorcą i uzyskujesz również inne przychody opodatkowane według skali…',
         data: '2023-01-09',
         nazwa: 'Co się zmienia dla przedsiębiorcy od stycznia 2023?',
@@ -1912,7 +1906,7 @@ export const WPISY = {
         nazwa: 'Spółka jawna',
     },
     'co-sie-zmienia-dla-przedsiebiorcy-od-stycznia-2023': {
-        tytul: 'Co się zmienia dla przedsiębiorcy od stycznia 2023? (2023) · co-sie-zmien · DGC',
+        tytul: 'Co się zmienia dla przedsiębiorcy od stycznia 2023? (2) · DGC',
         opis: 'Pracujesz na etacie? Chcesz wiedzieć co się zmienia dla Ciebie? Od 2023 r. możesz z większą swobodą dysponować kwotą wolną od podatku w trakcie roku.',
         data: '2023-01-02',
         nazwa: 'Co się zmienia dla przedsiębiorcy od stycznia 2023?',

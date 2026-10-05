@@ -140,24 +140,70 @@ const gotowe = wpisy.map((w) => ({
     opisMeta: uzupelnij(naOpis(w.opis), w.slug),
 }));
 
-// Powtorzone tytuly: rozroznienie rokiem. Google traktuje kilkanascie stron
-// o tej samej nazwie jak jedna, wiec pozostale przepadaja.
-const licznik = {};
-for (const w of gotowe) licznik[w.tytulMeta] = (licznik[w.tytulMeta] ?? 0) + 1;
+// Powtorzone tytuly. Google traktuje kilkanascie stron o tej samej nazwie
+// jak jedna, wiec pozostale przepadaja.
+//
+// Poprzednia wersja doklejala do powtorek `slug.slice(0, 12)` i w szesciu
+// tytulach konczylo sie to urwanym fragmentem adresu:
+// "Sprawozdanie finansowe (2025) · obowiazek-sp · DGC". Fragment wchodzil
+// tez do og:title i twitter:title, wiec bylo go widac w podgladach linkow.
+// W dwoch przypadkach nie pomagal nawet na to, po co powstal: dwa adresy
+// o tym samym prefiksie sluga dostawaly identyczny tytul.
+//
+// Teraz rozroznienie dobieramy dla CALEJ grupy naraz, probujac po kolei
+// i zatrzymujac sie na pierwszym sposobie, ktory daje w grupie same rozne
+// tytuly. Zaden z nich nie pokazuje adresu.
+const MIESIACE_PL = ['styczen', 'luty', 'marzec', 'kwiecien', 'maj', 'czerwiec',
+    'lipiec', 'sierpien', 'wrzesien', 'pazdziernik', 'listopad', 'grudzien'];
+
+const grupy = new Map();
+for (const w of gotowe) {
+    if (!grupy.has(w.tytulMeta)) grupy.set(w.tytulMeta, []);
+    grupy.get(w.tytulMeta).push(w);
+}
+
+const bezDGC = (t) => t.replace(/ · DGC$/, '');
+const zRokiem = (w) => (w.rok && !bezDGC(w.tytulMeta).includes(w.rok)
+    ? `${bezDGC(w.tytulMeta)} (${w.rok}) · DGC` : null);
+const zMiesiacem = (w) => {
+    const m = /^\d{4}-(\d{2})/.exec(w.data || '');
+    return m && w.rok ? `${bezDGC(w.tytulMeta)} (${MIESIACE_PL[+m[1] - 1]} ${w.rok}) · DGC` : null;
+};
+// Ostatnia deska ratunku: kolejny numer. Brzydkie, ale zawsze unikalne
+// i nigdy nie pokazuje adresu strony.
+const zNumerem = (w, i) => `${bezDGC(w.tytulMeta)} (${i + 1}) · DGC`;
 
 let rozroznione = 0;
-const uzyte = new Set();
-for (const w of gotowe) {
-    if (licznik[w.tytulMeta] < 2) { uzyte.add(w.tytulMeta); continue; }
-    const bezDGC = w.tytulMeta.replace(/ · DGC$/, '');
-    let kandydat = w.rok ? `${bezDGC} (${w.rok}) · DGC` : w.tytulMeta;
-    if (uzyte.has(kandydat)) {
-        // Dwa artykuly z tym samym tytulem i z tego samego roku.
-        kandydat = `${bezDGC} (${w.rok}) · ${w.slug.slice(0, 12)} · DGC`;
+for (const [tytul, grupa] of grupy) {
+    if (grupa.length < 2) continue;
+
+    const sposoby = [
+        // 1. Pelne tytuly sa rozne, a zrownalo je dopiero przyciecie —
+        //    wtedy wystarczy przyciac krocej i dodac ogon, ktory je dzieli.
+        (w) => (new Set(grupa.map((x) => x.tytul)).size === grupa.length
+            ? naTytul(w.tytul.slice(0, MAX_TYTUL + 24)) : null),
+        zRokiem,
+        zMiesiacem,
+        zNumerem,
+    ];
+
+    for (const sposob of sposoby) {
+        const kandydaci = grupa.map((w, i) => sposob(w, i));
+        if (kandydaci.some((k) => !k)) continue;
+        if (new Set(kandydaci).size !== grupa.length) continue;
+        grupa.forEach((w, i) => { w.tytulMeta = kandydaci[i]; });
+        rozroznione += grupa.length;
+        break;
     }
-    if (kandydat !== w.tytulMeta) rozroznione++;
-    w.tytulMeta = kandydat;
-    uzyte.add(kandydat);
+}
+
+// Kontrola koncowa: po tym wszystkim zaden tytul nie ma prawa sie powtorzyc.
+const poLiczeniu = {};
+for (const w of gotowe) poLiczeniu[w.tytulMeta] = (poLiczeniu[w.tytulMeta] ?? 0) + 1;
+const nadal = Object.entries(poLiczeniu).filter(([, n]) => n > 1);
+if (nadal.length) {
+    console.error('[meta] tytuly nadal powtorzone:', nadal);
+    process.exit(1);
 }
 
 const apostrof = (t) => String(t).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
