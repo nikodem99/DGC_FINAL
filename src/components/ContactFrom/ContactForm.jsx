@@ -70,47 +70,62 @@ const ContactForm = ({ zrodlo = 'strona-kontaktu' }) => {
     };
 
     return (
+        /* Etykiety, a nie same podpowiedzi w polach. Podpowiedz znika w chwili,
+           gdy ktos zacznie pisac, a czytnik ekranu w ogole jej nie musi czytac —
+           formularz kontaktowy byl jedynym w serwisie bez ani jednej etykiety
+           (reszta, jak KonsultacjaForm, ma je od poczatku). */
         <form onSubmit={submitHandler} className="contact-validation-active" noValidate >
             <div className="row">
                 <div className="col col-lg-6 col-12">
                     <div className="form-field">
+                        <label htmlFor="kf-imie">Imię i nazwisko</label>
                         <input
+                            id="kf-imie"
                             value={forms.name}
                             type="text"
                             name="name"
+                            autoComplete="name"
                             onBlur={(e) => changeHandler(e)}
                             onChange={(e) => changeHandler(e)}
-                            placeholder="Imię i nazwisko" />
+                            placeholder="Jan Kowalski" />
                         {validator.message('name', forms.name, 'required|alpha_space')}
                     </div>
                 </div>
                 <div className="col col-lg-6 col-12">
                     <div className="form-field">
+                        <label htmlFor="kf-email">Adres e-mail</label>
                         <input
+                            id="kf-email"
                             value={forms.email}
                             type="email"
                             name="email"
+                            autoComplete="email"
                             onBlur={(e) => changeHandler(e)}
                             onChange={(e) => changeHandler(e)}
-                            placeholder="Adres e-mail" />
+                            placeholder="jan@twojafirma.pl" />
                         {validator.message('email', forms.email, 'required|email')}
                     </div>
                 </div>
                 <div className="col col-lg-6 col-12">
                     <div className="form-field">
+                        <label htmlFor="kf-telefon">Telefon</label>
                         <input
+                            id="kf-telefon"
                             value={forms.phone}
                             type="tel"
                             name="phone"
+                            autoComplete="tel"
                             onBlur={(e) => changeHandler(e)}
                             onChange={(e) => changeHandler(e)}
-                            placeholder="Telefon" />
+                            placeholder="601 234 567" />
                         {validator.message('phone', forms.phone, 'required|telefon_pl')}
                     </div>
                 </div>
                 <div className="col col-lg-6 col-12">
                     <div className="form-field">
+                        <label htmlFor="kf-temat">Czego dotyczy zapytanie</label>
                         <select
+                            id="kf-temat"
                             onBlur={(e) => changeHandler(e)}
                             onChange={(e) => changeHandler(e)}
                             value={forms.subject}
@@ -124,12 +139,14 @@ const ContactForm = ({ zrodlo = 'strona-kontaktu' }) => {
                     </div>
                 </div>
                 <div className="col col-lg-12 col-12">
+                    <label htmlFor="kf-wiadomosc">Treść wiadomości</label>
                     <textarea
+                        id="kf-wiadomosc"
                         onBlur={(e) => changeHandler(e)}
                         onChange={(e) => changeHandler(e)}
                         value={forms.message}
                         name="message"
-                        placeholder="Twoja wiadomość">
+                        placeholder="Napisz, w czym możemy pomóc">
                     </textarea>
                     {validator.message('message', forms.message, 'required')}
                 </div>

@@ -66,7 +66,7 @@ const ServiceSinglePage = (props) => {
                                                 <div className="content">
                                                     <h3>{serves.title}</h3>
                                                     <p>{serves.description}</p>
-                                                    <Link onClick={ClickHandler} to={`/oferta/${serves.slug}/`}><i className="flaticon-right-arrow"></i></Link>
+                                                    <Link onClick={ClickHandler} to={`/oferta/${serves.slug}/`} aria-label={`Przejdź do: ${serves.title}`}><i className="flaticon-right-arrow" aria-hidden="true"></i></Link>
                                                 </div>
                                             </div>
                                         </div>

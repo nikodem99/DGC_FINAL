@@ -21,7 +21,11 @@ const Footer = (props) => {
                         <div className="col col-lg-3 col-md-6 col-sm-12 col-12">
                             <div className="widget about-widget">
                                 <div className="logo widget-title">
-                                    <img src={logo} alt="blog" />
+                                    {/* Pusty alt celowo: to ten sam znak firmowy co
+                                        w naglowku, nie jest odnosnikiem i nic nie wnosi
+                                        do tresci. Czytnik ma go pominac, a nie czytac
+                                        drugi raz. Bylo tu alt="blog" z szablonu. */}
+                                    <img src={logo} alt="" />
                                 </div>
                                 <p>Biuro rachunkowe z Łodzi. Od 2011 roku prowadzimy księgowość, rozliczenia
                                     podatkowe oraz sprawy kadrowo-płacowe firm z całej Polski.</p>

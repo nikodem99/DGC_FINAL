@@ -32,7 +32,7 @@ const ServiceSection = (props) => {
                                 <div className="content">
                                     <h2>{servic.title}</h2>
                                     <p>{servic.description}</p>
-                                    <Link onClick={ClickHandler} to={`/oferta/${servic.slug}/`}><i className="flaticon-right-arrow"></i></Link>
+                                    <Link onClick={ClickHandler} to={`/oferta/${servic.slug}/`} aria-label={`Przejdź do: ${servic.title}`}><i className="flaticon-right-arrow" aria-hidden="true"></i></Link>
                                 </div>
                             </div>
                         </div>

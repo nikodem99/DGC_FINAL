@@ -3,10 +3,8 @@ import '../src/css/themify-icons.css'
 import '../src/css/flaticon_medically.css'
 import '../src/css/font-awesome.min.css'
 import './sass/style.scss'
-import 'react-toastify/dist/ReactToastify.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import AllRoute from './main-component/router';
-import { ToastContainer } from 'react-toastify';
 import NewsletterPopup from './components/Newsletter/NewsletterPopup';
 import { useEffect } from 'react';
 import { uruchomPomiary } from './lib/analityka';
@@ -41,7 +39,11 @@ function App({ sciezka }) {
       <div className="App" id="scrool">
         <AllRoute sciezka={sciezka} />
         <NewsletterPopup />
-        <ToastContainer />
+        {/* Byl tu <ToastContainer /> z react-toastify. Wstawial na kazda
+            z 469 podstron obszar powiadomien o angielskiej nazwie
+            "Notifications Alt+T", przy lang="pl". Powiadomien nie wysyla
+            juz nic: jedyne wywolania toast() siedzialy w koszyku i liscie
+            zyczen kupionego szablonu, a tych stron nie ma. */}
       </div>
     </ThemeProvider>
   )

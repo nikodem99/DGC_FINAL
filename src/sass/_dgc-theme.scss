@@ -151,6 +151,42 @@ a:not(.theme-btn):not(.theme-btn-s2):not(.theme-btn-s3):not(.theme-btn-accent):n
   text-underline-offset: 0.22em;
 }
 
+/* --- Wskaznik fokusu: siatka bezpieczenstwa ---------------------- */
+/* Szablon w kilkudziesieciu miejscach robi `outline: 0`. Czesc z nich ma
+   zamiennik (pola formularzy dostaja nizej wlasna obwodke z box-shadow),
+   ale czesc nie ma zadnego — przycisk menu mobilnego, przyciski akordeonu
+   na /faq/ i /o-nas/ oraz odnosniki w suwaku zespolu. Uzytkownik klawiatury
+   nie widzi wtedy, gdzie jest.
+
+   Zamiast poprawiac kazda z tych regul osobno w cudzym arkuszu, stoi tu
+   jedna regula, ktorej nie da sie przykryc. Dwie rzeczy czynia ja bezpieczna:
+   dotyczy wylacznie :focus-visible, wiec klikajacy myszka nie zobaczy jej
+   nigdy, i omija pola formularzy, ktore maja juz swoj sygnal. */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible {
+  outline: 3px solid var(--dgc-accent) !important;
+  outline-offset: 2px !important;
+  border-radius: 2px;
+}
+
+/* Etykiety w formularzu kontaktowym (/kontakt/ i /cennik/). Dopisane razem
+   z samymi etykietami: szablon zakladal tu wylacznie podpowiedzi w polach,
+   wiec arkusz nie mial dla nich zadnej reguly i etykieta przyklejala sie do
+   pola. Wymiary przepisane z formularza na /umow-konsultacje/, zeby oba
+   wygladaly tak samo.
+
+   :not(.error) jest istotne — walidator wstawia komunikaty bledow tez jako
+   <label class="error">, a te maja wlasny wyglad nizej. */
+.contact-validation-active label:not(.error) {
+  display: block;
+  margin-bottom: 13px;
+  font-size: 20px;
+  line-height: 1.3;
+}
+
 /* --- Formularze ------------------------------------------------- */
 input:focus,
 textarea:focus,
