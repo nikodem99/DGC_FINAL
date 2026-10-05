@@ -96,7 +96,6 @@ Version:        1.0.0
 @import "components/form";
 @import "components/social-links";
 @import "components/page-title";
-@import "components/preloader";
 @import "components/blog-sidebar";
 @import "components/pagination";
 
@@ -112,16 +111,8 @@ Version:        1.0.0
 // page
 @import "page/home-default";
 @import "page/home-style-2";
-@import "page/home-style-3";
 @import "page/service-single";
-@import "page/project-single";
-@import "page/team-single";
-@import "page/shop";
-@import "page/shop-single";
-@import "page/cart";
-@import "page/checkout";
 @import "page/faq";
-@import "page/terms";
 
 
 @import "page/_blog";
