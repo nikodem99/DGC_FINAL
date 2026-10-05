@@ -2417,3 +2417,39 @@ footer a[href^="mailto:"] {
 img {
   height: auto;
 }
+
+
+/* Strona 404 ma teraz dwa wyjscia zamiast jednego: strona glowna i porady.
+   Szablon zakladal jeden przycisk, wiec para potrzebuje odstepu, a drugi
+   przycisk — lzejszego wygladu, zeby bylo widac, ktore wyjscie jest
+   glowne. Na waskim ekranie staja jeden pod drugim. */
+.error-message {
+    .theme-btn + .theme-btn {
+        margin-left: 12px;
+    }
+
+    .bl-404-porady {
+        background: transparent;
+        color: $dgc-brand;
+        box-shadow: inset 0 0 0 2px $dgc-brand;
+
+        &:hover,
+        &:focus-visible {
+            background: $dgc-brand;
+            color: $dgc-canvas;
+        }
+    }
+
+    @media (max-width: 575px) {
+        .theme-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .theme-btn + .theme-btn {
+            margin-left: 0;
+            margin-top: 12px;
+        }
+    }
+}

@@ -9,22 +9,11 @@ import React from 'react';
 import { BrowserRouter, StaticRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
 import Homepage from '../HomePage/HomePage'
 import AboutPage from '../AboutPage/AboutPage';
-import ShopPage from '../ShopPage'
-import ProductSinglePage from '../ProductSinglePage';
-import CartPage from '../CartPage';
-import CheckoutPage from '../CheckoutPage';
-import OrderRecived from '../OrderRecived';
 import FaqPage from '../FaqPage/FaqPage';
-import ProjectPage from '../ProjectPage/ProjectPage';
-import ProjectSingle from '../ProjectSingle/ProjectSingle';
 import ServicePages from '../ServicePage/ServicePage';
 import ServiceSinglePage from '../ServiceSinglePage/ServiceSinglePage';
 import BlogPage from '../BlogPage/BlogPage'
-import BlogPageLeft from '../BlogPageLeft/BlogPageLeft'
-import BlogPageFullwidth from '../BlogPageFullwidth/BlogPageFullwidth'
 import BlogDetails from '../BlogDetails/BlogDetails'
-import BlogDetailsLeftSiide from '../BlogDetailsLeftSiide/BlogDetailsLeftSiide'
-import BlogDetailsFull from '../BlogDetailsFull/BlogDetailsFull'
 import ContactPage from '../ContactPage/ContactPage';
 import PricingPage from '../PricingPage/PricingPage';
 import ErrorPage from '../ErrorPage/ErrorPage';
@@ -55,35 +44,26 @@ const AllRoute = ({ sciezka }) => {
         <BanerZgod />
         <Routes>
           {/* Trasy /home-2, /home-3, /team i /team-single zostaly usuniete
-              23.09.2026. Byly resztkami kupionego szablonu, serwer i tak
+              23.09.2026, a sklep, koszyk, kasa, projekty i trzy warianty
+              bloga 05.10.2026 — razem z komponentami. Serwer zwracal na nie
+              404 (src/seo/przekierowania.js, DO_KOSZA), ale router i tak
+              dorysowywal je w przegladarce: /checkout/ pokazywalo angielski
+              formularz platnosci karta w nawigacji biura rachunkowego. Byly resztkami kupionego szablonu, serwer i tak
               zwracal na nie 404 (src/seo/przekierowania.js, DO_KOSZA), a
               /team-single wyswietlalo dane wspolpracownikow razem z numerami
               wpisow na listy zawodowe. Usuniecie tras wyrzuca te komponenty
               z paczki, a nie tylko chowa je przed uzytkownikiem. */}
           <Route path="/" element={<Homepage />} />
-          <Route path="home" element={<Homepage />} />
+          <Route path="home" element={<Navigate to="/" replace />} />
           <Route path="o-nas" element={<AboutPage />} />
-          <Route path="shop" element={<ShopPage />} />
-          <Route path='shop-single/:slug' element={<ProductSinglePage />} />
-          <Route path='cart' element={<CartPage />} />
-          <Route path='checkout' element={<CheckoutPage />} />
-          <Route path='order_received' element={<OrderRecived />} />
           <Route path="faq" element={<FaqPage/>} />
-          <Route path="services" element={<ServicePages/>} />
-          <Route path="service-single/:slug" element={<ServiceSinglePage />} />
           <Route path="oferta" element={<ServicePages/>} />
           <Route path="oferta/:slug" element={<ServiceSinglePage />} />
-          <Route path="project" element={<ProjectPage/>} />
-          <Route path="project-single/:slug" element={<ProjectSingle />} />
           <Route path='porady' element={<BlogPage/>} />
           {/* Kolejne strony listy. Osobny adres zamiast stanu w JavaScripcie,
               zeby robot mial po czym przejsc do starszych artykulow. */}
           <Route path='porady/strona/:nr' element={<BlogPage/>} />
-          <Route path='blog-left-sidebar' element={<BlogPageLeft />} />
-          <Route path='blog-fullwidth' element={<BlogPageFullwidth />} />
           <Route path='porady/:slug' element={<BlogDetails />} />
-          <Route path='blog-single-left-sidebar/:slug' element={<BlogDetailsLeftSiide />} />
-          <Route path='blog-single-fullwidth/:slug' element={<BlogDetailsFull />} />
           <Route path='kontakt' element={<ContactPage />} />
           <Route path='cennik' element={<PricingPage />} />
           {/* Podstrona spoza menu — prowadzi do niej przycisk z hero
@@ -100,6 +80,12 @@ const AllRoute = ({ sciezka }) => {
           <Route path="blog-single/:slug" element={<PrzeniesArtykul />} />
 
           <Route path='404' element={<ErrorPage />} />
+          {/* Trasa przechwytujaca. Bez niej kazdy nieznany adres konczyl sie
+              BIALA strona: serwer oddawal poprawna polska strone 404, po czym
+              React montowal sie, nie znajdowal pasujacej trasy i wymazywal
+              wszystko — zostawal sam baner ciasteczek, bez naglowka i stopki.
+              MUSI byc ostatnia, bo pasuje do wszystkiego. */}
+          <Route path='*' element={<ErrorPage />} />
         </Routes>
       </Router>
 

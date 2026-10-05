@@ -49,6 +49,7 @@ export const DO_KOSZA = [
     '/shop', '/shop-single', '/cart', '/checkout', '/order_received',
     '/project', '/project-single', '/team', '/team-single',
     '/home-2', '/home-3', '/blog-left-sidebar', '/blog-fullwidth',
+    '/blog-single-left-sidebar', '/blog-single-fullwidth',
     '/services', '/service-single',
     '/wp-admin', '/wp-login.php', '/wp-json',
 ];

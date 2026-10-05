@@ -2,7 +2,14 @@
 4. wpo-footer
 --------------------------------------------------------------*/
 .wpo-site-footer,.wpo-site-footer_s2 {
-    background: $dgc-ink url(../../images/footer-bg.png) center / cover no-repeat;
+    // Byla tu jeszcze tekstura: url(../../images/footer-bg.png), 286 kB PNG
+    // pobierane na KAZDEJ z 469 podstron, czyli 23 procent wagi strony
+    // artykulu. Nie bylo jej widac — plik ma kanal alfa rowny 8/255 na
+    // wszystkich 1 363 200 pikselach, a na wierzchu lezy &::after z
+    // rgba(13, 68, 68, 0.93). Po zlozeniu jednego z drugim najwieksze
+    // odchylenie od plaskiego $dgc-ink to 0,53/255, czyli mniej, niz
+    // ekran potrafi pokazac. Stopka wyglada tak samo, strona wazy mniej.
+    background: $dgc-ink;
     position: relative;
     font-size: 15px;
     overflow: hidden;

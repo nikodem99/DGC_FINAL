@@ -1,8 +1,15 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import erimg from '../../images/error-404.png'
 
 
+// Strona pokazywana pod nieistniejacym adresem. Teksty byly po angielsku,
+// prosto z kupionego szablonu, choc cala warstwa meta tej strony jest po
+// polsku od poczatku. Doklejamy tez odnosnik do porad: najczesciej trafia
+// tu ktos ze starego linku do artykulu, ktorego nie przenieslismy.
+//
+// Bylo tu jeszcze zdjecie error-404.png z szablonu — szary prostokat
+// z napisem "700X500". Zamiast szukac zastepnika, nie ma go wcale: na
+// stronie bledu liczy sie zdanie, co dalej, a nie ilustracja.
 const Error = (props) => {
     const ClickHandler = () =>{
         window.scrollTo(10, 0);
@@ -14,13 +21,16 @@ const Error = (props) => {
                 <div className="row">
                     <div className="col col-xs-12">
                         <div className="content clearfix">
-                            <div className="error">
-                                <img src={erimg} alt=""/>
-                            </div>
                             <div className="error-message">
-                                <h3>Oops! Page Not Found!</h3>
-                                <p>We’re sorry but we can’t seem to find the page you requested. This might be because you have typed the web address incorrectly.</p>
-                                <Link onClick={ClickHandler} to="/" className="theme-btn"> Back to home</Link>
+                                <h3>Nie znaleźliśmy takiej strony</h3>
+                                <p>
+                                    Adres może być wpisany z literówką albo strona została
+                                    przeniesiona. Zajrzyj na stronę główną lub do porad —
+                                    jest tam ponad 370 artykułów o księgowości, podatkach
+                                    i kadrach.
+                                </p>
+                                <Link onClick={ClickHandler} to="/" className="theme-btn">Strona główna</Link>
+                                <Link onClick={ClickHandler} to="/porady/" className="theme-btn bl-404-porady">Przejdź do porad</Link>
                             </div>
                         </div>
                     </div>
