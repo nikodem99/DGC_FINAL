@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../src/css/themify-icons.css'
-import '../src/css/flaticon_medically.css'
+import '../src/css/dgc-ikony.css'
 import '../src/css/font-awesome.min.css'
 import './sass/style.scss'
 import { ThemeProvider, createTheme } from '@mui/material/styles';

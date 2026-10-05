@@ -1,9 +1,9 @@
 @font-face {
-  font-family: "flaticon_medically";
-  src: url("./flaticon_medically.woff2?4319b266fb98e79c94c0cf546315ba25") format("woff2"), url("./flaticon_medically.woff?4319b266fb98e79c94c0cf546315ba25") format("woff"), url("./flaticon_medically.eot?4319b266fb98e79c94c0cf546315ba25#iefix") format("embedded-opentype"), url("./flaticon_medically.ttf?4319b266fb98e79c94c0cf546315ba25") format("truetype"), url("./flaticon_medically.svg?4319b266fb98e79c94c0cf546315ba25#flaticon_medically") format("svg");
+  font-family: "dgc-ikony";
+  src: url("./dgc-ikony.woff2?4319b266fb98e79c94c0cf546315ba25") format("woff2"), url("./dgc-ikony.woff?4319b266fb98e79c94c0cf546315ba25") format("woff"), url("./dgc-ikony.eot?4319b266fb98e79c94c0cf546315ba25#iefix") format("embedded-opentype"), url("./dgc-ikony.ttf?4319b266fb98e79c94c0cf546315ba25") format("truetype"), url("./dgc-ikony.svg?4319b266fb98e79c94c0cf546315ba25#dgc-ikony") format("svg");
 }
 i[class^=flaticon-]:before, i[class*=" flaticon-"]:before {
-  font-family: flaticon_medically !important;
+  font-family: dgc-ikony !important;
   font-style: normal;
   font-weight: normal !important;
   font-variant: normal;
@@ -159,4 +159,4 @@ i[class^=flaticon-]:before, i[class*=" flaticon-"]:before {
 
 .flaticon-email:before {
   content: "\f125";
-}/*# sourceMappingURL=flaticon_medically.css.map */
+}/*# sourceMappingURL=dgc-ikony.css.map */

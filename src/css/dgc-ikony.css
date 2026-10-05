@@ -10,17 +10,17 @@
 */
 
 @font-face {
-    font-family: "flaticon_medically";
-    src: url("../fonts/flaticon_medically.woff2?4319b266fb98e79c94c0cf546315ba25") format("woff2"),
-        url("../fonts/flaticon_medically.woff?4319b266fb98e79c94c0cf546315ba25") format("woff"),
-        url("../fonts/flaticon_medically.eot?4319b266fb98e79c94c0cf546315ba25#iefix") format("embedded-opentype"),
-        url("../fonts/flaticon_medically.ttf?4319b266fb98e79c94c0cf546315ba25") format("truetype"),
-        url("../fonts/flaticon_medically.svg?4319b266fb98e79c94c0cf546315ba25#flaticon_medically") format("svg")
+    font-family: "dgc-ikony";
+    src: url("../fonts/dgc-ikony.woff2?4319b266fb98e79c94c0cf546315ba25") format("woff2"),
+        url("../fonts/dgc-ikony.woff?4319b266fb98e79c94c0cf546315ba25") format("woff"),
+        url("../fonts/dgc-ikony.eot?4319b266fb98e79c94c0cf546315ba25#iefix") format("embedded-opentype"),
+        url("../fonts/dgc-ikony.ttf?4319b266fb98e79c94c0cf546315ba25") format("truetype"),
+        url("../fonts/dgc-ikony.svg?4319b266fb98e79c94c0cf546315ba25#dgc-ikony") format("svg")
 }
 
 i[class^="flaticon-"]:before,
 i[class*=" flaticon-"]:before {
-    font-family: flaticon_medically !important;
+    font-family: dgc-ikony !important;
     font-style: normal;
     font-weight: normal !important;
     font-variant: normal;
