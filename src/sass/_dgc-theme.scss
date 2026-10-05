@@ -151,6 +151,14 @@ a:not(.theme-btn):not(.theme-btn-s2):not(.theme-btn-s3):not(.theme-btn-accent):n
   text-underline-offset: 0.22em;
 }
 
+/* Atrybut hidden ma naprawde chowac. Bootstrap i szablon ustawiaja display
+   na wielu klasach, a kazda taka regula wygrywa z display:none z przegladarki
+   — element z hidden zostalby widoczny. Dotyczy odpowiedzi w akordeonie na
+   /faq/ i /o-nas/, ktore od teraz sa w dokumencie zawsze. */
+[hidden] {
+  display: none !important;
+}
+
 /* --- Wskaznik fokusu: siatka bezpieczenstwa ---------------------- */
 /* Szablon w kilkudziesieciu miejscach robi `outline: 0`. Czesc z nich ma
    zamiennik (pola formularzy dostaja nizej wlasna obwodke z box-shadow),

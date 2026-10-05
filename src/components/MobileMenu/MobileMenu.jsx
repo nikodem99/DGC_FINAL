@@ -1,5 +1,4 @@
 import React, { Fragment, useState } from 'react';
-import Collapse from "@mui/material/Collapse";
 import { NavLink } from "react-router-dom";
 import offerMenu from '../../api/offerMenu';
 import './style.css';
@@ -50,6 +49,9 @@ const menus = [
 // Dlatego uzywamy tu zwyklych <li> i <ul> zamiast komponentow MUI.
 const MobileMenu = () => {
 
+    // Identyfikator panelu, zeby hamburger mogl na niego wskazac.
+    const idPanelu = React.useId();
+
     const [openId, setOpenId] = useState(0);
     const [menuActive, setMenuState] = useState(false);
 
@@ -63,9 +65,19 @@ const MobileMenu = () => {
 
     return (
         <div>
-            <div className={`mobileMenu ${menuActive ? "show" : ""}`}>
+            <div className={`mobileMenu ${menuActive ? "show" : ""}`} id={idPanelu}>
                 <div className="menu-close">
-                    <div className="clox" onClick={() => setMenuState(!menuActive)}><i className="ti-close"></i></div>
+                    {/* Bylo <div onClick>: poza kolejnoscia Tab, bez reakcji na
+                        Enter i bez nazwy. Krzyzyk to jedyny sposob zamkniecia
+                        menu poza wybraniem pozycji. */}
+                    <button
+                        type="button"
+                        className="clox"
+                        aria-label="Zamknij menu"
+                        onClick={() => setMenuState(false)}
+                    >
+                        <i className="ti-close" aria-hidden="true"></i>
+                    </button>
                 </div>
 
                 <ul className="responsivemenu">
@@ -74,21 +86,42 @@ const MobileMenu = () => {
                             <li className={item.id === openId ? 'active' : null} key={mn}>
                                 {item.submenu ?
                                     <Fragment>
-                                        <p onClick={() => setOpenId(item.id === openId ? 0 : item.id)}>{item.title}
-                                            <i className={item.id === openId ? 'fa fa-angle-up' : 'fa fa-angle-down'}></i>
-                                        </p>
-                                        <Collapse in={item.id === openId} timeout="auto" unmountOnExit>
-                                            <ul className="subMenu">
-                                                {item.submenu.map((submenu, i) => {
-                                                    return (
-                                                        <li key={i}>
-                                                            <NavLink onClick={ClickHandler} className="active"
-                                                                to={submenu.link}>{submenu.title}</NavLink>
-                                                        </li>
-                                                    )
-                                                })}
-                                            </ul>
-                                        </Collapse>
+                                        {/* Bylo <p onClick>. Teraz przycisk, wiec pozycja
+                                            jest w kolejnosci Tab, reaguje na Enter i spacje,
+                                            a czytnik mowi, czy podmenu jest rozwiniete. */}
+                                        <button
+                                            type="button"
+                                            aria-expanded={item.id === openId}
+                                            aria-controls={`${idPanelu}-podmenu-${item.id}`}
+                                            onClick={() => setOpenId(item.id === openId ? 0 : item.id)}
+                                        >
+                                            {item.title}
+                                            <i className={item.id === openId ? 'fa fa-angle-up' : 'fa fa-angle-down'} aria-hidden="true"></i>
+                                        </button>
+                                        {/* Bylo tu <Collapse> z MUI z unmountOnExit, czyli
+                                            szesc odnosnikow do podstron oferty nie istnialo
+                                            w dokumencie, dopoki ktos nie rozwinal podmenu —
+                                            ani dla czytnika, ani dla wyszukiwarki.
+
+                                            Zwykly <ul> z atrybutem hidden zamiast MUI: tamten
+                                            komponent renderuje sie przez emotion, ktore przy
+                                            prerenderowaniu w Node nie ma zainicjowanej pamieci
+                                            podrecznej i wywracalo budowanie. Przy okazji z
+                                            paczki znika kolejny kawalek MUI. */}
+                                        <ul
+                                            className="subMenu"
+                                            id={`${idPanelu}-podmenu-${item.id}`}
+                                            hidden={item.id !== openId}
+                                        >
+                                            {item.submenu.map((submenu, i) => {
+                                                return (
+                                                    <li key={i}>
+                                                        <NavLink onClick={ClickHandler} className="active"
+                                                            to={submenu.link}>{submenu.title}</NavLink>
+                                                    </li>
+                                                )
+                                            })}
+                                        </ul>
                                     </Fragment>
                                     : <NavLink onClick={ClickHandler} className="active"
                                         to={item.link}>{item.title}</NavLink>
@@ -100,8 +133,18 @@ const MobileMenu = () => {
 
             </div>
 
-            <div className="showmenu mobail-menu" onClick={() => setMenuState(!menuActive)}>
-                <button type="button" className="navbar-toggler open-btn">
+            {/* onClick siedzial na otaczajacym <div>, wiec fokus z klawiatury
+                trafial na przycisk, ktory nic nie robil. Przycisk nie mial tez
+                zadnej nazwy — jego cala tresc to trzy kreski ze <span>. */}
+            <div className="showmenu mobail-menu">
+                <button
+                    type="button"
+                    className="navbar-toggler open-btn"
+                    aria-label={menuActive ? 'Zamknij menu' : 'Otwórz menu'}
+                    aria-expanded={menuActive}
+                    aria-controls={idPanelu}
+                    onClick={() => setMenuState(!menuActive)}
+                >
                     <span className="icon-bar first-angle"></span>
                     <span className="icon-bar middle-angle"></span>
                     <span className="icon-bar last-angle"></span>

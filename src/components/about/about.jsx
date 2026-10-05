@@ -1,5 +1,5 @@
 import React from 'react';
-import CountUp from 'react-countup';
+import Licznik from '../Licznik/Licznik';
 
 // image
 import Ab1 from '../../images/paniprezes.jpg'
@@ -22,7 +22,7 @@ const about = (props) => {
                                             <i className="flaticon-cup"></i>
                                         </div>
                                         <div className="text">
-                                        <h2><CountUp end={15} enableScrollSpy /></h2>
+                                        <h2><Licznik ile={15} /></h2>
                                             <p>Lat na rynku</p>
                                         </div>
                                     </div>

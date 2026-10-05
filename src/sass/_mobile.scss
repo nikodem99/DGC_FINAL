@@ -52,7 +52,8 @@
        dzialaly wcale — wysokosc 44px brala sie przypadkiem z szablonowej
        reguly @media(max-width:450px), czyli tylko na najwezszych ekranach. */
     .mobileMenu .responsivemenu li a,
-    .mobileMenu .responsivemenu li p {
+    .mobileMenu .responsivemenu li p,
+    .mobileMenu .responsivemenu li button {
         padding-top: 13px;
         padding-bottom: 13px;
         font-size: 15px;
@@ -89,6 +90,14 @@
         justify-content: center;
         width: 44px;
         height: 44px;
+        /* Krzyzyk byl <div>, a jest <button> — zeby dalo sie go dosiegnac
+           klawiatura. Przycisk przynosi ze soba domyslny wyglad przegladarki
+           (szare tlo i obwodke "outset"), wiec trzeba go zdjac. */
+        padding: 0;
+        background: none;
+        border: 0;
+        color: inherit;
+        cursor: pointer;
     }
 
     /* --- Okruszki nawigacyjne ---------------------------------------- */

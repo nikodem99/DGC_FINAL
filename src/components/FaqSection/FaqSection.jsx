@@ -11,6 +11,10 @@ const FaqSection = ({
 }) => {
     const [activeIndex, setActiveIndex] = useState(null);
 
+    // Na stronie /o-nas/ ta sama sekcja stoi drugi raz, wiec identyfikatory
+    // musza sie roznic — inaczej aria-controls wskazuje cudza odpowiedz.
+    const idBazowe = React.useId();
+
     const handleToggle = (index) => {
         setActiveIndex(activeIndex === index ? null : index);
     }
@@ -42,17 +46,29 @@ const FaqSection = ({
                                                 <h3 className="accordion-header">
                                                     <button
                                                         type="button"
+                                                        id={`${idBazowe}-przycisk-${index}`}
+                                                        aria-controls={`${idBazowe}-odpowiedz-${index}`}
                                                         onClick={() => handleToggle(index)}
                                                         aria-expanded={activeIndex === index}
                                                     >
                                                         {accordion.title}
                                                     </button>
                                                 </h3>
-                                                {activeIndex === index && (
-                                                    <div className="accordion-body">
-                                                        <p>{accordion.content}</p>
-                                                    </div>
-                                                )}
+                                                {/* Odpowiedz jest w dokumencie ZAWSZE, schowana atrybutem
+                                                    hidden. Wczesniej powstawala dopiero po kliknieciu, wiec
+                                                    w gotowym HTML-u nie bylo ani slowa odpowiedzi — ani dla
+                                                    czytnika ekranu, ani dla wyszukiwarki, ani dla kogos bez
+                                                    JavaScriptu. Na /faq/ to 320 slow tresci, do ktorych
+                                                    odwoluja sie jeszcze dane strukturalne FAQPage. */}
+                                                <div
+                                                    className="accordion-body"
+                                                    id={`${idBazowe}-odpowiedz-${index}`}
+                                                    role="region"
+                                                    aria-labelledby={`${idBazowe}-przycisk-${index}`}
+                                                    hidden={activeIndex !== index}
+                                                >
+                                                    <p>{accordion.content}</p>
+                                                </div>
                                             </div>
                                         ))}
                                     </div>

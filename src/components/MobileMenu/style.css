@@ -33,6 +33,7 @@
 }
 .responsivemenu li a,
 .responsivemenu li p,
+.responsivemenu li button,
 .responsivemenu ul{
     display: block;
     padding: 10px 35px;
@@ -43,9 +44,31 @@
     color: #FDFCFC;
     cursor: pointer;
 }
-.responsivemenu li p{
+.responsivemenu li p,
+.responsivemenu li button{
     position: relative;
     margin-bottom: 0;
+}
+
+/* Przelacznik "Oferta" byl akapitem z onClick — poza kolejnoscia Tab,
+   bez reakcji na Enter i bez roli. Jest przyciskiem, wiec trzeba zdjac
+   z niego domyslny wyglad przycisku i wyrownac do pozostalych pozycji. */
+.responsivemenu li button{
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: 0;
+    font-family: inherit;
+}
+
+/* Zamkniete menu stalo poza ekranem, ale z visibility: visible — jego
+   odnosniki siedzialy w kolejnosci Tab i mozna bylo wejsc w nie
+   klawiatura, nie widzac, gdzie sie jest. */
+.mobileMenu:not(.show){
+    visibility: hidden;
+}
+.mobileMenu.show{
+    visibility: visible;
 }
 .responsivemenu ul.subMenu{
     padding-top: 0;

@@ -318,13 +318,20 @@
 		transform: translateY(-50%);
 	}
 
-	.wpo-site-header #navbar>ul>li:hover>.sub-menu {
+	/* :focus-within obok :hover — podmenu "Oferta" otwieralo sie wylacznie
+	   po najechaniu myszka, wiec szesc odnosnikow do podstron oferty bylo
+	   z klawiatury nieosiagalnych (visibility: hidden wyjmuje je z tabulacji).
+	   Ta sama regula stoi w tym pliku drugi raz, nizej, w zagniezdzonym
+	   bloku #navbar — szablon ma ja zdublowana i obie trzeba trzymac zgodne. */
+	.wpo-site-header #navbar>ul>li:hover>.sub-menu,
+	.wpo-site-header #navbar>ul>li:focus-within>.sub-menu {
 		top: 100%;
 		visibility: visible;
 		opacity: 1;
 	}
 
-	.wpo-site-header #navbar .sub-menu>li:hover>.sub-menu {
+	.wpo-site-header #navbar .sub-menu>li:hover>.sub-menu,
+	.wpo-site-header #navbar .sub-menu>li:focus-within>.sub-menu {
 		left: 100%;
 		visibility: visible;
 		opacity: 1;
@@ -1095,13 +1102,16 @@
 			}
 
 			/*** hover effect ***/
-			>ul>li:hover>.sub-menu {
+			/* Druga kopia tej samej reguly, patrz komentarz przy pierwszej. */
+			>ul>li:hover>.sub-menu,
+			>ul>li:focus-within>.sub-menu {
 				top: 100%;
 				visibility: visible;
 				opacity: 1;
 			}
 
-			.sub-menu>li:hover>.sub-menu {
+			.sub-menu>li:hover>.sub-menu,
+			.sub-menu>li:focus-within>.sub-menu {
 				left: 100%;
 				visibility: visible;
 				opacity: 1;
