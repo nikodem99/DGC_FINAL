@@ -152,6 +152,20 @@ drogą, którą lead dociera do biura.
 Poczta domeny stoi na tym samym serwerze co strona, więc wiadomość nie
 wychodzi nawet do internetu i SPF zgadza się sam z siebie.
 
+**Dostarczanie potwierdzone 5 października 2026**: biuro potwierdziło, że
+zgłoszenia z formularza docierają na `kontakt@biurodgc.pl`. Do tego dnia
+była to jedyna nieprzetestowana ścieżka w całym serwisie.
+
+Forminit zostaje podłączony jako zapas i **nie jest już niczym krytycznym**.
+Można go odłączyć w dowolnej chwili bez zmiany w kodzie — `sendLead.js`
+uznaje zgłoszenie za wysłane, gdy zadziała którakolwiek z dwóch dróg.
+Gdyby kiedyś skończył się darmowy limit 100 zgłoszeń miesięcznie, też nic
+się nie stanie: poczta leci niezależnie.
+
+Jeśli kiedykolwiek pojawi się podejrzenie, że formularz przestał działać,
+pierwsze, co trzeba sprawdzić, to `nadaj.php?test=dgc-sprawdzam`. Nic nie
+wysyła, zwraca JSON ze stanem środowiska (`poczta`, `mbstring`, `licznik`).
+
 ---
 
 ## Pułapki, na które już wpadliśmy
