@@ -257,7 +257,7 @@ if (fs.existsSync(listaHtmlSciezka) && wpisy.length) {
     podmienWLiscie('og:url', /<meta property="og:url" content="[^"]*">/, '<meta property="og:url" content="@@KANONICZNY@@">');
 
     // Karty: wszystko od pierwszej karty do stronicowania.
-    const poczatekKart = lista.indexOf('<div class="wpo-blog-content">') + '<div class="wpo-blog-content">'.length;
+    const poczatekKart = lista.indexOf('<div class="dgc-blog-content">') + '<div class="dgc-blog-content">'.length;
     const poczatekStron = lista.indexOf('<div class="pagination-wrapper');
     if (poczatekKart > 0 && poczatekStron > poczatekKart) {
         const kartyHtml = lista.slice(poczatekKart, poczatekStron);
