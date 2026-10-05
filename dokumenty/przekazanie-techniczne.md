@@ -181,11 +181,89 @@ która nie jest JSON-em, i mówi o tym wprost w konsoli.
 
 ---
 
+## Po szablonie nie ma już śladu
+
+Strona powstała na kupionym motywie „Medically". 5 października 2026 został
+z niego usunięty cały balast — nie tylko ukryty, ale wyrzucony z repozytorium
+i z paczki:
+
+- **13 tras i 28 komponentów**: sklep, koszyk, kasa, potwierdzenie zamówienia,
+  projekty, trzy warianty bloga, dwie dodatkowe strony główne, profile zespołu.
+  Serwer i tak zwracał na nie 404, ale **router dorysowywał je w przeglądarce** —
+  `/checkout/` pokazywało angielski formularz płatności kartą w nawigacji biura
+  rachunkowego. Dziś pokazuje stronę 404.
+- **Dane demo**: hasło `123456`, numer karty, adresy `admin@`.
+- **Prefiks klas `wpo-`** (nazwa dostawcy motywu) zamieniony na `dgc-` —
+  217 wystąpień. Zamiana sprawdzona przez porównanie HTML-a wszystkich
+  podstron przed i po: zero różnic poza samym prefiksem.
+- **Font ikon** `flaticon_medically` → `dgc-ikony`. Słowo „medically" nie
+  występuje już nigdzie w gotowej paczce.
+- **Dziewięć partiali SCSS** opisujących nieistniejące strony oraz katalogi
+  obrazków sklepu, koszyka, lekarzy i zespołu.
+
+Paczka JavaScriptu: **1 119 994 → 809 003 B** (o 28% mniej). Arkusz:
+557 247 → 507 301 B.
+
+Jeśli kiedyś trzeba będzie sprawdzić, czy coś nie zostało: `grep -ri
+"medically\|wpo-" src/` ma nie dawać trafień poza komentarzami opisującymi
+historię.
+
+---
+
+## Dlaczego aplikacja montuje się przez `createRoot`, a nie `hydrateRoot`
+
+To jest świadoma decyzja, nie przeoczenie — i ma konsekwencję, o której
+trzeba wiedzieć.
+
+`src/main.jsx` używa `createRoot`, czyli React **wyrzuca prerenderowany HTML
+i rysuje stronę od zera**. Skutek: atrybuty `loading="lazy"`,
+`decoding="async"` i `width`/`height`, które dokłada `scripts/wydajnosc.mjs`
+po budowaniu, **znikają w momencie montowania**. Zostają tylko dla robotów
+nieuruchamiających JavaScriptu. Leniwe ładowanie obrazków w przeglądarce
+więc nie działa.
+
+Sama zamiana na `hydrateRoot` niczego nie naprawi, a pogorszy. `PersistGate`
+przy pierwszym rysowaniu w przeglądarce zwraca `null` (stan z `localStorage`
+nie istnieje przed `componentDidMount`), więc React porówna pełny HTML
+z pustym drzewem, zgłosi rozjazd i **i tak odrzuci cały prerender** — tyle że
+po zapłaceniu za przebieg hydracji. Rozjazd jest pewny na wszystkich
+podstronach.
+
+Żeby hydracja przeszła czysto, trzeba wcześniej poprawić cztery rzeczy:
+
+1. `PersistGate` — podać `loading={children}` albo wyjąć go z korzenia,
+2. `TeamSection` i `Testimonial` — `slidesToShow` liczone z `window.innerWidth`
+   zmienia liczbę klonów w `react-slick`, czyli liczbę dzieci w DOM. Rozjazd
+   strukturalny poniżej 992 px,
+3. `KonsultacjaForm` — `min={dzisiaj()}` liczone przy rysowaniu. Po hydracji
+   React zostawi wartość z HTML-a, czyli datę budowania, a walidator dalej
+   porówna z prawdziwym dziś,
+4. `Licznik` (`src/components/Licznik/Licznik.jsx`) — gdyby wróciła tam
+   animacja zależna od przeglądarki.
+
+Dopóki to nie jest zrobione, `createRoot` jest właściwym wyborem.
+
+---
+
 ## Co zostało niezrobione
 
+- **103 akapity w 19 artykułach udają punkty listy** — zaczynają się od
+  myślnika zamiast być elementami `ul`. Celowo NIE poprawione automatem:
+  w kilku plikach myślnik jest zwykłą interpunkcją, w innych kilka pozycji
+  jest sklejonych w jednym akapicie, a jeszcze gdzie indziej akapit
+  z myślnikiem to wprowadzenie do listy, nie jej część. Automat zepsułby
+  treść. Do poprawienia w panelu, artykuł po artykule. Najwięcej:
+  `spolka-jawna` (17), `spolka-partnerska` (16).
+- **20 opisów meta krótszych niż 90 znaków**, w tym `spolka-akcyjna`
+  (26 znaków) i `spolka-komandytowo-akcyjna` (23). `zTresci()`
+  w `scripts/popraw-meta.mjs` dociąga tekst tylko z bloków typu `p`,
+  a te artykuły zaczynają się od listy. Do poprawienia w panelu.
+- **Obrazki bez `srcset` i bez WebP.** Miniatury 1200×628 renderują się na
+  353×184, a w pasku bocznym na 90×47. Mobilna strona główna waży ok. 3 MB.
+- **Fonty ikon**: `themify` nie ma wariantu WOFF2 (56 kB na każdej
+  podstronie), FontAwesome pobiera 72 kB dla jednej strzałki poniżej 992 px.
 - **373 artykuły mają okładkę z logo zamiast zdjęcia.** Obrazki z kupionego
   szablonu okazały się szarymi prostokątami z wypisanym rozmiarem.
-- **Brak danych strukturalnych `Article`** na stronach artykułów.
 - **215 opisów meta** to przycięte pierwsze akapity, a nie pisane opisy.
   Powstały automatycznie przy przenoszeniu artykułów z archiwum.
 - **Filtry kategorii i miesiąca na liście porad działają tylko w JavaScripcie**
