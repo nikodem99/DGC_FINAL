@@ -10,11 +10,11 @@ import logo from '../../images/logo.svg';
 const BlogPage = () => {
     return (
         <Fragment>
-            <Navbar hclass={'wpo-site-header wpo-site-header-s2'} Logo={logo} />
+            <Navbar hclass={'dgc-site-header dgc-site-header-s2'} Logo={logo} />
             <PageTitle pageTitle={'Porady'} pagesub={'Porady'} />
             <BlogList />
             <NewsletterSection />
-            <Footer hclass={'wpo-site-footer_s2'} />
+            <Footer hclass={'dgc-site-footer_s2'} />
             <Scrollbar />
         </Fragment>
     )

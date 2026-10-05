@@ -1,7 +1,7 @@
 /*--------------------------------------------------------------
-4. wpo-footer
+4. dgc-footer
 --------------------------------------------------------------*/
-.wpo-site-footer,.wpo-site-footer_s2 {
+.dgc-site-footer,.dgc-site-footer_s2 {
     // Byla tu jeszcze tekstura: url(../../images/footer-bg.png), 286 kB PNG
     // pobierane na KAZDEJ z 469 podstron, czyli 23 procent wagi strony
     // artykulu. Nie bylo jej widac — plik ma kanal alfa rowny 8/255 na
@@ -44,28 +44,28 @@
         z-index: 1;
     }
 
-    .wpo-upper-footer {
+    .dgc-upper-footer {
         padding: 100px 0;
         padding-top: 270px;
     }
 
     @media (max-width: 991px) {
 
-        .wpo-upper-footer {
+        .dgc-upper-footer {
             padding: 50px 0 0;
         }
     }
 
     @media (max-width: 767px) {
 
-        .wpo-upper-footer {
+        .dgc-upper-footer {
             padding: 60px 0 0;
         }
     }
 
     @media (max-width: 991px) {
 
-        .wpo-upper-footer .col {
+        .dgc-upper-footer .col {
             min-height: 235px;
             margin-bottom: 70px;
         }
@@ -73,7 +73,7 @@
 
     @media (max-width: 767px) {
 
-        .wpo-upper-footer .col {
+        .dgc-upper-footer .col {
             min-height: auto;
             margin-bottom: 60px;
         }
@@ -119,7 +119,7 @@
         }
     }
 
-    .wpo-service-link-widget {
+    .dgc-service-link-widget {
         padding-left: 70px;
     }
 
@@ -231,7 +231,7 @@
         }
     }
 
-    .wpo-lower-footer {
+    .dgc-lower-footer {
 
         position: relative;
 
@@ -310,23 +310,23 @@
 }
 
 
-/* wpo-site-footer_s2 */
-.wpo-site-footer_s2 {
+/* dgc-site-footer_s2 */
+.dgc-site-footer_s2 {
 
-    .wpo-upper-footer {
+    .dgc-upper-footer {
         padding: 100px 0;
     }
 
     @media (max-width: 991px) {
 
-        .wpo-upper-footer {
+        .dgc-upper-footer {
             padding: 50px 0 0;
         }
     }
 
     @media (max-width: 767px) {
 
-        .wpo-upper-footer {
+        .dgc-upper-footer {
             padding: 60px 0 0;
         }
     }

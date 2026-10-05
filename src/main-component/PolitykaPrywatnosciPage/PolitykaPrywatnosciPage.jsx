@@ -9,7 +9,7 @@ import { SEKCJE } from '../../api/politykaPrywatnosci';
 const PolitykaPrywatnosciPage = () => {
     return (
         <Fragment>
-            <Navbar hclass={'wpo-site-header wpo-site-header-s2'} Logo={Logo} />
+            <Navbar hclass={'dgc-site-header dgc-site-header-s2'} Logo={Logo} />
             <PageTitle pageTitle={'Polityka prywatności'} pagesub={'Polityka prywatności'} />
 
             <main className="polityka_page section-padding">
@@ -42,7 +42,7 @@ const PolitykaPrywatnosciPage = () => {
                 </div>
             </main>
 
-            <Footer hclass={'wpo-site-footer_s2'} />
+            <Footer hclass={'dgc-site-footer_s2'} />
             <Scrollbar />
         </Fragment>
     );

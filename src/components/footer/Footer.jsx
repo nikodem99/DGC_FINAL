@@ -15,7 +15,7 @@ const Footer = (props) => {
    
     return (
         <footer className={"" +props.hclass}>
-            <div className="wpo-upper-footer">
+            <div className="dgc-upper-footer">
                 <div className="container">
                     <div className="row">
                         <div className="col col-lg-3 col-md-6 col-sm-12 col-12">
@@ -108,7 +108,7 @@ const Footer = (props) => {
                     </div>
                 </div>
             </div>
-            <div className="wpo-lower-footer">
+            <div className="dgc-lower-footer">
                 <div className="container">
                     <div className="row g-0">
                         <div className="col-12">

@@ -18,10 +18,10 @@ const BlogDetails = (props) => {
 
     return (
         <Fragment>
-            <Navbar Logo={logo} hclass={'wpo-site-header wpo-site-header-s2'} />
+            <Navbar Logo={logo} hclass={'dgc-site-header dgc-site-header-s2'} />
             <PageTitle pageTitle={wpis?.title ?? 'Nie znaleziono wpisu'} pagesub={'Porady'} />
             <BlogSingle />
-            <Footer hclass={"wpo-site-footer_s2"}/>
+            <Footer hclass={"dgc-site-footer_s2"}/>
             <Scrollbar />
         </Fragment>
     )

@@ -10,10 +10,10 @@ import Logo from '../../images/logo.svg'
 const ContactPage = () => {
     return (
         <Fragment>
-            <Navbar hclass={'wpo-site-header wpo-site-header-s2'} Logo={Logo} />
+            <Navbar hclass={'dgc-site-header dgc-site-header-s2'} Logo={Logo} />
             <PageTitle pageTitle={'Kontakt'} pagesub={'Kontakt'} />
             <Contactpage />
-            <Footer hclass={'wpo-site-footer_s2'} />
+            <Footer hclass={'dgc-site-footer_s2'} />
             <Scrollbar />
         </Fragment>
     )

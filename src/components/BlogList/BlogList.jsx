@@ -76,11 +76,11 @@ const BlogList = (props) => {
     const adresStrony = (nr) => (nr <= 1 ? '/porady/' : `/porady/strona/${nr}/`);
 
     return (
-        <section className="wpo-blog-pg-section section-padding">
+        <section className="dgc-blog-pg-section section-padding">
             <div className="container">
                 <div className="row">
                     <div className={`col col-lg-8 col-12 ${props.blRight}`}>
-                        <div className="wpo-blog-content">
+                        <div className="dgc-blog-content">
                             {widoczne.length === 0 && (
                                 <p className="blog_pusto">
                                     Brak wpisów dla wybranych filtrów.{' '}

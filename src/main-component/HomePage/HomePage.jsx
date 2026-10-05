@@ -22,7 +22,7 @@ import Logo from '../../images/logo.svg'
 const HomePage = () => {
     return (
         <Fragment>
-            <Navbar hclass={'wpo-site-header'}  Logo={Logo} />
+            <Navbar hclass={'dgc-site-header'}  Logo={Logo} />
             <Hero hclass={'static-hero'} />
             <AppointmentSection hclass={'appointment_section'}/>
             <ServiceSection2 hclass={'service_section_s2 section-padding'} />
@@ -50,7 +50,7 @@ const HomePage = () => {
                 na stopke — musi zostac ostatnia. */}
             <NewsletterSection zrodlo="newsletter-home" />
             <CtafromSection hclass={'ctafrom_section'}/>
-            <Footer hclass={'wpo-site-footer'}/>
+            <Footer hclass={'dgc-site-footer'}/>
             <Scrollbar />
         </Fragment>
     )

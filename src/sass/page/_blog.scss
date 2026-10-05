@@ -1,8 +1,8 @@
 /*--------------------------------------------------------------
 17. blog-pg-section
 --------------------------------------------------------------*/
-.wpo-blog-pg-section {
-	.wpo-blog-content {
+.dgc-blog-pg-section {
+	.dgc-blog-content {
 
 		.post {
 			margin-bottom: 70px;
@@ -296,7 +296,7 @@
 }
 
 .blog-pg-fullwidth {
-	.wpo-blog-content {
+	.dgc-blog-content {
 		@include widther(1200px) {
 			padding: 0;
 		}

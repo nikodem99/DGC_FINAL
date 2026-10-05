@@ -1,4 +1,4 @@
-.wpo-breadcumb-area {
+.dgc-breadcumb-area {
 	/* Bialy pasek zamiast ciemnozielonego. Pelnoekranowa plama koloru
 	   przytlaczala podstrony i gryzla sie z jasnymi sekcjami pod spodem. */
 	background-color: $dgc-canvas;
@@ -27,7 +27,7 @@
 		z-index: -1;
 	}
 
-	.wpo-breadcumb-wrap {
+	.dgc-breadcumb-wrap {
 		text-align: center;
 
 		h1 {
@@ -95,6 +95,6 @@
 
 
 
-.wpo-about-section.wpo-about-section-s2 {
+.dgc-about-section.dgc-about-section-s2 {
 	padding-top: 170px;
 }

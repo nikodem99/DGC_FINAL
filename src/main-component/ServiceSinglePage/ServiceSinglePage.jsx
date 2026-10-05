@@ -20,7 +20,7 @@ const ServiceSinglePage = (props) => {
 
     return (
         <Fragment>
-            <Navbar Logo={logo} hclass={'wpo-site-header wpo-site-header-s2'} />
+            <Navbar Logo={logo} hclass={'dgc-site-header dgc-site-header-s2'} />
             <PageTitle pageTitle={serviceDetails.title} pagesub={'Oferta'} />
             <section className="service_single section-padding">
                 <div className="container">
@@ -97,7 +97,7 @@ const ServiceSinglePage = (props) => {
                     </div>
                 </div>
             </section>
-            <Footer hclass={'wpo-site-footer_s2'} />
+            <Footer hclass={'dgc-site-footer_s2'} />
             <Scrollbar />
         </Fragment>
     )

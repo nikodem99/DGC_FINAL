@@ -25,7 +25,7 @@ const MAPA = `https://maps.google.com/maps?q=${encodeURIComponent(ADRES_ZAPYTANI
 const Contactpage = () => {
 
     return (
-        <section className="wpo-contact-pg-section section-padding">
+        <section className="dgc-contact-pg-section section-padding">
             <div className="container">
                 <div className="row">
                     <div className="col col-lg-10 offset-lg-1">
@@ -88,8 +88,8 @@ const Contactpage = () => {
                 lead={'Opisz krótko, czego potrzebujesz. Odpowiemy w ciągu 24 godzin roboczych. Jeśli sprawa jest pilna, zadzwoń.'}
             />
 
-            <section className="wpo-contact-map-section">
-                <div className="wpo-contact-map">
+            <section className="dgc-contact-map-section">
+                <div className="dgc-contact-map">
                     {/* Mapa laduje sie razem ze strona — decyzja klienta.
                         Nie jest kategoria w banerze cookies; opisana jest
                         w polityce prywatnosci. referrerPolicy ogranicza to,

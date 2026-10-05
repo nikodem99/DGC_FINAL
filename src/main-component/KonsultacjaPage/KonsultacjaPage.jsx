@@ -24,7 +24,7 @@ import logo from '../../images/logo.svg';
 const KonsultacjaPage = () => {
     return (
         <Fragment>
-            <Navbar Logo={logo} hclass={'wpo-site-header wpo-site-header-s2'} />
+            <Navbar Logo={logo} hclass={'dgc-site-header dgc-site-header-s2'} />
             <PageTitle pageTitle={'Umów konsultację'} pagesub={'Konsultacje'} />
 
             <section className="konsultacja_section section-padding">
@@ -126,7 +126,7 @@ const KonsultacjaPage = () => {
                 </div>
             </section>
 
-            <Footer hclass={'wpo-site-footer_s2'} />
+            <Footer hclass={'dgc-site-footer_s2'} />
             <Scrollbar />
         </Fragment>
     );

@@ -8,10 +8,10 @@ import Logo from '../../images/logo.svg'
 const ErrorPage =() => {
     return(
         <Fragment>
-            <Navbar hclass={'wpo-site-header wpo-site-header-s2'} Logo={Logo} />
+            <Navbar hclass={'dgc-site-header dgc-site-header-s2'} Logo={Logo} />
             <PageTitle pageTitle={'404'} pagesub={'404'}/> 
             <Error/>
-            <Footer hclass={'wpo-site-footer_s2'} />
+            <Footer hclass={'dgc-site-footer_s2'} />
             <Scrollbar/>
         </Fragment>
     )

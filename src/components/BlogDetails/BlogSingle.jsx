@@ -111,7 +111,7 @@ const BlogSingle = (props) => {
     // ekranem — szablon czytal tu wprost .blogSingleImg z undefined.
     if (!wpis) {
         return (
-            <section className="wpo-blog-single-section section-padding">
+            <section className="dgc-blog-single-section section-padding">
                 <div className="container">
                     <div className="row justify-content-center">
                         <div className="col col-lg-8 col-12">
@@ -131,11 +131,11 @@ const BlogSingle = (props) => {
     const nastepny = blogs[nr + 1];
 
     return (
-        <section className="wpo-blog-single-section section-padding">
+        <section className="dgc-blog-single-section section-padding">
             <div className="container">
                 <div className="row">
                     <div className={`col col-lg-8 col-12 ${props.blRight}`}>
-                        <div className="wpo-blog-content">
+                        <div className="dgc-blog-content">
                             <article className="post format-standard-image">
                                 <div className="entry-media">
                                     <img src={wpis.blogSingleImg} alt="" />

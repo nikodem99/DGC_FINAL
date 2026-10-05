@@ -23,7 +23,7 @@ import Logo from '../../images/logo.svg'
 const AboutPage = () => {
     return (
         <Fragment>
-            <Navbar hclass={'wpo-site-header wpo-site-header-s2'} Logo={Logo} />
+            <Navbar hclass={'dgc-site-header dgc-site-header-s2'} Logo={Logo} />
             <PageTitle pageTitle={'O nas'} pagesub={'O nas'} />
             <About hclass={'about_section section-padding s4'} />
             <ProcessSection hclass={"work_section_s2 section-padding"} />
@@ -64,7 +64,7 @@ const AboutPage = () => {
             <CtaSection tClass={'cta_section'} image={LogoDGC} />
             <BlogSection tClass={'blog_section section-padding'} />
             <CtafromSection hclass={'ctafrom_section'} />
-            <Footer hclass={'wpo-site-footer'} />
+            <Footer hclass={'dgc-site-footer'} />
             <Scrollbar />
 
         </Fragment>

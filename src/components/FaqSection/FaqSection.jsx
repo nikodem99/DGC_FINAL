@@ -7,7 +7,7 @@ import { FAQ_OGOLNE } from '../../api/faq';
 const FaqSection = ({
     items = FAQ_OGOLNE,
     title = 'Najczęstsze pytania',
-    hclass = 'wpo-faq-section section-padding',
+    hclass = 'dgc-faq-section section-padding',
 }) => {
     const [activeIndex, setActiveIndex] = useState(null);
 
@@ -34,10 +34,10 @@ const FaqSection = ({
                         </div>
                     </div>
                     <div className="col-lg-8 offset-lg-2">
-                        <div className="wpo-faq-wrap">
+                        <div className="dgc-faq-wrap">
                             <div className="row">
                                 <div className="col-lg-12 col-12">
-                                    <div className="wpo-benefits-item">
+                                    <div className="dgc-benefits-item">
                                         {items.map((accordion, index) => (
                                             <div
                                                 className={`accordion-item ${activeIndex === index ? 'active' : ''}`}

@@ -107,7 +107,7 @@ html,
 /* --- Zloto jako jezyk akcentow ---------------------------------- */
 /* Podkreslenia naglowkow, kreski, gwiazdki ocen i numeracja. */
 .widget-title h3::after,
-.wpo-breadcumb-wrap h1::after,
+.dgc-breadcumb-wrap h1::after,
 .section_title h2::after,
 .about_title h2::after {
   background: var(--dgc-accent);
@@ -115,9 +115,9 @@ html,
 
 /* Złota kreska pod tytułem — jedyny element marki obecny na KAŻDEJ podstronie,
    także tam, gdzie nie ma etykiet sekcji (kontakt, FAQ, blog). */
-.wpo-breadcumb-wrap h1::after,
-.wpo-contact-title h2::after,
-.wpo-section-title.text-center h2::after {
+.dgc-breadcumb-wrap h1::after,
+.dgc-contact-title h2::after,
+.dgc-section-title.text-center h2::after {
   content: '';
   display: block;
   width: 64px;
@@ -612,10 +612,10 @@ select.error,
    robic miejsce dla zdjecia wystajacego ponad pas — ale znak DGC jest
    kwadratowy i miesci sie w calosci w srodku, wiec nie ma czego mijac.
    Zerujemy margines; zostaje sam padding sekcji wyzej. */
-.wpo-faq-section + .cta_section {
+.dgc-faq-section + .cta_section {
   margin-top: 0;
 }
-.opinie_cta_section + .wpo-faq-section {
+.opinie_cta_section + .dgc-faq-section {
   padding-top: 40px;
 }
 
@@ -786,7 +786,7 @@ select.error,
 }
 
 /* --- Sekcja z formularzem (cennik, kontakt, podstrony oferty) ------ */
-/* Reguly z /contact daja .wpo-contact-form-area ujemny margines dolny
+/* Reguly z /contact daja .dgc-contact-form-area ujemny margines dolny
    (-125px), zeby karta wchodzila na mape pod spodem. Poza strona kontaktu
    mapy nie ma, wiec ten margines wciagalby stopke pod formularz. */
 .form_section {
@@ -797,7 +797,7 @@ select.error,
     padding-bottom: 60px;
   }
 
-  .wpo-contact-form-area {
+  .dgc-contact-form-area {
     margin-bottom: 0;
     padding-bottom: 50px;
 
@@ -845,7 +845,7 @@ select.error,
 
 /* Na stronie kontaktu pod formularzem jest mapa. Bez odstepu karta
    formularza dotykala jej gornej krawedzi. */
-.wpo-contact-pg-section .form_section {
+.dgc-contact-pg-section .form_section {
   padding-bottom: 80px;
 
   @media (max-width: 767px) {
@@ -873,7 +873,7 @@ select.error,
    (kolor tekstu byl wtedy identyczny z tlem naglowka).
    Tutaj tekst zostaje w kanwie, a sygnalem jest zloty pasek. Zloto jako
    akcent, nie jako kolor tekstu — zgodnie z zasadami palety. */
-.wpo-site-header.wpo-site-header-s2 {
+.dgc-site-header.dgc-site-header-s2 {
   /* Tylko pozycje GORNEGO paska. Wczesniej bylo tu "> ul li a", a potomny
      selektor lapal takze linki w rozwijanym menu — te leza na bialym panelu
      (#FDFCFC), wiec po najechaniu dostawaly kolor tla i znikaly. Rozwijane
@@ -898,8 +898,8 @@ select.error,
    jak zostaly opublikowane. Ten sam problem co z .theme-btn wyzej.
    (Uppercase w pasku meta zostaje — wersaliki to nie to samo co title case
    i po polsku sa poprawne.) */
-.wpo-blog-pg-section .post h3 a,
-.wpo-blog-pg-section .post a.read-more,
+.dgc-blog-pg-section .post h3 a,
+.dgc-blog-pg-section .post a.read-more,
 .blog-sidebar .widget h3 {
   text-transform: none;
 }
@@ -908,8 +908,8 @@ select.error,
 /* Rozmiar w naglowku ustawia _header.scss — tamta regula ma wyzsza
    specyficznosc, wiec dublowanie jej tutaj tylko myli. Tu zostaje stopka. */
 /* W stopce znak stoi samodzielnie nad tekstem, wiec moze byc wiekszy. */
-.wpo-site-footer .about-widget .logo img,
-.wpo-site-footer_s2 .about-widget .logo img {
+.dgc-site-footer .about-widget .logo img,
+.dgc-site-footer_s2 .about-widget .logo img {
   width: auto;
   height: 76px;
   max-width: 100%;
@@ -1419,7 +1419,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* --- Tresc artykulu ----------------------------------------------- */
-.wpo-blog-single-section {
+.dgc-blog-single-section {
   .wpis_lista {
     margin: 0 0 25px;
     padding: 0;
@@ -1551,8 +1551,8 @@ h1, h2, h3, h4, h5, h6 {
 
   /* Tytuly srodkowe w tekscie — szablon skladal je wersalikami przez
      capitalize, po polsku to blad (patrz .theme-btn wyzej). */
-  .wpo-blog-content h2,
-  .wpo-blog-content h3,
+  .dgc-blog-content h2,
+  .dgc-blog-content h3,
   .more-posts .post-name {
     text-transform: none;
   }
@@ -2363,17 +2363,17 @@ h1, h2, h3, h4, h5, h6 {
 /* --- Klikalna cala karta na liscie porad --------------------------- */
 /* Te reguly MUSZA stac na najwyzszym poziomie. Wczesniej siedzialy
    w bloku .blog_section, czyli sekcji ze strony glownej, wiec Sass
-   skladal z nich ".blog_section .wpo-blog-pg-section ...", co nie
+   skladal z nich ".blog_section .dgc-blog-pg-section ...", co nie
    pasowalo do niczego i ::after w ogole sie nie tworzylo. */
-.wpo-blog-pg-section .post {
+.dgc-blog-pg-section .post {
   position: relative;
 }
 
-.wpo-blog-pg-section .post .karta_klik {
+.dgc-blog-pg-section .post .karta_klik {
   position: static;
 }
 
-.wpo-blog-pg-section .post .karta_klik::after {
+.dgc-blog-pg-section .post .karta_klik::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -2382,7 +2382,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Odnosnik "Czytaj dalej" i tak prowadzi tam samo, ale musi zostac nad
    warstwa, zeby dalo sie go najechac i zeby kursor sie nie gubil. */
-.wpo-blog-pg-section .post .read-more {
+.dgc-blog-pg-section .post .read-more {
   position: relative;
   z-index: 2;
 }
@@ -2402,7 +2402,7 @@ h1, h2, h3, h4, h5, h6 {
    udzialu w ukladzie. Powieksza sam obszar trafienia o 11 px w gore
    i w dol. Wyglad i wysokosc stopki bez zmian. */
 /* Selektor po elemencie <footer>, a nie po klasie. Szablon ma dwa
-   warianty stopki, .wpo-site-footer i .wpo-site-footer_s2, i przez
+   warianty stopki, .dgc-site-footer i .dgc-site-footer_s2, i przez
    pierwsza wersje tej reguly poprawka dzialala tylko na czesci podstron:
    strona glowna, o nas i oferta mialy dobrze, a cennik, kontakt, porady,
    artykul, FAQ, konsultacje i polityka dalej mialy niewidoczny numer. */

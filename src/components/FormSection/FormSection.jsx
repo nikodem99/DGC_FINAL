@@ -14,13 +14,13 @@ const FormSection = ({
     hclass = 'form_section',
 }) => {
     return (
-        <section className={`wpo-contact-pg-section ${hclass}`}>
+        <section className={`dgc-contact-pg-section ${hclass}`}>
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-lg-10 col-12">
                         <SectionTitle title={title} subtitle={subtitle} />
                         <p className="form_section_lead">{lead}</p>
-                        <div className="wpo-contact-form-area">
+                        <div className="dgc-contact-form-area">
                             <ContactForm zrodlo={zrodlo} />
                         </div>
                     </div>

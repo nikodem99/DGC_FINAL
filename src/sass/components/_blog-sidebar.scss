@@ -341,7 +341,7 @@
 
 	/*** instagram-widget ***/
 
-	.wpo-instagram-widget {
+	.dgc-instagram-widget {
 
 		ul {
 			display: flex;
@@ -396,9 +396,9 @@
 		}
 	}
 
-	/*** wpo-contact-widget ***/
+	/*** dgc-contact-widget ***/
 
-	.wpo-contact-widget {
+	.dgc-contact-widget {
 		border: 0;
 		// background: url(../../images/bg-2.jpg) no-repeat center center;
 		position: relative;
@@ -465,7 +465,7 @@
 }
 
 
-.wpo-blog-pg-section .order-lg-1 {
+.dgc-blog-pg-section .order-lg-1 {
 	.blog-sidebar {
 		@include widther(992px) {
 			padding-left: 0px;
@@ -475,7 +475,7 @@
 }
 
 
-.wpo-blog-single-section .order-lg-1 {
+.dgc-blog-single-section .order-lg-1 {
 	.blog-sidebar {
 		@include widther(992px) {
 			padding-left: 0px;

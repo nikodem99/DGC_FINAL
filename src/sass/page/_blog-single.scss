@@ -1,7 +1,7 @@
 /*--------------------------------------------------------------
 18. blog-single-section
 --------------------------------------------------------------*/
-.wpo-blog-single-section {
+.dgc-blog-single-section {
 
 	.entry-meta {
 		list-style: none;
@@ -697,7 +697,7 @@
 	}
 }
 
-.wpo-blog-single-left-sidebar-section {
+.dgc-blog-single-left-sidebar-section {
 	.blog-sidebar {
 		@include widther(1200px) {
 			padding-right: 45px;
