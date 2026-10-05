@@ -9,6 +9,7 @@ import path from 'node:path';
 import { WSZYSTKIE_TRASY, NOINDEX, DOMENA, MARKA, metaDla } from '../src/seo/meta.js';
 import { PROSTE, GALEZIE, DO_KOSZA } from '../src/seo/przekierowania.js';
 import { ARTYKULY_ZE_STAREJ_STRONY } from '../src/seo/stare-artykuly.js';
+import { WPISY } from '../src/seo/wpisy.js';
 
 const DIST = 'dist';
 const dzis = new Date().toISOString().slice(0, 10);
@@ -53,12 +54,22 @@ const priorytet = (t) => {
     return '0.7';
 };
 
+// Data ostatniej zmiany. Dla artykulu bierzemy JEGO date, nie date
+// budowania — inaczej mapa twierdzi, ze 378 artykulow, w tym te z 2019 roku,
+// zmienilo sie dzisiaj. Google taki jednolity lastmod po prostu ignoruje,
+// wiec znacznik nic nie wnosil. Strony stale faktycznie powstaja na nowo
+// przy kazdym budowaniu i tam data budowania jest prawdziwa.
+const zmienione = (t) => {
+    const m = /^\/porady\/([^/]+)$/.exec(t);
+    return (m && WPISY[m[1]]?.data) || dzis;
+};
+
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${doMapy
     .map((t) => {
         const m = metaDla(t);
-        return `  <url>\n    <loc>${m.kanoniczny}</loc>\n    <lastmod>${dzis}</lastmod>\n    <priority>${priorytet(t)}</priority>\n  </url>`;
+        return `  <url>\n    <loc>${m.kanoniczny}</loc>\n    <lastmod>${zmienione(t)}</lastmod>\n    <priority>${priorytet(t)}</priority>\n  </url>`;
     })
     .join('\n')}
 </urlset>
@@ -269,6 +280,30 @@ ${DO_KOSZA.map((s) => `RewriteRule ^${s.slice(1)}(/.*)?$ - [R=404,L]`).join('\n'
 ErrorDocument 404 /404/index.html
 ErrorDocument 403 /404/index.html
 
+# --- Naglowki bezpieczenstwa ------------------------------------------
+# Audyt wykazal, ze serwis nie wysylal zadnego z nich. Zadne z ponizszych
+# nie zmienia wygladu ani dzialania strony.
+#
+# Swiadomie NIE ma tu Content-Security-Policy. Strona wczytuje Google Tag
+# Manager, Google Fonts i film z YouTube, wiec sensowna polityka ma kilka
+# linii wyjatkow i kazdy blad w niej objawia sie pusta strona. Przy stronie
+# bez logowania dla odwiedzajacych zysk nie rownowazy tego ryzyka.
+<IfModule mod_headers.c>
+  # Przegladarka nie zgaduje typu pliku po zawartosci.
+  Header always set X-Content-Type-Options "nosniff"
+  # Do obcych serwisow nie wyciekaja pelne adresy z naszej strony.
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  # Strony nie da sie osadzic w ramce na cudzej domenie (clickjacking).
+  Header always set X-Frame-Options "SAMEORIGIN"
+  # Zadna podstrona nie prosi o kamere, mikrofon ani polozenie.
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+  # Przegladarka laczy sie wylacznie po HTTPS przez rok. Serwis i tak
+  # przekierowuje z http, a panel redakcyjny ma formularz logowania.
+  # Gdyby kiedys trzeba bylo to cofnac: wystarczy zmienic max-age na 0
+  # i odczekac, az przegladarki goscie odswieza wpis.
+  Header always set Strict-Transport-Security "max-age=31536000"
+</IfModule>
+
 # --- Pamiec podreczna -------------------------------------------------
 # Pliki z odciskiem w nazwie (assets) moga lezec w cache dlugo, HTML nie,
 # bo inaczej po wgraniu poprawki uzytkownicy widza stara wersje.
@@ -297,9 +332,14 @@ ErrorDocument 403 /404/index.html
 fs.writeFileSync(path.join(DIST, '.htaccess'), htaccess);
 
 // --- _redirects dla Netlify -------------------------------------------
-// Serwis idzie na cyber_Folks, wiec ten plik jest tam martwy. Generujemy
-// go, bo na Netlify stoi podglad pokazywany klientowi — i zeby przy
-// ewentualnej przeprowadzce nie trzeba bylo pisac listy po raz drugi.
+// Na cyber_Folks ten plik jest martwy — LiteSpeed czyta .htaccess. Lezal
+// jednak w paczce i trafial na serwer, gdzie kazdy mogl go pobrac: 78 kB
+// bez typu zawartosci, z cala mapa przekierowan i lista starych adresow.
+// Nic tajnego, ale tez nic, co ma tam prawo byc.
+//
+// Dlatego powstaje tylko na zadanie: DGC_NETLIFY=1 node scripts/seo.mjs.
+// Lista i tak zyje w src/seo/przekierowania.js, wiec przy przeprowadzce
+// na Netlify nie trzeba jej pisac drugi raz.
 const redirects = `# Wygenerowane przez scripts/seo.mjs ze src/seo/przekierowania.js.
 # Format Netlify. Docelowy hosting to cyber_Folks (LiteSpeed), ktory czyta
 # .htaccess, NIE ten plik. Tutaj sluzy podgladowi na Netlify.
@@ -321,7 +361,14 @@ ${DO_KOSZA.map((s) => `${s}/*  /404/index.html  404\n${s}  /404/index.html  404`
 /*  /404/index.html  404
 `;
 
-fs.writeFileSync(path.join(DIST, '_redirects'), redirects);
+const plikRedirects = path.join(DIST, '_redirects');
+if (process.env.DGC_NETLIFY === '1') {
+    fs.writeFileSync(plikRedirects, redirects);
+} else if (fs.existsSync(plikRedirects)) {
+    // Zostal po wczesniejszym budowaniu. Kasujemy, zeby nie pojechal
+    // na serwer razem z paczka.
+    fs.unlinkSync(plikRedirects);
+}
 
 fs.writeFileSync(path.join(DIST, 'sitemap.xml'), sitemap);
 fs.writeFileSync(path.join(DIST, 'robots.txt'), robots);

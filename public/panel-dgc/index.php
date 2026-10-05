@@ -225,9 +225,35 @@ function zapiszWpis(array $wpisy): array {
     ];
 
     // Podmiana albo dopisanie, potem sortowanie od najnowszego.
+    //
+    // Sortujemy po dacie w zapisie ISO, a nie po polskim zapisie slownym.
+    // Wczesniej bylo tu strcmp($b['archiveMonth'].$b['create_at'], ...), co
+    // porownuje "4 października 2026" z "22 października 2026" znak po znaku:
+    // "4" > "2", wiec czwarty wypadal nad dwudziestym drugim. Jeden zapis
+    // w panelu przestawial w ten sposob cala liste — na zywej stronie dalo
+    // to 60 par ustawionych odwrotnie.
     $bezNiego = array_values(array_filter($wpisy, static fn($w) => $w['slug'] !== $slug));
     $bezNiego[] = $nowy;
-    usort($bezNiego, static fn($a, $b) => strcmp($b['archiveMonth'] . $b['create_at'], $a['archiveMonth'] . $a['create_at']));
+
+    $klucz = static function (array $w): string {
+        $iso = isoZDaty((string)($w['create_at'] ?? ''));
+        // Wpis z niecytelna data ladu je na koncu swojego miesiaca, zamiast
+        // wywracac cala liste.
+        return $iso !== '' ? $iso : ((string)($w['archiveMonth'] ?? '') . '-00');
+    };
+
+    // Przy tej samej dacie trzymamy dotychczasowa kolejnosc. usort w PHP 7.4
+    // nie jest stabilny, a bez tego trzynascie wpisow z powtorzona data
+    // przeskakiwaloby przy kazdym zapisie i za kazdym razem trzeba by
+    // przebudowac wszystkie strony listy.
+    $pozycje = [];
+    foreach ($bezNiego as $i => $w) $pozycje[$w['slug']] = $i;
+
+    usort($bezNiego, static function (array $a, array $b) use ($klucz, $pozycje): int {
+        $r = strcmp($klucz($b), $klucz($a));
+        if ($r !== 0) return $r;
+        return ($pozycje[$a['slug']] ?? 0) <=> ($pozycje[$b['slug']] ?? 0);
+    });
     $wpisy = $bezNiego;
 
     // Kopia poprzedniej wersji, zeby dalo sie cofnac zla zmiane.
