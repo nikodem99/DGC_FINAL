@@ -9,6 +9,18 @@
 // tytuly rozrozniane rokiem. Powod w naglowku skryptu.
 
 export const WPISY = {
+    'okulary-w-kosztach-firmy': {
+        tytul: 'Okulary i soczewki w kosztach firmy – kiedy fiskus to uzna · DGC',
+        opis: 'Okulary dla pracownika przy monitorze to koszt pracodawcy z BHP, a okulary przedsiębiorcy wydatek osobisty. Sprawdź, skąd ta różnica.',
+        data: '2026-10-12',
+        nazwa: 'Okulary i soczewki w kosztach firmy – kiedy fiskus to uzna',
+    },
+    'sklep-internetowy-vat-przy-sprzedazy-do-krajow-unii': {
+        tytul: 'Sklep internetowy – VAT przy sprzedaży do krajów Unii · DGC',
+        opis: 'Sprzedajesz przez internet do krajów UE? Po przekroczeniu progu VAT rozliczasz według stawek kraju konsumenta. Sprawdź, jak działa OSS.',
+        data: '2026-10-07',
+        nazwa: 'Sklep internetowy – VAT przy sprzedaży do krajów Unii',
+    },
     'programista-b2b-ryczalt': {
         tytul: 'Programista na B2B – jaka stawka ryczałtu i kiedy się opłaca · DGC',
         opis: 'Usługi IT na ryczałcie to 12% albo 8,5%, a różnica wynosi tysiące złotych rocznie. Sprawdź, od czego zależy klasyfikacja i kiedy lepsza jest liniówka.',

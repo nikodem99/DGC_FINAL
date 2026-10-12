@@ -91,6 +91,10 @@ const STRONY = {
         tytul: 'Usługi kadrowo-płacowe · outsourcing kadr i płac · DGC',
         opis: 'Outsourcing kadr i płac dla firm z Łodzi i całej Polski, także online. ZUS, wynagrodzenia, umowy, PFRON i GUS oraz indywidualna wycena obsługi.',
     },
+    '/porady/okulary-w-kosztach-firmy': {
+        tytul: 'Okulary w kosztach firmy: pracownik tak, firma nie · DGC',
+        opis: 'Okulary dla pracownika przy monitorze to koszt pracodawcy z BHP, a okulary przedsiębiorcy wydatek osobisty. Sprawdź, skąd ta różnica.',
+    },
     '/porady/programista-b2b-ryczalt': {
         tytul: 'Programista na B2B: jaka stawka ryczałtu · DGC',
         opis: 'Usługi IT na ryczałcie to 12% albo 8,5%, a różnica wynosi tysiące złotych rocznie. Sprawdź, od czego zależy klasyfikacja i kiedy lepsza jest liniówka.',

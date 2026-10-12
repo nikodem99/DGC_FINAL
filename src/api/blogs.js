@@ -9,6 +9,7 @@
 import okladka from "../images/blog/okladka-dgc.svg";
 
 import programistaB2b from "../images/blog/programista-b2b-ryczalt.jpg";
+import sklepVatUe from "../images/blog/sklep-internetowy-vat-ue.jpg";
 import salonFryzjerski from "../images/blog/salon-fryzjerski.jpg";
 import gastronomiaVat from "../images/blog/gastronomia-stawki-vat.jpg";
 import spisZNatury from "../images/blog/spis-z-natury.jpg";
@@ -33,6 +34,43 @@ import zamkniecieChecklista from "../images/blog/zamkniecie-roku-checklista.jpg"
 // z tych pol, wiec liczby sa prawdziwe i same sie zaktualizuja.
 
 const blogs = [
+    {
+        id: '21',
+        title: 'Okulary i soczewki w kosztach firmy – kiedy fiskus to uzna',
+        title2: 'Okulary i soczewki w kosztach firmy – kiedy fiskus to uzna',
+        tag: 'Podatki',
+        slug: 'okulary-w-kosztach-firmy',
+        screens: okladka,
+        description: 'Okulary dla pracownika przy monitorze to koszt pracodawcy z BHP, a okulary przedsiębiorcy wydatek osobisty. Sprawdź, skąd ta różnica.',
+        author: 'DGC Biuro Rachunkowe',
+        create_at: '12 października 2026',
+        archiveMonth: '2026-10',
+        archiveLabel: 'Październik 2026',
+        blogSingleImg: okladka,
+        blClass: 'format-standard-image',
+        animation: '1200',
+    },
+
+    // --- Dodane przez panel redakcyjny, sciagniete z serwera ---------
+    {
+        id: '2000',
+        title: 'Sklep internetowy – VAT przy sprzedaży do krajów Unii',
+        title2: 'Sklep internetowy – VAT przy sprzedaży do krajów Unii',
+        tag: 'VAT',
+        slug: 'sklep-internetowy-vat-przy-sprzedazy-do-krajow-unii',
+        // Zdjecie wgrane przez panel. scripts/pobierz-z-serwera.mjs podstawia
+        // okladke firmowa, bo nie zna adresu z odciskiem — tu wracamy do
+        // pliku, ktory klient faktycznie wybral.
+        screens: sklepVatUe,
+        description: 'Sprzedajesz przez internet do krajów UE? Po przekroczeniu progu VAT rozliczasz według stawek kraju konsumenta. Sprawdź, jak działa OSS.',
+        author: 'DGC Biuro Rachunkowe',
+        create_at: '7 października 2026',
+        archiveMonth: '2026-10',
+        archiveLabel: 'Październik 2026',
+        blogSingleImg: sklepVatUe,
+        blClass: 'format-standard-image',
+        animation: '1200',
+    },
     {
         id: '20',
         title: 'Programista na B2B – jaka stawka ryczałtu i kiedy się opłaca',
