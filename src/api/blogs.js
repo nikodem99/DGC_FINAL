@@ -9,6 +9,7 @@
 import okladka from "../images/blog/okladka-dgc.svg";
 
 import programistaB2b from "../images/blog/programista-b2b-ryczalt.jpg";
+import okularyKoszty from "../images/blog/okulary-w-kosztach-firmy.jpg";
 import sklepVatUe from "../images/blog/sklep-internetowy-vat-ue.jpg";
 import salonFryzjerski from "../images/blog/salon-fryzjerski.jpg";
 import gastronomiaVat from "../images/blog/gastronomia-stawki-vat.jpg";
@@ -40,13 +41,13 @@ const blogs = [
         title2: 'Okulary i soczewki w kosztach firmy – kiedy fiskus to uzna',
         tag: 'Podatki',
         slug: 'okulary-w-kosztach-firmy',
-        screens: okladka,
+        screens: okularyKoszty,
         description: 'Okulary dla pracownika przy monitorze to koszt pracodawcy z BHP, a okulary przedsiębiorcy wydatek osobisty. Sprawdź, skąd ta różnica.',
         author: 'DGC Biuro Rachunkowe',
         create_at: '12 października 2026',
         archiveMonth: '2026-10',
         archiveLabel: 'Październik 2026',
-        blogSingleImg: okladka,
+        blogSingleImg: okularyKoszty,
         blClass: 'format-standard-image',
         animation: '1200',
     },
