@@ -9,6 +9,7 @@
 import okladka from "../images/blog/okladka-dgc.svg";
 
 import programistaB2b from "../images/blog/programista-b2b-ryczalt.jpg";
+import telefonKoszty from "../images/blog/telefon-w-kosztach-firmy.jpg";
 import okularyKoszty from "../images/blog/okulary-w-kosztach-firmy.jpg";
 import sklepVatUe from "../images/blog/sklep-internetowy-vat-ue.jpg";
 import salonFryzjerski from "../images/blog/salon-fryzjerski.jpg";
@@ -35,6 +36,22 @@ import zamkniecieChecklista from "../images/blog/zamkniecie-roku-checklista.jpg"
 // z tych pol, wiec liczby sa prawdziwe i same sie zaktualizuja.
 
 const blogs = [
+    {
+        id: '22',
+        title: 'Telefon i abonament w kosztach przy użytku mieszanym',
+        title2: 'Telefon i abonament w kosztach przy użytku mieszanym',
+        tag: 'Podatki',
+        slug: 'telefon-w-kosztach-firmy',
+        screens: telefonKoszty,
+        description: 'Jeden telefon do firmy i do domu? W koszty i do odliczenia VAT trafia tylko część firmowa. Sprawdź, jak uzasadnić proporcję.',
+        author: 'DGC Biuro Rachunkowe',
+        create_at: '15 października 2026',
+        archiveMonth: '2026-10',
+        archiveLabel: 'Październik 2026',
+        blogSingleImg: telefonKoszty,
+        blClass: 'format-standard-image',
+        animation: '1200',
+    },
     {
         id: '21',
         title: 'Okulary i soczewki w kosztach firmy – kiedy fiskus to uzna',

@@ -91,6 +91,10 @@ const STRONY = {
         tytul: 'Usługi kadrowo-płacowe · outsourcing kadr i płac · DGC',
         opis: 'Outsourcing kadr i płac dla firm z Łodzi i całej Polski, także online. ZUS, wynagrodzenia, umowy, PFRON i GUS oraz indywidualna wycena obsługi.',
     },
+    '/porady/telefon-w-kosztach-firmy': {
+        tytul: 'Telefon w kosztach firmy przy użytku mieszanym · DGC',
+        opis: 'Jeden telefon do firmy i do domu? W koszty i do odliczenia VAT trafia tylko część firmowa. Sprawdź, jak uzasadnić proporcję.',
+    },
     '/porady/okulary-w-kosztach-firmy': {
         tytul: 'Okulary w kosztach firmy: pracownik tak, firma nie · DGC',
         opis: 'Okulary dla pracownika przy monitorze to koszt pracodawcy z BHP, a okulary przedsiębiorcy wydatek osobisty. Sprawdź, skąd ta różnica.',
