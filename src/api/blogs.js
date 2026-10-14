@@ -45,7 +45,7 @@ const blogs = [
         screens: telefonKoszty,
         description: 'Jeden telefon do firmy i do domu? W koszty i do odliczenia VAT trafia tylko część firmowa. Sprawdź, jak uzasadnić proporcję.',
         author: 'DGC Biuro Rachunkowe',
-        create_at: '15 października 2026',
+        create_at: '14 października 2026',
         archiveMonth: '2026-10',
         archiveLabel: 'Październik 2026',
         blogSingleImg: telefonKoszty,

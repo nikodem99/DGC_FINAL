@@ -12,7 +12,7 @@ export const WPISY = {
     'telefon-w-kosztach-firmy': {
         tytul: 'Telefon i abonament w kosztach przy użytku mieszanym · DGC',
         opis: 'Jeden telefon do firmy i do domu? W koszty i do odliczenia VAT trafia tylko część firmowa. Sprawdź, jak uzasadnić proporcję.',
-        data: '2026-10-15',
+        data: '2026-10-14',
         nazwa: 'Telefon i abonament w kosztach przy użytku mieszanym',
     },
     'okulary-w-kosztach-firmy': {
