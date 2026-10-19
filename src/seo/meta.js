@@ -91,6 +91,10 @@ const STRONY = {
         tytul: 'Usługi kadrowo-płacowe · outsourcing kadr i płac · DGC',
         opis: 'Outsourcing kadr i płac dla firm z Łodzi i całej Polski, także online. ZUS, wynagrodzenia, umowy, PFRON i GUS oraz indywidualna wycena obsługi.',
     },
+    '/porady/praca-zdalna-wydatki': {
+        tytul: 'Praca zdalna: ryczałt, sprzęt i koszty · DGC',
+        opis: 'Praca zdalna to obowiązki pracodawcy: sprzęt, prąd i internet. Sprawdź, jak ustalić ryczałt i dlaczego nie jest przychodem pracownika.',
+    },
     '/porady/telefon-w-kosztach-firmy': {
         tytul: 'Telefon w kosztach firmy przy użytku mieszanym · DGC',
         opis: 'Jeden telefon do firmy i do domu? W koszty i do odliczenia VAT trafia tylko część firmowa. Sprawdź, jak uzasadnić proporcję.',

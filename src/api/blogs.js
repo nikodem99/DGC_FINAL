@@ -9,6 +9,7 @@
 import okladka from "../images/blog/okladka-dgc.svg";
 
 import programistaB2b from "../images/blog/programista-b2b-ryczalt.jpg";
+import pracaZdalna from "../images/blog/praca-zdalna-wydatki.jpg";
 import telefonKoszty from "../images/blog/telefon-w-kosztach-firmy.jpg";
 import okularyKoszty from "../images/blog/okulary-w-kosztach-firmy.jpg";
 import sklepVatUe from "../images/blog/sklep-internetowy-vat-ue.jpg";
@@ -36,6 +37,22 @@ import zamkniecieChecklista from "../images/blog/zamkniecie-roku-checklista.jpg"
 // z tych pol, wiec liczby sa prawdziwe i same sie zaktualizuja.
 
 const blogs = [
+    {
+        id: '23',
+        title: 'Praca zdalna – jakie wydatki rozliczy firma i pracownik',
+        title2: 'Praca zdalna – jakie wydatki rozliczy firma i pracownik',
+        tag: 'Kadry',
+        slug: 'praca-zdalna-wydatki',
+        screens: pracaZdalna,
+        description: 'Praca zdalna to obowiązki pracodawcy: sprzęt, prąd i internet. Sprawdź, jak ustalić ryczałt i dlaczego nie jest przychodem pracownika.',
+        author: 'DGC Biuro Rachunkowe',
+        create_at: '19 października 2026',
+        archiveMonth: '2026-10',
+        archiveLabel: 'Październik 2026',
+        blogSingleImg: pracaZdalna,
+        blClass: 'format-standard-image',
+        animation: '1200',
+    },
     {
         id: '22',
         title: 'Telefon i abonament w kosztach przy użytku mieszanym',

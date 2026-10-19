@@ -9,6 +9,12 @@
 // tytuly rozrozniane rokiem. Powod w naglowku skryptu.
 
 export const WPISY = {
+    'praca-zdalna-wydatki': {
+        tytul: 'Praca zdalna – jakie wydatki rozliczy firma i pracownik · DGC',
+        opis: 'Praca zdalna to obowiązki pracodawcy: sprzęt, prąd i internet. Sprawdź, jak ustalić ryczałt i dlaczego nie jest przychodem pracownika.',
+        data: '2026-10-19',
+        nazwa: 'Praca zdalna – jakie wydatki rozliczy firma i pracownik',
+    },
     'telefon-w-kosztach-firmy': {
         tytul: 'Telefon i abonament w kosztach przy użytku mieszanym · DGC',
         opis: 'Jeden telefon do firmy i do domu? W koszty i do odliczenia VAT trafia tylko część firmowa. Sprawdź, jak uzasadnić proporcję.',
