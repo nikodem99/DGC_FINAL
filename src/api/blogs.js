@@ -9,6 +9,7 @@
 import okladka from "../images/blog/okladka-dgc.svg";
 
 import programistaB2b from "../images/blog/programista-b2b-ryczalt.jpg";
+import kawaKoszt from "../images/blog/kawa-koszt-czy-reprezentacja.jpg";
 import pracaZdalna from "../images/blog/praca-zdalna-wydatki.jpg";
 import telefonKoszty from "../images/blog/telefon-w-kosztach-firmy.jpg";
 import okularyKoszty from "../images/blog/okulary-w-kosztach-firmy.jpg";
@@ -37,6 +38,22 @@ import zamkniecieChecklista from "../images/blog/zamkniecie-roku-checklista.jpg"
 // z tych pol, wiec liczby sa prawdziwe i same sie zaktualizuja.
 
 const blogs = [
+    {
+        id: '24',
+        title: 'Kawa i poczęstunek dla klientów – koszt czy reprezentacja',
+        title2: 'Kawa i poczęstunek dla klientów – koszt czy reprezentacja',
+        tag: 'Podatki',
+        slug: 'kawa-koszt-czy-reprezentacja',
+        screens: kawaKoszt,
+        description: 'Kawa dla pracowników to koszt, kolacja z kontrahentem już niekoniecznie. Sprawdź, gdzie przebiega granica i jak dokumentować catering.',
+        author: 'DGC Biuro Rachunkowe',
+        create_at: '21 października 2026',
+        archiveMonth: '2026-10',
+        archiveLabel: 'Październik 2026',
+        blogSingleImg: kawaKoszt,
+        blClass: 'format-standard-image',
+        animation: '1200',
+    },
     {
         id: '23',
         title: 'Praca zdalna – jakie wydatki rozliczy firma i pracownik',

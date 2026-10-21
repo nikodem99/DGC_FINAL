@@ -9,6 +9,12 @@
 // tytuly rozrozniane rokiem. Powod w naglowku skryptu.
 
 export const WPISY = {
+    'kawa-koszt-czy-reprezentacja': {
+        tytul: 'Kawa i poczęstunek dla klientów – koszt czy reprezentacja · DGC',
+        opis: 'Kawa dla pracowników to koszt, kolacja z kontrahentem już niekoniecznie. Sprawdź, gdzie przebiega granica i jak dokumentować catering.',
+        data: '2026-10-21',
+        nazwa: 'Kawa i poczęstunek dla klientów – koszt czy reprezentacja',
+    },
     'praca-zdalna-wydatki': {
         tytul: 'Praca zdalna – jakie wydatki rozliczy firma i pracownik · DGC',
         opis: 'Praca zdalna to obowiązki pracodawcy: sprzęt, prąd i internet. Sprawdź, jak ustalić ryczałt i dlaczego nie jest przychodem pracownika.',

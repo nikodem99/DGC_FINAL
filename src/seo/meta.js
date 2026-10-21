@@ -91,6 +91,10 @@ const STRONY = {
         tytul: 'Usługi kadrowo-płacowe · outsourcing kadr i płac · DGC',
         opis: 'Outsourcing kadr i płac dla firm z Łodzi i całej Polski, także online. ZUS, wynagrodzenia, umowy, PFRON i GUS oraz indywidualna wycena obsługi.',
     },
+    '/porady/kawa-koszt-czy-reprezentacja': {
+        tytul: 'Kawa i poczęstunek: koszt czy reprezentacja · DGC',
+        opis: 'Kawa dla pracowników to koszt, kolacja z kontrahentem już niekoniecznie. Sprawdź, gdzie przebiega granica i jak dokumentować catering.',
+    },
     '/porady/praca-zdalna-wydatki': {
         tytul: 'Praca zdalna: ryczałt, sprzęt i koszty · DGC',
         opis: 'Praca zdalna to obowiązki pracodawcy: sprzęt, prąd i internet. Sprawdź, jak ustalić ryczałt i dlaczego nie jest przychodem pracownika.',
