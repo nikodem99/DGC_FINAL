@@ -357,3 +357,67 @@ for (const [nazwa, dane] of Object.entries(zestawy)) {
 }
 
 console.log(`Tresc stron dla panelu: cennik ${cennik.length} pakietow, FAQ ${faq.length} pytan`);
+
+
+// --- szablony stron stalych dla panelu ---------------------------------
+//
+// Panel edytuje cennik i FAQ, wiec musi umiec przebudowac te cztery strony,
+// na ktorych te bloki stoja. Zasada jak przy artykule: bierzemy PRAWDZIWA
+// prerenderowana strone i zastepujemy sam blok znacznikiem. Kazde
+// podstawienie musi trafic dokladnie raz, inaczej budowanie pada.
+
+{
+    const strony = [
+        { plik: 'strona-glowna.html', zrodlo: 'index.html', pola: ['CENNIK'] },
+        { plik: 'cennik.html', zrodlo: 'cennik/index.html', pola: ['CENNIK'] },
+        { plik: 'faq.html', zrodlo: 'faq/index.html', pola: ['FAQ', 'FAQ_SCHEMAT'] },
+        { plik: 'o-nas.html', zrodlo: 'o-nas/index.html', pola: ['FAQ'] },
+    ];
+
+    const WZORY = {
+        CENNIK: {
+            wzor: /<div class="pricing_grid">[\s\S]*?<\/article><\/div>/,
+            czym: '<div class="pricing_grid">@@CENNIK@@</div>',
+        },
+        FAQ: {
+            wzor: /<div class="dgc-benefits-item">[\s\S]*?<\/div><\/div><\/div><\/div><\/div><\/div>/,
+            czym: '<div class="dgc-benefits-item">@@FAQ@@</div></div></div></div></div></div>',
+        },
+        FAQ_SCHEMAT: {
+            wzor: /<script type="application\/ld\+json">\{"@context":"https:\/\/schema\.org","@type":"FAQPage"[\s\S]*?<\/script>/,
+            czym: '@@FAQ_SCHEMAT@@',
+        },
+    };
+
+    const bledyStron = [];
+    const katalogSzablonow = path.join(DIST, 'dane', 'szablon');
+
+    for (const strona of strony) {
+        let tresc = fs.readFileSync(path.join(DIST, strona.zrodlo), 'utf8');
+
+        for (const pole of strona.pola) {
+            const { wzor, czym } = WZORY[pole];
+            const trafienia = tresc.match(new RegExp(wzor.source, 'g'));
+            if ((trafienia?.length ?? 0) !== 1) {
+                bledyStron.push(`${strona.plik}, pole ${pole}: oczekiwano 1 trafienia, jest ${trafienia?.length ?? 0}`);
+                continue;
+            }
+            tresc = tresc.replace(wzor, czym);
+        }
+
+        for (const pole of strona.pola) {
+            if (!tresc.includes(`@@${pole}@@`)) bledyStron.push(`${strona.plik}: brak znacznika @@${pole}@@`);
+        }
+
+        if (!bledyStron.length) fs.writeFileSync(path.join(katalogSzablonow, strona.plik), tresc);
+    }
+
+    if (bledyStron.length) {
+        console.error('[szablon] strony stale: budowa sie zmienila:');
+        for (const b of bledyStron) console.error(`  - ${b}`);
+        console.error('  Popraw wyrazenia w scripts/szablon.mjs i zbuduj ponownie.');
+        process.exit(1);
+    }
+
+    console.log(`Szablony stron stalych: ${strony.map((s) => s.plik).join(', ')}`);
+}

@@ -430,6 +430,137 @@ function podobneHtml(array $wpisy, int $nr): string {
     return $out;
 }
 
+/**
+ * Karty cennika — odpowiednik PricingSection.jsx i PricingPage.jsx.
+ *
+ * Oba komponenty renderuja prawie to samo; roznia sie dwoma rzeczami,
+ * stad parametry: na stronie glownej karta ma zdanie "dla kogo" i link
+ * "Zapytaj o wycene", a w cenniku tego zdania nie ma i link mowi
+ * "Zapytaj o pakiet". Strona glowna pokazuje tez tylko pakiety
+ * oznaczone naStronieGlownej.
+ *
+ * data-discover to atrybut doklejany przez React Router. Musi tu byc,
+ * inaczej przegladarka dostaje inny HTML, niz React oczekuje.
+ */
+function kartyCennika(array $pakiety, bool $stronaGlowna): string {
+    $out = '';
+    foreach ($pakiety as $p) {
+        if ($stronaGlowna && empty($p['naStronieGlownej'])) continue;
+
+        $wyrozniony = !empty($p['featured']);
+        $out .= '<article class="pricing_card' . ($wyrozniony ? ' is_featured' : '') . '">';
+        if ($wyrozniony) {
+            $out .= '<span class="pricing_badge">Pełna księgowość</span>';
+        }
+        $out .= '<div class="pricing_card_heading"><h3>' . h((string)($p['title'] ?? '')) . '</h3>'
+            . '<div class="pricing_price"><strong>' . h((string)($p['price'] ?? '')) . '</strong>'
+            . '<span>netto / miesiąc</span></div></div>';
+
+        if ($stronaGlowna && !empty($p['dlaKogo'])) {
+            $out .= '<p class="pricing_card_for">' . h((string)$p['dlaKogo']) . '</p>';
+        }
+
+        $out .= '<ul>';
+        foreach ((array)($p['features'] ?? []) as $cecha) {
+            $out .= '<li><span class="check_mark" aria-hidden="true">✓</span>'
+                . '<span>' . h((string)$cecha) . '</span></li>';
+        }
+        $out .= '</ul>';
+
+        $tekst = $stronaGlowna ? 'Zapytaj o wycenę' : 'Zapytaj o pakiet';
+        $out .= '<a class="pricing_card_link" href="/kontakt/" data-discover="true">'
+            . $tekst . ' <span aria-hidden="true">→</span></a></article>';
+    }
+    return $out;
+}
+
+/**
+ * Pozycje akordeonu FAQ — odpowiednik FaqSection.jsx.
+ *
+ * React nadaje identyfikatory przez useId() i wychodza z tego ciagi
+ * w rodzaju "_R_fd_". Tutaj uzywamy wlasnych, stalych: licza sie tylko
+ * wewnetrznie, zeby aria-controls wskazywalo wlasciwa odpowiedz, a po
+ * zamontowaniu Reacta i tak powstaja na nowo.
+ *
+ * Odpowiedz jest w dokumencie ZAWSZE, schowana atrybutem hidden — tak
+ * samo jak w komponencie. Gdyby powstawala dopiero po kliknieciu, na
+ * /faq/ nie byloby w HTML-u ani slowa odpowiedzi.
+ */
+function pozycjeFaq(array $pytania, string $przedrostek, ?int $ile = null): string {
+    $out = '';
+    $nr = 0;
+    foreach ($pytania as $p) {
+        if ($ile !== null && $nr >= $ile) break;
+        $idPrzycisku = $przedrostek . '-przycisk-' . $nr;
+        $idOdpowiedzi = $przedrostek . '-odpowiedz-' . $nr;
+        $out .= '<div class="accordion-item ">'
+            . '<h3 class="accordion-header"><button type="button" id="' . $idPrzycisku . '"'
+            . ' aria-controls="' . $idOdpowiedzi . '" aria-expanded="false">'
+            . h((string)($p['title'] ?? '')) . '</button></h3>'
+            . '<div class="accordion-body" id="' . $idOdpowiedzi . '" role="region"'
+            . ' aria-labelledby="' . $idPrzycisku . '" hidden=""><p>'
+            . h((string)($p['content'] ?? '')) . '</p></div></div>';
+        $nr++;
+    }
+    return $out;
+}
+
+/** Dane strukturalne FAQPage dla /faq/. Odpowiednik bloku z src/main.jsx. */
+function schematFaq(array $pytania): string {
+    $pozycje = [];
+    foreach ($pytania as $p) {
+        if (empty($p['title']) || empty($p['content'])) continue;
+        $pozycje[] = [
+            '@type' => 'Question',
+            'name' => $p['title'],
+            'acceptedAnswer' => ['@type' => 'Answer', 'text' => $p['content']],
+        ];
+    }
+    if (!$pozycje) return '';
+    return '<script type="application/ld+json">' . json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'FAQPage',
+        'mainEntity' => $pozycje,
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
+}
+
+/**
+ * Przebudowuje cztery strony, na ktorych stoi cennik albo FAQ.
+ * Wolane po kazdym zapisie tresci stron stalych.
+ */
+function odswiezStroneStale(array $cennik, array $faq, ?string &$blad = null): int {
+    $strony = [
+        ['szablon' => 'strona-glowna.html', 'cel' => KORZEN . '/index.html',
+         'pola' => ['CENNIK' => kartyCennika($cennik, true)]],
+        ['szablon' => 'cennik.html', 'cel' => KORZEN . '/cennik/index.html',
+         'pola' => ['CENNIK' => kartyCennika($cennik, false)]],
+        ['szablon' => 'faq.html', 'cel' => KORZEN . '/faq/index.html',
+         'pola' => ['FAQ' => pozycjeFaq($faq, 'faq'), 'FAQ_SCHEMAT' => schematFaq($faq)]],
+        ['szablon' => 'o-nas.html', 'cel' => KORZEN . '/o-nas/index.html',
+         'pola' => ['FAQ' => pozycjeFaq($faq, 'onas', 6)]],
+    ];
+
+    $zapisane = 0;
+    foreach ($strony as $s) {
+        $szab = szablon($s['szablon']);
+        if ($szab === null) {
+            $blad = "brak szablonu {$s['szablon']} — wgraj aktualna paczke strony";
+            return $zapisane;
+        }
+        $html = podstaw($szab, $s['pola']);
+
+        $znacznik = zostalZnacznik($html);
+        if ($znacznik !== null) {
+            $blad = "szablon {$s['szablon']} ma pole $znacznik, ktorego ten panel nie zna"
+                . ' — wgrana paczka strony jest nowsza niz panel';
+            return $zapisane;
+        }
+
+        if (zapiszAtomowo($s['cel'], $html)) $zapisane++;
+    }
+    return $zapisane;
+}
+
 /** Sklada i zapisuje strone jednego artykulu. */
 function zapiszStroneArtykulu(array $wpis, array $bloki, array $wpisy, int $nr, ?string &$blad = null): bool {
     $szab = szablon('artykul.html');
