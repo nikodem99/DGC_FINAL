@@ -430,6 +430,22 @@ function podobneHtml(array $wpisy, int $nr): string {
     return $out;
 }
 
+/** Odczyt tresci strony stalej: 'cennik' albo 'faq'. */
+function wczytajTrescStrony(string $co): array {
+    $plik = DANE . '/tresc/' . $co . '.json';
+    if (!is_file($plik)) return [];
+    $dane = json_decode((string)file_get_contents($plik), true);
+    return is_array($dane) ? $dane : [];
+}
+
+/** Zapis tresci strony stalej. */
+function zapiszTrescStrony(string $co, array $dane): bool {
+    $kat = DANE . '/tresc';
+    if (!is_dir($kat)) @mkdir($kat, 0755, true);
+    return zapiszAtomowo($kat . '/' . $co . '.json',
+        (string)json_encode($dane, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+}
+
 /**
  * Karty cennika — odpowiednik PricingSection.jsx i PricingPage.jsx.
  *

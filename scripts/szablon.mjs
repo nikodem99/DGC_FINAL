@@ -305,35 +305,7 @@ if (fs.existsSync(listaHtmlSciezka) && wpisy.length) {
     }
 }
 
-// --- czy panel zna wszystkie pola szablonu -----------------------------
-//
-// Szablony sa wyciagane tutaj, a wypelnia je PHP w panelu. Dolozenie pola
-// po tej stronie i zapomnienie o drugiej dawaloby na zywej stronie goly
-// napis @@PODOBNE@@. Panel ma na to wlasnego straznika (zostalZnacznik),
-// ale on tylko odmawia zapisu — a to widac dopiero, gdy biuro probuje
-// dodac artykul. Tutaj to samo widac od razu, przy budowaniu.
 
-const GENERATOR = path.join(KORZEN, 'public', 'panel-dgc', 'generator.php');
-if (fs.existsSync(GENERATOR)) {
-    const php = fs.readFileSync(GENERATOR, 'utf8');
-    const nieznane = [];
-
-    for (const plik of ['artykul.html', 'lista.html', 'karta.html']) {
-        const tresc = fs.readFileSync(path.join(DIST, 'dane', 'szablon', plik), 'utf8');
-        for (const znacznik of new Set(tresc.match(/@@[A-Z_]+@@/g) ?? [])) {
-            const nazwa = znacznik.slice(2, -2);
-            if (!new RegExp(`'${nazwa}'\\s*=>`).test(php)) nieznane.push(`${plik}: ${znacznik}`);
-        }
-    }
-
-    if (nieznane.length) {
-        console.error('[szablon] panel nie umie wypelnic tych pol:');
-        for (const n of nieznane) console.error(`  - ${n}`);
-        console.error('  Dopisz je w public/panel-dgc/generator.php (tablica w podstaw()).');
-        process.exit(1);
-    }
-    console.log('Panel zna wszystkie pola szablonow.');
-}
 
 // --- tresc stron stalych dla panelu ------------------------------------
 //
@@ -381,7 +353,10 @@ console.log(`Tresc stron dla panelu: cennik ${cennik.length} pakietow, FAQ ${faq
         },
         FAQ: {
             wzor: /<div class="dgc-benefits-item">[\s\S]*?<\/div><\/div><\/div><\/div><\/div><\/div>/,
-            czym: '<div class="dgc-benefits-item">@@FAQ@@</div></div></div></div></div></div>',
+            // Wzorzec konczy sie szescioma </div>. Dwa z nich zamykaja OSTATNIA
+            // pozycje akordeonu i siedza juz w @@FAQ@@ — tutaj dokladamy tylko
+            // cztery otaczajace: dgc-benefits-item, kolumne, wiersz i dgc-faq-wrap.
+            czym: '<div class="dgc-benefits-item">@@FAQ@@</div></div></div></div>',
         },
         FAQ_SCHEMAT: {
             wzor: /<script type="application\/ld\+json">\{"@context":"https:\/\/schema\.org","@type":"FAQPage"[\s\S]*?<\/script>/,
@@ -420,4 +395,36 @@ console.log(`Tresc stron dla panelu: cennik ${cennik.length} pakietow, FAQ ${faq
     }
 
     console.log(`Szablony stron stalych: ${strony.map((s) => s.plik).join(', ')}`);
+}
+
+// --- czy panel zna wszystkie pola szablonu -----------------------------
+//
+// Szablony sa wyciagane tutaj, a wypelnia je PHP w panelu. Dolozenie pola
+// po tej stronie i zapomnienie o drugiej dawaloby na zywej stronie goly
+// napis @@PODOBNE@@. Panel ma na to wlasnego straznika (zostalZnacznik),
+// ale on tylko odmawia zapisu — a to widac dopiero, gdy biuro probuje
+// dodac artykul. Tutaj to samo widac od razu, przy budowaniu.
+
+const GENERATOR = path.join(KORZEN, 'public', 'panel-dgc', 'generator.php');
+if (fs.existsSync(GENERATOR)) {
+    const php = fs.readFileSync(GENERATOR, 'utf8');
+    const nieznane = [];
+
+    for (const plik of ['artykul.html', 'lista.html', 'karta.html',
+                        'strona-glowna.html', 'cennik.html', 'faq.html', 'o-nas.html']) {
+        if (!fs.existsSync(path.join(DIST, 'dane', 'szablon', plik))) continue;
+        const tresc = fs.readFileSync(path.join(DIST, 'dane', 'szablon', plik), 'utf8');
+        for (const znacznik of new Set(tresc.match(/@@[A-Z_]+@@/g) ?? [])) {
+            const nazwa = znacznik.slice(2, -2);
+            if (!new RegExp(`'${nazwa}'\\s*=>`).test(php)) nieznane.push(`${plik}: ${znacznik}`);
+        }
+    }
+
+    if (nieznane.length) {
+        console.error('[szablon] panel nie umie wypelnic tych pol:');
+        for (const n of nieznane) console.error(`  - ${n}`);
+        console.error('  Dopisz je w public/panel-dgc/generator.php (tablica w podstaw()).');
+        process.exit(1);
+    }
+    console.log('Panel zna wszystkie pola szablonow.');
 }

@@ -143,6 +143,34 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'z
     }
 }
 
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'zapisz-cennik') {
+    if (!sprawdzToken()) {
+        $blad = 'Sesja wygasła. Odśwież stronę i spróbuj ponownie.';
+    } else {
+        [$blad, $komunikat] = zapiszCennik();
+    }
+    $akcja = 'cennik';
+}
+
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'zapisz-faq') {
+    if (!sprawdzToken()) {
+        $blad = 'Sesja wygasła. Odśwież stronę i spróbuj ponownie.';
+    } else {
+        [$blad, $komunikat] = zapiszFaq();
+    }
+    $akcja = 'faq';
+}
+
+if ($akcja === 'cennik') {
+    widokCennika(wczytajTrescStrony('cennik'), $komunikat, $blad);
+    exit;
+}
+
+if ($akcja === 'faq') {
+    widokFaq(wczytajTrescStrony('faq'), $komunikat, $blad);
+    exit;
+}
+
 if ($akcja === 'nowy' || $akcja === 'edytuj') {
     $slug = (string)($_GET['slug'] ?? '');
     $wpis = null;
@@ -385,7 +413,11 @@ function widokLogowania(string $blad): void {
 function widokListy(array $wpisy, string $komunikat, string $blad): void {
     naglowek('Artykuły');
     $szukaj = trim((string)($_GET['szukaj'] ?? ''));
-    echo '<div class="pas"><strong>Panel DGC</strong><span><a href="?akcja=nowy">Nowy artykuł</a> &nbsp;·&nbsp; <a href="?akcja=wyloguj">Wyloguj</a></span></div>';
+    echo '<div class="pas"><strong>Panel DGC</strong><span>'
+        . '<a href="?akcja=nowy">Nowy artykuł</a> &nbsp;·&nbsp; '
+        . '<a href="?akcja=cennik">Cennik</a> &nbsp;·&nbsp; '
+        . '<a href="?akcja=faq">Pytania</a> &nbsp;·&nbsp; '
+        . '<a href="?akcja=wyloguj">Wyloguj</a></span></div>';
     echo '<div class="srodek">';
     if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
     if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
@@ -478,6 +510,192 @@ function widokFormularza(?array $wpis, string $tresc, string $blad): void {
 
     echo '<p style="margin-top:22px"><button class="przycisk akcent" type="submit">Zapisz i opublikuj</button> '
         . '<a class="przycisk lekki" href="?">Anuluj</a></p>';
+    echo '</form></div>';
+    stopka();
+}
+
+// =======================================================================
+//  TRESC STRON STALYCH: CENNIK I PYTANIA
+// =======================================================================
+//
+// Te dwa zestawy leza w dane/tresc/*.json i sa czytane przez przegladarke
+// (src/api/tresciStron.js) oraz wklejane w gotowe strony przez
+// odswiezStroneStale(). Po kazdym zapisie przebudowujemy cztery strony,
+// na ktorych te bloki stoja: /, /cennik/, /faq/ i /o-nas/.
+
+/** Zamienia textarea z punktami (jeden na linie) na tablice. */
+function liniaNaTablice(string $tekst): array {
+    $linie = preg_split('/\r\n|\r|\n/', $tekst) ?: [];
+    $wynik = [];
+    foreach ($linie as $l) {
+        $l = trim($l);
+        // Pozwalamy wpisac punkt z myslnikiem albo bez — biuro i tak go dopisze.
+        $l = ltrim($l, "-• \t");
+        if ($l !== '') $wynik[] = $l;
+    }
+    return $wynik;
+}
+
+function zapiszCennik(): array {
+    $tytuly = (array)($_POST['title'] ?? []);
+    $pakiety = [];
+
+    foreach ($tytuly as $i => $tytul) {
+        $tytul = trim((string)$tytul);
+        // Pusta nazwa = pakiet skasowany albo nigdy nie wypelniony.
+        if ($tytul === '') continue;
+
+        $punkty = liniaNaTablice((string)($_POST['features'][$i] ?? ''));
+        if (!$punkty) return ['Pakiet „' . $tytul . '" nie ma ani jednego punktu. Dopisz, co obejmuje.', ''];
+
+        $pakiety[] = [
+            'title' => $tytul,
+            'krotki' => trim((string)($_POST['krotki'][$i] ?? '')) ?: $tytul,
+            'price' => trim((string)($_POST['price'][$i] ?? '')),
+            'dlaKogo' => trim((string)($_POST['dlaKogo'][$i] ?? '')),
+            'features' => $punkty,
+            'featured' => !empty($_POST['featured'][$i]),
+            'naStronieGlownej' => !empty($_POST['naGlownej'][$i]),
+        ];
+    }
+
+    if (!$pakiety) return ['Zostaw przynajmniej jeden pakiet.', ''];
+
+    if (!zapiszTrescStrony('cennik', $pakiety)) {
+        return ['Nie udało się zapisać cennika.', ''];
+    }
+
+    $bladStron = null;
+    $ile = odswiezStroneStale($pakiety, wczytajTrescStrony('faq'), $bladStron);
+    if ($bladStron !== null) return ["Cennik zapisany, ale strony się nie przebudowały: $bladStron", ''];
+
+    return ['', "Cennik zapisany. Odświeżono $ile stron."];
+}
+
+function zapiszFaq(): array {
+    $pytania = (array)($_POST['pytanie'] ?? []);
+    $zestaw = [];
+
+    foreach ($pytania as $i => $pytanie) {
+        $pytanie = trim((string)$pytanie);
+        $odpowiedz = trim((string)($_POST['odpowiedz'][$i] ?? ''));
+        // Puste pytanie = pozycja skasowana. Pytanie bez odpowiedzi to blad,
+        // bo na stronie powstalby naglowek, ktory po kliknieciu nic nie pokazuje.
+        if ($pytanie === '' && $odpowiedz === '') continue;
+        if ($pytanie === '' || $odpowiedz === '') {
+            return ['Każde pytanie musi mieć odpowiedź, a każda odpowiedź pytanie. Sprawdź pozycję ' . ($i + 1) . '.', ''];
+        }
+        $zestaw[] = ['title' => $pytanie, 'content' => $odpowiedz];
+    }
+
+    if (!$zestaw) return ['Zostaw przynajmniej jedno pytanie.', ''];
+
+    if (!zapiszTrescStrony('faq', $zestaw)) {
+        return ['Nie udało się zapisać pytań.', ''];
+    }
+
+    $bladStron = null;
+    $ile = odswiezStroneStale(wczytajTrescStrony('cennik'), $zestaw, $bladStron);
+    if ($bladStron !== null) return ["Pytania zapisane, ale strony się nie przebudowały: $bladStron", ''];
+
+    return ['', "Pytania zapisane. Odświeżono $ile stron."];
+}
+
+function pasTresci(string $gdzie): void {
+    echo '<div class="pas"><strong>Panel DGC</strong><span>'
+        . '<a href="?">Artykuły</a> &nbsp;·&nbsp; '
+        . ($gdzie === 'cennik' ? '<strong>Cennik</strong>' : '<a href="?akcja=cennik">Cennik</a>') . ' &nbsp;·&nbsp; '
+        . ($gdzie === 'faq' ? '<strong>Pytania</strong>' : '<a href="?akcja=faq">Pytania</a>') . ' &nbsp;·&nbsp; '
+        . '<a href="?akcja=wyloguj">Wyloguj</a></span></div>';
+}
+
+function widokCennika(array $pakiety, string $komunikat, string $blad): void {
+    naglowek('Cennik');
+    pasTresci('cennik');
+    echo '<div class="srodek">';
+    if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
+    if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
+
+    echo '<h1>Cennik</h1>';
+    echo '<p class="male">Zmiany pojawiają się od razu na stronie głównej i na podstronie Cennik. '
+        . 'Żeby usunąć pakiet, wyczyść jego nazwę i zapisz.</p>';
+
+    echo '<form method="post"><input type="hidden" name="co" value="zapisz-cennik">'
+        . '<input type="hidden" name="token" value="' . h(token()) . '">';
+
+    // Jedno puste miejsce na nowy pakiet.
+    $doPokazania = $pakiety;
+    $doPokazania[] = ['title' => '', 'price' => '', 'dlaKogo' => '', 'features' => [],
+                      'featured' => false, 'naStronieGlownej' => false, 'krotki' => ''];
+
+    foreach ($doPokazania as $i => $p) {
+        $nowy = ($p['title'] ?? '') === '';
+        echo '<fieldset style="border:1px solid var(--linia);border-radius:10px;padding:16px 18px;margin:18px 0">';
+        echo '<legend class="male" style="padding:0 6px">' . ($nowy ? 'Nowy pakiet (zostaw puste, jeśli niepotrzebny)' : 'Pakiet ' . ($i + 1)) . '</legend>';
+
+        echo '<label for="t' . $i . '">Nazwa pakietu</label>';
+        echo '<input id="t' . $i . '" type="text" name="title[' . $i . ']" value="' . h((string)($p['title'] ?? '')) . '" maxlength="120">';
+
+        echo '<label for="c' . $i . '">Cena</label>';
+        echo '<p class="male" style="margin:-2px 0 6px">Tak, jak ma się wyświetlić, na przykład <code>od 200 zł</code>. Pod spodem strona sama dopisuje „netto / miesiąc".</p>';
+        echo '<input id="c' . $i . '" type="text" name="price[' . $i . ']" value="' . h((string)($p['price'] ?? '')) . '" maxlength="40">';
+
+        echo '<label for="d' . $i . '">Dla kogo</label>';
+        echo '<p class="male" style="margin:-2px 0 6px">Jedno zdanie. Pokazuje się tylko na stronie głównej.</p>';
+        echo '<input id="d' . $i . '" type="text" name="dlaKogo[' . $i . ']" value="' . h((string)($p['dlaKogo'] ?? '')) . '" maxlength="200">';
+
+        echo '<label for="f' . $i . '">Co obejmuje</label>';
+        echo '<p class="male" style="margin:-2px 0 6px">Jeden punkt w każdej linii.</p>';
+        echo '<textarea id="f' . $i . '" name="features[' . $i . ']" style="min-height:110px;font-family:inherit;font-size:16px">'
+            . h(implode("\n", (array)($p['features'] ?? []))) . '</textarea>';
+
+        echo '<p style="margin:12px 0 0">'
+            . '<label style="display:inline;font-weight:400"><input type="checkbox" name="naGlownej[' . $i . ']" value="1"'
+            . (!empty($p['naStronieGlownej']) ? ' checked' : '') . '> Pokaż na stronie głównej</label>'
+            . ' &nbsp;&nbsp; '
+            . '<label style="display:inline;font-weight:400"><input type="checkbox" name="featured[' . $i . ']" value="1"'
+            . (!empty($p['featured']) ? ' checked' : '') . '> Wyróżnij</label></p>';
+
+        echo '</fieldset>';
+    }
+
+    echo '<p style="margin-top:22px"><button class="przycisk akcent" type="submit">Zapisz cennik</button> '
+        . '<a class="przycisk lekki" href="/cennik/" target="_blank" rel="noreferrer">Zobacz stronę</a></p>';
+    echo '</form></div>';
+    stopka();
+}
+
+function widokFaq(array $pytania, string $komunikat, string $blad): void {
+    naglowek('Pytania');
+    pasTresci('faq');
+    echo '<div class="srodek">';
+    if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
+    if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
+
+    echo '<h1>Najczęstsze pytania <span class="male">(' . count($pytania) . ')</span></h1>';
+    echo '<p class="male">Pokazują się na podstronie Pytania, a pierwsze sześć także na stronie O nas. '
+        . 'Kolejność jest taka jak tutaj. Żeby usunąć pytanie, wyczyść oba pola i zapisz.</p>';
+
+    echo '<form method="post"><input type="hidden" name="co" value="zapisz-faq">'
+        . '<input type="hidden" name="token" value="' . h(token()) . '">';
+
+    $doPokazania = $pytania;
+    for ($i = 0; $i < 3; $i++) $doPokazania[] = ['title' => '', 'content' => ''];
+
+    foreach ($doPokazania as $i => $p) {
+        $nowe = ($p['title'] ?? '') === '';
+        echo '<fieldset style="border:1px solid var(--linia);border-radius:10px;padding:16px 18px;margin:18px 0">';
+        echo '<legend class="male" style="padding:0 6px">' . ($nowe ? 'Nowe pytanie (zostaw puste, jeśli niepotrzebne)' : 'Pytanie ' . ($i + 1)) . '</legend>';
+        echo '<label for="p' . $i . '">Pytanie</label>';
+        echo '<input id="p' . $i . '" type="text" name="pytanie[' . $i . ']" value="' . h((string)($p['title'] ?? '')) . '" maxlength="200">';
+        echo '<label for="o' . $i . '">Odpowiedź</label>';
+        echo '<textarea id="o' . $i . '" name="odpowiedz[' . $i . ']" style="min-height:120px;font-family:inherit;font-size:16px" maxlength="1200">'
+            . h((string)($p['content'] ?? '')) . '</textarea>';
+        echo '</fieldset>';
+    }
+
+    echo '<p style="margin-top:22px"><button class="przycisk akcent" type="submit">Zapisz pytania</button> '
+        . '<a class="przycisk lekki" href="/faq/" target="_blank" rel="noreferrer">Zobacz stronę</a></p>';
     echo '</form></div>';
     stopka();
 }

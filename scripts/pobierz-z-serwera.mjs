@@ -46,6 +46,60 @@ if (!zdalneWpisy.length) {
     process.exit(1);
 }
 
+// --- tresc stron stalych (cennik, pytania) ----------------------------
+//
+// Od 22.10.2026 biuro edytuje te dwa zestawy w panelu. Zapisuja sie na
+// serwerze w dane/tresc/*.json, a w repozytorium zrodlem sa src/api/
+// pricing.js i faq.js. Gdyby ktos zbudowal paczke z samego repozytorium,
+// nadpisalby klientce jej zmiany — dlatego sciagamy je tutaj i wpisujemy
+// z powrotem do zrodel.
+
+const naLiterale = (w) => JSON.stringify(w, null, 4).replace(/"([a-zA-Z]\w*)":/g, '$1:');
+
+const zestawy = [
+    {
+        co: 'cennik',
+        plik: 'src/api/pricing.js',
+        wzor: /const pakiety = \[[\s\S]*?\n\];/,
+        zloz: (d) => `const pakiety = ${naLiterale(d)};`,
+    },
+    {
+        co: 'faq',
+        plik: 'src/api/faq.js',
+        wzor: /export const FAQ_OGOLNE = \[[\s\S]*?\n\];/,
+        zloz: (d) => `export const FAQ_OGOLNE = ${naLiterale(d)};`,
+    },
+];
+
+for (const z of zestawy) {
+    let zdalny;
+    try {
+        zdalny = await (await pobierz(`/dane/tresc/${z.co}.json`)).json();
+    } catch {
+        console.log(`[pobierz] ${z.co}: brak na serwerze, zostaje wersja z repozytorium`);
+        continue;
+    }
+    if (!Array.isArray(zdalny) || !zdalny.length) {
+        console.error(`[pobierz] ${z.co}: serwer zwrocil pusty zestaw — pomijam, zeby niczego nie skasowac`);
+        continue;
+    }
+
+    const sciezka = path.join(KORZEN, z.plik);
+    const zrodlo = fs.readFileSync(sciezka, 'utf8');
+    if (!z.wzor.test(zrodlo)) {
+        console.error(`[pobierz] ${z.co}: nie rozpoznaje struktury ${z.plik} — popraw wzorzec w tym skrypcie`);
+        process.exit(1);
+    }
+
+    const nowy = zrodlo.replace(z.wzor, z.zloz(zdalny));
+    if (nowy === zrodlo) {
+        console.log(`[pobierz] ${z.co}: bez zmian (${zdalny.length} pozycji)`);
+    } else {
+        fs.writeFileSync(sciezka, nowy);
+        console.log(`[pobierz] ${z.co}: pobrane z serwera, ${zdalny.length} pozycji -> ${z.plik}`);
+    }
+}
+
 // Slugi, ktore juz sa w repozytorium.
 const blogsJs = fs.readFileSync(path.join(KORZEN, 'src/api/blogs.js'), 'utf8');
 const lokalne = new Set([...blogsJs.matchAll(/slug:\s*'((?:[^'\\]|\\.)*)'/g)].map((m) => m[1]));
