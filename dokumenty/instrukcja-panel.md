@@ -184,11 +184,76 @@ akapitami. Wejdźcie w edycję i dodajcie je.
 
 ---
 
+## Cennik
+
+Zakładka **Cennik** w pasku na górze. Zmiany widać od razu na stronie głównej
+i na podstronie Cennik — nie trzeba nikogo prosić o wgranie czegokolwiek.
+
+Każdy pakiet ma:
+
+- **Nazwę** — tak, jak ma się wyświetlić.
+- **Cenę** — wpisujecie dokładnie to, co ma być widoczne, na przykład
+  `od 200 zł`. Strona sama dopisuje pod spodem „netto / miesiąc".
+- **Dla kogo** — jedno zdanie. Pokazuje się **tylko na stronie głównej**.
+- **Co obejmuje** — jeden punkt w każdej linii. Myślnika na początku nie
+  trzeba dopisywać, strona stawia go sama.
+- **Pokaż na stronie głównej** — na stronie głównej mieszczą się trzy pakiety.
+  Zaznaczcie te, które mają tam stać.
+- **Wyróżnij** — pakiet dostaje ramkę i plakietkę „Pełna księgowość".
+
+Na dole formularza jest jedno puste miejsce na **nowy pakiet**. Jeśli go nie
+wypełnicie, nic się nie stanie.
+
+**Żeby usunąć pakiet, wyczyśćcie jego nazwę i zapiszcie.**
+
+Pakiet musi mieć przynajmniej jeden punkt w „Co obejmuje" — bez tego panel
+nie zapisze i powie o tym.
+
+---
+
+## Pytania (FAQ)
+
+Zakładka **Pytania**. Pokazują się na podstronie Pytania, a **pierwsze sześć
+także na stronie O nas**. Kolejność na stronie jest taka jak w panelu.
+
+Każda pozycja to pytanie i odpowiedź. Na dole są **trzy puste miejsca** na
+nowe pytania.
+
+**Żeby usunąć pytanie, wyczyśćcie oba pola i zapiszcie.**
+
+Panel nie pozwoli zapisać pytania bez odpowiedzi ani odpowiedzi bez pytania —
+na stronie powstałby wtedy nagłówek, który po kliknięciu nic nie pokazuje.
+
+> **Dlaczego to jest ważne dla Google**
+> Pytania i odpowiedzi z tej zakładki trafiają też do danych, które czyta
+> wyszukiwarka. Dzięki nim odpowiedzi potrafią pokazać się bezpośrednio
+> w wynikach. Dlatego warto, żeby odpowiedź była pełnym zdaniem, a nie
+> jednym słowem.
+
+---
+
+## Czego panel NIE zmienia
+
+Żeby nie było nieporozumień — te rzeczy wymagają programisty:
+
+- układ stron, kolory, nowe sekcje i nowe podstrony,
+- teksty na podstronach oferty,
+- skład zespołu i zdjęcia na stronie,
+- polityka prywatności,
+- menu i stopka.
+
+Przy zmianie składu zespołu albo zdjęć **zadzwońcie do osoby opiekującej się
+stroną**. To świadoma decyzja: te fragmenty są zbudowane tak, że łatwo je
+zepsuć, a trudno naprawić bez dostępu do kodu.
+
+---
+
 ## Jedna rzecz do zapamiętania przy zmianie wykonawcy
 
-Artykuły dodane przez panel żyją na serwerze, a nie w materiałach, które
-dostał wykonawca strony. Jeśli kiedyś ktoś będzie wgrywał nową wersję strony,
-**musi najpierw pobrać artykuły z serwera**, inaczej je nadpisze.
+Artykuły dodane przez panel **oraz cennik i pytania** żyją na serwerze, a nie
+w materiałach, które dostał wykonawca strony. Jeśli kiedyś ktoś będzie wgrywał
+nową wersję strony, **musi najpierw pobrać te dane z serwera**, inaczej je
+nadpisze — razem z każdą zmianą ceny, którą zrobiliście w panelu.
 
 Powiedzcie to osobie, która będzie to robić, i pokażcie jej plik
 `dokumenty/przekazanie-techniczne.md` z materiałów strony. Jest tam opisane

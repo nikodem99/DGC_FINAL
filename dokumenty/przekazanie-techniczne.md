@@ -98,6 +98,37 @@ nie zna ani nowego pola, ani strażnika — wstawi na stronę goły napis
 2026, na dwóch stronach. Kolejność ma znaczenie: **najpierw pliki panelu,
 potem paczka strony.**
 
+### Cennik i FAQ też są edytowalne z panelu
+
+Od 22 października 2026 panel obsługuje nie tylko artykuły, ale też **cennik
+i pytania FAQ**. Mechanizm jest ten sam, co przy artykułach, tylko zastosowany
+do stron stałych:
+
+- źródłem przy budowaniu są `src/api/pricing.js` i `src/api/faq.js`,
+- `scripts/szablon.mjs` zrzuca je do `dane/tresc/*.json` i wycina cztery
+  szablony stron: `strona-glowna.html`, `cennik.html`, `faq.html`, `o-nas.html`,
+- przeglądarka czyta `dane/tresc/*.json` przez `src/api/tresciStron.js`
+  (odpowiednik `indeks.js` dla artykułów),
+- panel zapisuje JSON i **przebudowuje te cztery strony** przez
+  `odswiezStroneStale()` w `generator.php`, razem z danymi strukturalnymi
+  FAQPage.
+
+**To są trzecie lustro React ↔ PHP w tym projekcie** (po `blokiNaHtml` i
+`podobneHtml`): `kartyCennika()` odpowiada `PricingSection.jsx` i
+`PricingPage.jsx`, a `pozycjeFaq()` odpowiada `FaqSection.jsx`. Zmiana
+w komponencie wymaga zmiany w PHP. Budowanie to wyłapie tylko wtedy, gdy
+zmieni się *struktura* strony — zmiana samego wyglądu karty przejdzie cicho.
+
+**Czego panel celowo NIE obejmuje:** zespołu. Suwak react-slick prerenderuje
+się z klonami slajdów i szerokościami liczonymi z `window.innerWidth`,
+więc odtworzenie go w PHP byłoby kruche. Przy zmianie składu biuro dzwoni
+do opiekuna strony — tak ustalone z klientem.
+
+**Zdjęcia zespołu** leżą poza paczką Vite, w `public/dane/obrazki/`, pod
+stałymi nazwami. Gdyby kiedyś trzeba było dać biuru ich podmianę, mechanizm
+wgrywania obrazków z panelu już istnieje i wystarczy go podpiąć — HTML się
+nie zmienia, bo adresy nie mają odcisku.
+
 ### Zapis w panelu nadpisuje ręcznie dobrane meta
 
 Piętnaście artykułów ma w `src/seo/meta.js` ręcznie napisany tytuł i opis pod
