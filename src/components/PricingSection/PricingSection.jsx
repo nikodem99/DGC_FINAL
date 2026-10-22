@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import pakiety from '../../api/pricing';
+import { uzyjTresci } from '../../api/tresciStron.js';
 import SectionTitle from '../SectionTitle/SectionTitle';
 
 const ClickHandler = () => {
@@ -11,6 +11,7 @@ const ClickHandler = () => {
 // dokladnie tam, gdzie czytelnik pyta o cene. Wirtualne biuro zostaje na
 // podstronie /cennik, bo to inny produkt niz sama ksiegowosc.
 const PricingSection = (props) => {
+    const pakiety = uzyjTresci('cennik');
     const { hclass } = props;
     const widoczne = pakiety.filter((p) => p.naStronieGlownej);
 

@@ -9,7 +9,7 @@ import PricingSection from '../../components/PricingSection/PricingSection';
 import Testimonial from '../../components/Testimonial/Testimonial';
 import CtaSection from '../../components/CtaSection/CtaSection';
 import TeamSection from '../../components/TeamSection/TeamSection';
-import { ZESPOL_BIURA } from '../../api/team';
+import { uzyjTresci } from '../../api/tresciStron.js';
 import FunFact from '../../components/FunFact/FunFact';
 import BlogSection from '../../components/BlogSection/BlogSection';
 import NewsletterSection from '../../components/Newsletter/NewsletterSection';
@@ -20,6 +20,7 @@ import Scrollbar from '../../components/scrollbar/scrollbar';
 import Logo from '../../images/logo.svg'
 
 const HomePage = () => {
+    const zespol = uzyjTresci('zespol');
     return (
         <Fragment>
             <Navbar hclass={'dgc-site-header'}  Logo={Logo} />
@@ -36,8 +37,8 @@ const HomePage = () => {
                 trzy karty widoczne, reszta po przeciagnieciu. */}
             <TeamSection
                 hclass={'team_section section-padding'}
-                osoby={ZESPOL_BIURA}
-                sliceEnd={ZESPOL_BIURA.length}
+                osoby={zespol}
+                sliceEnd={zespol.length}
                 title={'Zespół'}
                 subtitle={'Poznaj osoby, z którymi pracujesz na co dzień'}
                 suwak={true}

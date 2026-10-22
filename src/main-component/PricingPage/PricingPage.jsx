@@ -6,12 +6,13 @@ import SectionTitle from '../../components/SectionTitle/SectionTitle';
 import Footer from '../../components/footer/Footer';
 import Scrollbar from '../../components/scrollbar/scrollbar';
 import Logo from '../../images/logo.svg';
-import packages from '../../api/pricing';
+import { uzyjTresci } from '../../api/tresciStron.js';
 import FormSection from '../../components/FormSection/FormSection.jsx';
 
 
 
 const PricingPage = () => {
+    const packages = uzyjTresci('cennik');
     const scrollToTop = () => window.scrollTo(10, 0);
 
     return (

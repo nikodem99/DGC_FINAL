@@ -5,12 +5,11 @@ import About from '../../components/about/about';
 import ProcessSection from '../../components/ProcessSection/ProcessSection';
 import FunFact from '../../components/FunFact/FunFact';
 import TeamSection from '../../components/TeamSection/TeamSection';
-import { ZESPOL_BIURA } from '../../api/team';
+import { uzyjTresci } from '../../api/tresciStron.js';
 import ZespolSection from '../../components/ZespolSection/ZespolSection.jsx';
 import WMediach from '../../components/WMediach/WMediach.jsx';
 import FaqSection from '../../components/FaqSection/FaqSection.jsx';
 import OpinieCta from '../../components/OpinieCta/OpinieCta.jsx';
-import { FAQ_OGOLNE } from '../../api/faq';
 import CtaSection from '../../components/CtaSection/CtaSection.jsx';
 import LogoDGC from '../../images/logo.jpg';
 import BlogSection from '../../components/BlogSection/BlogSection';
@@ -21,6 +20,7 @@ import Logo from '../../images/logo.svg'
 
 
 const AboutPage = () => {
+    const zespol = uzyjTresci('zespol');
     return (
         <Fragment>
             <Navbar hclass={'dgc-site-header dgc-site-header-s2'} Logo={Logo} />
@@ -37,8 +37,8 @@ const AboutPage = () => {
                 zeby pokazac pozostale trzy osoby. */}
             <TeamSection
                 hclass={'team_section_s2 section-padding'}
-                osoby={ZESPOL_BIURA}
-                sliceEnd={ZESPOL_BIURA.length}
+                osoby={zespol}
+                sliceEnd={zespol.length}
                 title={'Zespół'}
                 subtitle={'Poznaj osoby, z którymi pracujesz na co dzień'}
                 suwak={true}
@@ -57,7 +57,7 @@ const AboutPage = () => {
                 zostaje na /faq, zeby podstrona "O nas" nie zrobila sie
                 dluzsza od strony glownej. */}
             <FaqSection
-                items={FAQ_OGOLNE.slice(0, 6)}
+                ile={6}
                 title={'Pytania, które słyszymy najczęściej'}
             />
             {/* Ten sam pas co na stronie glownej, z tym samym znakiem DGC. */}

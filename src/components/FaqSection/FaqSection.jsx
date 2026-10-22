@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
-import { FAQ_OGOLNE } from '../../api/faq';
+import { uzyjTresci } from '../../api/tresciStron.js';
 
 
 // Sekcja przyjmuje wlasny zestaw pytan i naglowek, zeby ta sama karuzela
 // pytan mogla stanac na /faq, na /about i pozniej na podstronach oferty.
 const FaqSection = ({
-    items = FAQ_OGOLNE,
+    items,
+    ile,
     title = 'Najczęstsze pytania',
     hclass = 'dgc-faq-section section-padding',
 }) => {
+    // Pytania biora sie z haka, a nie z importu, zeby zmiana zrobiona
+    // w panelu pojawila sie bez przebudowania strony. `items` zostaje dla
+    // przyszlych zestawow (np. pytania na podstronie oferty), a `ile`
+    // ogranicza liczbe pozycji — na /o-nas/ pokazujemy pierwsze szesc.
+    const zPanelu = uzyjTresci('faq');
+    const pytania = items ?? (ile ? zPanelu.slice(0, ile) : zPanelu);
+
     const [activeIndex, setActiveIndex] = useState(null);
 
     // Na stronie /o-nas/ ta sama sekcja stoi drugi raz, wiec identyfikatory
@@ -38,7 +46,7 @@ const FaqSection = ({
                             <div className="row">
                                 <div className="col-lg-12 col-12">
                                     <div className="dgc-benefits-item">
-                                        {items.map((accordion, index) => (
+                                        {pytania.map((accordion, index) => (
                                             <div
                                                 className={`accordion-item ${activeIndex === index ? 'active' : ''}`}
                                                 key={index}

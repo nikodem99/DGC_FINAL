@@ -334,3 +334,30 @@ if (fs.existsSync(GENERATOR)) {
     }
     console.log('Panel zna wszystkie pola szablonow.');
 }
+
+// --- tresc stron stalych dla panelu ------------------------------------
+//
+// Cennik, pytania i zespol wyjezdzaja z paczki do /dane/tresc/*.json, zeby
+// panel mial co edytowac, a przegladarka skad doczytac (src/api/tresciStron.js).
+// Zrodlem przy budowaniu pozostaja pliki w src/api — tutaj tylko je zrzucamy.
+
+const katTresci = path.join(DIST, 'dane', 'tresc');
+fs.mkdirSync(katTresci, { recursive: true });
+
+const { default: cennik } = await import('../src/api/pricing.js');
+const { FAQ_OGOLNE: faq } = await import('../src/api/faq.js');
+const { ZESPOL_BIURA: zespol } = await import('../src/api/team.js');
+
+const zestawy = { cennik, faq, zespol };
+for (const [nazwa, dane] of Object.entries(zestawy)) {
+    if (!Array.isArray(dane) || !dane.length) {
+        console.error(`[szablon] zestaw ${nazwa} jest pusty — przerywam`);
+        process.exit(1);
+    }
+    fs.writeFileSync(path.join(katTresci, `${nazwa}.json`), JSON.stringify(dane, null, 1));
+}
+
+console.log(
+    `Tresc stron dla panelu: cennik ${cennik.length} pakietow, `
+    + `FAQ ${faq.length} pytan, zespol ${zespol.length} osob`
+);
