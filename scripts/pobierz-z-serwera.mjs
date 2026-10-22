@@ -185,6 +185,30 @@ async function wczytajZdalne(co) {
     }
 }
 
+// --- teksty podstron oferty -------------------------------------------
+
+{
+    const o = await wczytajZdalne('oferta');
+    if (o && Object.keys(o).length) {
+        const plik = path.join(KORZEN, 'src/api/serviceContent.js');
+        const zrodlo = fs.readFileSync(plik, 'utf8');
+        const nowy = zrodlo.replace(
+            /const serviceContent = \{[\s\S]*?\n\};/,
+            `const serviceContent = ${naLiterale(o)};`
+        );
+        if (!/const serviceContent = \{/.test(zrodlo)) {
+            console.error('[pobierz] oferta: nie rozpoznaje struktury serviceContent.js');
+            process.exit(1);
+        }
+        if (nowy !== zrodlo) {
+            fs.writeFileSync(plik, nowy);
+            console.log(`[pobierz] oferta: pobrana z serwera, ${Object.keys(o).length} podstron`);
+        } else {
+            console.log('[pobierz] oferta: bez zmian');
+        }
+    }
+}
+
 // Slugi, ktore juz sa w repozytorium.
 const blogsJs = fs.readFileSync(path.join(KORZEN, 'src/api/blogs.js'), 'utf8');
 const lokalne = new Set([...blogsJs.matchAll(/slug:\s*'((?:[^'\\]|\\.)*)'/g)].map((m) => m[1]));

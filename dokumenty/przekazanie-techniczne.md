@@ -134,7 +134,11 @@ się z klonami slajdów i szerokościami liczonymi z `window.innerWidth`,
 więc odtworzenie go w PHP byłoby kruche. Przy zmianie składu biuro dzwoni
 do opiekuna strony — tak ustalone z klientem.
 
-Nie obejmuje też **nazw usług** (`src/api/Services.js`). Tytuł usługi jest
+Od 22 października panel obsługuje też **teksty sześciu podstron oferty**
+(`src/api/serviceContent.js`, szablony `oferta-<slug>.html`). Nagłówek `<h2>`
+z nazwą usługi zostaje w szablonie — edytowalna jest wyłącznie treść pod nim.
+
+Nie obejmuje za to **nazw usług** (`src/api/Services.js`). Tytuł usługi jest
 jednocześnie nazwą karty, nagłówkiem H1 podstrony oferty i pozycją w menu
 (`offerMenu.js` ma własną kopię). Edycja z panelu rozjechałaby menu
 z resztą — a menu jest na wszystkich 481 stronach. Edytowalne mogłyby być

@@ -24,6 +24,7 @@ import pakietyZPaczki from './pricing.js';
 import { FAQ_OGOLNE as faqZPaczki } from './faq.js';
 import { CENA, CZAS_TRWANIA, CO_ZYSKUJESZ, JAK_SIE_PRZYGOTOWAC } from './konsultacje.js';
 import { KONTAKT } from './kontakt.js';
+import trescOfertyZPaczki from './serviceContent.js';
 
 const DOMYSLNE = {
     cennik: pakietyZPaczki,
@@ -38,6 +39,8 @@ const DOMYSLNE = {
         przygotowanie: JAK_SIE_PRZYGOTOWAC,
     },
     kontakt: KONTAKT,
+    // Mapa slug -> tresc podstrony, a nie lista.
+    oferta: trescOfertyZPaczki,
 };
 
 const biezace = { ...DOMYSLNE };
@@ -63,7 +66,7 @@ export function odswiez(co) {
             // Listy musza byc niepuste, obiekt konsultacji musi miec cene.
             const puste = Array.isArray(dane)
                 ? !dane.length
-                : !(dane && (dane.kwota || dane.telefon));
+                : !(dane && (dane.kwota || dane.telefon || Object.keys(dane).length));
             if (puste) return biezace[co];
             if (JSON.stringify(dane) === JSON.stringify(biezace[co])) return biezace[co];
 
@@ -86,7 +89,7 @@ const migawka = () => wersja;
 const migawkaSerwera = () => 0;
 
 /**
- * Hak dla komponentow: 'cennik', 'faq', 'konsultacje' albo 'kontakt'.
+ * Hak dla komponentow: 'cennik', 'faq', 'konsultacje', 'kontakt', 'oferta'.
  *
  * Przy prerenderowaniu w Node nie ma fetch ani przegladarki, wiec zwraca
  * wersje z paczki — dokladnie ta, ktora trafia do gotowego HTML-a.

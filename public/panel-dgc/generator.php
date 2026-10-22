@@ -588,6 +588,65 @@ function wczytajKontakt(): array {
     return is_array($d) ? $d : [];
 }
 
+/**
+ * Tresc jednej podstrony oferty — odpowiednik ServiceSinglePage.jsx.
+ *
+ * Naglowek <h2> z nazwa uslugi NIE jest tu skladany: zostaje w szablonie,
+ * bo ta sama nazwa stoi w menu, ktore ma wlasna kopie. Gdyby biuro mogle
+ * ja zmienic z panelu, menu zostaloby ze stara nazwa na 481 stronach.
+ */
+function trescOferty(array $dane): string {
+    $out = '';
+    foreach ((array)($dane['intro'] ?? []) as $akapit) {
+        $akapit = trim((string)$akapit);
+        if ($akapit !== '') $out .= '<p>' . h($akapit) . '</p>';
+    }
+
+    foreach ((array)($dane['sections'] ?? []) as $sekcja) {
+        $tytul = trim((string)($sekcja['title'] ?? ''));
+        if ($tytul === '') continue;
+
+        $out .= '<section class="service_copy_section"><h3>' . h($tytul) . '</h3>';
+        foreach ((array)($sekcja['paragraphs'] ?? []) as $akapit) {
+            $akapit = trim((string)$akapit);
+            if ($akapit !== '') $out .= '<p>' . h($akapit) . '</p>';
+        }
+        $pozycje = liPozycje((array)($sekcja['items'] ?? []));
+        if ($pozycje !== '') $out .= '<ul>' . $pozycje . '</ul>';
+        foreach ((array)($sekcja['closing'] ?? []) as $akapit) {
+            $akapit = trim((string)$akapit);
+            if ($akapit !== '') $out .= '<p>' . h($akapit) . '</p>';
+        }
+        $out .= '</section>';
+    }
+    return $out;
+}
+
+/** Odczyt tresci wszystkich podstron oferty. */
+function wczytajOferte(): array {
+    $plik = DANE . '/tresc/oferta.json';
+    if (!is_file($plik)) return [];
+    $d = json_decode((string)file_get_contents($plik), true);
+    return is_array($d) ? $d : [];
+}
+
+/** Przebudowuje JEDNA podstrone oferty. */
+function odswiezOferte(string $slug, array $dane, ?string &$blad = null): bool {
+    $szab = szablon("oferta-$slug.html");
+    if ($szab === null) {
+        $blad = "brak szablonu oferta-$slug.html — wgraj aktualna paczke strony";
+        return false;
+    }
+    $html = podstaw($szab, ['OFERTA_TRESC' => trescOferty($dane)]);
+
+    $znacznik = zostalZnacznik($html);
+    if ($znacznik !== null) {
+        $blad = "szablon oferta-$slug.html ma pole $znacznik, ktorego panel nie zna";
+        return false;
+    }
+    return zapiszAtomowo(KORZEN . "/oferta/$slug/index.html", $html);
+}
+
 /** Pozycje <li> z tablicy tekstow. */
 function liPozycje(array $pozycje): string {
     $out = '';

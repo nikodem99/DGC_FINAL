@@ -179,6 +179,26 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'z
     $akcja = 'kontakt';
 }
 
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'zapisz-oferte') {
+    if (!sprawdzToken()) {
+        $blad = 'Sesja wygasła. Odśwież stronę i spróbuj ponownie.';
+    } else {
+        [$blad, $komunikat] = zapiszOferte();
+    }
+    $akcja = 'oferta';
+}
+
+if ($akcja === 'oferta') {
+    $slugOferty = (string)($_GET['slug'] ?? '');
+    $oferta = wczytajOferte();
+    if ($slugOferty !== '' && isset($oferta[$slugOferty])) {
+        widokOferty($slugOferty, $oferta[$slugOferty], $komunikat, $blad);
+    } else {
+        widokListyOferty($oferta, $komunikat, $blad);
+    }
+    exit;
+}
+
 if ($akcja === 'kontakt') {
     widokKontaktu(wczytajKontakt(), $komunikat, $blad);
     exit;
@@ -447,6 +467,7 @@ function widokListy(array $wpisy, string $komunikat, string $blad): void {
         . '<a href="?akcja=faq">Pytania</a> &nbsp;·&nbsp; '
         . '<a href="?akcja=konsultacje">Konsultacja</a> &nbsp;·&nbsp; '
         . '<a href="?akcja=kontakt">Kontakt</a> &nbsp;·&nbsp; '
+        . '<a href="?akcja=oferta">Oferta</a> &nbsp;·&nbsp; '
         . '<a href="?akcja=wyloguj">Wyloguj</a></span></div>';
     echo '<div class="srodek">';
     if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
@@ -576,7 +597,7 @@ function zapiszCennik(): array {
         if ($tytul === '') continue;
 
         $punkty = liniaNaTablice((string)($_POST['features'][$i] ?? ''));
-        if (!$punkty) return ['Pakiet „' . $tytul . '" nie ma ani jednego punktu. Dopisz, co obejmuje.', ''];
+        if (!$punkty) return ['Pakiet „' . $tytul . '” nie ma ani jednego punktu. Dopisz, co obejmuje.', ''];
 
         $pakiety[] = [
             'title' => $tytul,
@@ -638,6 +659,7 @@ function pasTresci(string $gdzie): void {
         . ($gdzie === 'faq' ? '<strong>Pytania</strong>' : '<a href="?akcja=faq">Pytania</a>') . ' &nbsp;·&nbsp; '
         . ($gdzie === 'konsultacje' ? '<strong>Konsultacja</strong>' : '<a href="?akcja=konsultacje">Konsultacja</a>') . ' &nbsp;·&nbsp; '
         . ($gdzie === 'kontakt' ? '<strong>Kontakt</strong>' : '<a href="?akcja=kontakt">Kontakt</a>') . ' &nbsp;·&nbsp; '
+        . ($gdzie === 'oferta' ? '<strong>Oferta</strong>' : '<a href="?akcja=oferta">Oferta</a>') . ' &nbsp;·&nbsp; '
         . '<a href="?akcja=wyloguj">Wyloguj</a></span></div>';
 }
 
@@ -669,7 +691,7 @@ function widokCennika(array $pakiety, string $komunikat, string $blad): void {
         echo '<input id="t' . $i . '" type="text" name="title[' . $i . ']" value="' . h((string)($p['title'] ?? '')) . '" maxlength="120">';
 
         echo '<label for="c' . $i . '">Cena</label>';
-        echo '<p class="male" style="margin:-2px 0 6px">Tak, jak ma się wyświetlić, na przykład <code>od 200 zł</code>. Pod spodem strona sama dopisuje „netto / miesiąc".</p>';
+        echo '<p class="male" style="margin:-2px 0 6px">Tak, jak ma się wyświetlić, na przykład <code>od 200 zł</code>. Pod spodem strona sama dopisuje „netto / miesiąc”.</p>';
         echo '<input id="c' . $i . '" type="text" name="price[' . $i . ']" value="' . h((string)($p['price'] ?? '')) . '" maxlength="40">';
 
         echo '<label for="d' . $i . '">Dla kogo</label>';
@@ -809,7 +831,7 @@ function widokKonsultacji(array $k, string $komunikat, string $blad): void {
     echo '<textarea id="przygotowanie" name="przygotowanie" style="min-height:110px;font-family:inherit;font-size:16px">'
         . h(implode("\n", (array)($k['przygotowanie'] ?? []))) . '</textarea>';
 
-    echo '<p class="male" style="margin-top:18px">Kroki „Jak to działa" i opcje w formularzu '
+    echo '<p class="male" style="margin-top:18px">Kroki „Jak to działa” i opcje w formularzu '
         . 'zgłoszeniowym zostają poza panelem — opcje muszą zgadzać się z listą tematów, '
         . 'którą sprawdza wysyłka zgłoszeń.</p>';
 
@@ -904,6 +926,157 @@ function widokKontaktu(array $k, string $komunikat, string $blad): void {
 
     echo '<p style="margin-top:22px"><button class="przycisk akcent" type="submit">Zapisz</button> '
         . '<a class="przycisk lekki" href="/kontakt/" target="_blank" rel="noreferrer">Zobacz stronę</a></p>';
+    echo '</form></div>';
+    stopka();
+}
+
+// --- teksty na podstronach oferty --------------------------------------
+//
+// Szesc podstron, kazda z wstepem i kilkoma sekcjami. Nazwa uslugi NIE jest
+// edytowalna: ta sama nazwa stoi w menu, ktore ma wlasna kopie, wiec zmiana
+// z panelu rozjechalaby nawigacje na wszystkich stronach.
+
+/** Tekst z pustymi liniami na tablice akapitow. */
+function akapityZTekstu(string $tekst): array {
+    $czesci = preg_split('/\n\s*\n/', str_replace(["\r\n", "\r"], "\n", $tekst)) ?: [];
+    $wynik = [];
+    foreach ($czesci as $c) {
+        // Zlamania linii wewnatrz akapitu scalamy — w HTML i tak by zniknely.
+        $c = trim(preg_replace('/\s*\n\s*/', ' ', $c) ?? '');
+        if ($c !== '') $wynik[] = $c;
+    }
+    return $wynik;
+}
+
+function zapiszOferte(): array {
+    $slug = (string)($_POST['slug'] ?? '');
+    $oferta = wczytajOferte();
+    if ($slug === '' || !isset($oferta[$slug])) {
+        return ['Nie znam takiej podstrony oferty.', ''];
+    }
+
+    $intro = akapityZTekstu((string)($_POST['intro'] ?? ''));
+    if (!$intro) return ['Wstęp nie może być pusty.', ''];
+
+    $sekcje = [];
+    foreach ((array)($_POST['sek_title'] ?? []) as $i => $tytul) {
+        $tytul = trim((string)$tytul);
+        $akapity = akapityZTekstu((string)($_POST['sek_paragraphs'][$i] ?? ''));
+        $punkty = liniaNaTablice((string)($_POST['sek_items'][$i] ?? ''));
+        $konc = akapityZTekstu((string)($_POST['sek_closing'][$i] ?? ''));
+
+        // Pusty tytul = sekcja skasowana albo nigdy nie wypelniona.
+        if ($tytul === '') continue;
+        if (!$akapity && !$punkty) {
+            return ["Sekcja „$tytul” nie ma ani akapitu, ani punktów. Dopisz treść albo wyczyść tytuł.", ''];
+        }
+
+        $s = ['title' => $tytul];
+        if ($akapity) $s['paragraphs'] = $akapity;
+        if ($punkty) $s['items'] = $punkty;
+        if ($konc) $s['closing'] = $konc;
+        $sekcje[] = $s;
+    }
+
+    if (!$sekcje) return ['Zostaw przynajmniej jedną sekcję.', ''];
+
+    $oferta[$slug] = ['intro' => $intro, 'sections' => $sekcje];
+
+    $kat = DANE . '/tresc';
+    if (!is_dir($kat)) @mkdir($kat, 0755, true);
+    if (!zapiszAtomowo($kat . '/oferta.json',
+        (string)json_encode($oferta, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT))) {
+        return ['Nie udało się zapisać treści oferty.', ''];
+    }
+
+    $bladStrony = null;
+    if (!odswiezOferte($slug, $oferta[$slug], $bladStrony)) {
+        return ["Zapisane, ale strona się nie przebudowała: $bladStrony", ''];
+    }
+
+    return ['', 'Zapisane. Strona oferty odświeżona.'];
+}
+
+function widokListyOferty(array $oferta, string $komunikat, string $blad): void {
+    naglowek('Oferta');
+    pasTresci('oferta');
+    echo '<div class="srodek">';
+    if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
+    if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
+
+    echo '<h1>Teksty na podstronach oferty</h1>';
+    echo '<p class="male">Wybierzcie podstronę, której tekst chcecie zmienić. '
+        . 'Nazwy usług zostają poza panelem — ta sama nazwa stoi w menu na każdej '
+        . 'stronie, więc jej zmiana wymaga programisty.</p>';
+
+    if (!$oferta) {
+        echo '<div class="blad">Brak pliku dane/tresc/oferta.json — wgraj aktualną paczkę strony.</div>';
+        echo '</div>'; stopka(); return;
+    }
+
+    echo '<table><tr><th>Podstrona</th><th>Sekcji</th><th></th></tr>';
+    foreach ($oferta as $slug => $d) {
+        $ile = count((array)($d['sections'] ?? []));
+        echo '<tr><td>/oferta/' . h($slug) . '/</td>'
+            . '<td class="male">' . $ile . '</td>'
+            . '<td><a href="?akcja=oferta&amp;slug=' . urlencode($slug) . '">Edytuj</a> &nbsp; '
+            . '<a href="/oferta/' . h($slug) . '/" target="_blank" rel="noreferrer">Zobacz</a></td></tr>';
+    }
+    echo '</table></div>';
+    stopka();
+}
+
+function widokOferty(string $slug, array $d, string $komunikat, string $blad): void {
+    naglowek('Oferta');
+    pasTresci('oferta');
+    echo '<div class="srodek">';
+    if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
+    if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
+
+    echo '<p><a href="?akcja=oferta">&larr; Wszystkie podstrony oferty</a></p>';
+    echo '<h1>/oferta/' . h($slug) . '/</h1>';
+    echo '<p class="male">Pusta linia zaczyna nowy akapit. Żeby usunąć sekcję, '
+        . 'wyczyśćcie jej tytuł i zapiszcie.</p>';
+
+    echo '<form method="post"><input type="hidden" name="co" value="zapisz-oferte">'
+        . '<input type="hidden" name="slug" value="' . h($slug) . '">'
+        . '<input type="hidden" name="token" value="' . h(token()) . '">';
+
+    echo '<label for="intro">Wstęp</label>';
+    echo '<textarea id="intro" name="intro" style="min-height:130px;font-family:inherit;font-size:16px">'
+        . h(implode("\n\n", (array)($d['intro'] ?? []))) . '</textarea>';
+
+    $sekcje = (array)($d['sections'] ?? []);
+    $sekcje[] = ['title' => '', 'paragraphs' => [], 'items' => [], 'closing' => []];
+
+    foreach ($sekcje as $i => $sek) {
+        $nowa = ($sek['title'] ?? '') === '';
+        echo '<fieldset style="border:1px solid var(--linia);border-radius:10px;padding:16px 18px;margin:18px 0">';
+        echo '<legend class="male" style="padding:0 6px">'
+            . ($nowa ? 'Nowa sekcja (zostaw puste, jeśli niepotrzebna)' : 'Sekcja ' . ($i + 1)) . '</legend>';
+
+        echo '<label for="st' . $i . '">Śródtytuł</label>';
+        echo '<input id="st' . $i . '" type="text" name="sek_title[' . $i . ']" value="'
+            . h((string)($sek['title'] ?? '')) . '" maxlength="200">';
+
+        echo '<label for="sp' . $i . '">Akapity</label>';
+        echo '<textarea id="sp' . $i . '" name="sek_paragraphs[' . $i . ']" style="min-height:130px;font-family:inherit;font-size:16px">'
+            . h(implode("\n\n", (array)($sek['paragraphs'] ?? []))) . '</textarea>';
+
+        echo '<label for="si' . $i . '">Wypunktowanie</label>';
+        echo '<p class="male" style="margin:-2px 0 6px">Jeden punkt w każdej linii. Zostaw puste, jeśli sekcja go nie ma.</p>';
+        echo '<textarea id="si' . $i . '" name="sek_items[' . $i . ']" style="min-height:90px;font-family:inherit;font-size:16px">'
+            . h(implode("\n", (array)($sek['items'] ?? []))) . '</textarea>';
+
+        echo '<label for="sc' . $i . '">Akapity po wypunktowaniu</label>';
+        echo '<textarea id="sc' . $i . '" name="sek_closing[' . $i . ']" style="min-height:70px;font-family:inherit;font-size:16px">'
+            . h(implode("\n\n", (array)($sek['closing'] ?? []))) . '</textarea>';
+
+        echo '</fieldset>';
+    }
+
+    echo '<p style="margin-top:22px"><button class="przycisk akcent" type="submit">Zapisz</button> '
+        . '<a class="przycisk lekki" href="/oferta/' . h($slug) . '/" target="_blank" rel="noreferrer">Zobacz stronę</a></p>';
     echo '</form></div>';
     stopka();
 }

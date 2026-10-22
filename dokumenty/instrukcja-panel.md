@@ -267,12 +267,33 @@ dzwonienia z telefonu składa się sam.
 
 ---
 
+## Teksty na podstronach oferty
+
+Zakładka **Oferta**. Jest sześć podstron, każdą edytuje się osobno.
+
+Każda składa się z **wstępu** i kilku **sekcji**. Sekcja ma śródtytuł,
+akapity, opcjonalne wypunktowanie i opcjonalne akapity pod nim.
+
+- **Pusta linia zaczyna nowy akapit** — tak samo jak w artykułach.
+- **Wypunktowanie** — jeden punkt w każdej linii. Zostawcie puste, jeśli
+  sekcja go nie ma.
+- Na dole jest jedno puste miejsce na **nową sekcję**.
+- **Żeby usunąć sekcję, wyczyśćcie jej śródtytuł i zapiszcie.**
+
+> **Czego tu nie ma: nazwy usługi**
+> Nazwa („Biuro rachunkowe Łódź" i pozostałe) jest jednocześnie pozycją
+> w menu, a menu jest na każdej stronie serwisu. Gdyby dało się ją zmienić
+> tutaj, menu zostałoby ze starą nazwą i nikt by nie wiedział dlaczego.
+> Zmiana nazwy usługi wymaga programisty — zadzwońcie.
+
+---
+
 ## Czego panel NIE zmienia
 
 Żeby nie było nieporozumień — te rzeczy wymagają programisty:
 
 - układ stron, kolory, nowe sekcje i nowe podstrony,
-- teksty na podstronach oferty i nazwy usług,
+- nazwy usług i pozycje w menu,
 - skład zespołu i zdjęcia na stronie,
 - polityka prywatności,
 - menu i stopka.
@@ -285,8 +306,8 @@ zepsuć, a trudno naprawić bez dostępu do kodu.
 
 ## Jedna rzecz do zapamiętania przy zmianie wykonawcy
 
-Artykuły dodane przez panel **oraz cennik, pytania, konsultacja i dane
-kontaktowe** żyją na serwerze, a nie
+Artykuły dodane przez panel **oraz cennik, pytania, konsultacja, dane
+kontaktowe i teksty oferty** żyją na serwerze, a nie
 w materiałach, które dostał wykonawca strony. Jeśli kiedyś ktoś będzie wgrywał
 nową wersję strony, **musi najpierw pobrać te dane z serwera**, inaczej je
 nadpisze — razem z każdą zmianą ceny, którą zrobiliście w panelu.

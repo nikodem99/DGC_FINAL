@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Link, useParams } from 'react-router-dom'
 import Services from '../../api/Services';
+import { uzyjTresci } from '../../api/tresciStron.js';
 import ServiceSidebar from './sidebar'
 import Navbar from '../../components/Navbar/Navbar'
 import PageTitle from '../../components/pagetitle/PageTitle'
@@ -15,7 +16,14 @@ const ServiceSinglePage = (props) => {
     }
 
     const { slug } = useParams()
-    const serviceDetails = Services.find(item => item.slug === slug)
+    // Tresc podstrony jest edytowalna z panelu, wiec bierzemy ja z haka,
+    // a nie wprost z serviceContent.js. Nazwa uslugi i obrazki zostaja
+    // w paczce — nazwa stoi tez w menu, ktore panel pomija.
+    const trescZPanelu = uzyjTresci('oferta');
+    const znaleziony = Services.find(item => item.slug === slug)
+    const serviceDetails = znaleziony
+        ? { ...znaleziony, content: trescZPanelu[slug] ?? znaleziony.content }
+        : znaleziony
     const relatedServices = Services.filter(item => item.slug !== slug).slice(0, 3)
 
     return (
