@@ -2,7 +2,9 @@ import React from 'react';
 import Licznik from '../Licznik/Licznik';
 
 // image
-import Ab1 from '../../images/paniprezes.jpg'
+// Zdjecie prezes poza paczka Vite, zeby panel mogl je podmienic.
+// Powod opisany w src/api/team.js.
+const Ab1 = '/dane/obrazki/paniprezes.jpg';
 
 // Tresc oparta na materialach DGC: biurodgc.pl (strona glowna) oraz
 // biurodgc.pl/prezes-zarzadu/. Zadnych danych spoza tych zrodel.

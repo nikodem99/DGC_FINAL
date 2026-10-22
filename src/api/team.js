@@ -1,15 +1,13 @@
-
-
-
-import zespolDanuta from '../images/zespol/danuta-grabinska-chlopas.jpg'
-import zespolMiroslaw from '../images/zespol/miroslaw-chlopas.jpg'
-import zespolKatarzyna from '../images/zespol/katarzyna-kulpa.jpg'
-import zespolEmilia from '../images/zespol/emilia-trzmielewska.jpg'
-import zespolJustyna from '../images/zespol/justyna-olszewska.jpg'
-import zespolKarolina from '../images/zespol/karolina-bielecka.jpg'
-
-
-
+// Zdjecia zespolu NIE przechodza przez Vite.
+//
+// Leza w public/dane/obrazki/zespol/ pod stalymi nazwami i sa tu podane
+// jako zwykle adresy. Dzieki temu panel redakcyjny moze podmienic zdjecie,
+// nadpisujac plik na serwerze — bez przebudowania strony i bez zmiany
+// czegokolwiek w gotowym HTML-u. Gdyby szly przez import, kazdy plik
+// dostawalby nazwe z odciskiem, wpieczona w 473 strony.
+//
+// Koszt: te obrazki nie maja cache-bustingu, wiec /dane/obrazki/ ma
+// krotszy cache w .htaccess (patrz scripts/seo.mjs).
 
 // Lista wspolpracujacych specjalistow (radca prawny, doradcy podatkowi,
 // biegla rewident) zostala USUNIETA 23.09.2026.
@@ -47,10 +45,10 @@ import zespolKarolina from '../images/zespol/karolina-bielecka.jpg'
 // Zastapila wczesniejsza kolejnosc towarzyska (maz prezes na drugim
 // miejscu) — odkad stanowiska sa widoczne, karty czyta sie z gory w dol.
 export const ZESPOL_BIURA = [
-    { id: 'z1', title: 'Danuta Grabińska-Chłopaś', subtitle: 'Prezes zarządu', timg: zespolDanuta },
-    { id: 'z2', title: 'Justyna Olszewska', subtitle: 'Główna księgowa', timg: zespolJustyna },
-    { id: 'z3', title: 'Emilia Trzmielewska', subtitle: 'Główna księgowa', timg: zespolEmilia },
-    { id: 'z4', title: 'Karolina Bielecka', subtitle: 'Księgowa', timg: zespolKarolina },
-    { id: 'z5', title: 'Mirosław Chłopaś', subtitle: 'Księgowy', timg: zespolMiroslaw },
-    { id: 'z6', title: 'Katarzyna Kulpa', subtitle: 'Asystentka prezesa', timg: zespolKatarzyna },
+    { id: 'z1', title: 'Danuta Grabińska-Chłopaś', subtitle: 'Prezes zarządu', timg: '/dane/obrazki/zespol/danuta-grabinska-chlopas.jpg' },
+    { id: 'z2', title: 'Justyna Olszewska', subtitle: 'Główna księgowa', timg: '/dane/obrazki/zespol/justyna-olszewska.jpg' },
+    { id: 'z3', title: 'Emilia Trzmielewska', subtitle: 'Główna księgowa', timg: '/dane/obrazki/zespol/emilia-trzmielewska.jpg' },
+    { id: 'z4', title: 'Karolina Bielecka', subtitle: 'Księgowa', timg: '/dane/obrazki/zespol/karolina-bielecka.jpg' },
+    { id: 'z5', title: 'Mirosław Chłopaś', subtitle: 'Księgowy', timg: '/dane/obrazki/zespol/miroslaw-chlopas.jpg' },
+    { id: 'z6', title: 'Katarzyna Kulpa', subtitle: 'Asystentka prezesa', timg: '/dane/obrazki/zespol/katarzyna-kulpa.jpg' },
 ];

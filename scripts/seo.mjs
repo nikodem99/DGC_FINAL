@@ -326,6 +326,13 @@ ErrorDocument 403 /404/index.html
     ExpiresDefault "access plus 1 week"
   </Files>
   ExpiresByType font/woff2 "access plus 1 year"
+
+  # Zdjecia, ktore podmienia panel redakcyjny, nie maja odcisku w nazwie —
+  # panel nadpisuje plik pod tym samym adresem. Przy polrocznym cache
+  # podmienione zdjecie docieraloby do stalych goscie dopiero za pol roku.
+  <Directory "dane/obrazki">
+    ExpiresDefault "access plus 1 day"
+  </Directory>
 </IfModule>
 `;
 

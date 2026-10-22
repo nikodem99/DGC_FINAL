@@ -1,6 +1,7 @@
 import React from 'react';
 import SectionTitle from '../SectionTitle/SectionTitle';
-import ZdjecieZespolu from '../../images/zespol.jpg';
+// Poza paczka Vite, zeby panel mogl podmienic. Powod w src/api/team.js.
+const ZdjecieZespolu = '/dane/obrazki/zespol-grupowe.jpg';
 import { ZESPOL_OPIS, ZAPEWNIAMY, BRANZE } from '../../api/zespol';
 
 // Sekcja o zespole na /about. Tresc pochodzi z podstrony "Nasz zespół"
