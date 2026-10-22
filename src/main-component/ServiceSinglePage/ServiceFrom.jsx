@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import { sendLead, KONTAKT_ZAPASOWY } from '../../lib/sendLead';
-import { KONTAKT } from '../../api/kontakt';
+import { uzyjTresci } from '../../api/tresciStron.js';
 import { zgloszenieWyslane } from '../../lib/pomiar';
 import { TEMATY } from '../../lib/tematy';
 import { KOMUNIKATY, WALIDATORY } from '../../lib/walidacja';
@@ -23,6 +23,7 @@ import { KOMUNIKATY, WALIDATORY } from '../../lib/walidacja';
 const PUSTY = { name: '', email: '', phone: '', subject: '', message: '', _gotcha: '' };
 
 const ContactForm = ({ zrodlo = 'podstrona-oferty', temat = '' }) => {
+    const KONTAKT = uzyjTresci('kontakt');
     // Temat podpowiedziany na podstawie ogladanej uslugi (Services.js).
     // Pole zostaje edytowalne — podpowiedz ma oszczedzic klikniecie,
     // a nie zdecydowac za pytajacego.

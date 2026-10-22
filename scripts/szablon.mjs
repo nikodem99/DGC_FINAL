@@ -318,6 +318,21 @@ fs.mkdirSync(katTresci, { recursive: true });
 
 const { default: cennik } = await import('../src/api/pricing.js');
 const { FAQ_OGOLNE: faq } = await import('../src/api/faq.js');
+const { CENA, CZAS_TRWANIA, CO_ZYSKUJESZ, JAK_SIE_PRZYGOTOWAC } = await import('../src/api/konsultacje.js');
+const { KONTAKT } = await import('../src/api/kontakt.js');
+
+// Konsultacja nie jest lista, tylko kilkoma polami — zapisujemy ja osobno,
+// bo kontrola "czy zestaw nie jest pusty" nizej dotyczy list.
+fs.writeFileSync(path.join(katTresci, 'konsultacje.json'), JSON.stringify({
+    kwota: CENA.kwota,
+    jednostka: CENA.jednostka,
+    uwaga: CENA.uwaga,
+    czas: CZAS_TRWANIA,
+    zyskujesz: CO_ZYSKUJESZ,
+    przygotowanie: JAK_SIE_PRZYGOTOWAC,
+}, null, 1));
+
+fs.writeFileSync(path.join(katTresci, 'kontakt.json'), JSON.stringify(KONTAKT, null, 1));
 
 const zestawy = { cennik, faq };
 for (const [nazwa, dane] of Object.entries(zestawy)) {
@@ -344,6 +359,8 @@ console.log(`Tresc stron dla panelu: cennik ${cennik.length} pakietow, FAQ ${faq
         { plik: 'cennik.html', zrodlo: 'cennik/index.html', pola: ['CENNIK'] },
         { plik: 'faq.html', zrodlo: 'faq/index.html', pola: ['FAQ', 'FAQ_SCHEMAT'] },
         { plik: 'o-nas.html', zrodlo: 'o-nas/index.html', pola: ['FAQ'] },
+        { plik: 'konsultacje.html', zrodlo: 'umow-konsultacje/index.html',
+          pola: ['KONS_CENA', 'KONS_CZAS', 'KONS_ZYSKUJESZ', 'KONS_PRZYGOTOWANIE'] },
     ];
 
     const WZORY = {
@@ -357,6 +374,22 @@ console.log(`Tresc stron dla panelu: cennik ${cennik.length} pakietow, FAQ ${faq
             // pozycje akordeonu i siedza juz w @@FAQ@@ — tutaj dokladamy tylko
             // cztery otaczajace: dgc-benefits-item, kolumne, wiersz i dgc-faq-wrap.
             czym: '<div class="dgc-benefits-item">@@FAQ@@</div></div></div></div>',
+        },
+        KONS_CENA: {
+            wzor: /<div class="konsultacja_cena">[\s\S]*?<\/p><\/div>/,
+            czym: '<div class="konsultacja_cena">@@KONS_CENA@@</div>',
+        },
+        KONS_CZAS: {
+            wzor: /<li><strong>Czas trwania<\/strong><span>[^<]*<\/span><\/li>/,
+            czym: '<li><strong>Czas trwania</strong><span>@@KONS_CZAS@@</span></li>',
+        },
+        KONS_ZYSKUJESZ: {
+            wzor: /<h3>Co z tego masz<\/h3><ul>[\s\S]*?<\/ul>/,
+            czym: '<h3>Co z tego masz</h3><ul>@@KONS_ZYSKUJESZ@@</ul>',
+        },
+        KONS_PRZYGOTOWANIE: {
+            wzor: /<h3>Jak się przygotować<\/h3><ul>[\s\S]*?<\/ul>/,
+            czym: '<h3>Jak się przygotować</h3><ul>@@KONS_PRZYGOTOWANIE@@</ul>',
         },
         FAQ_SCHEMAT: {
             wzor: /<script type="application\/ld\+json">\{"@context":"https:\/\/schema\.org","@type":"FAQPage"[\s\S]*?<\/script>/,
@@ -411,7 +444,8 @@ if (fs.existsSync(GENERATOR)) {
     const nieznane = [];
 
     for (const plik of ['artykul.html', 'lista.html', 'karta.html',
-                        'strona-glowna.html', 'cennik.html', 'faq.html', 'o-nas.html']) {
+                        'strona-glowna.html', 'cennik.html', 'faq.html', 'o-nas.html',
+                        'konsultacje.html']) {
         if (!fs.existsSync(path.join(DIST, 'dane', 'szablon', plik))) continue;
         const tresc = fs.readFileSync(path.join(DIST, 'dane', 'szablon', plik), 'utf8');
         for (const znacznik of new Set(tresc.match(/@@[A-Z_]+@@/g) ?? [])) {

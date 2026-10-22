@@ -119,10 +119,26 @@ do stron stałych:
 w komponencie wymaga zmiany w PHP. Budowanie to wyłapie tylko wtedy, gdy
 zmieni się *struktura* strony — zmiana samego wyglądu karty przejdzie cicho.
 
+Od 22 października panel obsługuje też **podstronę „Umów konsultację"**
+(cena, czas, dwie listy — szablon `konsultacje.html`) oraz **dane
+kontaktowe**.
+
+Kontakt działa inaczej niż reszta: telefon, godziny i e-mail są w stopce,
+czyli na 481 podstronach. Zamiast przebudowywać je wszystkie z szablonów,
+`podmienKontakt()` robi **zwykłą podmianę tekstu** we wszystkich plikach
+`.html`, łącznie z szablonami w `dane/szablon` — bez tego najbliższy zapis
+cennika przywróciłby stary numer. Układ stron nie jest w ogóle dotykany.
+
 **Czego panel celowo NIE obejmuje:** zespołu. Suwak react-slick prerenderuje
 się z klonami slajdów i szerokościami liczonymi z `window.innerWidth`,
 więc odtworzenie go w PHP byłoby kruche. Przy zmianie składu biuro dzwoni
 do opiekuna strony — tak ustalone z klientem.
+
+Nie obejmuje też **nazw usług** (`src/api/Services.js`). Tytuł usługi jest
+jednocześnie nazwą karty, nagłówkiem H1 podstrony oferty i pozycją w menu
+(`offerMenu.js` ma własną kopię). Edycja z panelu rozjechałaby menu
+z resztą — a menu jest na wszystkich 481 stronach. Edytowalne mogłyby być
+same jednozdaniowe opisy kart, ale to 6 pól za 8 kolejnych szablonów.
 
 **Zdjęcia zespołu** leżą poza paczką Vite, w `public/dane/obrazki/`, pod
 stałymi nazwami. Gdyby kiedyś trzeba było dać biuru ich podmianę, mechanizm

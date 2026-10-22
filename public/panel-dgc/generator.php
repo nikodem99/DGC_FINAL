@@ -541,7 +541,90 @@ function schematFaq(array $pytania): string {
 }
 
 /**
- * Przebudowuje cztery strony, na ktorych stoi cennik albo FAQ.
+ * Podmiana danych kontaktowych we WSZYSTKICH gotowych stronach.
+ *
+ * Telefon, godziny i mail siedza w stopce, czyli na 480 z 481 podstron.
+ * Przebudowywanie ich wszystkich z szablonow byloby kosztowne i wymagaloby
+ * szablonu dla kazdego typu strony. Zamiast tego robimy zwykla podmiane
+ * tekstu: stary numer na nowy. Uklad stron nie jest w ogole dotykany.
+ *
+ * Szablony w dane/szablon tez przerabiamy — inaczej najblizszy zapis
+ * cennika albo FAQ przywrocilby stary numer na przebudowanych stronach.
+ *
+ * Zwraca liczbe zmienionych plikow albo -1, gdy nie bylo czego podmieniac.
+ */
+function podmienKontakt(array $stare, array $nowe): int {
+    $pary = [];
+    foreach (['telefon', 'telefonHref', 'godziny', 'email'] as $pole) {
+        $s = (string)($stare[$pole] ?? '');
+        $n = (string)($nowe[$pole] ?? '');
+        if ($s !== '' && $n !== '' && $s !== $n) $pary[$s] = $n;
+    }
+    if (!$pary) return 0;
+
+    $szukane = array_keys($pary);
+    $zamienniki = array_values($pary);
+
+    $zmienione = 0;
+    $katalogi = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator(KORZEN, FilesystemIterator::SKIP_DOTS)
+    );
+    foreach ($katalogi as $plik) {
+        if (!$plik->isFile() || strtolower($plik->getExtension()) !== 'html') continue;
+
+        $sciezka = $plik->getPathname();
+        $tresc = (string)file_get_contents($sciezka);
+        $nowa = str_replace($szukane, $zamienniki, $tresc);
+        if ($nowa !== $tresc && zapiszAtomowo($sciezka, $nowa)) $zmienione++;
+    }
+    return $zmienione;
+}
+
+/** Odczyt danych kontaktowych. */
+function wczytajKontakt(): array {
+    $plik = DANE . '/tresc/kontakt.json';
+    if (!is_file($plik)) return [];
+    $d = json_decode((string)file_get_contents($plik), true);
+    return is_array($d) ? $d : [];
+}
+
+/** Pozycje <li> z tablicy tekstow. */
+function liPozycje(array $pozycje): string {
+    $out = '';
+    foreach ($pozycje as $p) {
+        $p = trim((string)$p);
+        if ($p !== '') $out .= '<li>' . h($p) . '</li>';
+    }
+    return $out;
+}
+
+/**
+ * Pola podstrony /umow-konsultacje/ — odpowiednik KonsultacjaPage.jsx.
+ * Edytowalna jest cena, czas i dwie listy. Kroki procesu i opcje formularza
+ * zostaja w kodzie: opcje musza byc zgodne z lista tematow, ktora sprawdza
+ * walidator, wiec ich edycja z panelu moglaby zepsuc wysylke zgloszen.
+ */
+function polaKonsultacji(array $k): array {
+    return [
+        'KONS_CENA' => '<span class="konsultacja_cena_kwota">' . h((string)($k['kwota'] ?? '')) . '</span>'
+            . '<span class="konsultacja_cena_opis">' . h((string)($k['jednostka'] ?? '')) . '</span>'
+            . '<p>' . h((string)($k['uwaga'] ?? '')) . '</p>',
+        'KONS_CZAS' => h((string)($k['czas'] ?? '')),
+        'KONS_ZYSKUJESZ' => liPozycje((array)($k['zyskujesz'] ?? [])),
+        'KONS_PRZYGOTOWANIE' => liPozycje((array)($k['przygotowanie'] ?? [])),
+    ];
+}
+
+/** Odczyt danych konsultacji (to obiekt, nie lista — stad osobna funkcja). */
+function wczytajKonsultacje(): array {
+    $plik = DANE . '/tresc/konsultacje.json';
+    if (!is_file($plik)) return [];
+    $d = json_decode((string)file_get_contents($plik), true);
+    return is_array($d) ? $d : [];
+}
+
+/**
+ * Przebudowuje strony, na ktorych stoi cennik, FAQ albo dane konsultacji.
  * Wolane po kazdym zapisie tresci stron stalych.
  */
 function odswiezStroneStale(array $cennik, array $faq, ?string &$blad = null): int {
@@ -555,6 +638,13 @@ function odswiezStroneStale(array $cennik, array $faq, ?string &$blad = null): i
         ['szablon' => 'o-nas.html', 'cel' => KORZEN . '/o-nas/index.html',
          'pola' => ['FAQ' => pozycjeFaq($faq, 'onas', 6)]],
     ];
+
+    $konsultacje = wczytajKonsultacje();
+    if ($konsultacje) {
+        $strony[] = ['szablon' => 'konsultacje.html',
+                     'cel' => KORZEN . '/umow-konsultacje/index.html',
+                     'pola' => polaKonsultacji($konsultacje)];
+    }
 
     $zapisane = 0;
     foreach ($strony as $s) {

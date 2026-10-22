@@ -54,7 +54,25 @@ if (!zdalneWpisy.length) {
 // nadpisalby klientce jej zmiany — dlatego sciagamy je tutaj i wpisujemy
 // z powrotem do zrodel.
 
-const naLiterale = (w) => JSON.stringify(w, null, 4).replace(/"([a-zA-Z]\w*)":/g, '$1:');
+// Zapis w stylu reszty projektu: apostrofy zamiast cudzyslowow i klucze
+// bez cudzyslowow. Inaczej kazde pobranie z serwera robilo by halasliwy
+// diff na calym pliku.
+const wApostrofach = (w) => `'${String(w).replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+
+const naLiterale = (w, wciecie = 4) => {
+    const sp = ' '.repeat(wciecie);
+    if (Array.isArray(w)) {
+        return `[\n${w.map((x) => `${sp}${naLiterale(x, wciecie + 4)},`).join('\n')}\n${' '.repeat(wciecie - 4)}]`;
+    }
+    if (w && typeof w === 'object') {
+        const pola = Object.entries(w)
+            .map(([k, v]) => `${sp}${k}: ${naLiterale(v, wciecie + 4)},`)
+            .join('\n');
+        return `{\n${pola}\n${' '.repeat(wciecie - 4)}}`;
+    }
+    if (typeof w === 'boolean' || typeof w === 'number') return String(w);
+    return wApostrofach(w);
+};
 
 const zestawy = [
     {
@@ -97,6 +115,73 @@ for (const z of zestawy) {
     } else {
         fs.writeFileSync(sciezka, nowy);
         console.log(`[pobierz] ${z.co}: pobrane z serwera, ${zdalny.length} pozycji -> ${z.plik}`);
+    }
+}
+
+// --- konsultacja i dane kontaktowe ------------------------------------
+//
+// To nie listy, tylko pojedyncze pola, wiec kazde wraca do swojego miejsca
+// w zrodle osobno. Bez tego paczka zbudowana z repozytorium przywrocilaby
+// stara cene konsultacji albo stary numer telefonu.
+
+const tekst = wApostrofach;
+const listaTekstow = (t) => `[\n${t.map((x) => `    ${tekst(x)},`).join('\n')}\n]`;
+
+async function wczytajZdalne(co) {
+    try {
+        const d = await (await pobierz(`/dane/tresc/${co}.json`)).json();
+        return d && typeof d === 'object' ? d : null;
+    } catch {
+        return null;
+    }
+}
+
+{
+    const k = await wczytajZdalne('konsultacje');
+    if (k && k.kwota) {
+        const plik = path.join(KORZEN, 'src/api/konsultacje.js');
+        let zrodlo = fs.readFileSync(plik, 'utf8');
+        const przed = zrodlo;
+
+        zrodlo = zrodlo.replace(
+            /export const CENA = \{[\s\S]*?\n\};/,
+            `export const CENA = {\n    kwota: ${tekst(k.kwota)},\n`
+            + `    jednostka: ${tekst(k.jednostka)},\n    uwaga: ${tekst(k.uwaga)},\n};`
+        );
+        zrodlo = zrodlo.replace(/export const CZAS_TRWANIA = '[^']*';/, `export const CZAS_TRWANIA = ${tekst(k.czas)};`);
+        if (Array.isArray(k.zyskujesz) && k.zyskujesz.length) {
+            zrodlo = zrodlo.replace(/export const CO_ZYSKUJESZ = \[[\s\S]*?\n\];/, `export const CO_ZYSKUJESZ = ${listaTekstow(k.zyskujesz)};`);
+        }
+        if (Array.isArray(k.przygotowanie) && k.przygotowanie.length) {
+            zrodlo = zrodlo.replace(/export const JAK_SIE_PRZYGOTOWAC = \[[\s\S]*?\n\];/, `export const JAK_SIE_PRZYGOTOWAC = ${listaTekstow(k.przygotowanie)};`);
+        }
+
+        if (zrodlo !== przed) {
+            fs.writeFileSync(plik, zrodlo);
+            console.log('[pobierz] konsultacja: pobrana z serwera -> src/api/konsultacje.js');
+        } else {
+            console.log('[pobierz] konsultacja: bez zmian');
+        }
+    }
+}
+
+{
+    const k = await wczytajZdalne('kontakt');
+    if (k && k.telefon) {
+        const plik = path.join(KORZEN, 'src/api/kontakt.js');
+        const zrodlo = fs.readFileSync(plik, 'utf8');
+        const nowy = zrodlo.replace(
+            /export const KONTAKT = \{[\s\S]*?\n\};/,
+            `export const KONTAKT = {\n    telefon: ${tekst(k.telefon)},\n`
+            + `    telefonHref: ${tekst(k.telefonHref)},\n    godziny: ${tekst(k.godziny)},\n`
+            + `    email: ${tekst(k.email)},\n};`
+        );
+        if (nowy !== zrodlo) {
+            fs.writeFileSync(plik, nowy);
+            console.log('[pobierz] kontakt: pobrany z serwera -> src/api/kontakt.js');
+        } else {
+            console.log('[pobierz] kontakt: bez zmian');
+        }
     }
 }
 

@@ -232,12 +232,47 @@ na stronie powstałby wtedy nagłówek, który po kliknięciu nic nie pokazuje.
 
 ---
 
+## Umów konsultację
+
+Zakładka **Konsultacja**. Cena, czas trwania i dwie listy z podstrony
+„Umów konsultację".
+
+- **Cena** — tak, jak ma się wyświetlić, na przykład `od 250 zł netto`.
+- **Za co** — napis pod ceną, na przykład `za 30 minut konsultacji`.
+- **Czas trwania** — pojawia się w tabelce obok.
+- **Co z tego masz** i **Jak się przygotować** — jeden punkt w każdej linii.
+
+Kroki „Jak to działa" i opcje w formularzu zgłoszeniowym zostają poza
+panelem. Opcje muszą zgadzać się z listą tematów, którą sprawdza wysyłka
+zgłoszeń — zmiana z panelu mogłaby popsuć odbieranie zapytań.
+
+---
+
+## Dane kontaktowe
+
+Zakładka **Kontakt**. Telefon, godziny pracy i adres e-mail.
+
+Te trzy rzeczy są w stopce, czyli **na każdej podstronie**. Zapis zmienia
+je wszystkie naraz i może potrwać kilkanaście sekund — nie zamykajcie
+wtedy strony. Panel na końcu napisze, ile stron zmienił.
+
+Numer wpisujecie tak, jak ma być widoczny (`731 580 184`). Odnośnik do
+dzwonienia z telefonu składa się sam.
+
+> **Uwaga przy zmianie adresu e-mail**
+> Zmiana tutaj zmienia adres **tylko na stronie**. Skrzynka, na którą
+> przychodzą zgłoszenia z formularzy, jest ustawiona osobno, w innym pliku.
+> Jeśli zmieniacie adres na dobre, powiedzcie o tym osobie opiekującej się
+> stroną, inaczej zgłoszenia dalej będą szły na stary.
+
+---
+
 ## Czego panel NIE zmienia
 
 Żeby nie było nieporozumień — te rzeczy wymagają programisty:
 
 - układ stron, kolory, nowe sekcje i nowe podstrony,
-- teksty na podstronach oferty,
+- teksty na podstronach oferty i nazwy usług,
 - skład zespołu i zdjęcia na stronie,
 - polityka prywatności,
 - menu i stopka.
@@ -250,7 +285,8 @@ zepsuć, a trudno naprawić bez dostępu do kodu.
 
 ## Jedna rzecz do zapamiętania przy zmianie wykonawcy
 
-Artykuły dodane przez panel **oraz cennik i pytania** żyją na serwerze, a nie
+Artykuły dodane przez panel **oraz cennik, pytania, konsultacja i dane
+kontaktowe** żyją na serwerze, a nie
 w materiałach, które dostał wykonawca strony. Jeśli kiedyś ktoś będzie wgrywał
 nową wersję strony, **musi najpierw pobrać te dane z serwera**, inaczej je
 nadpisze — razem z każdą zmianą ceny, którą zrobiliście w panelu.

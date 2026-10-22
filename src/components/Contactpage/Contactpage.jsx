@@ -1,6 +1,6 @@
 import React from 'react';
 import FormSection from '../FormSection/FormSection';
-import { KONTAKT } from '../../api/kontakt';
+import { uzyjTresci } from '../../api/tresciStron.js';
 
 // Adres, telefon, godziny i mapa pochodza z biurodgc.pl. Szablon mial tu
 // adres w Indianie, dwa razy ten sam medically@gmail.com, amerykanskie
@@ -23,6 +23,7 @@ const ADRES_ZAPYTANIE = `DGC Biuro Rachunkowe Sp. z o.o., ${ADRES.ulica}, ${ADRE
 const MAPA = `https://maps.google.com/maps?q=${encodeURIComponent(ADRES_ZAPYTANIE)}&z=16&hl=pl&output=embed`;
 
 const Contactpage = () => {
+    const KONTAKT = uzyjTresci('kontakt');
 
     return (
         <section className="dgc-contact-pg-section section-padding">

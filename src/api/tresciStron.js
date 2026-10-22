@@ -22,10 +22,22 @@
 import { useSyncExternalStore, useEffect } from 'react';
 import pakietyZPaczki from './pricing.js';
 import { FAQ_OGOLNE as faqZPaczki } from './faq.js';
+import { CENA, CZAS_TRWANIA, CO_ZYSKUJESZ, JAK_SIE_PRZYGOTOWAC } from './konsultacje.js';
+import { KONTAKT } from './kontakt.js';
 
 const DOMYSLNE = {
     cennik: pakietyZPaczki,
     faq: faqZPaczki,
+    // Konsultacja nie jest lista, tylko kilkoma polami — stad inny ksztalt.
+    konsultacje: {
+        kwota: CENA.kwota,
+        jednostka: CENA.jednostka,
+        uwaga: CENA.uwaga,
+        czas: CZAS_TRWANIA,
+        zyskujesz: CO_ZYSKUJESZ,
+        przygotowanie: JAK_SIE_PRZYGOTOWAC,
+    },
+    kontakt: KONTAKT,
 };
 
 const biezace = { ...DOMYSLNE };
@@ -48,7 +60,11 @@ export function odswiez(co) {
         .then((dane) => {
             // Pusta albo uszkodzona odpowiedz NIE moze wyczyscic strony —
             // zostaje wtedy wersja z paczki.
-            if (!Array.isArray(dane) || !dane.length) return biezace[co];
+            // Listy musza byc niepuste, obiekt konsultacji musi miec cene.
+            const puste = Array.isArray(dane)
+                ? !dane.length
+                : !(dane && (dane.kwota || dane.telefon));
+            if (puste) return biezace[co];
             if (JSON.stringify(dane) === JSON.stringify(biezace[co])) return biezace[co];
 
             biezace[co] = dane;
@@ -70,7 +86,7 @@ const migawka = () => wersja;
 const migawkaSerwera = () => 0;
 
 /**
- * Hak dla komponentow. `co` to 'cennik' albo 'faq'.
+ * Hak dla komponentow: 'cennik', 'faq', 'konsultacje' albo 'kontakt'.
  *
  * Przy prerenderowaniu w Node nie ma fetch ani przegladarki, wiec zwraca
  * wersje z paczki — dokladnie ta, ktora trafia do gotowego HTML-a.

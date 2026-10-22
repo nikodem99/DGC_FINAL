@@ -161,6 +161,34 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'z
     $akcja = 'faq';
 }
 
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'zapisz-konsultacje') {
+    if (!sprawdzToken()) {
+        $blad = 'Sesja wygasła. Odśwież stronę i spróbuj ponownie.';
+    } else {
+        [$blad, $komunikat] = zapiszKonsultacje();
+    }
+    $akcja = 'konsultacje';
+}
+
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'zapisz-kontakt') {
+    if (!sprawdzToken()) {
+        $blad = 'Sesja wygasła. Odśwież stronę i spróbuj ponownie.';
+    } else {
+        [$blad, $komunikat] = zapiszKontakt();
+    }
+    $akcja = 'kontakt';
+}
+
+if ($akcja === 'kontakt') {
+    widokKontaktu(wczytajKontakt(), $komunikat, $blad);
+    exit;
+}
+
+if ($akcja === 'konsultacje') {
+    widokKonsultacji(wczytajKonsultacje(), $komunikat, $blad);
+    exit;
+}
+
 if ($akcja === 'cennik') {
     widokCennika(wczytajTrescStrony('cennik'), $komunikat, $blad);
     exit;
@@ -417,6 +445,8 @@ function widokListy(array $wpisy, string $komunikat, string $blad): void {
         . '<a href="?akcja=nowy">Nowy artykuł</a> &nbsp;·&nbsp; '
         . '<a href="?akcja=cennik">Cennik</a> &nbsp;·&nbsp; '
         . '<a href="?akcja=faq">Pytania</a> &nbsp;·&nbsp; '
+        . '<a href="?akcja=konsultacje">Konsultacja</a> &nbsp;·&nbsp; '
+        . '<a href="?akcja=kontakt">Kontakt</a> &nbsp;·&nbsp; '
         . '<a href="?akcja=wyloguj">Wyloguj</a></span></div>';
     echo '<div class="srodek">';
     if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
@@ -606,6 +636,8 @@ function pasTresci(string $gdzie): void {
         . '<a href="?">Artykuły</a> &nbsp;·&nbsp; '
         . ($gdzie === 'cennik' ? '<strong>Cennik</strong>' : '<a href="?akcja=cennik">Cennik</a>') . ' &nbsp;·&nbsp; '
         . ($gdzie === 'faq' ? '<strong>Pytania</strong>' : '<a href="?akcja=faq">Pytania</a>') . ' &nbsp;·&nbsp; '
+        . ($gdzie === 'konsultacje' ? '<strong>Konsultacja</strong>' : '<a href="?akcja=konsultacje">Konsultacja</a>') . ' &nbsp;·&nbsp; '
+        . ($gdzie === 'kontakt' ? '<strong>Kontakt</strong>' : '<a href="?akcja=kontakt">Kontakt</a>') . ' &nbsp;·&nbsp; '
         . '<a href="?akcja=wyloguj">Wyloguj</a></span></div>';
 }
 
@@ -696,6 +728,182 @@ function widokFaq(array $pytania, string $komunikat, string $blad): void {
 
     echo '<p style="margin-top:22px"><button class="przycisk akcent" type="submit">Zapisz pytania</button> '
         . '<a class="przycisk lekki" href="/faq/" target="_blank" rel="noreferrer">Zobacz stronę</a></p>';
+    echo '</form></div>';
+    stopka();
+}
+
+// --- podstrona "Umow konsultacje" --------------------------------------
+
+function zapiszKonsultacje(): array {
+    $kwota = trim((string)($_POST['kwota'] ?? ''));
+    $jednostka = trim((string)($_POST['jednostka'] ?? ''));
+    $czas = trim((string)($_POST['czas'] ?? ''));
+
+    if ($kwota === '' || $jednostka === '' || $czas === '') {
+        return ['Cena, opis ceny i czas trwania nie mogą być puste.', ''];
+    }
+
+    $dane = [
+        'kwota' => $kwota,
+        'jednostka' => $jednostka,
+        'uwaga' => trim((string)($_POST['uwaga'] ?? '')),
+        'czas' => $czas,
+        'zyskujesz' => liniaNaTablice((string)($_POST['zyskujesz'] ?? '')),
+        'przygotowanie' => liniaNaTablice((string)($_POST['przygotowanie'] ?? '')),
+    ];
+
+    if (!$dane['zyskujesz'] || !$dane['przygotowanie']) {
+        return ['Obie listy muszą mieć przynajmniej jedną pozycję.', ''];
+    }
+
+    $kat = DANE . '/tresc';
+    if (!is_dir($kat)) @mkdir($kat, 0755, true);
+    if (!zapiszAtomowo($kat . '/konsultacje.json',
+        (string)json_encode($dane, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT))) {
+        return ['Nie udało się zapisać danych konsultacji.', ''];
+    }
+
+    $bladStron = null;
+    $ile = odswiezStroneStale(wczytajTrescStrony('cennik'), wczytajTrescStrony('faq'), $bladStron);
+    if ($bladStron !== null) return ["Zapisane, ale strony się nie przebudowały: $bladStron", ''];
+
+    return ['', "Zapisane. Odświeżono $ile stron."];
+}
+
+function widokKonsultacji(array $k, string $komunikat, string $blad): void {
+    naglowek('Konsultacja');
+    pasTresci('konsultacje');
+    echo '<div class="srodek">';
+    if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
+    if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
+
+    echo '<h1>Umów konsultację</h1>';
+    echo '<p class="male">Cena i czas trwania płatnej konsultacji. Zmiany widać od razu '
+        . 'na podstronie Umów konsultację.</p>';
+
+    echo '<form method="post"><input type="hidden" name="co" value="zapisz-konsultacje">'
+        . '<input type="hidden" name="token" value="' . h(token()) . '">';
+
+    echo '<label for="kwota">Cena</label>';
+    echo '<p class="male" style="margin:-2px 0 6px">Tak, jak ma się wyświetlić, na przykład <code>od 250 zł netto</code>.</p>';
+    echo '<input id="kwota" type="text" name="kwota" value="' . h((string)($k['kwota'] ?? '')) . '" maxlength="60">';
+
+    echo '<label for="jednostka">Za co</label>';
+    echo '<p class="male" style="margin:-2px 0 6px">Napis pod ceną, na przykład <code>za 30 minut konsultacji</code>.</p>';
+    echo '<input id="jednostka" type="text" name="jednostka" value="' . h((string)($k['jednostka'] ?? '')) . '" maxlength="80">';
+
+    echo '<label for="uwaga">Zdanie pod ceną</label>';
+    echo '<input id="uwaga" type="text" name="uwaga" value="' . h((string)($k['uwaga'] ?? '')) . '" maxlength="200">';
+
+    echo '<label for="czas">Czas trwania</label>';
+    echo '<p class="male" style="margin:-2px 0 6px">Na przykład <code>30 minut</code>.</p>';
+    echo '<input id="czas" type="text" name="czas" value="' . h((string)($k['czas'] ?? '')) . '" maxlength="40">';
+
+    echo '<label for="zyskujesz">Co z tego masz</label>';
+    echo '<p class="male" style="margin:-2px 0 6px">Jeden punkt w każdej linii.</p>';
+    echo '<textarea id="zyskujesz" name="zyskujesz" style="min-height:110px;font-family:inherit;font-size:16px">'
+        . h(implode("\n", (array)($k['zyskujesz'] ?? []))) . '</textarea>';
+
+    echo '<label for="przygotowanie">Jak się przygotować</label>';
+    echo '<p class="male" style="margin:-2px 0 6px">Jeden punkt w każdej linii.</p>';
+    echo '<textarea id="przygotowanie" name="przygotowanie" style="min-height:110px;font-family:inherit;font-size:16px">'
+        . h(implode("\n", (array)($k['przygotowanie'] ?? []))) . '</textarea>';
+
+    echo '<p class="male" style="margin-top:18px">Kroki „Jak to działa" i opcje w formularzu '
+        . 'zgłoszeniowym zostają poza panelem — opcje muszą zgadzać się z listą tematów, '
+        . 'którą sprawdza wysyłka zgłoszeń.</p>';
+
+    echo '<p style="margin-top:22px"><button class="przycisk akcent" type="submit">Zapisz</button> '
+        . '<a class="przycisk lekki" href="/umow-konsultacje/" target="_blank" rel="noreferrer">Zobacz stronę</a></p>';
+    echo '</form></div>';
+    stopka();
+}
+
+// --- dane kontaktowe ----------------------------------------------------
+//
+// Telefon, godziny i mail sa w stopce, czyli na kazdej podstronie. Zamiast
+// przebudowywac 481 stron z szablonow, podmieniamy sam tekst — patrz
+// podmienKontakt() w generator.php.
+
+function zapiszKontakt(): array {
+    $telefon = trim((string)($_POST['telefon'] ?? ''));
+    $godziny = trim((string)($_POST['godziny'] ?? ''));
+    $email = trim((string)($_POST['email'] ?? ''));
+
+    if ($telefon === '' || $godziny === '' || $email === '') {
+        return ['Wszystkie trzy pola są wymagane.', ''];
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return ['To nie wygląda na poprawny adres e-mail.', ''];
+    }
+
+    // Odnosnik tel: skladamy sami z cyfr, zeby nie trzeba bylo go wpisywac
+    // i zeby nie dalo sie go rozjechac z numerem widocznym na stronie.
+    $cyfry = preg_replace('/\D+/', '', $telefon) ?? '';
+    if (strlen($cyfry) < 9) return ['Numer telefonu wygląda na zbyt krótki.', ''];
+    if (strpos($cyfry, '48') !== 0) $cyfry = '48' . $cyfry;
+
+    $stare = wczytajKontakt();
+    $nowe = [
+        'telefon' => $telefon,
+        'telefonHref' => 'tel:+' . $cyfry,
+        'godziny' => $godziny,
+        'email' => $email,
+    ];
+
+    if (!$stare) {
+        return ['Brak pliku dane/tresc/kontakt.json — wgraj aktualną paczkę strony.', ''];
+    }
+    if ($stare === $nowe) {
+        return ['', 'Nic się nie zmieniło.'];
+    }
+
+    $kat = DANE . '/tresc';
+    if (!is_dir($kat)) @mkdir($kat, 0755, true);
+    if (!zapiszAtomowo($kat . '/kontakt.json',
+        (string)json_encode($nowe, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT))) {
+        return ['Nie udało się zapisać danych kontaktowych.', ''];
+    }
+
+    $ile = podmienKontakt($stare, $nowe);
+
+    return ['', "Zapisane. Zmienione na $ile stronach."];
+}
+
+function widokKontaktu(array $k, string $komunikat, string $blad): void {
+    naglowek('Kontakt');
+    pasTresci('kontakt');
+    echo '<div class="srodek">';
+    if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
+    if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
+
+    echo '<h1>Dane kontaktowe</h1>';
+    echo '<p class="male">Telefon, godziny i adres e-mail. Są w stopce, więc zmiana '
+        . 'przechodzi przez <strong>wszystkie podstrony naraz</strong> — zapis może potrwać '
+        . 'kilkanaście sekund. Nie zamykajcie strony w trakcie.</p>';
+
+    echo '<form method="post"><input type="hidden" name="co" value="zapisz-kontakt">'
+        . '<input type="hidden" name="token" value="' . h(token()) . '">';
+
+    echo '<label for="telefon">Telefon</label>';
+    echo '<p class="male" style="margin:-2px 0 6px">Tak, jak ma być widoczny, na przykład '
+        . '<code>731 580 184</code>. Odnośnik do dzwonienia składa się sam.</p>';
+    echo '<input id="telefon" type="text" name="telefon" value="' . h((string)($k['telefon'] ?? '')) . '" maxlength="40">';
+
+    echo '<label for="godziny">Godziny pracy</label>';
+    echo '<p class="male" style="margin:-2px 0 6px">Na przykład <code>pon.–pt. 8:00–16:00</code>.</p>';
+    echo '<input id="godziny" type="text" name="godziny" value="' . h((string)($k['godziny'] ?? '')) . '" maxlength="80">';
+
+    echo '<label for="email">Adres e-mail</label>';
+    echo '<input id="email" type="email" name="email" value="' . h((string)($k['email'] ?? '')) . '" maxlength="120">';
+
+    echo '<p class="male" style="margin-top:18px"><strong>Uwaga:</strong> zmiana adresu e-mail tutaj '
+        . 'zmienia go tylko na stronie. Skrzynka, na którą przychodzą zgłoszenia z formularzy, '
+        . 'jest ustawiona osobno — przy zmianie adresu trzeba o tym powiedzieć osobie '
+        . 'opiekującej się stroną.</p>';
+
+    echo '<p style="margin-top:22px"><button class="przycisk akcent" type="submit">Zapisz</button> '
+        . '<a class="przycisk lekki" href="/kontakt/" target="_blank" rel="noreferrer">Zobacz stronę</a></p>';
     echo '</form></div>';
     stopka();
 }
