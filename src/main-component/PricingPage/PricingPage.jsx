@@ -37,9 +37,9 @@ const PricingPage = () => {
 
                         <div className="pricing_service_area">
                             <p className="pricing_service_note">
-                                Obsługujemy przedsiębiorców z Łodzi, Pabianic, Zgierza,
-                                Aleksandrowa Łódzkiego i okolic. Przed rozpoczęciem współpracy
-                                omawiamy potrzeby firmy oraz dokładny zakres czynności.
+                                Obsługujemy przedsiębiorców z całej Polski — w pełni online,
+                                bez dojazdów do biura. Przed rozpoczęciem współpracy omawiamy
+                                potrzeby firmy oraz dokładny zakres czynności.
                             </p>
 
                             <div className="pricing_grid">

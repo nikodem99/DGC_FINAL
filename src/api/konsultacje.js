@@ -1,12 +1,8 @@
 // Dane podstrony /umow-konsultacje.
 //
 // ┌──────────────────────────────────────────────────────────────────────┐
-// │ DO POTWIERDZENIA Z PANIĄ PREZES PRZED PUBLIKACJĄ                     │
-// │ 1. CENA — 200 zł za godzinę to wartosc robocza, podana warunkowo.    │
-// │ 2. TEMATY — lista ponizej powstala z uslug DGC i listy TEMATY        │
-// │    (src/lib/tematy.js). Trzeba potwierdzic, w jakich sprawach biuro  │
-// │    faktycznie prowadzi platne konsultacje.                           │
-// │ 3. CZAS TRWANIA — przyjete 60 minut.                                 │
+// │ Cena i czas trwania POTWIERDZONE przez biuro 22.10.2026:             │
+// │ 250 zl netto za 30 minut (wczesniej bylo robocze 200 zl za godzine). │
 // │ Cena wystepuje w calym projekcie TYLKO w stalej CENA ponizej.        │
 // └──────────────────────────────────────────────────────────────────────┘
 
@@ -14,12 +10,12 @@ export const CENA = {
     // Formularz nie pobiera platnosci — kwote potwierdza pracownik telefonicznie,
     // dlatego "od". Gdy ceny beda zroznicowane wedlug tematu, tu dochodzi
     // rozbicie, a nie kolejne miejsce z liczba w komponencie.
-    kwota: 'od 200 zł',
-    jednostka: 'za godzinę konsultacji',
+    kwota: 'od 250 zł netto',
+    jednostka: 'za 30 minut konsultacji',
     uwaga: 'Ostateczną cenę potwierdzamy telefonicznie, zanim poprosimy o płatność.',
 };
 
-export const CZAS_TRWANIA = '60 minut';
+export const CZAS_TRWANIA = '30 minut';
 
 // Tematy konsultacji. Spojne z lista TEMATY uzywana w pozostalych
 // formularzach, ale zawezone do spraw, ktore realnie nadaja sie na

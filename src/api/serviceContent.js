@@ -109,7 +109,7 @@ const serviceContent = {
                     'stowarzyszenia i związki zawodowe.',
                 ],
                 closing: [
-                    'Pracujemy z firmami z Łodzi i okolic, ale dzięki obsłudze zdalnej możemy współpracować z klientami z całej Polski. Przygotowujemy i przekazujemy deklaracje do urzędu skarbowego, prowadzimy rejestry VAT oraz porządkujemy dokumentację dotyczącą PIT, CIT, IFT i PCC.',
+                    'Pracujemy z firmami z całej Polski — dzięki obsłudze zdalnej odległość od biura nie ma znaczenia. Przygotowujemy i przekazujemy deklaracje do urzędu skarbowego, prowadzimy rejestry VAT oraz porządkujemy dokumentację dotyczącą PIT, CIT, IFT i PCC.',
                     'Sporządzamy również zeznania podatkowe dla osób fizycznych, w tym rozliczenia związane z najmem prywatnym, takie jak PIT-28 i PIT-36.',
                 ],
             },

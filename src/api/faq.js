@@ -13,7 +13,7 @@ export const FAQ_OGOLNE = [
     },
     {
         title: 'Prowadzę firmę poza Łodzią. Czy to problem?',
-        content: 'Nie. Obsługujemy firmy z całej Polski. Najwięcej klientów mamy z Łodzi i okolic (Pabianic, Zgierza, Aleksandrowa Łódzkiego), ale przy obsłudze online odległość nie ma znaczenia.'
+        content: 'Nie. Obsługujemy firmy z całej Polski. Biuro mamy w Łodzi, ale przy obsłudze online odległość nie ma znaczenia — dokumenty przekazujesz elektronicznie, a kontakt prowadzimy telefonicznie i mailowo.'
     },
     {
         title: 'Jakie firmy obsługujecie?',
@@ -21,7 +21,7 @@ export const FAQ_OGOLNE = [
     },
     {
         title: 'Ile kosztuje prowadzenie księgowości?',
-        content: 'Ryczałt i księga przychodów i rozchodów od 200 zł netto miesięcznie, pełna księgowość od 550 zł, wirtualne biuro 100 zł. To stawki wywoławcze przy obsłudze do 20 dokumentów w miesiącu, a ostateczna cena zależy od ich liczby, formy prawnej i zakresu spraw kadrowych. Wycena jest bezpłatna i niezobowiązująca.'
+        content: 'Ryczałt i księga przychodów i rozchodów od 200 zł netto miesięcznie, pełna księgowość od 550 zł, wirtualne biuro 150 zł. To stawki wywoławcze przy obsłudze do 20 dokumentów w miesiącu, a ostateczna cena zależy od ich liczby, formy prawnej i zakresu spraw kadrowych. Wycena jest bezpłatna i niezobowiązująca.'
     },
     {
         title: 'Zaczynam działalność. Od czego zaczniemy współpracę?',

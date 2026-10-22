@@ -42,7 +42,7 @@ const pakiety = [
     {
         title: 'Wirtualne biuro',
         krotki: 'Wirtualne biuro',
-        price: '100 zł',
+        price: '150 zł',
         dlaKogo: 'Adres siedziby firmy wraz z obsługą korespondencji.',
         features: [
             'Odbieranie korespondencji firmowej',
