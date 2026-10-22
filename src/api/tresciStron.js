@@ -1,7 +1,12 @@
-// Tresc stron stalych, ktora biuro moze zmieniac z panelu.
+// Tresc stron stalych, ktora biuro moze zmieniac z panelu: cennik i FAQ.
 //
-// Ten plik jest odpowiednikiem src/api/indeks.js, tyle ze dla cennika,
-// FAQ i zespolu zamiast artykulow. Zasada jest ta sama i z tego samego
+// Zespol celowo NIE jest tu obslugiwany. Suwak zespolu prerenderuje sie
+// z klonami slajdow i szerokosciami liczonymi z szerokosci okna, wiec
+// odtworzenie go w PHP byloby kruche. Przy zmianie skladu biuro dzwoni
+// do opiekuna strony — tak ustalone z klientem 22.10.2026.
+//
+// Ten plik jest odpowiednikiem src/api/indeks.js, tyle ze dla cennika
+// i pytan FAQ zamiast artykulow. Zasada jest ta sama i z tego samego
 // powodu:
 //
 //   - wersja wkompilowana w paczke (pricing.js, faq.js, team.js) jest
@@ -17,12 +22,10 @@
 import { useSyncExternalStore, useEffect } from 'react';
 import pakietyZPaczki from './pricing.js';
 import { FAQ_OGOLNE as faqZPaczki } from './faq.js';
-import { ZESPOL_BIURA as zespolZPaczki } from './team.js';
 
 const DOMYSLNE = {
     cennik: pakietyZPaczki,
     faq: faqZPaczki,
-    zespol: zespolZPaczki,
 };
 
 const biezace = { ...DOMYSLNE };
@@ -67,7 +70,7 @@ const migawka = () => wersja;
 const migawkaSerwera = () => 0;
 
 /**
- * Hak dla komponentow. `co` to 'cennik', 'faq' albo 'zespol'.
+ * Hak dla komponentow. `co` to 'cennik' albo 'faq'.
  *
  * Przy prerenderowaniu w Node nie ma fetch ani przegladarki, wiec zwraca
  * wersje z paczki — dokladnie ta, ktora trafia do gotowego HTML-a.

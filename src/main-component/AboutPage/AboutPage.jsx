@@ -5,7 +5,7 @@ import About from '../../components/about/about';
 import ProcessSection from '../../components/ProcessSection/ProcessSection';
 import FunFact from '../../components/FunFact/FunFact';
 import TeamSection from '../../components/TeamSection/TeamSection';
-import { uzyjTresci } from '../../api/tresciStron.js';
+import { ZESPOL_BIURA } from '../../api/team';
 import ZespolSection from '../../components/ZespolSection/ZespolSection.jsx';
 import WMediach from '../../components/WMediach/WMediach.jsx';
 import FaqSection from '../../components/FaqSection/FaqSection.jsx';
@@ -20,7 +20,6 @@ import Logo from '../../images/logo.svg'
 
 
 const AboutPage = () => {
-    const zespol = uzyjTresci('zespol');
     return (
         <Fragment>
             <Navbar hclass={'dgc-site-header dgc-site-header-s2'} Logo={Logo} />
@@ -37,8 +36,8 @@ const AboutPage = () => {
                 zeby pokazac pozostale trzy osoby. */}
             <TeamSection
                 hclass={'team_section_s2 section-padding'}
-                osoby={zespol}
-                sliceEnd={zespol.length}
+                osoby={ZESPOL_BIURA}
+                sliceEnd={ZESPOL_BIURA.length}
                 title={'Zespół'}
                 subtitle={'Poznaj osoby, z którymi pracujesz na co dzień'}
                 suwak={true}
