@@ -9,6 +9,7 @@
 import okladka from "../images/blog/okladka-dgc.svg";
 
 import programistaB2b from "../images/blog/programista-b2b-ryczalt.jpg";
+import bialaLista from "../images/blog/biala-lista-vat.jpg";
 import kawaKoszt from "../images/blog/kawa-koszt-czy-reprezentacja.jpg";
 import pracaZdalna from "../images/blog/praca-zdalna-wydatki.jpg";
 import telefonKoszty from "../images/blog/telefon-w-kosztach-firmy.jpg";
@@ -38,6 +39,22 @@ import zamkniecieChecklista from "../images/blog/zamkniecie-roku-checklista.jpg"
 // z tych pol, wiec liczby sa prawdziwe i same sie zaktualizuja.
 
 const blogs = [
+    {
+        id: '25',
+        title: 'Biała lista podatników VAT – sprawdzaj przed przelewem',
+        title2: 'Biała lista podatników VAT – sprawdzaj przed przelewem',
+        tag: 'VAT',
+        slug: 'biala-lista-vat',
+        screens: bialaLista,
+        description: 'Przelew powyżej 15 000 zł na rachunek spoza białej listy to utrata kosztu i ryzyko odpowiedzialności za VAT kontrahenta. Sprawdź, co ratuje ZAW-NR.',
+        author: 'DGC Biuro Rachunkowe',
+        create_at: '26 października 2026',
+        archiveMonth: '2026-10',
+        archiveLabel: 'Październik 2026',
+        blogSingleImg: bialaLista,
+        blClass: 'format-standard-image',
+        animation: '1200',
+    },
     {
         id: '24',
         title: 'Kawa i poczęstunek dla klientów – koszt czy reprezentacja',

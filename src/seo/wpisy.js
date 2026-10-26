@@ -9,6 +9,12 @@
 // tytuly rozrozniane rokiem. Powod w naglowku skryptu.
 
 export const WPISY = {
+    'biala-lista-vat': {
+        tytul: 'Biała lista podatników VAT – sprawdzaj przed przelewem · DGC',
+        opis: 'Przelew powyżej 15 000 zł na rachunek spoza białej listy to utrata kosztu i ryzyko odpowiedzialności za VAT kontrahenta. Sprawdź, co ratuje ZAW-NR.',
+        data: '2026-10-26',
+        nazwa: 'Biała lista podatników VAT – sprawdzaj przed przelewem',
+    },
     'kawa-koszt-czy-reprezentacja': {
         tytul: 'Kawa i poczęstunek dla klientów – koszt czy reprezentacja · DGC',
         opis: 'Kawa dla pracowników to koszt, kolacja z kontrahentem już niekoniecznie. Sprawdź, gdzie przebiega granica i jak dokumentować catering.',
