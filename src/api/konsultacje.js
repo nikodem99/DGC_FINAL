@@ -6,10 +6,13 @@
 // │ Cena wystepuje w calym projekcie TYLKO w stalej CENA ponizej.        │
 // └──────────────────────────────────────────────────────────────────────┘
 
+// Formularz nie pobiera platnosci — kwote potwierdza pracownik telefonicznie,
+// dlatego "od". Gdy ceny beda zroznicowane wedlug tematu, tu dochodzi
+// rozbicie, a nie kolejne miejsce z liczba w komponencie.
+//
+// UWAGA: blok ponizej jest odtwarzany przez pobierz-z-serwera.mjs, wiec
+// komentarze musza stac nad nim, nie w srodku.
 export const CENA = {
-    // Formularz nie pobiera platnosci — kwote potwierdza pracownik telefonicznie,
-    // dlatego "od". Gdy ceny beda zroznicowane wedlug tematu, tu dochodzi
-    // rozbicie, a nie kolejne miejsce z liczba w komponencie.
     kwota: 'od 250 zł netto',
     jednostka: 'za 30 minut konsultacji',
     uwaga: 'Ostateczną cenę potwierdzamy telefonicznie, zanim poprosimy o płatność.',

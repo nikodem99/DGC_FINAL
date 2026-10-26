@@ -66,7 +66,12 @@ const naLiterale = (w, wciecie = 4) => {
     }
     if (w && typeof w === 'object') {
         const pola = Object.entries(w)
-            .map(([k, v]) => `${sp}${k}: ${naLiterale(v, wciecie + 4)},`)
+            // Klucz w cudzyslowie, gdy nie jest poprawna nazwa — slugi maja
+            // myslniki i bez tego powstawal plik, ktorego nie da sie wczytac.
+            .map(([k, v]) => {
+                const klucz = /^[A-Za-z_$][\w$]*$/.test(k) ? k : wApostrofach(k);
+                return `${sp}${klucz}: ${naLiterale(v, wciecie + 4)},`;
+            })
             .join('\n');
         return `{\n${pola}\n${' '.repeat(wciecie - 4)}}`;
     }
