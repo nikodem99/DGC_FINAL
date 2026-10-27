@@ -907,11 +907,16 @@ select.error,
 /* --- Logo ---------------------------------------------------------- */
 /* Rozmiar w naglowku ustawia _header.scss — tamta regula ma wyzsza
    specyficznosc, wiec dublowanie jej tutaj tylko myli. Tu zostaje stopka. */
-/* W stopce znak stoi samodzielnie nad tekstem, wiec moze byc wiekszy. */
+/* W stopce znak stoi samodzielnie nad tekstem, wiec moze byc wiekszy.
+   max-height zamiast height z tego samego powodu co w naglowku: przy
+   height + max-width waska kolumna przycinala szerokosc, zostawiala
+   wysokosc i znak wychodzil sciesniony. Zmierzone przy 900px: 220x76
+   zamiast proporcji 3,25. */
 .dgc-site-footer .about-widget .logo img,
 .dgc-site-footer_s2 .about-widget .logo img {
   width: auto;
-  height: 76px;
+  height: auto;
+  max-height: 76px;
   max-width: 100%;
 }
 

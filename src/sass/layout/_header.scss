@@ -1362,14 +1362,22 @@
 		}
 
 		img {
-			/* Logotyp klienta jest ukladem pietrowym (DGC nad podpisem),
-			   proporcja 772:346 czyli 2,23. Poprzedni plik byl poziomy (4,40),
-			   dlatego dalo sie go ograniczac szerokoscia. Teraz miara musi byc
-			   wysokosc — przy ograniczeniu szerokoscia znak rozpychal sie na
-			   cala wysokosc paska i dotykal obu krawedzi.
-			   64px zostawia po ~18px oddechu w pasku 100px.
-			   max-width pilnuje waskiej kolumny z logo (ok. 203px). */
-			height: 64px;
+			/* Nowy logotyp (paczka Kamila, 20.10.2026) jest ukladem poziomym:
+			   znak, kreska i podpis obok, proporcja 610,94:188 czyli 3,25.
+			   Poprzedni byl pietrowy (2,23), wiec przy tej samej wysokosci
+			   nowy jest o polowe szerszy.
+
+			   Miara zostaje wysokosc, bo pasek ma stala wysokosc 100px,
+			   a 64px zostawia po ~18px oddechu.
+
+			   KLUCZOWE: max-height zamiast height. Przy height + max-width
+			   przegladarka przycinala szerokosc do waskiej kolumny, ale
+			   zostawiala wysokosc 64px i znak wychodzil sciesniony — widac
+			   to bylo miedzy 768 a 1200 px, gdzie kolumna ma ok. 143px.
+			   Przy max-height oba ograniczenia dzialaja razem i proporcja
+			   zostaje zachowana. Sprawdzone pomiarem w przegladarce. */
+			height: auto;
+			max-height: 64px;
 			width: auto;
 			max-width: 100%;
 
@@ -1384,16 +1392,23 @@
 				top: 0;
 			}
 
+			/* Ta sama zasada co wyzej: max-height, nie height. Przy
+			   "height" sztywna wysokosc spotyka sie ponizej 370px z
+			   "max-width: 140px" (nizej w tym pliku) i znak wychodzi
+			   sciesniony w poziomie — proporcja spada z 3,25 na 3,18.
+			   Widac to na telefonach 360px, czyli na duzej czesci
+			   Androidow. Przy max-height oba ograniczenia dzialaja
+			   razem i szerokosc schodzi proporcjonalnie. */
 			@media (max-width:1399px) {
-				height: 58px;
+				max-height: 58px;
 			}
 
 			@media (max-width:991px) {
-				height: 52px;
+				max-height: 52px;
 			}
 
 			@media (max-width:575px) {
-				height: 44px;
+				max-height: 44px;
 			}
 		}
 	}
