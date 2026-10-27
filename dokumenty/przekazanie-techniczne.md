@@ -246,6 +246,66 @@ która nie jest JSON-em, i mówi o tym wprost w konsoli.
 
 ---
 
+## Logotyp — który wariant gdzie
+
+27 października 2026 wszedł nowy logotyp z paczki przysłanej przez Kamila
+(`DGC_logo_paczka.zip`). Paczka ma siedem wariantów kolorystycznych; na
+stronie używamy dwóch:
+
+| Wariant z paczki | Kolor | Gdzie |
+|---|---|---|
+| `01_podstawowe` | petrol `#0D4444` | jasne tła |
+| `03_negatyw_petrol` | biel `#FDFCFC` | ciemne tła |
+
+**Wariantu `02_akcent_magenta` (dwukolorowego, z różem) nie używamy nigdzie.**
+Zastrzeżenie od Kamila przy przekazaniu paczki: *„Jedno zastrzeżenie co do
+wariantu dwukolorowego (z tym różem) żeby go unikać. Lepiej jakby było go jak
+najmniej."* Róż `#B50B50` zostaje w serwisie wyłącznie jako kolor akcentu
+(kreski, przyciski), a nie jako kolor znaku.
+
+Pliki w repozytorium i to, co każdy obsługuje:
+
+| Plik | Układ | Gdzie widać |
+|---|---|---|
+| `src/images/logo.svg` | poziomy, petrol | nagłówek, wszystkie podstrony |
+| `src/images/logo-2.svg` | poziomy, biały | stopka |
+| `src/images/logo.jpg` | pionowy, petrol | pas CTA i `/o-nas` |
+| `public/logo-mail.jpg` | poziomy, petrol | stopka wiadomości z formularza |
+| `public/favicon.png` | sygnet, 512 px | zakładka, kafelki |
+| `public/favicon.ico` | sygnet, 64 px | starsze przeglądarki |
+| `src/images/blog/okladka-dgc.svg` | poziomy, biały na petrolu | domyślna okładka artykułu |
+| `public/og-dgc.jpg` | poziomy, biały na petrolu | Facebook, LinkedIn, WhatsApp |
+
+`src/images/favicon.png` jest w repozytorium **nieużywany** — nic go nie
+importuje i nie trafia do `dist`. Podmieniony tylko po to, żeby nie został
+w repozytorium stary znak.
+
+### Trzy rzeczy, o których trzeba pamiętać przy podmianie znaku
+
+**1. Proporcja.** Nowy znak poziomy ma 3,25:1, poprzedni pionowy miał 2,23:1.
+Wszystkie reguły wysokości logo w CSS muszą używać `max-height`, nigdy
+`height`. Przy `height` sztywna wysokość spotyka się z `max-width` wąskiej
+kolumny i znak wychodzi ściśnięty w poziomie — przeglądarka przycina
+szerokość, ale wysokość zostawia. Złapane pomiarem w dwóch miejscach:
+w stopce (220×76 zamiast proporcji 3,25) i w nagłówku poniżej 370 px
+(proporcja 3,18 zamiast 3,247, widoczne na telefonach 360 px). Reguły siedzą
+w `src/sass/layout/_header.scss` (drabinka progów 1399 / 991 / 575 px)
+i w `src/sass/_dgc-theme.scss` (stopka).
+
+**2. Numer `?v=` przy faviconach.** W `index.html` ikony mają `?v=4`.
+Przy każdej podmianie ikony trzeba ten numer podbić, bo inaczej przeglądarki
+z zapisaną starą ikoną pokazują ją dalej, mimo że na serwerze leży nowy plik.
+
+**3. Pamięć podręczna serwisów społecznościowych.** `og-dgc.jpg` ma stały
+adres, więc Facebook i LinkedIn serwują z pamięci wersję, którą pobrały
+wcześniej. Po podmianie trzeba je zmusić do ponownego pobrania:
+Facebook przez *Sharing Debugger* (`developers.facebook.com/tools/debug/`,
+przycisk „Scrape Again"), LinkedIn przez *Post Inspector*
+(`linkedin.com/post-inspector/`). Zajmuje to minutę i jest darmowe.
+Bez tego udostępnienia dalej pokazują stary obrazek.
+
+---
+
 ## Po szablonie nie ma już śladu
 
 Strona powstała na kupionym motywie „Medically". 5 października 2026 został
