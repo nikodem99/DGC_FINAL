@@ -81,7 +81,19 @@
 					left: 7px;
 				}
 
+				/* Biezaca pozycja na pelnej bieli, zeby "gdzie jestem"
+				   odroznialo sie od odnosnika obok (10,64:1 wobec 7,45:1).
+				   Kolor stoi na samym li:last-child, bo wczesniej celowal
+				   w span, ktorego w znacznikach nie ma — PageTitle.jsx
+				   renderuje <li>{props.pagesub}</li>, czyli goly wezel
+				   tekstowy. Regula byla martwa od poczatku, takze gdy pasek
+				   byl bialy. Zmierzone przed poprawka: obie pozycje
+				   okruszkow zwracaly identyczne rgba(253, 252, 252, 0.8).
+				   Selektor span zostaje na wypadek, gdyby komponent kiedys
+				   go dostal. */
 				&:last-child {
+					color: $dgc-canvas;
+
 					span {
 						color: $dgc-canvas;
 					}

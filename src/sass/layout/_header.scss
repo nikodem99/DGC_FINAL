@@ -1365,6 +1365,15 @@
 	}
 
 	.navbar-header .navbar-brand {
+		/* Bootstrap 5 daje kazdemu .navbar-brand margin-right: 1rem. Przy
+		   srodkowaniu ten margines wchodzi do szerokosci elementu liniowego,
+		   wiec os znaku siada o polowe marginesu na lewo od osi kolumny.
+		   Zmierzone przed zdjeciem: srodek znaku 178,6 przy srodku kolumny
+		   186,1, czyli dokladnie 7,5px w lewo. Ponizej 992px marginesu nie
+		   ruszamy — tam znak nie jest srodkowany w kolumnie. */
+		@media (min-width: 992px) {
+			margin-right: 0;
+		}
 
 		img {
 			/* Nowy logotyp (paczka Kamila, 20.10.2026) jest ukladem poziomym:

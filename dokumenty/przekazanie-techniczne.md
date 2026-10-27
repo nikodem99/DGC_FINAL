@@ -267,18 +267,31 @@ Pliki w repozytorium i to, co każdy obsługuje:
 
 | Plik | Układ | Gdzie widać |
 |---|---|---|
-| `src/images/logo.svg` | poziomy, petrol | nagłówek, wszystkie podstrony |
-| `src/images/logo-2.svg` | poziomy, biały | stopka |
-| `src/images/logo.jpg` | pionowy, petrol | pas CTA i `/o-nas` |
+| `src/images/logo.svg` | poziomy, petrol | nagłówek **tylko strony głównej** |
+| `src/images/logo-2.svg` | poziomy, biały | stopka **i nagłówek wszystkich 474 podstron** |
 | `public/logo-mail.jpg` | poziomy, petrol | stopka wiadomości z formularza |
 | `public/favicon.png` | sygnet, 512 px | zakładka, kafelki |
 | `public/favicon.ico` | sygnet, 64 px | starsze przeglądarki |
 | `src/images/blog/okladka-dgc.svg` | poziomy, biały na petrolu | domyślna okładka artykułu |
 | `public/og-dgc.jpg` | poziomy, biały na petrolu | Facebook, LinkedIn, WhatsApp |
 
-`src/images/favicon.png` jest w repozytorium **nieużywany** — nic go nie
-importuje i nie trafia do `dist`. Podmieniony tylko po to, żeby nie został
-w repozytorium stary znak.
+O podziale między pierwszym a drugim wierszem decyduje `Header.jsx`, a nie
+strona wywołująca: jeśli `hclass` niesie `dgc-site-header-s2`, komponent sam
+podstawia wariant biały. Ten nagłówek ma przezroczyste tło i leży **na**
+ciemnozielonym pasku tytułu podstrony, więc znak petrolowy miałby dokładnie
+kolor tła. Wybór siedzi w jednym miejscu właśnie dlatego, że gdy zależał od
+jedenastu plików podstron, żaden o nim nie pamiętał.
+
+**Pliki nieużywane w repozytorium** (nic ich nie importuje, nie trafiają do
+`dist`, podmienione tylko po to, żeby nie został w repozytorium stary znak):
+
+- `src/images/favicon.png`
+- `src/images/logo.jpg` — pionowy znak na białym tle. Obsługiwał pas
+  „Zadzwoń do nas" i `/o-nas` do 27.10.2026, kiedy obrazek z tego pasa
+  zniknął na prośbę klienta. Białe tło było wypalone w samym pliku (JPEG
+  nie ma kanału alfa, zmierzony narożnik to `#fcfcfc`), więc nie dało się
+  go zdjąć CSS-em. Gdyby znak miał kiedyś wrócić w ciemny pas, trzeba użyć
+  `logo-2.svg` — ten sam znak w bieli, z przezroczystością.
 
 ### Trzy rzeczy, o których trzeba pamiętać przy podmianie znaku
 
