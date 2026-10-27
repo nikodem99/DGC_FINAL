@@ -11,7 +11,6 @@ import WMediach from '../../components/WMediach/WMediach.jsx';
 import FaqSection from '../../components/FaqSection/FaqSection.jsx';
 import OpinieCta from '../../components/OpinieCta/OpinieCta.jsx';
 import CtaSection from '../../components/CtaSection/CtaSection.jsx';
-import LogoDGC from '../../images/logo.jpg';
 import BlogSection from '../../components/BlogSection/BlogSection';
 import CtafromSection from '../../components/CtafromSection/CtafromSection';
 import Footer from '../../components/footer/Footer';
@@ -60,7 +59,7 @@ const AboutPage = () => {
                 title={'Pytania, które słyszymy najczęściej'}
             />
             {/* Ten sam pas co na stronie glownej, z tym samym znakiem DGC. */}
-            <CtaSection tClass={'cta_section'} image={LogoDGC} />
+            <CtaSection tClass={'cta_section'} />
             <BlogSection tClass={'blog_section section-padding'} />
             <CtafromSection hclass={'ctafrom_section'} />
             <Footer hclass={'dgc-site-footer'} />

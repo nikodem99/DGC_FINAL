@@ -871,17 +871,24 @@ select.error,
    turkusem. Na jasnym naglowku strony glownej to dziala, ale wariant s2
    lezy na pasie w tym samym turkusie — kontrast 1:1 i napis znikal
    (kolor tekstu byl wtedy identyczny z tlem naglowka).
-   Tutaj tekst zostaje w kanwie, a sygnalem jest zloty pasek. Zloto jako
-   akcent, nie jako kolor tekstu — zgodnie z zasadami palety. */
+   Tutaj tekst zostaje w kanwie, a sygnalem jest magentowy pasek. Magenta
+   jako akcent, nie jako kolor tekstu — zgodnie z zasadami palety. */
 .dgc-site-header.dgc-site-header-s2 {
   /* Tylko pozycje GORNEGO paska. Wczesniej bylo tu "> ul li a", a potomny
      selektor lapal takze linki w rozwijanym menu — te leza na bialym panelu
      (#FDFCFC), wiec po najechaniu dostawaly kolor tla i znikaly. Rozwijane
-     menu zostaje przy szablonowym ciemnym tekscie ze zlota kreska. */
+     menu zostaje przy szablonowym ciemnym tekscie z magentowa kreska.
+
+     Tekst pod kursorem zostaje bialy. Stala tu magenta — dobrana, gdy pasek
+     byl bialy, i tam liczyla sie dobrze (6,55:1). Po powrocie ciemnej zieleni
+     (27.10.2026) ta sama magenta #b50b50 na tle #0d4444 daje 1,62:1, czyli
+     ponizej kazdego progu WCAG — napis pod kursorem bylby mniej czytelny niz
+     przed najechaniem. Rola sygnalu wraca wiec do paska nad pozycja, a napis
+     rozjasnia sie do pelnej bieli (10,64:1). */
   #navbar > ul > li > a:hover,
   #navbar > ul > li > a:focus,
   #navbar > ul > li > a.active {
-    color: var(--dgc-accent);
+    color: var(--dgc-canvas);
   }
 
   @media screen and (min-width: 992px) {

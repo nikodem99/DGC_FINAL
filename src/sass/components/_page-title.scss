@@ -1,9 +1,18 @@
 .dgc-breadcumb-area {
-	/* Bialy pasek zamiast ciemnozielonego. Pelnoekranowa plama koloru
-	   przytlaczala podstrony i gryzla sie z jasnymi sekcjami pod spodem. */
-	background-color: $dgc-canvas;
+	/* Ciemnozielony pasek, ten sam kolor co stopka ($dgc-ink, #0d4444).
+	   Stal tu przez chwile bialy — mial odciazyc podstrony, ale przy samym
+	   tytule i okruszkach na 500px wysokosci wychodzila plama pustki.
+	   Decyzja klienta z 27.10.2026: wracamy na zielen, tekst na bialo,
+	   magentowa kreska pod tytulem zostaje.
+
+	   Styk z sekcja ponizej jest bezpieczny: na wszystkich 11 podstronach
+	   korzystajacych z PageTitle pierwsza sekcja pod paskiem ma tlo
+	   przezroczyste, czyli jasne tlo strony. Sprawdzone pomiarem w
+	   przegladarce na /o-nas, /kontakt, /porady i na stronie artykulu.
+	   Obramowania u dolu juz nie ma — var(--dgc-line) to rgba(13,68,68,.13),
+	   czyli czern na czerni, niewidoczna. Granice robi teraz sam kolor. */
+	background-color: $dgc-ink;
 	background-image: none;
-	border-bottom: 1px solid var(--dgc-line);
 	min-height: 500px;
 	position: relative;
 	display: flex;
@@ -32,7 +41,7 @@
 
 		h1 {
 			font-size: 70px;
-			color: $dgc-ink;
+			color: $dgc-canvas;
 			line-height: 1.06;
 			margin-top: -10px;
 			margin-bottom: 0px;
@@ -50,12 +59,15 @@
 			}
 		}
 
+		/* Okruszki. Przezroczystosci sa te same, ktorych uzywa stopka na tym
+		   samym tle (rgba(253, 252, 252, 0.80) — src/sass/layout/_footer.scss),
+		   zeby oba ciemne pasy mowily jednym glosem. */
 		ul {
 			list-style: none;
 			li {
 				display: inline;
 				padding: 0px 5px;
-				color: rgba(13, 68, 68, 0.75);
+				color: rgba(253, 252, 252, 0.80);
 				position: relative;
 				font-size: 20px;
 
@@ -71,7 +83,7 @@
 
 				&:last-child {
 					span {
-						color: $dgc-ink;
+						color: $dgc-canvas;
 					}
 
 					&:after {
@@ -80,12 +92,14 @@
 				}
 
 				a {
-					color: rgba(13, 68, 68, 0.75);
+					color: rgba(253, 252, 252, 0.80);
 					font-size: 20px;
 					transition: all .3s;
 
+					/* Pelna biel, nie $theme-primary-color. Tamten to #0d4444,
+					   czyli dokladnie kolor tla — odnosnik znikalby pod kursorem. */
 					&:hover {
-						color: $theme-primary-color;
+						color: $dgc-canvas;
 					}
 				}
 			}

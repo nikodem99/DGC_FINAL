@@ -1350,16 +1350,21 @@
 		}
 	}
 
-	.navbar-header .navbar-brand {
-		/* Odsuniecie od krawedzi okna i lekkie opuszczenie. Logo stalo na 21px,
-		   czyli praktycznie przy samym brzegu. Wyrownanie do tresci hero (50px)
-		   bylo punktem wyjscia, dalsze 22px w prawo i 10px w dol to juz
-		   dopasowanie na oko, na prosbe klienta.
-		   Tylko od 992px — nizej logo jest wysrodkowane obok hamburgera,
-		   a padding zepchnalby je z osi. */
+	.navbar-header {
+		/* Znak stoi na srodku wlasnej kolumny. Wczesniej byl odsuniety od lewej
+		   krawedzi sztywnym padding-left: 52px na .navbar-brand — wartosc dobrana
+		   na oko pod poprzedni, pietrowy logotyp. Po wejsciu ukladu poziomego
+		   (o polowe szerszego) ten padding wypychal znak poza kolumne: przy 1440px
+		   konczyl sie na 281px, a kolumna nawigacji zaczyna sie na 245px, wiec
+		   znak wjezdzal 36px w pole menu.
+		   Srodkowanie dziala i w pionie, i w poziomie, bo .navbar-brand jest
+		   elementem liniowym — text-align wystarcza i nie trzeba ruszac JSX-a. */
 		@media (min-width: 992px) {
-			padding-left: 52px;
+			text-align: center;
 		}
+	}
+
+	.navbar-header .navbar-brand {
 
 		img {
 			/* Nowy logotyp (paczka Kamila, 20.10.2026) jest ukladem poziomym:
@@ -1367,8 +1372,10 @@
 			   Poprzedni byl pietrowy (2,23), wiec przy tej samej wysokosci
 			   nowy jest o polowe szerszy.
 
-			   Miara zostaje wysokosc, bo pasek ma stala wysokosc 100px,
-			   a 64px zostawia po ~18px oddechu.
+			   Miara zostaje wysokosc. Po poszerzeniu kolumny znaku z dwoch
+			   jednostek na trzy (Header.jsx) znak ma miejsce, zeby urosnac
+			   z 64 na 78px — o to prosil klient, bo poziomy uklad przy 64px
+			   wygladal drobnie obok menu.
 
 			   KLUCZOWE: max-height zamiast height. Przy height + max-width
 			   przegladarka przycinala szerokosc do waskiej kolumny, ale
@@ -1377,38 +1384,37 @@
 			   Przy max-height oba ograniczenia dzialaja razem i proporcja
 			   zostaje zachowana. Sprawdzone pomiarem w przegladarce. */
 			height: auto;
-			max-height: 64px;
+			max-height: 78px;
 			width: auto;
 			max-width: 100%;
 
-			/* Opuszczenie o 10px. Przez padding sie nie da — pasek wyrownuje
-			   zawartosc do srodka i po prostu go wchlania, przesuwajac przy
-			   okazji cala wysokosc naglowka. position: relative przesuwa sam
-			   obrazek, nie ruszajac ukladu ani wysokosci paska. */
-			position: relative;
-			top: 10px;
-
-			@media (max-width:991px) {
-				top: 0;
-			}
+			/* Znak siedzi na osi paska i nic go z niej nie zsuwa.
+			   Stalo tu kiedys top: 10px — druga polowa recznego dopasowania
+			   pod poprzedni logotyp (pierwsza byl padding-left: 52px, zdjety
+			   wyzej). Przy znaku o wysokosci 78px w pasku wysokim na 94px
+			   to opuszczenie wypchneloby go 2px pod dolna krawedz, bo pasek
+			   wyrownuje zawartosc do srodka (align-items-center) i 10px
+			   dochodzi juz do gotowego wysrodkowania.
+			   Wysokosc paska bierze sie z menu, nie ze znaku: .navigation ma
+			   padding 0, a 94px to wysokosc kolumny nawigacji. */
 
 			/* Ta sama zasada co wyzej: max-height, nie height. Przy
 			   "height" sztywna wysokosc spotyka sie ponizej 370px z
-			   "max-width: 140px" (nizej w tym pliku) i znak wychodzi
+			   graniczna szerokoscia (nizej w tym pliku) i znak wychodzi
 			   sciesniony w poziomie — proporcja spada z 3,25 na 3,18.
 			   Widac to na telefonach 360px, czyli na duzej czesci
 			   Androidow. Przy max-height oba ograniczenia dzialaja
 			   razem i szerokosc schodzi proporcjonalnie. */
 			@media (max-width:1399px) {
-				max-height: 58px;
+				max-height: 72px;
 			}
 
 			@media (max-width:991px) {
-				max-height: 52px;
+				max-height: 64px;
 			}
 
 			@media (max-width:575px) {
-				max-height: 44px;
+				max-height: 52px;
 			}
 		}
 	}
@@ -1452,10 +1458,16 @@
 
 
 
+/* Szerokosci graniczne na najwezszych ekranach. Wartosci podniesione razem
+   z wysokoscia znaku (max-height 52px przy proporcji 3,247 potrzebuje 169px).
+   Stare 185/140 byly dobrane pod poprzedni, piecrowy logotyp i przy nowym
+   ukladzie poziomym zaczely go przycinac. Kolumna obok (col-3 po prawej) jest
+   na telefonie pusta, wiec znak ma dokad urosnac — sprawdzone pomiarem przy
+   360 i 375px: bez nachodzenia na przycisk menu i bez przewijania w poziomie. */
 @media(max-width: 440px) {
 	.dgc-site-header .navbar-header .navbar-brand {
 		img {
-			max-width: 185px;
+			max-width: 210px;
 		}
 	}
 }
@@ -1463,7 +1475,7 @@
 @media(max-width: 370px) {
 	.dgc-site-header .navbar-header .navbar-brand {
 		img {
-			max-width: 140px;
+			max-width: 172px;
 		}
 	}
 }
@@ -1605,13 +1617,30 @@
 
 .dgc-site-header-s2 {
 
-	/* Pasek tytulowy podstron jest teraz bialy, wiec menu musi byc ciemne.
-	   Wczesniej bylo biale, bo pasek byl ciemnozielony — po zmianie tla
-	   znikalo calkowicie. */
+	/* Menu biale, bo pasek tytulu podstrony wrocil na ciemna zielen
+	   (27.10.2026, decyzja klienta — src/sass/components/_page-title.scss).
+	   Ten wariant naglowka ma przezroczyste tlo i lezy NA tym pasku, wiec
+	   jego tlem jest #0d4444. Przez chwile bylo tu $dgc-ink, dobrane pod
+	   bialy pasek; po powrocie zieleni oznaczaloby to tekst w kolorze tla,
+	   czyli menu znikajace bez sladu. Sprawdzone pomiarem: przed poprawka
+	   kolor linku i tlo paska zwracaly identyczne rgb(13, 68, 68).
+
+	   Znak graficzny ma ten sam problem i jest rozwiazany po stronie
+	   komponentu (src/components/header/Header.jsx podstawia logo-2.svg). */
 	@media screen and (min-width: 992px) {
 		#navbar>ul>li>a {
-			color: $dgc-ink;
+			color: $dgc-canvas;
 		}
+	}
+
+	/* Hamburger na telefonie. Kafelek pod ikona ma kolor $dgc-ink, czyli
+	   dokladnie kolor paska — na zielonym tle i tak go nie widac, wiec
+	   zamiast zostawiac niewidoczny prostokat, zdejmujemy go swiadomie.
+	   Same paski sa juz biale i czytaja sie na zieleni bez niczego pod
+	   spodem. Na stronie glownej (wariant bez s2, jasne hero) kafelek
+	   zostaje, bo tam niesie cala widocznosc przycisku. */
+	.navbar-toggler.open-btn {
+		background-color: transparent;
 	}
 
 	/* Przyklejony naglowek tez na bieli — inaczej po przewinieciu menu
