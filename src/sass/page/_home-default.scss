@@ -1387,7 +1387,23 @@
 
         .shape-icon {
             position: absolute;
-            left: 64%;
+            /* 76% zamiast 64%. Po zdjeciu obrazka z logo (27.10.2026) prawa
+               strona panelu zostala pusta, a znak wodny stal w jej lewej
+               krawedzi i panel wychodzil lewostronny.
+               76% to zmierzony srodek wolnej strefy przy 1440px: panel ma
+               1298px, .content konczy sie na 732px, wewnetrzny margines
+               z prawej to 60px, wiec wolne jest 732-1238, a jego srodek
+               wypada na 985px, czyli 75,9%.
+               Zakres, w ktorym ta wartosc musi dzialac, jest waski: panel
+               zatrzymuje sie na 1298px (max-width kontenera), wiec powyzej
+               ok. 1400px okna nic sie juz nie zmienia — zmierzone przy 1700px:
+               panel dalej 1298px, znak na 891-1081. Rozjazd jest tylko miedzy
+               992px (panel 938px, idealny procent ~86) a 1400px (idealny 76).
+               Przy 992px znak wchodzi wtedy nieco pod tekst, ale lezy na
+               z-index -1 i ma 14% krycia, wiec to tylko faktura pod spodem.
+               Zmierzone przy 992px: znak 618-808, margines wewnetrzny 878 —
+               nie wychodzi poza panel. */
+            left: 76%;
             top: 64%;
             transform: translate(-50%, -50%);
             font-size: 190px;
@@ -1395,6 +1411,10 @@
             /* swiadomy jasny znak wodny na turkusie zamiast ciemnej plamy (2,11:1) */
             color: rgba(253, 252, 252, 0.14);
 
+            /* Ponizej 992px tresc wypelnia panel niemal w calosci (zmierzone:
+               przy 900px panel 698px, tresc konczy sie na 668px), wiec wolnej
+               strefy po prawej juz nie ma i znak wodny jest po prostu
+               faktura pod tekstem. Te wartosci zostaja bez zmian. */
             @media (max-width:991px) {
                 font-size: 100px;
                 left: 55%;
