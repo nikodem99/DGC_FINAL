@@ -29,9 +29,6 @@ import zamkniecieChecklista from "../images/blog/zamkniecie-roku-checklista.jpg"
 // Slugi celowo takie same jak na starej stronie, zeby po przeniesieniu domeny
 // stare adresy dalej dzialaly i nie przepadly pozycje w Google.
 //
-// Zdjecia zostaja szablonowe i powtarzaja sie co trzy wpisy — klient podmieni
-// je pozniej.
-//
 // `tag` to kategoria wpisu. Wartosci pochodza z listy kategorii biurodgc.pl
 // (CIT, Kadry, Księgowość, PIT, Podatki, Płace, Rachunkowość, VAT). Sama
 // strona nie pokazuje, ktora kategoria jest przypisana do ktorego artykulu,

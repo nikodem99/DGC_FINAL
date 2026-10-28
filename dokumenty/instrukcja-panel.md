@@ -302,6 +302,21 @@ Przy zmianie składu zespołu albo zdjęć **zadzwońcie do osoby opiekującej s
 stroną**. To świadoma decyzja: te fragmenty są zbudowane tak, że łatwo je
 zepsuć, a trudno naprawić bez dostępu do kodu.
 
+### Jeden wyjątek, który łatwo przeoczyć: numer telefonu w polityce prywatności
+
+Zmiana danych kontaktowych w panelu przestawia numer i adres e-mail
+**na całej stronie — oprócz polityki prywatności**. Tam numer i adres są
+wpisane w treść dokumentu, a polityki panel nie rusza.
+
+Czyli po zmianie numeru w panelu strona będzie pokazywać nowy numer wszędzie,
+a polityka prywatności nadal stary. To nie jest usterka panelu, tylko skutek
+tego, że polityka prywatności jest dokumentem o skutkach prawnych i celowo
+została poza zasięgiem edycji.
+
+**Co zrobić:** po zmianie numeru albo adresu e-mail napiszcie do osoby
+opiekującej się stroną, żeby poprawiła też politykę prywatności. To pięć
+minut pracy, ale ktoś musi o tym pamiętać.
+
 ---
 
 ## Jedna rzecz do zapamiętania przy zmianie wykonawcy

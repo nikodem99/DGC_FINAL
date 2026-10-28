@@ -1942,9 +1942,19 @@
                 padding: 14px 20px;
                 border: 0;
 
+                /* Jasny pierscien, nie zgaszony fokus. Stalo tu "outline: 0"
+                   bez niczego w zamian: pola leza na ciemnym panelu i maja
+                   border: 0, wiec globalna regula dla formularzy
+                   (border-color + box-shadow rgba(13,68,68,0.14) wyzej
+                   w _dgc-theme.scss) nie miala czego pokolorowac — ten cien
+                   na tym tle daje 1,01:1, czyli jest matematycznie
+                   niewidoczny. Trzy pola wyceny na stronie glownej, /o-nas
+                   i /oferta byly dla osoby nawigujacej klawiatura zupelnie
+                   nieoznaczone (WCAG 2.4.7, poziom A).
+                   Biel na tle panelu daje 10,64:1. */
                 &:focus-visible {
-                    outline-offset: 0px;
-                    outline: 0;
+                    outline: 3px solid var(--dgc-canvas);
+                    outline-offset: 2px;
                 }
             }
 

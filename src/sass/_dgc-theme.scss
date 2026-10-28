@@ -178,6 +178,25 @@ summary:focus-visible,
   outline: 3px solid var(--dgc-accent) !important;
   outline-offset: 2px !important;
   border-radius: 2px;
+
+  /* Biala poswiata na zewnatrz magentowego pierscienia.
+     Sama magenta #b50b50 jest dobrana pod jasne tlo — tam daje 6,55:1
+     i dziala dobrze. Na ciemnych powierzchniach serwisu (#0d4444: stopka,
+     pasek tytulu podstrony, pas CTA, panel menu mobilnego) ta sama magenta
+     daje 1,62:1 przy progu 3:1 dla wskaznika fokusu, czyli pierscien
+     praktycznie znikal. Dotyczylo to odnosnikow stopki na 475 stronach,
+     okruszkow na 474, numeru w pasie CTA i calego menu na telefonie —
+     a wiec dokladnie tego, czemu ta regula miala zapobiec.
+
+     Poswiata rozwiazuje to bez wyliczania ciemnych kontenerow po nazwach.
+     Wyliczanka jest krucha: wystarczy dolozyc kiedys jedna ciemna sekcje
+     i zapomniec jej dopisac, zeby fokus znowu zniknal. Tutaj jeden
+     pierscien czyta sie na obu rodzajach tla:
+       - na jasnym tle biel jest niewidoczna i zostaje magenta, jak dotad,
+       - na ciemnym magenta ginie, ale biel ma 10,64:1.
+     Rozlozenie promieni od krawedzi elementu: 0-2px biel (odstep),
+     2-5px magenta (outline rysuje sie NA cieniu), 5-8px biel. */
+  box-shadow: 0 0 0 8px var(--dgc-canvas) !important;
 }
 
 /* Etykiety w formularzu kontaktowym (/kontakt/ i /cennik/). Dopisane razem
@@ -759,8 +778,10 @@ select.error,
 
 
 /* --- Pas kontaktowy pod opiniami --------------------------------- */
-/* Uklad prostokata ze zdjeciem zostaje taki, jak w szablonie — podmieniamy
-   sam plik. Zadnych nadpisan pozycji ani rozmiaru. */
+/* Ten blok ustawia juz tylko dwie rzeczy: numer telefonu, ktory jest
+   odnosnikiem, ale ma wygladac jak naglowek, oraz akapit z godzinami pracy.
+   Stal tu wczesniej komentarz o "ukladzie prostokata ze zdjeciem" — obrazek
+   z tego pasa zostal zdjety 27.10.2026 i nic takiego juz nie ma. */
 .cta_section .cta_wrapper {
   /* Numer jest linkiem, ale ma wygladac jak naglowek, nie jak odnosnik. */
   .text h3 a {

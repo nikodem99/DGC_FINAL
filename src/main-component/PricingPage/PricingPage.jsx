@@ -13,6 +13,17 @@ import FormSection from '../../components/FormSection/FormSection.jsx';
 
 const PricingPage = () => {
     const packages = uzyjTresci('cennik');
+    // Dane kontaktowe z panelu, nie wpisane na sztywno. Byly tu wczesniej
+    // wklepane numer i adres, co dawalo pulapke widoczna dla uzytkownika:
+    // panel po zapisie podmienia kontakt tekstowo we WSZYSTKICH plikach HTML
+    // na serwerze, wiec strona przychodzila z nowym numerem — ale aplikacja
+    // montuje sie przez createRoot i przerysowuje ja od zera z paczki, czyli
+    // ze starym. Numer mignal i wracal do poprzedniego na oczach
+    // odwiedzajacego. Ten sam mechanizm opisuje ostrzezenie w
+    // src/api/tresciStron.js. Pozostale miejsca pokazujace kontakt (stopka,
+    // pas CTA, formularze) braly go z tego hooka od poczatku — cennik byl
+    // jedynym odstepstwem.
+    const KONTAKT = uzyjTresci('kontakt');
     const scrollToTop = () => window.scrollTo(10, 0);
 
     return (
@@ -98,22 +109,22 @@ const PricingPage = () => {
                             </div>
 
                             <div className="pricing_contact_options">
-                                <a href="tel:+48731580184" className="pricing_contact_item">
+                                <a href={KONTAKT.telefonHref} className="pricing_contact_item">
                                     <span className="pricing_contact_icon" aria-hidden="true">
                                         <i className="fi flaticon-phone-call"></i>
                                     </span>
                                     <span>
                                         <small>Zadzwoń</small>
-                                        <strong>+48 731 580 184</strong>
+                                        <strong>+48 {KONTAKT.telefon}</strong>
                                     </span>
                                 </a>
-                                <a href="mailto:kontakt@biurodgc.pl" className="pricing_contact_item">
+                                <a href={`mailto:${KONTAKT.email}`} className="pricing_contact_item">
                                     <span className="pricing_contact_icon" aria-hidden="true">
                                         <i className="fi flaticon-email"></i>
                                     </span>
                                     <span>
                                         <small>Napisz</small>
-                                        <strong>kontakt@biurodgc.pl</strong>
+                                        <strong>{KONTAKT.email}</strong>
                                     </span>
                                 </a>
                             </div>

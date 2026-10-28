@@ -41,10 +41,7 @@ const AboutPage = () => {
                 subtitle={'Poznaj osoby, z którymi pracujesz na co dzień'}
                 suwak={true}
             />
-            {/* Prosba o opinie kierowana do obecnych klientow. Stoi NAD pytaniami,
-                bo pas kontaktowy nizej ma zdjecie wystajace ~195px ponad swoj
-                gorny brzeg — miedzy nimi musi zostac sekcja z wlasnym
-                paddingiem, inaczej zdjecie wchodzi na blok. */}
+            {/* Prosba o opinie kierowana do obecnych klientow, nad pytaniami. */}
             {/* Rozmowa prezes w radiu stoi po zespole i przed prosba o opinie:
                 najpierw czytelnik poznaje ludzi, potem widzi ich na antenie,
                 a dopiero wtedy prosimy go o cokolwiek. */}
@@ -58,7 +55,7 @@ const AboutPage = () => {
                 ile={6}
                 title={'Pytania, które słyszymy najczęściej'}
             />
-            {/* Ten sam pas co na stronie glownej, z tym samym znakiem DGC. */}
+            {/* Ten sam pas co na stronie glownej. */}
             <CtaSection tClass={'cta_section'} />
             <BlogSection tClass={'blog_section section-padding'} />
             <CtafromSection hclass={'ctafrom_section'} />
