@@ -193,14 +193,22 @@
                     height: 40px;
                     line-height: 45px;
                     text-align: center;
-                    background: $dgc-brand;
+                    /* Kolko bylo w kolorze $dgc-brand, czyli dokladnie w kolorze
+                       stopki — 1,00:1, wiec nie bylo go widac wcale. Sama ikona
+                       jest biala i czytala sie dobrze (10,64:1), ale chip wokol
+                       niej nie istnial. Delikatna biel daje ksztalt przycisku,
+                       nie przykrywajac ikony. */
+                    background: rgba(253, 252, 252, 0.12);
                     border-radius: 100px;
                     display: block;
                     transition: all .3s;
 
+                    /* Pod kursorem ikona byla $dgc-ink na magencie, czyli
+                       1,62:1 — znikala dokladnie w chwili, gdy uzytkownik na
+                       nia celowal. Biel na magencie to 6,55:1. */
                     &:hover {
                         background: $dgc-accent;
-                        color: $dgc-ink;
+                        color: $dgc-canvas;
                     }
 
                 }

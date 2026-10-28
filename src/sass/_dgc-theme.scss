@@ -788,8 +788,14 @@ select.error,
     color: inherit;
     text-decoration: none;
 
+    /* Pod kursorem numer dostawal magente, co na tym panelu daje 1,49:1 —
+       czyli najechanie na numer telefonu sprawialo, ze numer znikal.
+       Kolor zostaje bez zmian (10,64:1), a sygnalem jest podkreslenie,
+       ktore nie zalezy od kontrastu barw. */
     &:hover {
-      color: var(--dgc-accent);
+      text-decoration: underline;
+      text-underline-offset: 6px;
+      text-decoration-thickness: 2px;
     }
   }
 
@@ -912,9 +918,13 @@ select.error,
     color: var(--dgc-canvas);
   }
 
+  /* Pasek nad pozycja menu — jedyny sygnal najechania i strony biezacej
+     w tym wariancie, bo sam tekst zostaje bialy. Magenta dawala tu 1,62:1,
+     czyli sygnal, ktorego nie widac; wtedy najechanie nie dawaloby zadnej
+     informacji. Biel ma 10,64:1. */
   @media screen and (min-width: 992px) {
     #navbar > ul > li > a:before {
-      background: var(--dgc-accent);
+      background: var(--dgc-canvas);
     }
   }
 }
