@@ -19,6 +19,7 @@ import salonFryzjerski from "../images/blog/salon-fryzjerski.jpg";
 import gastronomiaVat from "../images/blog/gastronomia-stawki-vat.jpg";
 import spisZNatury from "../images/blog/spis-z-natury.jpg";
 import zamkniecieChecklista from "../images/blog/zamkniecie-roku-checklista.jpg";
+import wigiliaFirmowa from "../images/blog/wigilia-firmowa-koszt-vat.jpg";
 
 
 // Indeks wpisow: pietnascie ostatnich artykulow z biurodgc.pl/porady/
@@ -42,13 +43,13 @@ const blogs = [
         title2: 'Impreza integracyjna i wigilia firmowa – koszt i VAT',
         tag: 'VAT',
         slug: 'wigilia-firmowa-koszt-vat',
-        screens: okladka,
+        screens: wigiliaFirmowa,
         description: 'Wigilia firmowa to koszt podatkowy, ale VAT z faktury za gastronomię nie podlega odliczeniu. Sprawdź, co zmieniają kontrahenci na imprezie.',
         author: 'DGC Biuro Rachunkowe',
         create_at: '28 października 2026',
         archiveMonth: '2026-10',
         archiveLabel: 'Październik 2026',
-        blogSingleImg: okladka,
+        blogSingleImg: wigiliaFirmowa,
         blClass: 'format-standard-image',
         animation: '1200',
     },
