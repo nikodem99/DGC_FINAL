@@ -1,5 +1,6 @@
 import React from 'react';
 import Licznik from '../Licznik/Licznik';
+import { latNaRynku } from '../../seo/firma.js';
 
 // image
 // Zdjecie prezes poza paczka Vite, zeby panel mogl je podmienic.
@@ -24,7 +25,7 @@ const about = (props) => {
                                             <i className="flaticon-cup"></i>
                                         </div>
                                         <div className="text">
-                                        <h2><Licznik ile={15} /></h2>
+                                        <h2><Licznik ile={latNaRynku()} /></h2>
                                             <p>Lat na rynku</p>
                                         </div>
                                     </div>

@@ -18,6 +18,22 @@
 
 import { KONTAKT } from '../api/kontakt.js';
 
+// Rok zalozenia DGC. Jedno zrodlo prawdy dla calego serwisu.
+export const ROK_ZALOZENIA = 2011;
+
+// Staz firmy w latach. Liczymy go z roku zalozenia, zamiast wpisywac liczbe
+// recznie — wpisana recznie zdezaktualizowala by sie 1 stycznia, i to w dwoch
+// miejscach naraz: src/components/about/about.jsx i
+// src/components/FunFact/FunFact.jsx. Oba mialy wpisane "15".
+//
+// Co to daje, a czego nie: w przegladarce liczba jest zawsze aktualna, bo
+// aplikacja montuje sie przez createRoot i przerysowuje cala strone od nowa
+// (patrz komentarz w src/main.jsx). W prerenderowanym HTML-u siedzi wartosc
+// z chwili budowania, wiec robot wyszukiwarki i ktos bez JavaScriptu zobacza
+// ja az do najblizszego przebudowania paczki. To i tak lepiej niz dzis, bo
+// teraz liczba nie poprawia sie nigdzie i nigdy.
+export const latNaRynku = () => new Date().getFullYear() - ROK_ZALOZENIA;
+
 export const DANE_FIRMY = {
     '@context': 'https://schema.org',
     '@type': 'AccountingService',
@@ -51,7 +67,7 @@ export const DANE_FIRMY = {
         { '@type': 'PropertyValue', propertyID: 'KRS', value: '0000384095' },
         { '@type': 'PropertyValue', propertyID: 'REGON', value: '101073765' },
     ],
-    foundingDate: '2011',
+    foundingDate: String(ROK_ZALOZENIA),
     // Godziny z src/api/kontakt.js. To dostepnosc telefoniczna, ktora dla
     // schema.org jest wlasciwym znaczeniem openingHours przy uslugach zdalnych.
     openingHoursSpecification: [
