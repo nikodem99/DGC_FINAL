@@ -9,6 +9,12 @@
 // tytuly rozrozniane rokiem. Powod w naglowku skryptu.
 
 export const WPISY = {
+    'wigilia-firmowa-koszt-vat': {
+        tytul: 'Impreza integracyjna i wigilia firmowa – koszt i VAT · DGC',
+        opis: 'Wigilia firmowa to koszt podatkowy, ale VAT z faktury za gastronomię nie podlega odliczeniu. Sprawdź, co zmieniają kontrahenci na imprezie.',
+        data: '2026-10-28',
+        nazwa: 'Impreza integracyjna i wigilia firmowa – koszt i VAT',
+    },
     'biala-lista-vat': {
         tytul: 'Biała lista podatników VAT – sprawdzaj przed przelewem · DGC',
         opis: 'Przelew powyżej 15 000 zł na rachunek spoza białej listy to utrata kosztu i ryzyko odpowiedzialności za VAT kontrahenta. Sprawdź, co ratuje ZAW-NR.',

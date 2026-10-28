@@ -37,6 +37,22 @@ import zamkniecieChecklista from "../images/blog/zamkniecie-roku-checklista.jpg"
 
 const blogs = [
     {
+        id: '26',
+        title: 'Impreza integracyjna i wigilia firmowa – koszt i VAT',
+        title2: 'Impreza integracyjna i wigilia firmowa – koszt i VAT',
+        tag: 'VAT',
+        slug: 'wigilia-firmowa-koszt-vat',
+        screens: okladka,
+        description: 'Wigilia firmowa to koszt podatkowy, ale VAT z faktury za gastronomię nie podlega odliczeniu. Sprawdź, co zmieniają kontrahenci na imprezie.',
+        author: 'DGC Biuro Rachunkowe',
+        create_at: '28 października 2026',
+        archiveMonth: '2026-10',
+        archiveLabel: 'Październik 2026',
+        blogSingleImg: okladka,
+        blClass: 'format-standard-image',
+        animation: '1200',
+    },
+    {
         id: '25',
         title: 'Biała lista podatników VAT – sprawdzaj przed przelewem',
         title2: 'Biała lista podatników VAT – sprawdzaj przed przelewem',

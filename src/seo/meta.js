@@ -91,6 +91,10 @@ const STRONY = {
         tytul: 'Usługi kadrowo-płacowe · outsourcing kadr i płac · DGC',
         opis: 'Outsourcing kadr i płac dla firm z Łodzi i całej Polski, także online. ZUS, wynagrodzenia, umowy, PFRON i GUS oraz indywidualna wycena obsługi.',
     },
+    '/porady/wigilia-firmowa-koszt-vat': {
+        tytul: 'Wigilia firmowa i integracja: koszt i VAT · DGC',
+        opis: 'Wigilia firmowa to koszt podatkowy, ale VAT z faktury za gastronomię nie podlega odliczeniu. Sprawdź, co zmieniają kontrahenci na imprezie.',
+    },
     '/porady/biala-lista-vat': {
         tytul: 'Biała lista VAT: sprawdzaj przed przelewem · DGC',
         opis: 'Przelew powyżej 15 000 zł na rachunek spoza białej listy to utrata kosztu i ryzyko odpowiedzialności za VAT kontrahenta. Sprawdź, co ratuje ZAW-NR.',
