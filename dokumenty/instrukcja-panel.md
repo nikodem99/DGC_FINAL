@@ -40,8 +40,44 @@ dowie, a nie zapowiadał, że „w artykule omówimy".
 **Zdjęcie** — nieobowiązkowe. Jeśli nic nie wybierzecie, artykuł dostanie
 okładkę z logo DGC, taką samą jak większość pozostałych.
 
-Na końcu **Zapisz i opublikuj**. Artykuł jest na stronie od razu, nie trzeba
-niczego zatwierdzać.
+Na końcu są dwa przyciski i warto znać różnicę.
+
+**Zapisz i opublikuj** — artykuł idzie na stronę natychmiast. Pojawia się
+na liście porad, w mapie strony i z czasem w Google.
+
+**Zapisz szkic** — artykuł zostaje odłożony. **Nie ma go na stronie**: nie
+widać go na liście porad, nie ma go w mapie strony, Google go nie znajdzie.
+Czeka, aż ktoś naciśnie przy nim **Publikuj**.
+
+---
+
+## Szkice, czyli teksty przygotowane na później
+
+Zakładka **Szkice** w górnym pasku. Liczba przy nazwie mówi, ile ich czeka.
+
+Do czego to służy: można napisać kilka artykułów naraz — na przykład cały
+grudzień — i wypuszczać je pojedynczo w wybranych dniach. Tekst jest gotowy
+i sprawdzony, a na stronę wchodzi dopiero wtedy, kiedy chcecie.
+
+Przy każdym szkicu są trzy przyciski:
+
+- **Edytuj** — otwiera go z powrotem do poprawek.
+- **Publikuj** — wystawia na stronę. Panel pyta o potwierdzenie, bo tego
+  kliknięcia nie da się cofnąć jednym ruchem.
+- **Usuń** — kasuje szkic. Też pyta o potwierdzenie.
+
+**Pole „Data publikacji" w szkicu to tylko notatka dla Was.** Nic nie odpala
+się samo o północy. Jeśli data już minęła, na liście szkiców pojawia się
+dopisek „termin minął" — to przypomnienie, nie automat. Artykuł wchodzi
+wyłącznie po naciśnięciu **Publikuj**.
+
+Szkic wolno zapisać niedokończony — wystarczy tytuł, po którym go odnajdziecie.
+Reszta pól sprawdzana jest dopiero przy publikacji.
+
+Jedna uwaga: zdjęcie wgrane do szkicu leży już na serwerze, pod adresem
+z losową nazwą. Nikt go nie znajdzie przypadkiem i nie ma go nigdzie na
+stronie, ale nie jest to sejf — jeśli grafika jest naprawdę poufna, wgrajcie
+ją dopiero przy publikacji.
 
 ---
 

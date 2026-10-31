@@ -32,6 +32,9 @@ const Tekst = ({ x }) => {
     );
 };
 
+// Czy to okladka zastepcza (znak firmowy), a nie zdjecie artykulu.
+const zastepcza = (adres) => String(adres || '').includes('okladka-dgc');
+
 // Jeden blok tresci. Typy opisane w api/tresci.js.
 const Blok = ({ blok }) => {
     if (blok.t === 'h') return <h3>{blok.x}</h3>;
@@ -138,7 +141,15 @@ const BlogSingle = (props) => {
                         <div className="dgc-blog-content">
                             <article className="post format-standard-image">
                                 <div className="entry-media">
-                                    <img src={wpis.blogSingleImg} alt="" />
+                                    {/* Okladka zastepcza to sam znak firmowy, czyli ozdoba —
+                                        dostaje puste alt, zeby czytnik ekranu jej nie czytal.
+                                        Wlasna okladka ma tytul WYPALONY w grafice, wiec alt
+                                        musi ten tytul powtorzyc: inaczej jedyna tresc obrazka
+                                        przepada dla czytnika i dla Google. */}
+                                    <img
+                                        src={wpis.blogSingleImg}
+                                        alt={zastepcza(wpis.blogSingleImg) ? '' : wpis.title}
+                                    />
                                 </div>
                                 <div className="entry-meta">
                                     <ul>

@@ -184,9 +184,35 @@ też pierwszego poziomu, i właśnie tam lądują podrzucone skrypty.
 Ta blokada jest też głównym zabezpieczeniem wgrywania zdjęć — plik `.php`
 przemycony jako obrazek nie ma jak się wykonać.
 
-**Przy każdej nowej paczce** rozpakuje się katalog `panel-dgc`, bo build nie
-zna nazwy wybranej przez właściciela. Trzeba przenieść z niego trzy pliki do
-właściwego katalogu i skasować resztę.
+Build produkuje katalog `dist/panel-dgc`, bo nie zna nazwy wybranej przez
+właściciela. **Paczki wydawane klientowi pakujemy z wykluczeniem tego
+katalogu** (`zip -x 'panel-dgc/*' -x 'panel-dgc'`), żeby nie nadpisać panelu
+stojącego na serwerze. Gdy panel faktycznie się zmienia, wgrywa się osobno
+`index.php` i `generator.php` do katalogu o właściwej nazwie.
+
+### Szkice
+
+`szkice.json` **w katalogu panelu**, nie w `dane/`. To nie jest kosmetyka:
+`dane/` jest publiczne (`dane/wpisy.json` zwraca 200 każdemu), a `.htaccess`
+panelu odmawia dostępu do wszystkiego, co kończy się na `.json`. Nieopublikowany
+tekst nie ma prawa wisieć pod zgadywalnym adresem.
+
+Szkic trzyma komplet pól formularza plus surowy tekst treści — nie bloki.
+Zamiana na bloki następuje dopiero przy publikacji, tą samą funkcją
+`blokiZTekstu()`, co przy zwykłym zapisie.
+
+**Publikacja szkicu nie ma własnej ścieżki.** `opublikujSzkic()` przekłada pola
+do `$_POST` i woła `zapiszWpis()` — dokładnie tę funkcję, która obsługuje zwykły
+zapis. Dzięki temu szkic przechodzi tę samą kontrolę pól, tak samo powstaje
+strona, tak samo odświeżają się sąsiedzi, listy i mapa strony. Druga ścieżka
+publikacji prędzej czy później rozjechałaby się z pierwszą.
+
+Plik `szkice.json` powstaje na serwerze i **nie ma go w repozytorium**. Wgrywanie
+samego `index.php` i `generator.php` go nie rusza. Kasowanie całego katalogu
+panelu — owszem, skasuje też nieopublikowane teksty.
+
+Data w szkicu to **notatka, nie wyzwalacz**. Nic nie publikuje się samo;
+automatyczne odpalanie o godzinie wymagałoby zadania cron na hostingu.
 
 ---
 
@@ -216,6 +242,26 @@ się nie stanie: poczta leci niezależnie.
 Jeśli kiedykolwiek pojawi się podejrzenie, że formularz przestał działać,
 pierwsze, co trzeba sprawdzić, to `nadaj.php?test=dgc-sprawdzam`. Nic nie
 wysyła, zwraca JSON ze stanem środowiska (`poczta`, `mbstring`, `licznik`).
+
+---
+
+## Karta społecznościowa artykułu
+
+`og:image` i `twitter:image` dla `/porady/<slug>/` biorą **okładkę wpisu**, nie
+wizytówkę serwisu — ale tylko wtedy, gdy okładka jest rastrowa. 372 z 384
+artykułów stoi na zastępczym `okladka-dgc.svg`, a Facebook SVG w `og:image`
+nie renderuje: pokazałby pustą ramkę. Te wpisy zostają przy `/og-dgc.jpg`.
+Sprawdzenie jest w `src/main.jsx`, funkcja `rastrowa()`.
+
+Okładki robimy w **1200×628**, czyli dokładnie w formacie karty, z tytułem
+wypalonym w grafice. Dlatego `alt` zdjęcia wiodącego powtarza tytuł artykułu —
+inaczej jedyna treść obrazka przepada dla czytnika ekranu i dla Google.
+Okładka zastępcza to sam znak firmowy, czyli ozdoba, i dostaje puste `alt`.
+
+Ten warunek stoi w **trzech miejscach naraz** i muszą się zgadzać:
+`BlogSingle.jsx` (React), `scripts/szablon.mjs` (znacznik `@@OBRAZEK_ALT@@`)
+i `generator.php` (podstawienie dla panelu). Rozjazd złapie kontrola
+„Panel zna wszystkie pola szablonów" przy budowaniu.
 
 ---
 

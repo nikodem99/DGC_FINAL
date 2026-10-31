@@ -143,6 +143,41 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'z
     }
 }
 
+// --- szkice -------------------------------------------------------------
+// Szkic to artykul zapisany, ale jeszcze niewidoczny na stronie. Lezy poza
+// dane/wpisy.json, wiec nie wchodzi ani na liste porad, ani do mapy strony,
+// ani do podpowiedzi. Publikacja to osobne, swiadome klikniecie.
+
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'szkic') {
+    if (!sprawdzToken()) {
+        $blad = 'Sesja wygasła. Odśwież stronę i spróbuj ponownie.';
+    } else {
+        [$blad, $komunikat] = zapiszSzkic();
+        if ($blad === '') $akcja = 'szkice';
+    }
+}
+
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'publikuj-szkic') {
+    if (!sprawdzToken()) {
+        $blad = 'Sesja wygasła. Odśwież stronę i spróbuj ponownie.';
+    } else {
+        [$blad, $komunikat, $wpisy] = opublikujSzkic((string)($_POST['id'] ?? ''), $wpisy);
+        $akcja = $blad === '' ? 'lista' : 'szkice';
+    }
+}
+
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'usun-szkic') {
+    if (!sprawdzToken()) {
+        $blad = 'Sesja wygasła. Odśwież stronę i spróbuj ponownie.';
+    } else {
+        $id = (string)($_POST['id'] ?? '');
+        $szkice = array_values(array_filter(wczytajSzkice(), static fn($sz) => ($sz['id'] ?? '') !== $id));
+        $komunikat = zapiszSzkice($szkice) ? 'Szkic usunięty.' : '';
+        if ($komunikat === '') $blad = 'Nie udało się usunąć szkicu.';
+        $akcja = 'szkice';
+    }
+}
+
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'zapisz-cennik') {
     if (!sprawdzToken()) {
         $blad = 'Sesja wygasła. Odśwież stronę i spróbuj ponownie.';
@@ -219,6 +254,18 @@ if ($akcja === 'faq') {
     exit;
 }
 
+if ($akcja === 'szkice') {
+    widokSzkicow(wczytajSzkice(), $komunikat, $blad);
+    exit;
+}
+
+if ($akcja === 'edytuj-szkic') {
+    $sz = szkicPoId(wczytajSzkice(), (string)($_GET['id'] ?? ''));
+    if (!$sz) { $blad = 'Nie ma takiego szkicu.'; widokSzkicow(wczytajSzkice(), '', $blad); exit; }
+    widokFormularza(null, (string)($sz['tresc'] ?? ''), $blad, $sz);
+    exit;
+}
+
 if ($akcja === 'nowy' || $akcja === 'edytuj') {
     $slug = (string)($_GET['slug'] ?? '');
     $wpis = null;
@@ -234,6 +281,80 @@ widokListy($wpisy, $komunikat, $blad);
 // =======================================================================
 //  ZAPIS
 // =======================================================================
+
+/**
+ * Zapis szkicu. Celowo LAGODNIEJSZY niz zapiszWpis(): szkic wolno zostawic
+ * niedokonczony, bo po to jest. Pelna kontrola pol odpala sie dopiero przy
+ * publikacji — i to ta sama, co przy zwyklym zapisie artykulu.
+ */
+function zapiszSzkic(): array {
+    $tytul = trim((string)($_POST['tytul'] ?? ''));
+    if ($tytul === '') return ['Szkic musi mieć tytuł — po nim go odnajdziesz.', ''];
+    if (mb_strlen($tytul) > 160) return ['Tytuł jest za długi (maksimum 160 znaków).', ''];
+
+    $szkice = wczytajSzkice();
+    $id = (string)($_POST['szkic_id'] ?? '');
+    $stary = $id !== '' ? szkicPoId($szkice, $id) : null;
+
+    // Zdjecie: nowe wgrane albo to, ktore szkic juz mial.
+    $bladZdjecia = null;
+    $wgrane = isset($_FILES['zdjecie']) ? zapiszObrazek($_FILES['zdjecie'], $bladZdjecia) : null;
+    if ($bladZdjecia !== null) return [$bladZdjecia, ''];
+    $obrazek = $wgrane ?: (string)($_POST['obrazek_biezacy'] ?? ($stary['obrazek'] ?? ''));
+
+    $nowy = [
+        'id'        => $id !== '' ? $id : bin2hex(random_bytes(8)),
+        'title'     => $tytul,
+        'tag'       => in_array((string)($_POST['tag'] ?? ''), KATEGORIE, true) ? (string)$_POST['tag'] : KATEGORIE[0],
+        'opis'      => trim((string)($_POST['opis'] ?? '')),
+        'data'      => (string)($_POST['data'] ?? ''),
+        'tresc'     => (string)($_POST['tresc'] ?? ''),
+        'obrazek'   => $obrazek,
+        'zmieniony' => date('Y-m-d H:i'),
+    ];
+
+    if ($stary) {
+        foreach ($szkice as $i => $sz) if (($sz['id'] ?? '') === $id) { $szkice[$i] = $nowy; break; }
+    } else {
+        array_unshift($szkice, $nowy);
+    }
+
+    if (!zapiszSzkice($szkice)) return ['Nie udało się zapisać szkicu.', ''];
+    return ['', 'Szkic zapisany. Nie ma go jeszcze na stronie — opublikujesz go przyciskiem.'];
+}
+
+/**
+ * Publikacja szkicu.
+ *
+ * Nie powielamy tu logiki publikowania. Przekladamy pola szkicu do $_POST
+ * i wolamy zapiszWpis() — dokladnie te sama funkcje, ktora obsluguje zwykly
+ * zapis. Dzieki temu szkic przechodzi ta sama kontrole pol, tak samo powstaje
+ * strona, tak samo odswiezaja sie sasiedzi, listy i mapa strony. Gdyby byla
+ * tu druga sciezka publikacji, predzej czy pozniej rozjechalaby sie z tamta.
+ */
+function opublikujSzkic(string $id, array $wpisy): array {
+    $szkice = wczytajSzkice();
+    $sz = szkicPoId($szkice, $id);
+    if (!$sz) return ['Nie ma takiego szkicu.', '', $wpisy];
+
+    $_POST['tytul']            = (string)($sz['title'] ?? '');
+    $_POST['tag']              = (string)($sz['tag'] ?? '');
+    $_POST['opis']             = (string)($sz['opis'] ?? '');
+    $_POST['data']             = (string)($sz['data'] ?? '');
+    $_POST['tresc']            = (string)($sz['tresc'] ?? '');
+    $_POST['slug_stary']       = '';
+    $_POST['obrazek_biezacy']  = (string)($sz['obrazek'] ?? '');
+    $_FILES = [];  // zdjecie szkic ma juz wgrane, nic nie przychodzi formularzem
+
+    [$blad, $komunikat, $wpisy] = zapiszWpis($wpisy);
+    if ($blad !== '') return [$blad, '', $wpisy];
+
+    // Dopiero gdy artykul naprawde stanal — kasujemy szkic.
+    $szkice = array_values(array_filter($szkice, static fn($x) => ($x['id'] ?? '') !== $id));
+    zapiszSzkice($szkice);
+
+    return ['', 'Opublikowane. ' . $komunikat, $wpisy];
+}
 
 function zapiszWpis(array $wpisy): array {
     $tytul = trim((string)($_POST['tytul'] ?? ''));
@@ -461,8 +582,10 @@ function widokLogowania(string $blad): void {
 function widokListy(array $wpisy, string $komunikat, string $blad): void {
     naglowek('Artykuły');
     $szukaj = trim((string)($_GET['szukaj'] ?? ''));
+    $ileSzkicow = count(wczytajSzkice());
     echo '<div class="pas"><strong>Panel DGC</strong><span>'
         . '<a href="?akcja=nowy">Nowy artykuł</a> &nbsp;·&nbsp; '
+        . '<a href="?akcja=szkice">Szkice' . ($ileSzkicow ? ' (' . $ileSzkicow . ')' : '') . '</a> &nbsp;·&nbsp; '
         . '<a href="?akcja=cennik">Cennik</a> &nbsp;·&nbsp; '
         . '<a href="?akcja=faq">Pytania</a> &nbsp;·&nbsp; '
         . '<a href="?akcja=konsultacje">Konsultacja</a> &nbsp;·&nbsp; '
@@ -498,42 +621,139 @@ function widokListy(array $wpisy, string $komunikat, string $blad): void {
     stopka();
 }
 
-function widokFormularza(?array $wpis, string $tresc, string $blad): void {
+function widokSzkicow(array $szkice, string $komunikat, string $blad): void {
+    naglowek('Szkice');
+    echo '<div class="pas"><strong>Panel DGC</strong><span>'
+        . '<a href="?">Artykuły</a> &nbsp;·&nbsp; '
+        . '<a href="?akcja=nowy">Nowy artykuł</a> &nbsp;·&nbsp; '
+        . '<a href="?akcja=wyloguj">Wyloguj</a></span></div>';
+    echo '<div class="srodek">';
+    if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
+    if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
+    echo '<h1>Szkice <span class="male">(' . count($szkice) . ')</span></h1>';
+    echo '<p class="male">Teksty zapisane, ale jeszcze niewidoczne na stronie.'
+        . ' Nie ma ich ani na liście porad, ani w mapie strony, ani w Google.'
+        . ' Wchodzą dopiero po kliknięciu „Publikuj".</p>';
+
+    if (!$szkice) {
+        echo '<p style="margin-top:20px">Nie ma żadnych szkiców.'
+            . ' <a href="?akcja=nowy">Napisz artykuł</a> i zapisz go przyciskiem „Zapisz szkic".</p>';
+        echo '</div>';
+        stopka();
+        return;
+    }
+
+    echo '<table><tr><th>Tytuł</th><th>Kategoria</th><th>Na kiedy</th><th>Zmieniony</th><th></th></tr>';
+    foreach ($szkice as $sz) {
+        $id = h((string)($sz['id'] ?? ''));
+        $kiedy = (string)($sz['data'] ?? '');
+        // Data w szkicu to PLAN, nie publikacja. Nic nie odpala sie samo.
+        $opisKiedy = $kiedy !== '' ? h($kiedy) : '<span class="male">bez daty</span>';
+        if ($kiedy !== '' && $kiedy <= date('Y-m-d')) {
+            $opisKiedy = '<strong>' . h($kiedy) . '</strong> <span class="male">— termin minął</span>';
+        }
+        echo '<tr><td>' . h((string)($sz['title'] ?? '')) . '</td>'
+            . '<td class="male">' . h((string)($sz['tag'] ?? '')) . '</td>'
+            . '<td class="male">' . $opisKiedy . '</td>'
+            . '<td class="male">' . h((string)($sz['zmieniony'] ?? '')) . '</td>'
+            . '<td>'
+            . '<a href="?akcja=edytuj-szkic&amp;id=' . $id . '">Edytuj</a> &nbsp; '
+            . '<form method="post" style="display:inline" onsubmit="return confirm(\'Opublikować ten artykuł na stronie?\')">'
+            . '<input type="hidden" name="co" value="publikuj-szkic">'
+            . '<input type="hidden" name="token" value="' . h(token()) . '">'
+            . '<input type="hidden" name="id" value="' . $id . '">'
+            . '<button class="przycisk akcent" type="submit">Publikuj</button></form> &nbsp; '
+            . '<form method="post" style="display:inline" onsubmit="return confirm(\'Usunąć szkic? Tego nie da się cofnąć.\')">'
+            . '<input type="hidden" name="co" value="usun-szkic">'
+            . '<input type="hidden" name="token" value="' . h(token()) . '">'
+            . '<input type="hidden" name="id" value="' . $id . '">'
+            . '<button class="przycisk lekki" type="submit">Usuń</button></form>'
+            . '</td></tr>';
+    }
+    echo '</table>';
+    echo '</div>';
+    stopka();
+}
+
+function widokFormularza(?array $wpis, string $tresc, string $blad, ?array $szkic = null): void {
     $nowy = $wpis === null;
-    naglowek($nowy ? 'Nowy artykuł' : 'Edycja');
-    echo '<div class="pas"><strong>Panel DGC</strong><span><a href="?">Wróć do listy</a> &nbsp;·&nbsp; <a href="?akcja=wyloguj">Wyloguj</a></span></div>';
+
+    // Jedno zrodlo wartosci dla pol. Formularz obsluguje trzy stany: nowy
+    // artykul (pusto), edycje opublikowanego ($wpis) i edycje szkicu
+    // ($szkic). Bez tego kazde pole musialoby pytac o stan osobno.
+    $pole = [
+        'title'   => $szkic['title']   ?? $wpis['title']       ?? '',
+        'tag'     => $szkic['tag']     ?? $wpis['tag']         ?? '',
+        'opis'    => $szkic['opis']    ?? $wpis['description'] ?? '',
+        'obrazek' => $szkic['obrazek'] ?? $wpis['obrazek']     ?? '',
+    ];
+
+    // Zapis sie nie udal — pokazujemy to, co biuro WPISALO, a nie to, co
+    // lezy w pliku.
+    //
+    // Bez tego jedno puste pole kasowalo caly napisany artykul: formularz
+    // wracal z komunikatem o bledzie, ale pola odtwarzal ze zrodla, czyli
+    // przy nowym wpisie PUSTE. Ktos pisal tekst pol godziny, zapominal
+    // opisu i zostawal z czysta kartka. Tu kazdy POST oznacza blad, bo
+    // udany zapis konczy sie przekierowaniem na liste.
+    $zPosta = $blad !== '' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST';
+    if ($zPosta) {
+        $pole['title']   = (string)($_POST['tytul'] ?? $pole['title']);
+        $pole['tag']     = (string)($_POST['tag'] ?? $pole['tag']);
+        $pole['opis']    = (string)($_POST['opis'] ?? $pole['opis']);
+        $pole['obrazek'] = (string)($_POST['obrazek_biezacy'] ?? $pole['obrazek']);
+        $tresc           = (string)($_POST['tresc'] ?? $tresc);
+    }
+
+    $tytulEkranu = $szkic ? 'Szkic' : ($nowy ? 'Nowy artykuł' : 'Edycja artykułu');
+    naglowek($tytulEkranu);
+    echo '<div class="pas"><strong>Panel DGC</strong><span>'
+        . '<a href="?">Wróć do listy</a> &nbsp;·&nbsp; '
+        . '<a href="?akcja=szkice">Szkice</a> &nbsp;·&nbsp; '
+        . '<a href="?akcja=wyloguj">Wyloguj</a></span></div>';
     echo '<div class="srodek">';
     if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
-    echo '<h1>' . ($nowy ? 'Nowy artykuł' : 'Edycja artykułu') . '</h1>';
+    echo '<h1>' . h($tytulEkranu) . '</h1>';
+    if ($szkic) {
+        echo '<p class="male" style="margin:-6px 0 14px">Ten tekst nie jest jeszcze na stronie.'
+            . ' „Zapisz szkic" odkłada go na później, „Zapisz i opublikuj" wystawia go od razu.</p>';
+    }
 
-    echo '<form method="post" enctype="multipart/form-data"><input type="hidden" name="co" value="zapisz">';
+    echo '<form method="post" enctype="multipart/form-data">';
     echo '<input type="hidden" name="token" value="' . h(token()) . '">';
     echo '<input type="hidden" name="slug_stary" value="' . h($wpis['slug'] ?? '') . '">';
-    echo '<input type="hidden" name="obrazek_biezacy" value="' . h($wpis['obrazek'] ?? '') . '">';
+    echo '<input type="hidden" name="obrazek_biezacy" value="' . h($pole['obrazek']) . '">';
+    echo '<input type="hidden" name="szkic_id" value="' . h($szkic['id'] ?? (string)($_POST['szkic_id'] ?? '')) . '">';
 
     echo '<label for="tytul">Tytuł</label>';
-    echo '<input id="tytul" type="text" name="tytul" maxlength="160" required value="' . h($wpis['title'] ?? '') . '">';
+    echo '<input id="tytul" type="text" name="tytul" maxlength="160" required value="' . h($pole['title']) . '">';
 
     echo '<div class="rzad">';
     echo '<div><label for="tag">Kategoria</label><select id="tag" name="tag">';
     foreach (KATEGORIE as $k) {
-        $wyb = ($wpis['tag'] ?? '') === $k ? ' selected' : '';
+        $wyb = $pole['tag'] === $k ? ' selected' : '';
         echo '<option' . $wyb . '>' . h($k) . '</option>';
     }
     echo '</select></div>';
 
     $dataIso = date('Y-m-d');
+    if ($szkic && preg_match('/^\d{4}-\d{2}-\d{2}$/', (string)($szkic['data'] ?? ''))) {
+        $dataIso = (string)$szkic['data'];
+    }
     if ($wpis && preg_match('/^(\d{4})-(\d{2})$/', $wpis['archiveMonth'] ?? '', $m)) {
         if (preg_match('/^(\d{1,2})\s/', $wpis['create_at'] ?? '', $d)) {
             $dataIso = sprintf('%s-%s-%02d', $m[1], $m[2], (int)$d[1]);
         }
+    }
+    if ($zPosta && preg_match('/^\d{4}-\d{2}-\d{2}$/', (string)($_POST['data'] ?? ''))) {
+        $dataIso = (string)$_POST['data'];
     }
     echo '<div><label for="data">Data publikacji</label><input id="data" type="date" name="data" value="' . h($dataIso) . '"></div>';
     echo '</div>';
 
     echo '<label for="opis">Krótki opis</label>';
     echo '<p class="male" style="margin:-2px 0 6px">Dwa, trzy zdania. Pokazuje się na liście artykułów i w wynikach Google.</p>';
-    echo '<textarea id="opis" name="opis" style="min-height:90px;font-family:inherit;font-size:16px" maxlength="400" required>' . h($wpis['description'] ?? '') . '</textarea>';
+    echo '<textarea id="opis" name="opis" style="min-height:90px;font-family:inherit;font-size:16px" maxlength="400">' . h($pole['opis']) . '</textarea>';
 
     echo '<label for="tresc">Treść</label>';
     echo '<div class="pomoc" style="margin-bottom:10px">'
@@ -549,7 +769,7 @@ function widokFormularza(?array $wpis, string $tresc, string $blad): void {
     echo '<textarea id="tresc" name="tresc" required>' . h($tresc) . '</textarea>';
 
     echo '<label for="zdjecie">Zdjęcie artykułu</label>';
-    $biezace = $wpis['obrazek'] ?? '';
+    $biezace = $pole['obrazek'];
     if ($biezace !== '') {
         echo '<p class="male" style="margin:-2px 0 8px">Teraz jest ustawione to zdjęcie. Zostanie, jeśli nie wybierzesz nowego.</p>';
         echo '<img src="' . h($biezace) . '" alt="" style="max-width:280px;border-radius:8px;border:1px solid var(--linia);display:block;margin-bottom:10px">';
@@ -559,8 +779,15 @@ function widokFormularza(?array $wpis, string $tresc, string $blad): void {
     echo '<input id="zdjecie" type="file" name="zdjecie" accept="image/jpeg,image/png,image/webp">';
     echo '<p class="male">JPG, PNG albo WEBP, do 5 MB. Najlepiej poziome, mniej więcej dwa razy szersze niż wyższe. Większe zdjęcia zmniejszamy automatycznie.</p>';
 
-    echo '<p style="margin-top:22px"><button class="przycisk akcent" type="submit">Zapisz i opublikuj</button> '
+    // Kolejnosc ma znaczenie: Enter w polu jednoliniowym wysyla formularz
+    // PIERWSZYM przyciskiem. "Zapisz i opublikuj" stoi pierwszy, bo tak
+    // dziala panel od poczatku — przestawienie zmienialoby po cichu skutek
+    // odruchu, ktory biuro juz ma w palcach.
+    echo '<p style="margin-top:22px">'
+        . '<button class="przycisk akcent" type="submit" name="co" value="zapisz">Zapisz i opublikuj</button> '
+        . '<button class="przycisk lekki" type="submit" name="co" value="szkic" formnovalidate>Zapisz szkic</button> '
         . '<a class="przycisk lekki" href="?">Anuluj</a></p>';
+    echo '<p class="male">Szkic możesz zapisać niedokończony — pełna kontrola pól włącza się dopiero przy publikacji.</p>';
     echo '</form></div>';
     stopka();
 }

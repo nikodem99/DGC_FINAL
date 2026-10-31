@@ -95,7 +95,7 @@ podmien(
     'obrazek',
     /<div class="entry-media"><img[^>]*><\/div>/,
     '<div class="entry-media"><img width="@@OBRAZEK_W@@" height="@@OBRAZEK_H@@"'
-    + ' decoding="async" src="@@OBRAZEK@@" alt=""></div>'
+    + ' decoding="async" src="@@OBRAZEK@@" alt="@@OBRAZEK_ALT@@"></div>'
 );
 
 podmien(
@@ -128,7 +128,7 @@ podmien('sasiedzi', /<div class="more-posts">[\s\S]*?<\/div><\/div><\/div>/, '@@
 
 const ZNACZNIKI = [
     '@@TYTUL_STRONY@@', '@@OPIS@@', '@@KANONICZNY@@', '@@SLUG@@', '@@ZIARNO@@',
-    '@@TYTUL@@', '@@OBRAZEK@@', '@@OBRAZEK_W@@', '@@OBRAZEK_H@@', '@@AUTOR@@', '@@DATA@@', '@@TAG@@', '@@TRESC@@', '@@SASIEDZI@@', '@@PODOBNE@@',
+    '@@TYTUL@@', '@@OBRAZEK@@', '@@OBRAZEK_ALT@@', '@@OBRAZEK_W@@', '@@OBRAZEK_H@@', '@@AUTOR@@', '@@DATA@@', '@@TAG@@', '@@TRESC@@', '@@SASIEDZI@@', '@@PODOBNE@@',
     '@@SCHEMAT@@',
 ];
 for (const z of ZNACZNIKI) {

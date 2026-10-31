@@ -80,7 +80,17 @@ export async function prerender(data) {
     const sciezka = new URL(data.url, DOMENA).pathname;
     const m = metaDla(sciezka);
     const obrazek_domyslny = `${DOMENA}/og-dgc.jpg`;
-    const obrazek = obrazek_domyslny;
+
+    // Karta spolecznosciowa artykulu: wlasna okladka wpisu, nie wizytowka
+    // serwisu. Okladki robimy w 1200x628, czyli dokladnie w formacie karty,
+    // a tytul jest w nie wypalony — wiec na Facebooku i LinkedInie niesie
+    // wiecej niz samo logo.
+    //
+    // ALE tylko gdy okladka jest rastrowa. 372 z 384 artykulow stoi na
+    // zastepczym okladka-dgc.svg, a Facebook SVG w og:image nie renderuje
+    // (pokazalby pusta ramke). Te wpisy zostaja przy wizytowce.
+    const rastrowa = (adres) => /\.(jpe?g|png|webp)$/i.test(adres || '');
+    let obrazek = obrazek_domyslny;
 
     // Strona artykulu: tresc czytamy z dysku i wkladamy do pamieci PRZED
     // renderowaniem, bo renderToString jest synchroniczne i nie zaczekaloby
@@ -95,6 +105,12 @@ export async function prerender(data) {
         try {
             const bloki = await wczytaj(slugWpisu);
             ziarno = { slug: slugWpisu, bloki };
+
+            const { default: blogs } = await import('./api/blogs.js');
+            const wpis = blogs.find((b) => b.slug === slugWpisu);
+            if (wpis && rastrowa(wpis.blogSingleImg)) {
+                obrazek = new URL(wpis.blogSingleImg, DOMENA).href;
+            }
         } catch (e) {
             // Brak tresci to blad, a nie stan. Mowimy o tym glosno przy
             // budowaniu, zeby pusty artykul nie przeszedl niezauwazony.

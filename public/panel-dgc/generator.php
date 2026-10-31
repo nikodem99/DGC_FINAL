@@ -41,6 +41,12 @@ define('SZABLONY', DANE . '/szablon');
 define('PORADY', KORZEN . '/porady');
 define('DOMENA', 'https://biurodgc.pl');
 
+// Szkice lezą W KATALOGU PANELU, nie w dane/. To nie jest kosmetyka:
+// dane/ jest katalogiem publicznym (dane/wpisy.json zwraca 200 kazdemu),
+// a .htaccess panelu odmawia dostepu do wszystkiego, co konczy sie .json.
+// Nieopublikowany tekst nie ma prawa wisiec pod zgadywalnym adresem.
+define('SZKICE', __DIR__ . '/szkice.json');
+
 /** Kategorie ze starego bloga. Zamknieta lista, zeby nie powstawaly literowki. */
 const KATEGORIE = ['VAT', 'CIT', 'PIT', 'Podatki', 'Księgowość', 'Rachunkowość', 'Kadry', 'Płace'];
 
@@ -265,6 +271,26 @@ function zapiszWpisy(array $wpisy): bool {
         DANE . '/wpisy.json',
         (string)json_encode(['wersja' => count($wpisy) . '-' . time(), 'wpisy' => $wpisy], JSON_UNESCAPED_UNICODE)
     );
+}
+
+/** Szkice: artykuly zapisane, ale jeszcze nieopublikowane. */
+function wczytajSzkice(): array {
+    if (!is_file(SZKICE)) return [];
+    $d = json_decode((string)file_get_contents(SZKICE), true);
+    return is_array($d) && isset($d['szkice']) && is_array($d['szkice']) ? $d['szkice'] : [];
+}
+
+function zapiszSzkice(array $szkice): bool {
+    return zapiszAtomowo(
+        SZKICE,
+        (string)json_encode(['szkice' => $szkice], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+    );
+}
+
+/** Szkic po identyfikatorze albo null. */
+function szkicPoId(array $szkice, string $id): ?array {
+    foreach ($szkice as $sz) if (($sz['id'] ?? '') === $id) return $sz;
+    return null;
 }
 
 function wczytajTresc(string $slug): array {
@@ -777,6 +803,11 @@ function zapiszStroneArtykulu(array $wpis, array $bloki, array $wpisy, int $nr, 
         'ZIARNO'       => str_replace('<', '\\u003c', (string)json_encode($bloki, JSON_UNESCAPED_UNICODE)),
         'TYTUL'        => h($wpis['title']),
         'OBRAZEK'      => h($wpis['obrazek']),
+        // Odpowiednik zastepcza() z BlogSingle.jsx: okladka firmowa to
+        // ozdoba (puste alt), wlasna okladka ma tytul wypalony w grafice,
+        // wiec alt musi go powtorzyc.
+        'OBRAZEK_ALT'  => str_contains((string)$wpis['obrazek'], 'okladka-dgc')
+            ? '' : h((string)($wpis['title'] ?? '')),
         'OBRAZEK_W'    => (string)$wymiaryObrazka[0],
         'OBRAZEK_H'    => (string)$wymiaryObrazka[1],
         'AUTOR'        => h($wpis['author']),
