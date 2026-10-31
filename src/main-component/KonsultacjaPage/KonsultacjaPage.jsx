@@ -5,7 +5,7 @@ import Footer from '../../components/footer/Footer.jsx';
 import Scrollbar from '../../components/scrollbar/scrollbar.jsx';
 import KonsultacjaForm from '../../components/KonsultacjaForm/KonsultacjaForm.jsx';
 
-import { uzyjTresci } from '../../api/tresciStron.js';
+import { useTresci } from '../../api/tresciStron.js';
 import {
     KROKI,
 } from '../../api/konsultacje';
@@ -23,11 +23,11 @@ import logo from '../../images/logo.svg';
 // po co to jest → ile kosztuje → jak przebiega → dopiero formularz.
 
 const KonsultacjaPage = () => {
-    const KONTAKT = uzyjTresci('kontakt');
+    const KONTAKT = useTresci('kontakt');
     // Cena, czas i dwie listy sa edytowalne z panelu, wiec czytamy je tak
     // samo jak cennik — z /dane/tresc/konsultacje.json, z wersja z paczki
     // jako punktem wyjscia.
-    const k = uzyjTresci('konsultacje');
+    const k = useTresci('konsultacje');
     const CENA = { kwota: k.kwota, jednostka: k.jednostka, uwaga: k.uwaga };
     const CZAS_TRWANIA = k.czas;
     const CO_ZYSKUJESZ = k.zyskujesz;

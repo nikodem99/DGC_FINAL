@@ -1,5 +1,5 @@
 import React from 'react';
-import { uzyjTresci } from '../../api/tresciStron.js';
+import { useTresci } from '../../api/tresciStron.js';
 
 // Szablon mial tu "Available 24/7" i amerykanski numer z puli zastrzezonej
 // dla fikcji filmowej (555). DGC pracuje pon.-pt. 8:00-16:00 — obietnica
@@ -17,7 +17,7 @@ import { uzyjTresci } from '../../api/tresciStron.js';
 // Ten uklad byl juz sprawdzony: ponizej 768 px obrazka nie bylo od poczatku
 // (display: none), czyli telefony ogladaly ta wersje od dnia uruchomienia.
 const CtaSection = (props) => {
-    const KONTAKT = uzyjTresci('kontakt');
+    const KONTAKT = useTresci('kontakt');
     return (
         <section className={"" + props.tClass}>
             <div className="container">

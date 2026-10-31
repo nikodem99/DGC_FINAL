@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'
-import { uzyjWpisow } from '../../api/uzyjWpisow.js'
+import { useWpisy } from '../../api/useWpisy.js'
 
 const ClickHandler = () => {
     window.scrollTo(10, 0);
@@ -24,7 +24,7 @@ const BlogSidebar = (props) => {
     // Liczniki musza siedziec W komponencie, a nie na poziomie modulu.
     // Po dodaniu artykulu z panelu lista doczytuje sie z serwera i wtedy
     // liczby maja sie przeliczyc, a nie zostac z chwili budowania.
-    const blogs = uzyjWpisow();
+    const blogs = useWpisy();
     const kategorie = policz(blogs, 'tag', (blog) => blog.tag);
     const miesiace = policz(blogs, 'archiveMonth', (blog) => blog.archiveLabel);
 

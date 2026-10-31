@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { uzyjTresci } from '../../api/tresciStron.js';
+import { useTresci } from '../../api/tresciStron.js';
 
 
 // Sekcja przyjmuje wlasny zestaw pytan i naglowek, zeby ta sama karuzela
@@ -14,7 +14,7 @@ const FaqSection = ({
     // w panelu pojawila sie bez przebudowania strony. `items` zostaje dla
     // przyszlych zestawow (np. pytania na podstronie oferty), a `ile`
     // ogranicza liczbe pozycji — na /o-nas/ pokazujemy pierwsze szesc.
-    const zPanelu = uzyjTresci('faq');
+    const zPanelu = useTresci('faq');
     const pytania = items ?? (ile ? zPanelu.slice(0, ile) : zPanelu);
 
     const [activeIndex, setActiveIndex] = useState(null);

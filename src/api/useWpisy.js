@@ -7,7 +7,7 @@
 import { useSyncExternalStore, useEffect } from 'react';
 import { wpisy, odswiez, subskrybuj, migawka, migawkaSerwera } from './indeks.js';
 
-export function uzyjWpisow() {
+export function useWpisy() {
     useSyncExternalStore(subskrybuj, migawka, migawkaSerwera);
 
     // Doczytujemy dopiero po wyswietleniu, zeby nic nie opoznialo pierwszego
@@ -17,4 +17,4 @@ export function uzyjWpisow() {
     return wpisy();
 }
 
-export default uzyjWpisow;
+export default useWpisy;

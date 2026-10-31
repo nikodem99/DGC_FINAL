@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../../images/logo-2.svg'
 import { wycofajZgody } from '../../lib/zgody';
-import { uzyjTresci } from '../../api/tresciStron.js';
+import { useTresci } from '../../api/tresciStron.js';
 
 
 
@@ -12,7 +12,7 @@ const ClickHandler = () => {
 
 
 const Footer = (props) => {
-    const KONTAKT = uzyjTresci('kontakt');
+    const KONTAKT = useTresci('kontakt');
    
     return (
         <footer className={"" +props.hclass}>

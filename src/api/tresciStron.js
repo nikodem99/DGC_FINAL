@@ -19,12 +19,13 @@
 // HTML, a React po zamontowaniu wracalby do ceny z paczki — czyli zmiana
 // znikalaby na oczach odwiedzajacego.
 
-import { useSyncExternalStore, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import pakietyZPaczki from './pricing.js';
 import { FAQ_OGOLNE as faqZPaczki } from './faq.js';
 import { CENA, CZAS_TRWANIA, CO_ZYSKUJESZ, JAK_SIE_PRZYGOTOWAC } from './konsultacje.js';
 import { KONTAKT } from './kontakt.js';
 import trescOfertyZPaczki from './serviceContent.js';
+import tekstyStronZPaczki from './tekstyStron.js';
 
 const DOMYSLNE = {
     cennik: pakietyZPaczki,
@@ -41,10 +42,11 @@ const DOMYSLNE = {
     kontakt: KONTAKT,
     // Mapa slug -> tresc podstrony, a nie lista.
     oferta: trescOfertyZPaczki,
+    // Proza ze strony glownej i /o-nas/: hero i sekcja "O nas".
+    strony: tekstyStronZPaczki,
 };
 
 const biezace = { ...DOMYSLNE };
-let wersja = 0;
 const pobierania = {};
 const sluchacze = new Set();
 
@@ -71,7 +73,6 @@ export function odswiez(co) {
             if (JSON.stringify(dane) === JSON.stringify(biezace[co])) return biezace[co];
 
             biezace[co] = dane;
-            wersja += 1;
             powiadom();
             return biezace[co];
         })
@@ -80,28 +81,64 @@ export function odswiez(co) {
     return pobierania[co];
 }
 
-function subskrybuj(f) {
-    sluchacze.add(f);
-    return () => sluchacze.delete(f);
-}
-
-const migawka = () => wersja;
-const migawkaSerwera = () => 0;
-
 /**
- * Hak dla komponentow: 'cennik', 'faq', 'konsultacje', 'kontakt', 'oferta'.
+ * Hak dla komponentow: 'cennik', 'faq', 'konsultacje', 'kontakt', 'oferta', 'strony'.
  *
  * Przy prerenderowaniu w Node nie ma fetch ani przegladarki, wiec zwraca
  * wersje z paczki — dokladnie ta, ktora trafia do gotowego HTML-a.
+ *
+ * NAZWA MUSI ZACZYNAC SIE OD "use" — to nie jest kosmetyka
+ * -------------------------------------------------------
+ * Hak nazywal sie uzyjTresci i to BYLO zrodlem bledu, ktory gasil strony.
+ *
+ * W vite.config.js wlaczony jest babel-plugin-react-compiler. Kompilator
+ * rozpoznaje haki PO NAZWIE: funkcja jest hakiem, gdy nazywa sie use + duza
+ * litera. "uzyjTresci" wygladalo dla niego jak zwykla funkcja, wiec wolno mu
+ * bylo wstawic jej wywolanie do warunku memoizacji. W zbudowanej paczce
+ * FaqSection wygladala tak:
+ *
+ *     if ($[1] !== ile || $[2] !== items) {
+ *         const zPanelu = uzyjTresci("faq");   // hak w srodku IF-a
+ *     } else { t3 = $[3]; }                    // przerysowanie: hak pominiety
+ *
+ * Czyli przy kazdym przerysowaniu z niezmienionymi props hak NIE byl wolany,
+ * a kolejnosc hakow sie rozjezdzala. React przerywal renderowanie i zwijal
+ * cale drzewo. Skutek dla klienta: zmiana czegokolwiek w panelu — choćby
+ * godzin pracy w kontakcie — pokazywala PUSTA STRONE na /faq/ i /o-nas/.
+ * Sprawdzone pomiarem na zbudowanej paczce, takze na wersji sprzed tych
+ * zmian, wiec blad byl starszy.
+ *
+ * Ten sam blad mial uzyjWpisow (teraz useWpisy).
+ *
+ * PRZY OKAZJI: dlaczego nie useSyncExternalStore
+ * ----------------------------------------------
+ * To juz osobna sprawa, nie przyczyna tamtego bledu. Stalo tu
+ * useSyncExternalStore(subskrybuj, () => wersja, () => 0): migawka byla
+ * JEDNYM globalnym licznikiem dla wszystkich zestawow, a dane czytalo sie
+ * obok magazynu, przez biezace[co]. Zmiana godzin w kontakcie przerysowywala
+ * wiec takze cennik, pytania i teksty stron, ktorych nikt nie ruszal.
+ * Zwykly stan z subskrypcja w efekcie robi to samo prosciej i tylko tam,
+ * gdzie trzeba. Rozjazd miedzy watkami nam tu nie grozi, bo tresc dociaga
+ * sie raz, po pierwszym wyswietleniu.
  */
-export function uzyjTresci(co) {
-    useSyncExternalStore(subskrybuj, migawka, migawkaSerwera);
+export function useTresci(co) {
+    const [dane, ustawDane] = useState(() => biezace[co]);
 
-    // Doczytujemy dopiero po wyswietleniu, nie w trakcie rysowania —
-    // tak samo jak uzyjWpisow() dla artykulow.
-    useEffect(() => { odswiez(co); }, [co]);
+    useEffect(() => {
+        let zywy = true;
+        // Czytamy biezace[co] w momencie powiadomienia, a nie z domkniecia,
+        // zeby nie zapamietac nieaktualnej referencji.
+        const naZmiane = () => { if (zywy) ustawDane(biezace[co]); };
 
-    return biezace[co];
+        sluchacze.add(naZmiane);
+        // Stan mogl sie zmienic miedzy pierwszym rysowaniem a tym efektem.
+        naZmiane();
+        odswiez(co).then(naZmiane);
+
+        return () => { zywy = false; sluchacze.delete(naZmiane); };
+    }, [co]);
+
+    return dane;
 }
 
-export default uzyjTresci;
+export default useTresci;

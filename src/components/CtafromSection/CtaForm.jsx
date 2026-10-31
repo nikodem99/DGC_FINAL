@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { sendLead, KONTAKT_ZAPASOWY } from '../../lib/sendLead';
-import { uzyjTresci } from '../../api/tresciStron.js';
+import { useTresci } from '../../api/tresciStron.js';
 import { zgloszenieWyslane } from '../../lib/pomiar';
 
 // Formy prawne z materialow DGC — te same, ktore biuro wymienia jako
@@ -30,7 +30,7 @@ const DOKUMENTY = [
 const PUSTY = { forma: '', dokumenty: '', email: '', _gotcha: '' };
 
 const CtaForm = () => {
-    const KONTAKT = uzyjTresci('kontakt');
+    const KONTAKT = useTresci('kontakt');
 
     const [formData, setFormData] = useState(PUSTY);
     const [errors, setErrors] = useState({});

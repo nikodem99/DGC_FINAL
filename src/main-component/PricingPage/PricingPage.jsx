@@ -6,13 +6,13 @@ import SectionTitle from '../../components/SectionTitle/SectionTitle';
 import Footer from '../../components/footer/Footer';
 import Scrollbar from '../../components/scrollbar/scrollbar';
 import Logo from '../../images/logo.svg';
-import { uzyjTresci } from '../../api/tresciStron.js';
+import { useTresci } from '../../api/tresciStron.js';
 import FormSection from '../../components/FormSection/FormSection.jsx';
 
 
 
 const PricingPage = () => {
-    const packages = uzyjTresci('cennik');
+    const packages = useTresci('cennik');
     // Dane kontaktowe z panelu, nie wpisane na sztywno. Byly tu wczesniej
     // wklepane numer i adres, co dawalo pulapke widoczna dla uzytkownika:
     // panel po zapisie podmienia kontakt tekstowo we WSZYSTKICH plikach HTML
@@ -23,7 +23,7 @@ const PricingPage = () => {
     // src/api/tresciStron.js. Pozostale miejsca pokazujace kontakt (stopka,
     // pas CTA, formularze) braly go z tego hooka od poczatku — cennik byl
     // jedynym odstepstwem.
-    const KONTAKT = uzyjTresci('kontakt');
+    const KONTAKT = useTresci('kontakt');
     const scrollToTop = () => window.scrollTo(10, 0);
 
     return (
