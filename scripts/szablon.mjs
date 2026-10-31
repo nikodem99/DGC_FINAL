@@ -360,11 +360,13 @@ console.log(`Tresc stron dla panelu: cennik ${cennik.length} pakietow, FAQ ${faq
 {
     const strony = [
         { plik: 'strona-glowna.html', zrodlo: 'index.html', pola: ['CENNIK', 'HERO', 'O_NAS'] },
-        { plik: 'cennik.html', zrodlo: 'cennik/index.html', pola: ['CENNIK'] },
+        { plik: 'cennik.html', zrodlo: 'cennik/index.html',
+          pola: ['CENNIK', 'CEN_WSTEP', 'CEN_UWAGA', 'CEN_OFERTA', 'CEN_FORMULARZ'] },
         { plik: 'faq.html', zrodlo: 'faq/index.html', pola: ['FAQ', 'FAQ_SCHEMAT'] },
         { plik: 'o-nas.html', zrodlo: 'o-nas/index.html', pola: ['FAQ', 'O_NAS'] },
         { plik: 'konsultacje.html', zrodlo: 'umow-konsultacje/index.html',
-          pola: ['KONS_CENA', 'KONS_CZAS', 'KONS_ZYSKUJESZ', 'KONS_PRZYGOTOWANIE'] },
+          pola: ['KONS_CENA', 'KONS_CZAS', 'KONS_ZYSKUJESZ', 'KONS_PRZYGOTOWANIE',
+                 'KONS_WSTEP', 'KONS_KROKI', 'KONS_FORMULARZ'] },
         // Szesc podstron oferty. Tytul (<h2>) zostaje w szablonie, bo jest
         // jednoczesnie nazwa w menu — edytowalna jest sama tresc pod nim.
         ...Object.keys(trescOferty).map((slug) => ({
@@ -419,6 +421,42 @@ console.log(`Tresc stron dla panelu: cennik ${cennik.length} pakietow, FAQ ${faq
         O_NAS: {
             wzor: /<div class="content"><h2>O nas<\/h2>[\s\S]*?(?=<div class="ceo">)/,
             czym: '<div class="content">@@O_NAS@@',
+        },
+        // --- proza na /cennik/ ---
+        // CEN_WSTEP musi isc PRZED CEN_OFERTA: oba bloki zaczynaja sie tym
+        // samym <div class="col-lg-9 col-12">, a leniwy wzor CEN_OFERTA
+        // zlapalby od pierwszego z nich. Po podmianie pierwszego na znacznik
+        // drugi nie ma juz z czym sie pomylic. Kotwiczymy go dodatkowo na
+        // pricing_support_wrap, zeby nie zalezec od samej kolejnosci.
+        CEN_WSTEP: {
+            wzor: /<div class="col-lg-9 col-12"><div class="section_title">[\s\S]*?<p class="pricing_intro_lead">[\s\S]*?<\/p>/,
+            czym: '<div class="col-lg-9 col-12">@@CEN_WSTEP@@',
+        },
+        CEN_UWAGA: {
+            wzor: /<p class="pricing_service_note">[\s\S]*?<\/p>/,
+            czym: '@@CEN_UWAGA@@',
+        },
+        CEN_OFERTA: {
+            wzor: /(<div class="pricing_support_wrap"><div class="row justify-content-center"><div class="col-lg-9 col-12">)<div class="section_title">[\s\S]*?<p class="pricing_support_lead">[\s\S]*?<\/p>/,
+            czym: '$1@@CEN_OFERTA@@',
+        },
+        CEN_FORMULARZ: {
+            wzor: /<p class="form_section_lead">[\s\S]*?<\/p>/,
+            czym: '@@CEN_FORMULARZ@@',
+        },
+
+        // --- proza na /umow-konsultacje/ ---
+        KONS_WSTEP: {
+            wzor: /<div class="konsultacja_wstep"><h2>[\s\S]*?<\/p>/,
+            czym: '<div class="konsultacja_wstep">@@KONS_WSTEP@@',
+        },
+        KONS_KROKI: {
+            wzor: /<div class="konsultacja_kroki"><h3>[\s\S]*?<\/ol>/,
+            czym: '<div class="konsultacja_kroki">@@KONS_KROKI@@',
+        },
+        KONS_FORMULARZ: {
+            wzor: /<div class="title"><h3>Zgłoś się na konsultację<\/h3><p>[\s\S]*?<\/p><\/div>/,
+            czym: '<div class="title">@@KONS_FORMULARZ@@</div>',
         },
         FAQ_SCHEMAT: {
             wzor: /<script type="application\/ld\+json">\{"@context":"https:\/\/schema\.org","@type":"FAQPage"[\s\S]*?<\/script>/,

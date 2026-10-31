@@ -901,7 +901,7 @@ function pasTresci(string $gdzie): void {
         . ($gdzie === 'konsultacje' ? '<strong>Konsultacja</strong>' : '<a href="?akcja=konsultacje">Konsultacja</a>') . ' &nbsp;·&nbsp; '
         . ($gdzie === 'kontakt' ? '<strong>Kontakt</strong>' : '<a href="?akcja=kontakt">Kontakt</a>') . ' &nbsp;·&nbsp; '
         . ($gdzie === 'oferta' ? '<strong>Oferta</strong>' : '<a href="?akcja=oferta">Oferta</a>') . ' &nbsp;·&nbsp; '
-        . ($gdzie === 'strony' ? '<strong>Strona główna</strong>' : '<a href="?akcja=strony">Strona główna</a>') . ' &nbsp;·&nbsp; '
+        . ($gdzie === 'strony' ? '<strong>Teksty stron</strong>' : '<a href="?akcja=strony">Teksty stron</a>') . ' &nbsp;·&nbsp; '
         . '<a href="?akcja=wyloguj">Wyloguj</a></span></div>';
 }
 
@@ -1128,6 +1128,41 @@ function zapiszTekstyStronZFormularza(): array {
         ],
     ];
 
+    // Kroki "Jak to dziala": jeden krok w linii, tytul i opis oddzielone |.
+    $kroki = [];
+    foreach (preg_split('/\r\n|\r|\n/', (string)($_POST['kons_kroki'] ?? '')) ?: [] as $linia) {
+        $linia = trim($linia);
+        if ($linia === '') continue;
+        $czesci = explode('|', $linia, 2);
+        $kroki[] = [
+            'tytul' => trim($czesci[0]),
+            'opis'  => isset($czesci[1]) ? trim($czesci[1]) : '',
+        ];
+    }
+    if (!$kroki) return ['Lista „Jak to działa" nie może być pusta.', ''];
+
+    $dane['cennik'] = [
+        'nad'       => trim((string)($_POST['cen_nad'] ?? '')),
+        'tytul'     => trim((string)($_POST['cen_tytul'] ?? '')),
+        'wstep'     => trim((string)($_POST['cen_wstep'] ?? '')),
+        'uwaga'     => trim((string)($_POST['cen_uwaga'] ?? '')),
+        'nad2'      => trim((string)($_POST['cen_nad2'] ?? '')),
+        'tytul2'    => trim((string)($_POST['cen_tytul2'] ?? '')),
+        'wstep2'    => trim((string)($_POST['cen_wstep2'] ?? '')),
+        'formularz' => trim((string)($_POST['cen_formularz'] ?? '')),
+    ];
+    $dane['konsultacja'] = [
+        'tytul'          => trim((string)($_POST['kons_tytul'] ?? '')),
+        'wstep'          => trim((string)($_POST['kons_wstep'] ?? '')),
+        'krokiTytul'     => trim((string)($_POST['kons_kroki_tytul'] ?? '')),
+        'kroki'          => $kroki,
+        'formularzTytul' => trim((string)($_POST['kons_form_tytul'] ?? '')),
+        'formularzOpis'  => trim((string)($_POST['kons_form_opis'] ?? '')),
+    ];
+
+    if ($dane['cennik']['tytul'] === '')      return ['Tytuł sekcji na cenniku nie może być pusty.', ''];
+    if ($dane['konsultacja']['tytul'] === '') return ['Tytuł na stronie konsultacji nie może być pusty.', ''];
+
     if (!zapiszTekstyStron($dane)) return ['Nie udało się zapisać tekstów.', ''];
 
     $bladStron = null;
@@ -1183,7 +1218,7 @@ function zapiszKontakt(): array {
 }
 
 function widokTekstowStron(array $t, string $komunikat, string $blad): void {
-    naglowek('Strona główna');
+    naglowek('Teksty stron');
     pasTresci('strony');
     echo '<div class="srodek">';
     if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
@@ -1192,10 +1227,10 @@ function widokTekstowStron(array $t, string $komunikat, string $blad): void {
     $h = (array)($t['hero'] ?? []);
     $o = (array)($t['onas'] ?? []);
 
-    echo '<h1>Teksty na stronie głównej</h1>';
-    echo '<p class="male">Dwa bloki: powitanie na samej górze strony głównej oraz sekcja '
-        . '„O nas". <strong>Sekcja „O nas" stoi w dwóch miejscach naraz</strong> — na stronie '
-        . 'głównej i na podstronie /o-nas/. Zmiana przechodzi przez obie.</p>';
+    echo '<h1>Teksty stron</h1>';
+    echo '<p class="male">Proza ze strony głównej, z cennika i ze strony konsultacji. '
+        . '<strong>Sekcja „O nas" stoi w dwóch miejscach naraz</strong> — na stronie głównej '
+        . 'i na podstronie /o-nas/. Zmiana przechodzi przez obie.</p>';
 
     echo '<form method="post"><input type="hidden" name="co" value="zapisz-strony">'
         . '<input type="hidden" name="token" value="' . h(token()) . '">';
@@ -1237,6 +1272,57 @@ function widokTekstowStron(array $t, string $komunikat, string $blad): void {
 
     echo '<p class="male" style="margin-top:18px">Nazwisko i stanowisko pod tekstem idą z danych '
         . 'zespołu, nie stąd — tego panel nie zmienia.</p>';
+
+    $c = (array)($t['cennik'] ?? []);
+    $k = (array)($t['konsultacja'] ?? []);
+
+    echo '<h2 style="margin-top:34px">Strona „Cennik"</h2>';
+    echo '<p class="male">Same pakiety i ceny zmieniacie w zakładce <a href="?akcja=cennik">Cennik</a>. '
+        . 'Tutaj są teksty, które stoją wokół nich.</p>';
+
+    echo '<label for="cen_nad">Mały napis nad tytułem</label>';
+    echo '<input id="cen_nad" type="text" name="cen_nad" maxlength="80" value="' . h((string)($c['nad'] ?? '')) . '">';
+    echo '<label for="cen_tytul">Tytuł</label>';
+    echo '<input id="cen_tytul" type="text" name="cen_tytul" maxlength="160" required value="' . h((string)($c['tytul'] ?? '')) . '">';
+    echo '<label for="cen_wstep">Akapit pod tytułem</label>';
+    echo '<textarea id="cen_wstep" name="cen_wstep" style="min-height:90px;font-family:inherit;font-size:16px">' . h((string)($c['wstep'] ?? '')) . '</textarea>';
+    echo '<label for="cen_uwaga">Zdanie nad pakietami</label>';
+    echo '<textarea id="cen_uwaga" name="cen_uwaga" style="min-height:90px;font-family:inherit;font-size:16px">' . h((string)($c['uwaga'] ?? '')) . '</textarea>';
+
+    echo '<label for="cen_nad2">Mały napis nad drugą sekcją</label>';
+    echo '<input id="cen_nad2" type="text" name="cen_nad2" maxlength="80" value="' . h((string)($c['nad2'] ?? '')) . '">';
+    echo '<label for="cen_tytul2">Tytuł drugiej sekcji</label>';
+    echo '<input id="cen_tytul2" type="text" name="cen_tytul2" maxlength="160" value="' . h((string)($c['tytul2'] ?? '')) . '">';
+    echo '<label for="cen_wstep2">Akapit drugiej sekcji</label>';
+    echo '<textarea id="cen_wstep2" name="cen_wstep2" style="min-height:90px;font-family:inherit;font-size:16px">' . h((string)($c['wstep2'] ?? '')) . '</textarea>';
+    echo '<label for="cen_formularz">Zdanie nad formularzem</label>';
+    echo '<textarea id="cen_formularz" name="cen_formularz" style="min-height:70px;font-family:inherit;font-size:16px">' . h((string)($c['formularz'] ?? '')) . '</textarea>';
+
+    echo '<h2 style="margin-top:34px">Strona „Umów konsultację"</h2>';
+    echo '<p class="male">Cenę, czas trwania i obie listy zmieniacie w zakładce '
+        . '<a href="?akcja=konsultacje">Konsultacja</a>. Tutaj są teksty wokół nich.</p>';
+
+    echo '<label for="kons_tytul">Tytuł na górze strony</label>';
+    echo '<input id="kons_tytul" type="text" name="kons_tytul" maxlength="160" required value="' . h((string)($k['tytul'] ?? '')) . '">';
+    echo '<label for="kons_wstep">Akapit pod tytułem</label>';
+    echo '<textarea id="kons_wstep" name="kons_wstep" style="min-height:110px;font-family:inherit;font-size:16px">' . h((string)($k['wstep'] ?? '')) . '</textarea>';
+
+    echo '<label for="kons_kroki_tytul">Nagłówek listy kroków</label>';
+    echo '<input id="kons_kroki_tytul" type="text" name="kons_kroki_tytul" maxlength="120" value="' . h((string)($k['krokiTytul'] ?? '')) . '">';
+    echo '<label for="kons_kroki">Kroki</label>';
+    echo '<p class="male" style="margin:-2px 0 6px">Jeden krok w linii, w postaci '
+        . '<code>Tytuł kroku | opis kroku</code>. Numery dopisują się same.</p>';
+    $linieKrokow = [];
+    foreach ((array)($k['kroki'] ?? []) as $krok) {
+        $linieKrokow[] = (string)($krok['tytul'] ?? '') . ' | ' . (string)($krok['opis'] ?? '');
+    }
+    echo '<textarea id="kons_kroki" name="kons_kroki" style="min-height:170px;font-family:inherit;font-size:16px">'
+        . h(implode("\n", $linieKrokow)) . '</textarea>';
+
+    echo '<label for="kons_form_tytul">Nagłówek nad formularzem</label>';
+    echo '<input id="kons_form_tytul" type="text" name="kons_form_tytul" maxlength="160" value="' . h((string)($k['formularzTytul'] ?? '')) . '">';
+    echo '<label for="kons_form_opis">Zdanie pod tym nagłówkiem</label>';
+    echo '<textarea id="kons_form_opis" name="kons_form_opis" style="min-height:70px;font-family:inherit;font-size:16px">' . h((string)($k['formularzOpis'] ?? '')) . '</textarea>';
 
     echo '<p style="margin-top:22px"><button class="przycisk akcent" type="submit">Zapisz</button> '
         . '<a class="przycisk lekki" href="?">Wróć do listy</a></p>';

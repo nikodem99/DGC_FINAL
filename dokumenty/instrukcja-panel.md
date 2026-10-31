@@ -220,9 +220,14 @@ akapitami. Wejdźcie w edycję i dodajcie je.
 
 ---
 
-## Teksty na stronie głównej
+## Teksty stron
 
-Zakładka **Strona główna**. Dwa bloki.
+Zakładka **Teksty stron**. Trzy strony, same teksty — liczby, ceny i listy
+zmieniacie w swoich zakładkach.
+
+### Strona główna
+
+Dwa bloki.
 
 **Powitanie na górze** — to pierwsze, co widzi odwiedzający: mała linijka
 nad spodem, duży nagłówek, akapit pod nim i napis na przycisku. Nagłówek jest
@@ -239,6 +244,31 @@ obie, nie da się ustawić osobno.
 
 Nazwisko i stanowisko pod tekstem idą z danych zespołu, nie z tego formularza.
 Tego panel nie zmienia.
+
+### Cennik
+
+Teksty, które stoją **wokół** pakietów: mały napis nad tytułem, tytuł, akapit
+pod nim, zdanie nad kafelkami, druga sekcja („Indywidualna oferta") oraz zdanie
+nad formularzem na dole.
+
+Same pakiety, ceny i to, co w nich jest — w zakładce **Cennik**.
+
+### Umów konsultację
+
+Tytuł i akapit na górze strony, lista **„Jak to działa"** oraz nagłówek i zdanie
+nad formularzem.
+
+Kroki wpisujecie po jednym w linii, w postaci:
+
+```
+Tytuł kroku | opis kroku
+```
+
+Numery 1, 2, 3 dopisują się same — nie wpisujcie ich. Kroków może być więcej
+albo mniej niż cztery, numeracja sama się przeliczy.
+
+Cenę, czas trwania oraz listy „Co z tego masz" i „Jak się przygotować"
+zmieniacie w zakładce **Konsultacja**.
 
 ---
 

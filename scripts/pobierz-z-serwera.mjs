@@ -238,14 +238,28 @@ async function wczytajZdalne(co) {
                 `export const O_NAS = ${naLiterale(t.onas)};`
             );
         }
+        if (t.cennik && t.cennik.tytul) {
+            zrodlo = zrodlo.replace(
+                /export const CENNIK_TEKSTY = \{[\s\S]*?\n\};/,
+                `export const CENNIK_TEKSTY = ${naLiterale(t.cennik)};`
+            );
+        }
+        if (t.konsultacja && Array.isArray(t.konsultacja.kroki) && t.konsultacja.kroki.length) {
+            zrodlo = zrodlo.replace(
+                /export const KONSULTACJA_TEKSTY = \{[\s\S]*?\n\};/,
+                `export const KONSULTACJA_TEKSTY = ${naLiterale(t.konsultacja)};`
+            );
+        }
 
-        if (!/export const HERO = \{/.test(przed) || !/export const O_NAS = \{/.test(przed)) {
+        const wzorce = [/export const HERO = \{/, /export const O_NAS = \{/,
+                        /export const CENNIK_TEKSTY = \{/, /export const KONSULTACJA_TEKSTY = \{/];
+        if (wzorce.some((w) => !w.test(przed))) {
             console.error('[pobierz] strony: nie rozpoznaje struktury tekstyStron.js');
             process.exit(1);
         }
         if (zrodlo !== przed) {
             fs.writeFileSync(plik, zrodlo);
-            console.log('[pobierz] strony: hero i "O nas" pobrane z serwera -> src/api/tekstyStron.js');
+            console.log('[pobierz] strony: teksty pobrane z serwera -> src/api/tekstyStron.js');
         } else {
             console.log('[pobierz] strony: bez zmian');
         }

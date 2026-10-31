@@ -494,6 +494,58 @@ function oNasHtml(array $o): string {
     return $out;
 }
 
+/**
+ * Proza z /cennik/ i /umow-konsultacje/ jako HTML.
+ *
+ * Odpowiedniki PricingPage.jsx i KonsultacjaPage.jsx. Kazda zmiana tam
+ * wymaga zmiany tutaj, inaczej strona przebudowana z panelu bedzie
+ * wygladac inaczej niz strona z paczki.
+ */
+function tytulSekcji(string $nad, string $tytul): string {
+    return '<div class="section_title"><span class="section_nad">' . h($nad)
+        . '</span><h2>' . h($tytul) . '</h2></div>';
+}
+
+function cennikWstepHtml(array $c): string {
+    return tytulSekcji((string)($c['nad'] ?? ''), (string)($c['tytul'] ?? ''))
+        . '<p class="pricing_intro_lead">' . h((string)($c['wstep'] ?? '')) . '</p>';
+}
+
+function cennikUwagaHtml(array $c): string {
+    return '<p class="pricing_service_note">' . h((string)($c['uwaga'] ?? '')) . '</p>';
+}
+
+function cennikOfertaHtml(array $c): string {
+    return tytulSekcji((string)($c['nad2'] ?? ''), (string)($c['tytul2'] ?? ''))
+        . '<p class="pricing_support_lead">' . h((string)($c['wstep2'] ?? '')) . '</p>';
+}
+
+function cennikFormularzHtml(array $c): string {
+    return '<p class="form_section_lead">' . h((string)($c['formularz'] ?? '')) . '</p>';
+}
+
+function konsWstepHtml(array $k): string {
+    return '<h2>' . h((string)($k['tytul'] ?? '')) . '</h2>'
+        . '<p>' . h((string)($k['wstep'] ?? '')) . '</p>';
+}
+
+function konsKrokiHtml(array $k): string {
+    $out = '<h3>' . h((string)($k['krokiTytul'] ?? '')) . '</h3><ol>';
+    $i = 0;
+    foreach (($k['kroki'] ?? []) as $krok) {
+        $i++;
+        $out .= '<li><span class="konsultacja_krok_nr">' . $i . '</span><div><strong>'
+            . h((string)($krok['tytul'] ?? '')) . '</strong><p>'
+            . h((string)($krok['opis'] ?? '')) . '</p></div></li>';
+    }
+    return $out . '</ol>';
+}
+
+function konsFormularzHtml(array $k): string {
+    return '<h3>' . h((string)($k['formularzTytul'] ?? '')) . '</h3>'
+        . '<p>' . h((string)($k['formularzOpis'] ?? '')) . '</p>';
+}
+
 /** Odczyt tresci strony stalej: 'cennik' albo 'faq'. */
 function wczytajTrescStrony(string $co): array {
     $plik = DANE . '/tresc/' . $co . '.json';
@@ -757,12 +809,18 @@ function odswiezStroneStale(array $cennik, array $faq, ?string &$blad = null): i
     $teksty = wczytajTekstyStron();
     $hero = heroHtml((array)($teksty['hero'] ?? []));
     $oNas = oNasHtml((array)($teksty['onas'] ?? []));
+    $cen = (array)($teksty['cennik'] ?? []);
+    $kon = (array)($teksty['konsultacja'] ?? []);
 
     $strony = [
         ['szablon' => 'strona-glowna.html', 'cel' => KORZEN . '/index.html',
          'pola' => ['CENNIK' => kartyCennika($cennik, true), 'HERO' => $hero, 'O_NAS' => $oNas]],
         ['szablon' => 'cennik.html', 'cel' => KORZEN . '/cennik/index.html',
-         'pola' => ['CENNIK' => kartyCennika($cennik, false)]],
+         'pola' => ['CENNIK' => kartyCennika($cennik, false),
+                    'CEN_WSTEP' => cennikWstepHtml($cen),
+                    'CEN_UWAGA' => cennikUwagaHtml($cen),
+                    'CEN_OFERTA' => cennikOfertaHtml($cen),
+                    'CEN_FORMULARZ' => cennikFormularzHtml($cen)]],
         ['szablon' => 'faq.html', 'cel' => KORZEN . '/faq/index.html',
          'pola' => ['FAQ' => pozycjeFaq($faq, 'faq'), 'FAQ_SCHEMAT' => schematFaq($faq)]],
         ['szablon' => 'o-nas.html', 'cel' => KORZEN . '/o-nas/index.html',
@@ -773,7 +831,11 @@ function odswiezStroneStale(array $cennik, array $faq, ?string &$blad = null): i
     if ($konsultacje) {
         $strony[] = ['szablon' => 'konsultacje.html',
                      'cel' => KORZEN . '/umow-konsultacje/index.html',
-                     'pola' => polaKonsultacji($konsultacje)];
+                     'pola' => polaKonsultacji($konsultacje) + [
+                         'KONS_WSTEP' => konsWstepHtml($kon),
+                         'KONS_KROKI' => konsKrokiHtml($kon),
+                         'KONS_FORMULARZ' => konsFormularzHtml($kon),
+                     ]];
     }
 
     $zapisane = 0;

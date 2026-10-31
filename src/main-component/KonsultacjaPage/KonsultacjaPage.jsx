@@ -7,7 +7,6 @@ import KonsultacjaForm from '../../components/KonsultacjaForm/KonsultacjaForm.js
 
 import { useTresci } from '../../api/tresciStron.js';
 import {
-    KROKI,
 } from '../../api/konsultacje';
 import logo from '../../images/logo.svg';
 
@@ -28,6 +27,8 @@ const KonsultacjaPage = () => {
     // samo jak cennik — z /dane/tresc/konsultacje.json, z wersja z paczki
     // jako punktem wyjscia.
     const k = useTresci('konsultacje');
+    // Proza tej strony z panelu. Cena, czas i obie listy zostaja w 'konsultacje'.
+    const K = useTresci('strony').konsultacja;
     const CENA = { kwota: k.kwota, jednostka: k.jednostka, uwaga: k.uwaga };
     const CZAS_TRWANIA = k.czas;
     const CO_ZYSKUJESZ = k.zyskujesz;
@@ -43,13 +44,8 @@ const KonsultacjaPage = () => {
                     <div className="row justify-content-center">
                         <div className="col-lg-10 col-12">
                             <div className="konsultacja_wstep">
-                                <h2>Godzina rozmowy zamiast domysłów</h2>
-                                <p>
-                                    Konsultacja to indywidualna rozmowa o Twojej sytuacji: formie
-                                    opodatkowania, rozliczeniach, kadrach albo planowanej zmianie
-                                    w firmie. Odpowiadamy na konkretne pytania i mówimy, co zrobić
-                                    dalej. Nie musisz być naszym klientem, żeby z niej skorzystać.
-                                </p>
+                                <h2>{K.tytul}</h2>
+                                <p>{K.wstep}</p>
 
                                 <div className="konsultacja_fakty">
                                     <div className="konsultacja_cena">
@@ -71,9 +67,9 @@ const KonsultacjaPage = () => {
                     <div className="row justify-content-center">
                         <div className="col-lg-10 col-12">
                             <div className="konsultacja_kroki">
-                                <h3>Jak to działa</h3>
+                                <h3>{K.krokiTytul}</h3>
                                 <ol>
-                                    {KROKI.map((krok, i) => (
+                                    {K.kroki.map((krok, i) => (
                                         <li key={krok.tytul}>
                                             <span className="konsultacja_krok_nr">{i + 1}</span>
                                             <div>
@@ -110,11 +106,8 @@ const KonsultacjaPage = () => {
                         <div className="col-lg-10 col-12">
                             <div className="cta_form_s2" id="formularz">
                                 <div className="title">
-                                    <h3>Zgłoś się na konsultację</h3>
-                                    <p>
-                                        Wypełnij formularz, a oddzwonimy w ciągu 24 godzin roboczych,
-                                        żeby potwierdzić termin i cenę.
-                                    </p>
+                                    <h3>{K.formularzTytul}</h3>
+                                    <p>{K.formularzOpis}</p>
                                 </div>
                                 <KonsultacjaForm />
                             </div>

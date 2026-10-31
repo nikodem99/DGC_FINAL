@@ -192,8 +192,13 @@ stojącego na serwerze. Gdy panel faktycznie się zmienia, wgrywa się osobno
 
 ### Teksty stron: hero i „O nas"
 
-`dane/tresc/strony.json`, klucze `hero` i `onas`. Źródłem w repozytorium jest
-`src/api/tekstyStron.js`.
+`dane/tresc/strony.json`, klucze `hero`, `onas`, `cennik` i `konsultacja`.
+Źródłem w repozytorium jest `src/api/tekstyStron.js`.
+
+Co **nie** siedzi w tym pliku, choć stoi na tych samych stronach: pakiety
+cennika (`cennik.json`), cena i listy konsultacji (`konsultacje.json`), pytania
+FAQ (`faq.json`). Tamte zestawy mają swój kształt i swoje formularze — doklejenie
+do nich prozy zepsułoby jedno i drugie.
 
 **Dodanie takiego pola to cztery miejsca naraz** i wszystkie muszą się zgadzać:
 
@@ -208,6 +213,13 @@ Punkt 4 jest tym, o którym najłatwiej zapomnieć, ale budowanie go wymusza:
 kontrola „Panel zna wszystkie pola szablonów" przerywa build, gdy w szablonie
 zostanie znacznik, którego `podstaw()` nie wypełni. Sprawdzone przy tej zmianie
 — build padł dokładnie na tym, zanim dopisałem PHP.
+
+**Kolejność pól na liście `pola` ma znaczenie.** `CEN_WSTEP` musi iść przed
+`CEN_OFERTA`: oba bloki zaczynają się tym samym `<div class="col-lg-9 col-12">`,
+a leniwy wzór `CEN_OFERTA` złapałby od pierwszego z nich. Po podmianie pierwszego
+na znacznik drugi nie ma już z czym się pomylić. Dla pewności `CEN_OFERTA`
+kotwiczy dodatkowo na `pricing_support_wrap`, żeby nie zależeć od samej
+kolejności.
 
 **Hero cięte jest po znacznikach, nie po treści.** Fraza „Twoja księgowość"
 występuje w gotowym HTML-u dwa razy — raz w `<h1>`, raz w tytule okna — więc

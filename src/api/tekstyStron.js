@@ -14,9 +14,7 @@
 export const HERO = {
     nad: 'Biuro rachunkowe · Łódź · online',
     tytul: 'Twoja księgowość w dobrych rękach',
-    akapit: 'Obsługujemy jednoosobowe działalności, spółki i organizacje z całej Polski. '
-        + 'W pełni online, bez dojazdów do biura, z ubezpieczeniem OC. '
-        + 'Prowadzimy księgi nieprzerwanie od 2011 roku.',
+    akapit: 'Obsługujemy jednoosobowe działalności, spółki i organizacje z całej Polski. W pełni online, bez dojazdów do biura, z ubezpieczeniem OC. Prowadzimy księgi nieprzerwanie od 2011 roku.',
     przycisk: 'Umów konsultację',
 };
 
@@ -24,14 +22,62 @@ export const O_NAS = {
     naglowek: 'O nas',
     podtytul: 'Partnerem w biznesie, nie tylko biurem',
     akapity: [
-        'Od 2011 roku prowadzimy księgowość firm o zróżnicowanym profilu działania '
-        + 'i różnej wielkości. Wsłuchujemy się w potrzeby klienta i dobieramy rozwiązania '
-        + 'do jego sytuacji. Chcemy być partnerem w biznesie, a nie tylko biurem, '
-        + 'które księguje dokumenty.',
-        'Obsługa odbywa się online, więc dokumenty dostarczasz wtedy, kiedy Ci wygodnie, '
-        + 'bez dojazdów do biura. Prowadzimy pełną księgowość, rozliczenia podatkowe '
-        + 'oraz sprawy kadrowo-płacowe, a firmom szukającym adresu oferujemy biuro wirtualne.',
+        'Od 2011 roku prowadzimy księgowość firm o zróżnicowanym profilu działania i różnej wielkości. Wsłuchujemy się w potrzeby klienta i dobieramy rozwiązania do jego sytuacji. Chcemy być partnerem w biznesie, a nie tylko biurem, które księguje dokumenty.',
+        'Obsługa odbywa się online, więc dokumenty dostarczasz wtedy, kiedy Ci wygodnie, bez dojazdów do biura. Prowadzimy pełną księgowość, rozliczenia podatkowe oraz sprawy kadrowo-płacowe, a firmom szukającym adresu oferujemy biuro wirtualne.',
     ],
 };
 
-export default { hero: HERO, onas: O_NAS };
+export const CENNIK_TEKSTY = {
+    nad: 'Pakiety usług',
+    tytul: 'Obsługa dopasowana do Twojej firmy',
+    wstep: 'Każdą współpracę wyceniamy indywidualnie. Pakiety pokazują '
+        + 'podstawowy zakres obsługi i ułatwiają wybór właściwego rozwiązania.',
+    uwaga: 'Obsługujemy przedsiębiorców z całej Polski — w pełni online, '
+        + 'bez dojazdów do biura. Przed rozpoczęciem współpracy omawiamy '
+        + 'potrzeby firmy oraz dokładny zakres czynności.',
+    nad2: 'Indywidualna oferta',
+    tytul2: 'Twoje rachunki w najlepszych rękach',
+    wstep2: 'Potrzebujesz wsparcia księgowego lub kadrowego? Skontaktuj się '
+        + 'z nami. Przygotujemy ofertę dopasowaną do Twojej firmy.',
+    formularz: 'Zostaw kontakt i napisz, czego potrzebujesz. Odpowiemy z wyceną '
+        + 'w ciągu 24 godzin roboczych.',
+};
+
+// Proza z /umow-konsultacje/. Cena, czas, "Co z tego masz" i "Jak sie
+// przygotowac" NIE sa tutaj — te biuro edytuje osobno, zakladka Konsultacja.
+export const KONSULTACJA_TEKSTY = {
+    tytul: 'Godzina rozmowy zamiast domysłów',
+    wstep: 'Konsultacja to indywidualna rozmowa o Twojej sytuacji: formie '
+        + 'opodatkowania, rozliczeniach, kadrach albo planowanej zmianie '
+        + 'w firmie. Odpowiadamy na konkretne pytania i mówimy, co zrobić '
+        + 'dalej. Nie musisz być naszym klientem, żeby z niej skorzystać.',
+    krokiTytul: 'Jak to działa',
+    kroki: [
+        {
+            tytul: 'Wypełniasz formularz',
+            opis: 'Podajesz temat, preferowany dzień i porę. Im więcej napiszesz o swojej sytuacji, tym lepiej przygotujemy się do rozmowy.',
+        },
+        {
+            tytul: 'Potwierdzamy zgłoszenie',
+            opis: 'Dostajesz od nas wiadomość, że zgłoszenie do nas dotarło. To jeszcze nie jest rezerwacja terminu.',
+        },
+        {
+            tytul: 'Dzwonimy do Ciebie',
+            opis: 'Ustalamy dokładny termin, zakres rozmowy i cenę. Wtedy też mówimy, czy Twoja sprawa w ogóle wymaga płatnej konsultacji.',
+        },
+        {
+            tytul: 'Opłacasz i rozmawiamy',
+            opis: 'Po ustaleniach wysyłamy dane do przelewu. Termin rezerwujemy po zaksięgowaniu wpłaty.',
+        },
+    ],
+    formularzTytul: 'Zgłoś się na konsultację',
+    formularzOpis: 'Wypełnij formularz, a oddzwonimy w ciągu 24 godzin roboczych, '
+        + 'żeby potwierdzić termin i cenę.',
+};
+
+export default {
+    hero: HERO,
+    onas: O_NAS,
+    cennik: CENNIK_TEKSTY,
+    konsultacja: KONSULTACJA_TEKSTY,
+};

@@ -24,6 +24,8 @@ const PricingPage = () => {
     // pas CTA, formularze) braly go z tego hooka od poczatku — cennik byl
     // jedynym odstepstwem.
     const KONTAKT = useTresci('kontakt');
+    // Proza tej strony z panelu. Same pakiety siedza w useTresci('cennik').
+    const C = useTresci('strony').cennik;
     const scrollToTop = () => window.scrollTo(10, 0);
 
     return (
@@ -36,23 +38,13 @@ const PricingPage = () => {
                     <div className="container">
                         <div className="row justify-content-center">
                             <div className="col-lg-9 col-12">
-                                <SectionTitle
-                                    title={'Pakiety usług'}
-                                    subtitle={'Obsługa dopasowana do Twojej firmy'}
-                                />
-                                <p className="pricing_intro_lead">
-                                    Każdą współpracę wyceniamy indywidualnie. Pakiety pokazują
-                                    podstawowy zakres obsługi i ułatwiają wybór właściwego rozwiązania.
-                                </p>
+                                <SectionTitle title={C.nad} subtitle={C.tytul} />
+                                <p className="pricing_intro_lead">{C.wstep}</p>
                             </div>
                         </div>
 
                         <div className="pricing_service_area">
-                            <p className="pricing_service_note">
-                                Obsługujemy przedsiębiorców z całej Polski — w pełni online,
-                                bez dojazdów do biura. Przed rozpoczęciem współpracy omawiamy
-                                potrzeby firmy oraz dokładny zakres czynności.
-                            </p>
+                            <p className="pricing_service_note">{C.uwaga}</p>
 
                             <div className="pricing_grid">
                                 {packages.map((item) => (
@@ -97,14 +89,8 @@ const PricingPage = () => {
                         <div className="pricing_support_wrap">
                             <div className="row justify-content-center">
                                 <div className="col-lg-9 col-12">
-                                    <SectionTitle
-                                        title={'Indywidualna oferta'}
-                                        subtitle={'Twoje rachunki w najlepszych rękach'}
-                                    />
-                                    <p className="pricing_support_lead">
-                                        Potrzebujesz wsparcia księgowego lub kadrowego? Skontaktuj się
-                                        z nami. Przygotujemy ofertę dopasowaną do Twojej firmy.
-                                    </p>
+                                    <SectionTitle title={C.nad2} subtitle={C.tytul2} />
+                                    <p className="pricing_support_lead">{C.wstep2}</p>
                                 </div>
                             </div>
 
@@ -134,7 +120,7 @@ const PricingPage = () => {
 
                 <FormSection
                     zrodlo="cennik"
-                    lead={'Zostaw kontakt i napisz, czego potrzebujesz. Odpowiemy z wyceną w ciągu 24 godzin roboczych.'}
+                    lead={C.formularz}
                 />
             </main>
 
