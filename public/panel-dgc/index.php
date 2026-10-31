@@ -178,6 +178,15 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'u
     }
 }
 
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'zapisz-strony') {
+    if (!sprawdzToken()) {
+        $blad = 'Sesja wygasła. Odśwież stronę i spróbuj ponownie.';
+    } else {
+        [$blad, $komunikat] = zapiszTekstyStronZFormularza();
+    }
+    $akcja = 'strony';
+}
+
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'zapisz-cennik') {
     if (!sprawdzToken()) {
         $blad = 'Sesja wygasła. Odśwież stronę i spróbuj ponownie.';
@@ -241,6 +250,11 @@ if ($akcja === 'kontakt') {
 
 if ($akcja === 'konsultacje') {
     widokKonsultacji(wczytajKonsultacje(), $komunikat, $blad);
+    exit;
+}
+
+if ($akcja === 'strony') {
+    widokTekstowStron(wczytajTekstyStron(), $komunikat, $blad);
     exit;
 }
 
@@ -887,6 +901,7 @@ function pasTresci(string $gdzie): void {
         . ($gdzie === 'konsultacje' ? '<strong>Konsultacja</strong>' : '<a href="?akcja=konsultacje">Konsultacja</a>') . ' &nbsp;·&nbsp; '
         . ($gdzie === 'kontakt' ? '<strong>Kontakt</strong>' : '<a href="?akcja=kontakt">Kontakt</a>') . ' &nbsp;·&nbsp; '
         . ($gdzie === 'oferta' ? '<strong>Oferta</strong>' : '<a href="?akcja=oferta">Oferta</a>') . ' &nbsp;·&nbsp; '
+        . ($gdzie === 'strony' ? '<strong>Strona główna</strong>' : '<a href="?akcja=strony">Strona główna</a>') . ' &nbsp;·&nbsp; '
         . '<a href="?akcja=wyloguj">Wyloguj</a></span></div>';
 }
 
@@ -1074,6 +1089,54 @@ function widokKonsultacji(array $k, string $komunikat, string $blad): void {
 // przebudowywac 481 stron z szablonow, podmieniamy sam tekst — patrz
 // podmienKontakt() w generator.php.
 
+/**
+ * Zapis tekstow strony glownej: hero i sekcja "O nas".
+ *
+ * Po zapisie przebudowujemy strony stale, bo hero stoi na stronie glownej,
+ * a "O nas" na stronie glownej I na /o-nas/ — jeden tekst, dwie strony.
+ */
+function zapiszTekstyStronZFormularza(): array {
+    $heroNad      = trim((string)($_POST['hero_nad'] ?? ''));
+    $heroTytul    = trim((string)($_POST['hero_tytul'] ?? ''));
+    $heroAkapit   = trim((string)($_POST['hero_akapit'] ?? ''));
+    $heroPrzycisk = trim((string)($_POST['hero_przycisk'] ?? ''));
+    $onasNaglowek = trim((string)($_POST['onas_naglowek'] ?? ''));
+    $onasPodtytul = trim((string)($_POST['onas_podtytul'] ?? ''));
+    $onasAkapity  = liniaNaTablice((string)($_POST['onas_akapity'] ?? ''));
+
+    // Hero to jedyny H1 na stronie glownej i pierwsze, co widzi odwiedzajacy.
+    // Pusty tytul albo pusty przycisk to nie jest stan, ktory wolno zapisac.
+    if ($heroTytul === '')    return ['Nagłówek na stronie głównej nie może być pusty.', ''];
+    if ($heroPrzycisk === '') return ['Napis na przycisku nie może być pusty.', ''];
+    if ($onasNaglowek === '') return ['Nagłówek sekcji „O nas" nie może być pusty.', ''];
+    if (!$onasAkapity)        return ['Sekcja „O nas" musi mieć co najmniej jeden akapit.', ''];
+
+    if (mb_strlen($heroTytul) > 120)  return ['Nagłówek jest za długi (maksimum 120 znaków).', ''];
+    if (mb_strlen($heroAkapit) > 600) return ['Akapit pod nagłówkiem jest za długi (maksimum 600 znaków).', ''];
+
+    $dane = [
+        'hero' => [
+            'nad'      => $heroNad,
+            'tytul'    => $heroTytul,
+            'akapit'   => $heroAkapit,
+            'przycisk' => $heroPrzycisk,
+        ],
+        'onas' => [
+            'naglowek' => $onasNaglowek,
+            'podtytul' => $onasPodtytul,
+            'akapity'  => $onasAkapity,
+        ],
+    ];
+
+    if (!zapiszTekstyStron($dane)) return ['Nie udało się zapisać tekstów.', ''];
+
+    $bladStron = null;
+    $ile = odswiezStroneStale(wczytajTrescStrony('cennik'), wczytajTrescStrony('faq'), $bladStron);
+    if ($bladStron !== null) return ["Teksty zapisane, ale nie przebudowano stron: $bladStron", ''];
+
+    return ['', "Zapisane. Przebudowano $ile stron."];
+}
+
 function zapiszKontakt(): array {
     $telefon = trim((string)($_POST['telefon'] ?? ''));
     $godziny = trim((string)($_POST['godziny'] ?? ''));
@@ -1117,6 +1180,68 @@ function zapiszKontakt(): array {
     $ile = podmienKontakt($stare, $nowe);
 
     return ['', "Zapisane. Zmienione na $ile stronach."];
+}
+
+function widokTekstowStron(array $t, string $komunikat, string $blad): void {
+    naglowek('Strona główna');
+    pasTresci('strony');
+    echo '<div class="srodek">';
+    if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
+    if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
+
+    $h = (array)($t['hero'] ?? []);
+    $o = (array)($t['onas'] ?? []);
+
+    echo '<h1>Teksty na stronie głównej</h1>';
+    echo '<p class="male">Dwa bloki: powitanie na samej górze strony głównej oraz sekcja '
+        . '„O nas". <strong>Sekcja „O nas" stoi w dwóch miejscach naraz</strong> — na stronie '
+        . 'głównej i na podstronie /o-nas/. Zmiana przechodzi przez obie.</p>';
+
+    echo '<form method="post"><input type="hidden" name="co" value="zapisz-strony">'
+        . '<input type="hidden" name="token" value="' . h(token()) . '">';
+
+    echo '<h2 style="margin-top:26px">Powitanie na górze strony</h2>';
+
+    echo '<label for="hero_nad">Linijka nad nagłówkiem</label>';
+    echo '<p class="male" style="margin:-2px 0 6px">Mała, szara. Teraz: <code>Biuro rachunkowe · Łódź · online</code>.</p>';
+    echo '<input id="hero_nad" type="text" name="hero_nad" maxlength="120" value="' . h((string)($h['nad'] ?? '')) . '">';
+
+    echo '<label for="hero_tytul">Nagłówek</label>';
+    echo '<p class="male" style="margin:-2px 0 6px">Największy napis na całej stronie i jednocześnie '
+        . 'to, po czym Google rozpoznaje, o czym jest strona główna. Nie zostawiajcie go pustego.</p>';
+    echo '<input id="hero_tytul" type="text" name="hero_tytul" maxlength="120" required value="' . h((string)($h['tytul'] ?? '')) . '">';
+
+    echo '<label for="hero_akapit">Akapit pod nagłówkiem</label>';
+    echo '<textarea id="hero_akapit" name="hero_akapit" maxlength="600" style="min-height:110px;font-family:inherit;font-size:16px">'
+        . h((string)($h['akapit'] ?? '')) . '</textarea>';
+
+    echo '<label for="hero_przycisk">Napis na przycisku</label>';
+    echo '<p class="male" style="margin:-2px 0 6px">Sam przycisk zawsze prowadzi na stronę '
+        . '<code>/umow-konsultacje/</code> — zmieniacie tylko napis.</p>';
+    echo '<input id="hero_przycisk" type="text" name="hero_przycisk" maxlength="60" required value="' . h((string)($h['przycisk'] ?? '')) . '">';
+
+    echo '<h2 style="margin-top:34px">Sekcja „O nas"</h2>';
+
+    echo '<label for="onas_naglowek">Nagłówek sekcji</label>';
+    echo '<p class="male" style="margin:-2px 0 6px">Mały napis nad tytułem. Teraz: <code>O nas</code>.</p>';
+    echo '<input id="onas_naglowek" type="text" name="onas_naglowek" maxlength="80" required value="' . h((string)($o['naglowek'] ?? '')) . '">';
+
+    echo '<label for="onas_podtytul">Tytuł</label>';
+    echo '<input id="onas_podtytul" type="text" name="onas_podtytul" maxlength="160" value="' . h((string)($o['podtytul'] ?? '')) . '">';
+
+    echo '<label for="onas_akapity">Akapity</label>';
+    echo '<p class="male" style="margin:-2px 0 6px">Jeden akapit w jednej linii. Pusta linia '
+        . 'nic nie zmienia — liczy się podział na linie.</p>';
+    echo '<textarea id="onas_akapity" name="onas_akapity" style="min-height:190px;font-family:inherit;font-size:16px">'
+        . h(implode("\n", array_map('strval', (array)($o['akapity'] ?? [])))) . '</textarea>';
+
+    echo '<p class="male" style="margin-top:18px">Nazwisko i stanowisko pod tekstem idą z danych '
+        . 'zespołu, nie stąd — tego panel nie zmienia.</p>';
+
+    echo '<p style="margin-top:22px"><button class="przycisk akcent" type="submit">Zapisz</button> '
+        . '<a class="przycisk lekki" href="?">Wróć do listy</a></p>';
+    echo '</form></div>';
+    stopka();
 }
 
 function widokKontaktu(array $k, string $komunikat, string $blad): void {

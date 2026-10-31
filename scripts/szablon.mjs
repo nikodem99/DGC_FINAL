@@ -321,6 +321,7 @@ const { FAQ_OGOLNE: faq } = await import('../src/api/faq.js');
 const { CENA, CZAS_TRWANIA, CO_ZYSKUJESZ, JAK_SIE_PRZYGOTOWAC } = await import('../src/api/konsultacje.js');
 const { KONTAKT } = await import('../src/api/kontakt.js');
 const { default: trescOferty } = await import('../src/api/serviceContent.js');
+const { default: tekstyStron } = await import('../src/api/tekstyStron.js');
 
 // Konsultacja nie jest lista, tylko kilkoma polami — zapisujemy ja osobno,
 // bo kontrola "czy zestaw nie jest pusty" nizej dotyczy list.
@@ -335,6 +336,7 @@ fs.writeFileSync(path.join(katTresci, 'konsultacje.json'), JSON.stringify({
 
 fs.writeFileSync(path.join(katTresci, 'kontakt.json'), JSON.stringify(KONTAKT, null, 1));
 fs.writeFileSync(path.join(katTresci, 'oferta.json'), JSON.stringify(trescOferty, null, 1));
+fs.writeFileSync(path.join(katTresci, 'strony.json'), JSON.stringify(tekstyStron, null, 1));
 
 const zestawy = { cennik, faq };
 for (const [nazwa, dane] of Object.entries(zestawy)) {
@@ -357,10 +359,10 @@ console.log(`Tresc stron dla panelu: cennik ${cennik.length} pakietow, FAQ ${faq
 
 {
     const strony = [
-        { plik: 'strona-glowna.html', zrodlo: 'index.html', pola: ['CENNIK'] },
+        { plik: 'strona-glowna.html', zrodlo: 'index.html', pola: ['CENNIK', 'HERO', 'O_NAS'] },
         { plik: 'cennik.html', zrodlo: 'cennik/index.html', pola: ['CENNIK'] },
         { plik: 'faq.html', zrodlo: 'faq/index.html', pola: ['FAQ', 'FAQ_SCHEMAT'] },
-        { plik: 'o-nas.html', zrodlo: 'o-nas/index.html', pola: ['FAQ'] },
+        { plik: 'o-nas.html', zrodlo: 'o-nas/index.html', pola: ['FAQ', 'O_NAS'] },
         { plik: 'konsultacje.html', zrodlo: 'umow-konsultacje/index.html',
           pola: ['KONS_CENA', 'KONS_CZAS', 'KONS_ZYSKUJESZ', 'KONS_PRZYGOTOWANIE'] },
         // Szesc podstron oferty. Tytul (<h2>) zostaje w szablonie, bo jest
@@ -403,6 +405,20 @@ console.log(`Tresc stron dla panelu: cennik ${cennik.length} pakietow, FAQ ${faq
         OFERTA_TRESC: {
             wzor: /(<article class="service_copy"><h2>[^<]*<\/h2>)[\s\S]*?<\/article>/,
             czym: '$1@@OFERTA_TRESC@@</article>',
+        },
+        // Hero stoi tylko na stronie glownej. Kotwiczymy na ZNACZNIKACH,
+        // a nie na tresci: fraza "Twoja ksiegowosc" wystepuje w gotowym
+        // HTML-u dwa razy (raz w H1, raz w tytule okna), wiec ciecie po
+        // tekscie trafiloby dwukrotnie i wywalilo budowanie.
+        HERO: {
+            wzor: /<span class="hero_nad">[\s\S]*?<\/a>/,
+            czym: '@@HERO@@',
+        },
+        // Sekcja "O nas" bez bloku .ceo — nazwisko prezes idzie z danych
+        // zespolu, nie z tekstu, wiec nie ma go po co wystawiac do edycji.
+        O_NAS: {
+            wzor: /<div class="content"><h2>O nas<\/h2>[\s\S]*?(?=<div class="ceo">)/,
+            czym: '<div class="content">@@O_NAS@@',
         },
         FAQ_SCHEMAT: {
             wzor: /<script type="application\/ld\+json">\{"@context":"https:\/\/schema\.org","@type":"FAQPage"[\s\S]*?<\/script>/,

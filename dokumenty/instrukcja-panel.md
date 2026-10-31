@@ -220,6 +220,28 @@ akapitami. Wejdźcie w edycję i dodajcie je.
 
 ---
 
+## Teksty na stronie głównej
+
+Zakładka **Strona główna**. Dwa bloki.
+
+**Powitanie na górze** — to pierwsze, co widzi odwiedzający: mała linijka
+nad spodem, duży nagłówek, akapit pod nim i napis na przycisku. Nagłówek jest
+jednocześnie tym, po czym Google rozpoznaje, o czym jest cała strona — warto,
+żeby mówił, czym się zajmujecie, a nie witał. Przycisk zawsze prowadzi na
+stronę „Umów konsultację”, zmieniacie tylko napis na nim.
+
+**Sekcja „O nas"** — nagłówek, tytuł i akapity. Akapity wpisujecie po jednym
+w linii.
+
+Jedna rzecz, o której łatwo zapomnieć: **sekcja „O nas" stoi w dwóch miejscach
+naraz** — na stronie głównej i na podstronie `/o-nas/`. Zmiana przechodzi przez
+obie, nie da się ustawić osobno.
+
+Nazwisko i stanowisko pod tekstem idą z danych zespołu, nie z tego formularza.
+Tego panel nie zmienia.
+
+---
+
 ## Cennik
 
 Zakładka **Cennik** w pasku na górze. Zmiany widać od razu na stronie głównej

@@ -190,6 +190,38 @@ katalogu** (`zip -x 'panel-dgc/*' -x 'panel-dgc'`), żeby nie nadpisać panelu
 stojącego na serwerze. Gdy panel faktycznie się zmienia, wgrywa się osobno
 `index.php` i `generator.php` do katalogu o właściwej nazwie.
 
+### Teksty stron: hero i „O nas"
+
+`dane/tresc/strony.json`, klucze `hero` i `onas`. Źródłem w repozytorium jest
+`src/api/tekstyStron.js`.
+
+**Dodanie takiego pola to cztery miejsca naraz** i wszystkie muszą się zgadzać:
+
+1. `src/api/tekstyStron.js` — wartość wyjściowa wkompilowana w paczkę,
+2. komponent Reacta — `uzyjTresci('strony')` zamiast tekstu na sztywno,
+3. `scripts/szablon.mjs` — wzór wycięcia w `WZORY` i pole na liście `strony`,
+4. `public/panel-dgc/generator.php` — funkcja składająca ten sam HTML
+   (`heroHtml()`, `oNasHtml()`) plus wpięcie w `odswiezStroneStale()`,
+5. `scripts/pobierz-z-serwera.mjs` — ściąganie zmian biura z powrotem do repo.
+
+Punkt 4 jest tym, o którym najłatwiej zapomnieć, ale budowanie go wymusza:
+kontrola „Panel zna wszystkie pola szablonów" przerywa build, gdy w szablonie
+zostanie znacznik, którego `podstaw()` nie wypełni. Sprawdzone przy tej zmianie
+— build padł dokładnie na tym, zanim dopisałem PHP.
+
+**Hero cięte jest po znacznikach, nie po treści.** Fraza „Twoja księgowość"
+występuje w gotowym HTML-u dwa razy — raz w `<h1>`, raz w tytule okna — więc
+wzór oparty na tekście trafiłby dwukrotnie i wywalił budowanie. Wzór kotwiczy
+na `<span class="hero_nad">` i kończy na `</a>` przycisku.
+
+**„O nas" stoi na dwóch stronach:** `/` i `/o-nas/`. Jedno pole, dwa szablony,
+jeden zapis przebudowuje obie. Blok `.ceo` z nazwiskiem prezes zostaje poza
+wycięciem, bo idzie z danych zespołu.
+
+Zgodność HTML-u panelu z HTML-em paczki sprawdzamy porównaniem bajt w bajt
+`heroHtml()`/`oNasHtml()` z fragmentem prerenderowanej strony. Rozjazd oznacza,
+że zapis z panelu po cichu zmieniłby wygląd strony.
+
 ### Szkice
 
 `szkice.json` **w katalogu panelu**, nie w `dane/`. To nie jest kosmetyka:

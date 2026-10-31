@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import VideoModal from '../ModalVideo/VideoModal';
 import HeroWideo from '../HeroWideo/HeroWideo';
+import { useTresci } from '../../api/tresciStron.js';
 
 // image
 import Hshape from '../../images/slider/shape.svg'
@@ -12,6 +13,7 @@ const ClickHandler = () => {
 
 
 const hero = () => {
+    const { hero: H } = useTresci('strony');
     return (
         <section className="hero_section">
             <div className="bg_shape">
@@ -20,15 +22,12 @@ const hero = () => {
                 </svg>
             </div>
             <div className="content">
-                <span className="hero_nad">Biuro rachunkowe · Łódź · online</span>
+                <span className="hero_nad">{H.nad}</span>
                 {/* Jedyny H1 na stronie glownej. Wczesniej byl to H3, a rolę H1
    pelnil ukryty placeholder z trescia "title". */}
-                <h1>Twoja księgowość
-                    w dobrych rękach</h1>
-                <p>Obsługujemy jednoosobowe działalności, spółki i organizacje z całej Polski.
-                    W pełni online, bez dojazdów do biura, z ubezpieczeniem OC.
-                    Prowadzimy księgi nieprzerwanie od 2011 roku.</p>
-                <Link onClick={ClickHandler} className="theme-btn theme-btn-accent" to="/umow-konsultacje/">Umów konsultację</Link>
+                <h1>{H.tytul}</h1>
+                <p>{H.akapit}</p>
+                <Link onClick={ClickHandler} className="theme-btn theme-btn-accent" to="/umow-konsultacje/">{H.przycisk}</Link>
             </div>
             <div className="image_content">
                 <div className="video">

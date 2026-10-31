@@ -1,6 +1,7 @@
 import React from 'react';
 import Licznik from '../Licznik/Licznik';
 import { latNaRynku } from '../../seo/firma.js';
+import { useTresci } from '../../api/tresciStron.js';
 
 // image
 // Zdjecie prezes poza paczka Vite, zeby panel mogl je podmienic.
@@ -10,6 +11,7 @@ const Ab1 = '/dane/obrazki/paniprezes.jpg';
 // Tresc oparta na materialach DGC: biurodgc.pl (strona glowna) oraz
 // biurodgc.pl/prezes-zarzadu/. Zadnych danych spoza tych zrodel.
 const about = (props) => {
+    const { onas: O } = useTresci('strony');
     return (
         <section className={"" + props.hclass}>
             <div className="container">
@@ -37,15 +39,9 @@ const about = (props) => {
                     </div>
                     <div className="col-lg-6 col-12">
                         <div className="content">
-                            <h2>O nas</h2>
-                            <h3>Partnerem w biznesie, nie tylko biurem</h3>
-                            <p>Od 2011 roku prowadzimy księgowość firm o zróżnicowanym profilu działania
-                                i różnej wielkości. Wsłuchujemy się w potrzeby klienta i dobieramy rozwiązania
-                                do jego sytuacji. Chcemy być partnerem w biznesie, a nie tylko biurem,
-                                które księguje dokumenty.</p>
-                            <p>Obsługa odbywa się online, więc dokumenty dostarczasz wtedy, kiedy Ci wygodnie,
-                                bez dojazdów do biura. Prowadzimy pełną księgowość, rozliczenia podatkowe
-                                oraz sprawy kadrowo-płacowe, a firmom szukającym adresu oferujemy biuro wirtualne.</p>
+                            <h2>{O.naglowek}</h2>
+                            <h3>{O.podtytul}</h3>
+                            {O.akapity.map((a, i) => <p key={i}>{a}</p>)}
                             <div className="ceo">
                                 <div>
                                     <h4>Danuta Grabińska-Chłopaś</h4>

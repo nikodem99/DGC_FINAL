@@ -214,6 +214,44 @@ async function wczytajZdalne(co) {
     }
 }
 
+// --- teksty strony glownej: hero i "O nas" ----------------------------
+//
+// Jeden plik, dwa bloki. "O nas" stoi na stronie glownej I na /o-nas/,
+// wiec jego przeoczenie cofneloby tekst na dwoch stronach naraz.
+
+{
+    const t = await wczytajZdalne('strony');
+    if (t && (t.hero || t.onas)) {
+        const plik = path.join(KORZEN, 'src/api/tekstyStron.js');
+        let zrodlo = fs.readFileSync(plik, 'utf8');
+        const przed = zrodlo;
+
+        if (t.hero && t.hero.tytul) {
+            zrodlo = zrodlo.replace(
+                /export const HERO = \{[\s\S]*?\n\};/,
+                `export const HERO = ${naLiterale(t.hero)};`
+            );
+        }
+        if (t.onas && Array.isArray(t.onas.akapity) && t.onas.akapity.length) {
+            zrodlo = zrodlo.replace(
+                /export const O_NAS = \{[\s\S]*?\n\};/,
+                `export const O_NAS = ${naLiterale(t.onas)};`
+            );
+        }
+
+        if (!/export const HERO = \{/.test(przed) || !/export const O_NAS = \{/.test(przed)) {
+            console.error('[pobierz] strony: nie rozpoznaje struktury tekstyStron.js');
+            process.exit(1);
+        }
+        if (zrodlo !== przed) {
+            fs.writeFileSync(plik, zrodlo);
+            console.log('[pobierz] strony: hero i "O nas" pobrane z serwera -> src/api/tekstyStron.js');
+        } else {
+            console.log('[pobierz] strony: bez zmian');
+        }
+    }
+}
+
 // Slugi, ktore juz sa w repozytorium.
 const blogsJs = fs.readFileSync(path.join(KORZEN, 'src/api/blogs.js'), 'utf8');
 const lokalne = new Set([...blogsJs.matchAll(/slug:\s*'((?:[^'\\]|\\.)*)'/g)].map((m) => m[1]));

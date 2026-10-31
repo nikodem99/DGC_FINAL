@@ -456,6 +456,44 @@ function podobneHtml(array $wpisy, int $nr): string {
     return $out;
 }
 
+/** Teksty stron: hero na stronie glownej i sekcja "O nas". */
+function wczytajTekstyStron(): array {
+    $plik = DANE . '/tresc/strony.json';
+    if (!is_file($plik)) return [];
+    $d = json_decode((string)file_get_contents($plik), true);
+    return is_array($d) ? $d : [];
+}
+
+function zapiszTekstyStron(array $dane): bool {
+    $kat = DANE . '/tresc';
+    if (!is_dir($kat)) @mkdir($kat, 0755, true);
+    return zapiszAtomowo($kat . '/strony.json',
+        (string)json_encode($dane, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+}
+
+/**
+ * Hero strony glownej jako HTML.
+ *
+ * Odpowiednik src/components/hero/hero.jsx. Kazda zmiana tam wymaga zmiany
+ * tutaj, inaczej strona przebudowana z panelu bedzie wygladac inaczej niz
+ * strona z paczki.
+ */
+function heroHtml(array $h): string {
+    return '<span class="hero_nad">' . h((string)($h['nad'] ?? '')) . '</span>'
+        . '<h1>' . h((string)($h['tytul'] ?? '')) . '</h1>'
+        . '<p>' . h((string)($h['akapit'] ?? '')) . '</p>'
+        . '<a class="theme-btn theme-btn-accent" href="/umow-konsultacje/" data-discover="true">'
+        . h((string)($h['przycisk'] ?? '')) . '</a>';
+}
+
+/** Sekcja "O nas" jako HTML. Odpowiednik src/components/about/about.jsx. */
+function oNasHtml(array $o): string {
+    $out = '<h2>' . h((string)($o['naglowek'] ?? '')) . '</h2>'
+        . '<h3>' . h((string)($o['podtytul'] ?? '')) . '</h3>';
+    foreach (($o['akapity'] ?? []) as $a) $out .= '<p>' . h((string)$a) . '</p>';
+    return $out;
+}
+
 /** Odczyt tresci strony stalej: 'cennik' albo 'faq'. */
 function wczytajTrescStrony(string $co): array {
     $plik = DANE . '/tresc/' . $co . '.json';
@@ -713,15 +751,22 @@ function wczytajKonsultacje(): array {
  * Wolane po kazdym zapisie tresci stron stalych.
  */
 function odswiezStroneStale(array $cennik, array $faq, ?string &$blad = null): int {
+    // Teksty stron. Gdy pliku nie ma (stary serwer, nowy panel), bierzemy
+    // puste tablice — heroHtml() i oNasHtml() wyprodukuja wtedy puste
+    // znaczniki zamiast wywalic skladanie strony.
+    $teksty = wczytajTekstyStron();
+    $hero = heroHtml((array)($teksty['hero'] ?? []));
+    $oNas = oNasHtml((array)($teksty['onas'] ?? []));
+
     $strony = [
         ['szablon' => 'strona-glowna.html', 'cel' => KORZEN . '/index.html',
-         'pola' => ['CENNIK' => kartyCennika($cennik, true)]],
+         'pola' => ['CENNIK' => kartyCennika($cennik, true), 'HERO' => $hero, 'O_NAS' => $oNas]],
         ['szablon' => 'cennik.html', 'cel' => KORZEN . '/cennik/index.html',
          'pola' => ['CENNIK' => kartyCennika($cennik, false)]],
         ['szablon' => 'faq.html', 'cel' => KORZEN . '/faq/index.html',
          'pola' => ['FAQ' => pozycjeFaq($faq, 'faq'), 'FAQ_SCHEMAT' => schematFaq($faq)]],
         ['szablon' => 'o-nas.html', 'cel' => KORZEN . '/o-nas/index.html',
-         'pola' => ['FAQ' => pozycjeFaq($faq, 'onas', 6)]],
+         'pola' => ['FAQ' => pozycjeFaq($faq, 'onas', 6), 'O_NAS' => $oNas]],
     ];
 
     $konsultacje = wczytajKonsultacje();
