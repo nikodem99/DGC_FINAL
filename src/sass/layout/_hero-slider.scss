@@ -207,53 +207,61 @@
 			}
 		}
 
+		/* Przycisk odtwarzania: mniejszy i wciagniety w lewy gorny rog kadru.
+		   Prosba biura z 31.10.2026 ("zmniejszyc guzik do odtworzenia filmu
+		   dac go w jakis rog"). Wczesniej mial 140px i siedzial w jednej
+		   trzeciej wysokosci, czyli w srodku zdjecia.
+
+		   Rog LEWY GORNY, a nie dolny: podpis "Obejrzyj film" wisi POD
+		   przyciskiem (top: calc(100% + 14px) w _dgc-theme.scss), wiec przy
+		   dolnej krawedzi wyszedlby poza kadr. */
 		.video {
 			position: absolute;
-			left: 55px;
-			top: 215px;
+			left: 24px;
+			top: 24px;
 			background: $theme-primary-color;
-			width: 140px;
-			height: 140px;
+			width: 76px;
+			height: 76px;
 			z-index: 111;
 
 			@include media-query(1499px) {
-				left: 21px;
-				top: 148px;
+				left: 20px;
+				top: 20px;
 			}
 
 			@include media-query(1199px) {
-				width: 90px;
-				height: 90px;
-				left: 40px;
-				top: 148px;
+				width: 66px;
+				height: 66px;
+				left: 18px;
+				top: 18px;
 			}
 
 			@include media-query(991px) {
-				left: 10px;
-				top: 100px;
+				left: 14px;
+				top: 14px;
 			}
 
 			@include media-query(499px) {
-				width: 70px;
-				height: 70px;
-				left: -1px;
-				top: 54px;
+				width: 54px;
+				height: 54px;
+				left: 10px;
+				top: 10px;
 			}
 
 			&::before {
-				width: 120px;
-				height: 120px;
+				width: 66px;
+				height: 66px;
 				border: 1px solid $dgc-brand;
 				background: transparent;
 
 				@include media-query(1199px) {
-					width: 85px;
-					height: 85px;
+					width: 58px;
+					height: 58px;
 				}
 
 				@include media-query(499px) {
-					width: 60px;
-					height: 60px;
+					width: 48px;
+					height: 48px;
 				}
 			}
 

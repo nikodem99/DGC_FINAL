@@ -322,6 +322,7 @@ const { CENA, CZAS_TRWANIA, CO_ZYSKUJESZ, JAK_SIE_PRZYGOTOWAC } = await import('
 const { KONTAKT } = await import('../src/api/kontakt.js');
 const { default: trescOferty } = await import('../src/api/serviceContent.js');
 const { default: tekstyStron } = await import('../src/api/tekstyStron.js');
+const { default: uslugi } = await import('../src/api/Services.js');
 
 // Konsultacja nie jest lista, tylko kilkoma polami — zapisujemy ja osobno,
 // bo kontrola "czy zestaw nie jest pusty" nizej dotyczy list.
@@ -359,7 +360,11 @@ console.log(`Tresc stron dla panelu: cennik ${cennik.length} pakietow, FAQ ${faq
 
 {
     const strony = [
-        { plik: 'strona-glowna.html', zrodlo: 'index.html', pola: ['CENNIK', 'HERO', 'O_NAS'] },
+        { plik: 'strona-glowna.html', zrodlo: 'index.html',
+          pola: ['CENNIK', 'HERO', 'O_NAS', 'KARTA_1', 'KARTA_2', 'KARTA_3', 'KARTA_4', 'KARTA_5', 'KARTA_6'] },
+        // Strona listujaca oferte. Dotad panel znal tylko podstrony
+        // pojedynczych uslug, nie kafelki na liscie.
+        { plik: 'oferta.html', zrodlo: 'oferta/index.html', pola: ['KARTA_1', 'KARTA_2', 'KARTA_3', 'KARTA_4', 'KARTA_5', 'KARTA_6'] },
         { plik: 'cennik.html', zrodlo: 'cennik/index.html',
           pola: ['CENNIK', 'CEN_WSTEP', 'CEN_UWAGA', 'CEN_OFERTA', 'CEN_FORMULARZ'] },
         { plik: 'faq.html', zrodlo: 'faq/index.html', pola: ['FAQ', 'FAQ_SCHEMAT'] },
@@ -463,6 +468,20 @@ console.log(`Tresc stron dla panelu: cennik ${cennik.length} pakietow, FAQ ${faq
             czym: '@@FAQ_SCHEMAT@@',
         },
     };
+
+    // Opisy kafelkow oferty. Kotwiczymy na TYTULE karty, a nie na jej
+    // pozycji: strona glowna i /oferta/ renderuja te same karty, ale
+    // z innym poziomem naglowka (h3 i h2), a kolejnosc moze sie kiedys
+    // zmienic. Tytul jest na obu stronach unikalny.
+    const uciekaj = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    uslugi.slice(0, 6).forEach((u, i) => {
+        WZORY[`KARTA_${i + 1}`] = {
+            wzor: new RegExp(
+                `(<div class="service_card">[\\s\\S]*?<h[23]>${uciekaj(u.title)}</h[23]>)<p>[\\s\\S]*?</p>`
+            ),
+            czym: `$1@@KARTA_${i + 1}@@`,
+        };
+    });
 
     const bledyStron = [];
     const katalogSzablonow = path.join(DIST, 'dane', 'szablon');

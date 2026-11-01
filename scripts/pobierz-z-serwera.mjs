@@ -244,6 +244,12 @@ async function wczytajZdalne(co) {
                 `export const CENNIK_TEKSTY = ${naLiterale(t.cennik)};`
             );
         }
+        if (t.ofertaKarty && Object.keys(t.ofertaKarty).length) {
+            zrodlo = zrodlo.replace(
+                /export const OFERTA_KARTY = \{[\s\S]*?\n\};/,
+                `export const OFERTA_KARTY = ${naLiterale(t.ofertaKarty)};`
+            );
+        }
         if (t.konsultacja && Array.isArray(t.konsultacja.kroki) && t.konsultacja.kroki.length) {
             zrodlo = zrodlo.replace(
                 /export const KONSULTACJA_TEKSTY = \{[\s\S]*?\n\};/,
@@ -252,7 +258,8 @@ async function wczytajZdalne(co) {
         }
 
         const wzorce = [/export const HERO = \{/, /export const O_NAS = \{/,
-                        /export const CENNIK_TEKSTY = \{/, /export const KONSULTACJA_TEKSTY = \{/];
+                        /export const CENNIK_TEKSTY = \{/, /export const KONSULTACJA_TEKSTY = \{/,
+                        /export const OFERTA_KARTY = \{/];
         if (wzorce.some((w) => !w.test(przed))) {
             console.error('[pobierz] strony: nie rozpoznaje struktury tekstyStron.js');
             process.exit(1);

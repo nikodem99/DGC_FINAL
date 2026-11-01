@@ -270,6 +270,16 @@ albo mniej niż cztery, numeracja sama się przeliczy.
 Cenę, czas trwania oraz listy „Co z tego masz" i „Jak się przygotować"
 zmieniacie w zakładce **Konsultacja**.
 
+### Kafelki oferty
+
+Sześć kafelków, które stoją i na stronie głównej, i na stronie „Oferta".
+Zmieniacie sam opis pod tytułem.
+
+**Tytułu nie da się tu zmienić.** Jest jednocześnie nazwą w menu i częścią
+adresu podstrony — jego zmiana przebudowałaby nawigację i zepsuła odnośniki,
+które ludzie mają w zakładkach albo które zna Google. Jeśli tytuł naprawdę ma
+się zmienić, trzeba o tym powiedzieć opiekunowi strony.
+
 ---
 
 ## Cennik

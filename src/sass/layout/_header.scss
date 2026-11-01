@@ -1393,7 +1393,7 @@
 			   Przy max-height oba ograniczenia dzialaja razem i proporcja
 			   zostaje zachowana. Sprawdzone pomiarem w przegladarce. */
 			height: auto;
-			max-height: 78px;
+			max-height: 92px;
 			width: auto;
 			max-width: 100%;
 
@@ -1415,15 +1415,15 @@
 			   Androidow. Przy max-height oba ograniczenia dzialaja
 			   razem i szerokosc schodzi proporcjonalnie. */
 			@media (max-width:1399px) {
-				max-height: 72px;
+				max-height: 84px;
 			}
 
 			@media (max-width:991px) {
-				max-height: 64px;
+				max-height: 74px;
 			}
 
 			@media (max-width:575px) {
-				max-height: 52px;
+				max-height: 60px;
 			}
 		}
 	}
@@ -1476,7 +1476,7 @@
 @media(max-width: 440px) {
 	.dgc-site-header .navbar-header .navbar-brand {
 		img {
-			max-width: 210px;
+			max-width: 234px;
 		}
 	}
 }
@@ -1484,7 +1484,7 @@
 @media(max-width: 370px) {
 	.dgc-site-header .navbar-header .navbar-brand {
 		img {
-			max-width: 172px;
+			max-width: 196px;
 		}
 	}
 }

@@ -214,6 +214,20 @@ kontrola „Panel zna wszystkie pola szablonów" przerywa build, gdy w szablonie
 zostanie znacznik, którego `podstaw()` nie wypełni. Sprawdzone przy tej zmianie
 — build padł dokładnie na tym, zanim dopisałem PHP.
 
+**Kafelki oferty** (`ofertaKarty`) są cięte po jednym akapicie na kartę, a wzory
+powstają w pętli z `src/api/Services.js` — nie są wpisane ręcznie. Kotwicą jest
+TYTUŁ karty, nie jej pozycja: strona główna renderuje je w `h3`, a `/oferta/`
+w `h2`, więc wzór dopuszcza oba. Numeracja `@@KARTA_1@@`..`@@KARTA_6@@` idzie
+w kolejności z `Services.js`, a `generator.php` ma tę samą kolejność wpisaną
+w stałej `KARTY_OFERTY` — **zmiana kolejności tam wymaga zmiany tutaj**.
+
+Przy okazji powstał nowy szablon `oferta.html` dla strony listującej ofertę.
+Dotąd panel znał tylko podstrony pojedynczych usług.
+
+`src/api/Services.js` importuje `./serviceContent.js` **z rozszerzeniem** —
+bez niego `scripts/szablon.mjs` nie wczyta go w czystym Node (`ERR_MODULE_NOT_FOUND`).
+Vite wybacza brak rozszerzenia, Node nie.
+
 **Kolejność pól na liście `pola` ma znaczenie.** `CEN_WSTEP` musi iść przed
 `CEN_OFERTA`: oba bloki zaczynają się tym samym `<div class="col-lg-9 col-12">`,
 a leniwy wzór `CEN_OFERTA` złapałby od pierwszego z nich. Po podmianie pierwszego

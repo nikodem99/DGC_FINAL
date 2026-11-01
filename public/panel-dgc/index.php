@@ -1163,6 +1163,12 @@ function zapiszTekstyStronZFormularza(): array {
     if ($dane['cennik']['tytul'] === '')      return ['Tytuł sekcji na cenniku nie może być pusty.', ''];
     if ($dane['konsultacja']['tytul'] === '') return ['Tytuł na stronie konsultacji nie może być pusty.', ''];
 
+    $karty = [];
+    foreach (KARTY_OFERTY as $slug) {
+        $karty[$slug] = trim((string)($_POST['karta_' . str_replace('-', '_', $slug)] ?? ''));
+    }
+    $dane['ofertaKarty'] = $karty;
+
     if (!zapiszTekstyStron($dane)) return ['Nie udało się zapisać tekstów.', ''];
 
     $bladStron = null;
@@ -1323,6 +1329,20 @@ function widokTekstowStron(array $t, string $komunikat, string $blad): void {
     echo '<input id="kons_form_tytul" type="text" name="kons_form_tytul" maxlength="160" value="' . h((string)($k['formularzTytul'] ?? '')) . '">';
     echo '<label for="kons_form_opis">Zdanie pod tym nagłówkiem</label>';
     echo '<textarea id="kons_form_opis" name="kons_form_opis" style="min-height:70px;font-family:inherit;font-size:16px">' . h((string)($k['formularzOpis'] ?? '')) . '</textarea>';
+
+    $ko = (array)($t['ofertaKarty'] ?? []);
+    echo '<h2 style="margin-top:34px">Kafelki oferty</h2>';
+    echo '<p class="male">Sześć kafelków ze strony głównej i ze strony '
+        . '<a href="/oferta/" target="_blank" rel="noreferrer">Oferta</a>. Zmieniacie sam opis pod '
+        . 'tytułem. <strong>Tytułu nie da się tu zmienić</strong> — jest jednocześnie nazwą w menu '
+        . 'i częścią adresu podstrony, więc jego zmiana przebudowałaby nawigację.</p>';
+    foreach (KARTY_OFERTY as $slug) {
+        $poleId = 'karta_' . str_replace('-', '_', $slug);
+        echo '<label for="' . $poleId . '">' . h(NAZWY_KART[$slug] ?? $slug) . '</label>';
+        echo '<textarea id="' . $poleId . '" name="' . $poleId . '" maxlength="300" '
+            . 'style="min-height:70px;font-family:inherit;font-size:16px">'
+            . h((string)($ko[$slug] ?? '')) . '</textarea>';
+    }
 
     echo '<p style="margin-top:22px"><button class="przycisk akcent" type="submit">Zapisz</button> '
         . '<a class="przycisk lekki" href="?">Wróć do listy</a></p>';

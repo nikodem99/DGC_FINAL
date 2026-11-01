@@ -2,10 +2,13 @@ import React from "react";
 import { Link } from 'react-router-dom'
 import SectionTitle from "../SectionTitle/SectionTitle";
 import Services from "../../api/Services";
+import { useTresci } from "../../api/tresciStron.js";
 
 
 
 const ServiceSection = (props) => {
+    // Opisy kart z panelu; gdy klucza brak, zostaje tekst z paczki.
+    const OPISY = useTresci('strony').ofertaKarty;
 
     const ClickHandler = () => {
         window.scrollTo(10, 0);
@@ -31,7 +34,7 @@ const ServiceSection = (props) => {
                                 </div>
                                 <div className="content">
                                     <h2>{servic.title}</h2>
-                                    <p>{servic.description}</p>
+                                    <p>{OPISY?.[servic.slug] ?? servic.description}</p>
                                     <Link onClick={ClickHandler} to={`/oferta/${servic.slug}/`} aria-label={`Przejdź do: ${servic.title}`}><i className="flaticon-right-arrow" aria-hidden="true"></i></Link>
                                 </div>
                             </div>

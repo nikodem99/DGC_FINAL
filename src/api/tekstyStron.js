@@ -75,9 +75,22 @@ export const KONSULTACJA_TEKSTY = {
         + 'żeby potwierdzić termin i cenę.',
 };
 
+// Opisy szesciu kafelkow oferty na stronie glownej i na /oferta/.
+// Sam TYTUL karty zostaje poza panelem: jest jednoczesnie nazwa w menu
+// i podstawa adresu podstrony, wiec jego zmiana przebudowalaby nawigacje.
+export const OFERTA_KARTY = {
+    'biuro-rachunkowe-lodz': 'Kompleksowa obsługa rachunkowa i podatkowa dla firm z Łodzi i całej Polski.',
+    'biuro-ksiegowe-lodz': 'Pełna księgowość, KPiR, rozliczenia podatkowe i doradztwo dla przedsiębiorców.',
+    'rozliczenia-podatku': 'Terminowe i zgodne z przepisami rozliczenia najważniejszych zobowiązań podatkowych.',
+    'rozliczenia-kadrowo-placowe-pracownikow': 'Rzetelna obsługa wynagrodzeń, dokumentacji pracowniczej i obowiązków urzędowych.',
+    'uslugi-kadrowo-placowe': 'Outsourcing kadr i płac dopasowany do wielkości, branży i sposobu działania firmy.',
+    'prowadzenie-ksiag-rachunkowych': 'Księgi rachunkowe, KPiR, ryczałt oraz kompletna ewidencja dokumentacji firmy.',
+};
+
 export default {
     hero: HERO,
     onas: O_NAS,
     cennik: CENNIK_TEKSTY,
     konsultacja: KONSULTACJA_TEKSTY,
+    ofertaKarty: OFERTA_KARTY,
 };

@@ -3,7 +3,7 @@
 // ktorych NIC nie renderowalo. Przetrwaly wczesniejsze czyszczenie szablonu
 // tylko dlatego, ze ten plik je importowal — wiec wygladaly na uzywane.
 // Sprawdzone po gotowej paczce: zero wystapien na wszystkich 473 stronach.
-import serviceContent from './serviceContent'
+import serviceContent from './serviceContent.js'
 
 
 

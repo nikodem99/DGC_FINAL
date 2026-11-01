@@ -1,8 +1,13 @@
 // Dane podstrony /umow-konsultacje.
 //
 // ┌──────────────────────────────────────────────────────────────────────┐
-// │ Cena i czas trwania POTWIERDZONE przez biuro 22.10.2026:             │
-// │ 250 zl netto za 30 minut (wczesniej bylo robocze 200 zl za godzine). │
+// │ Cena i czas trwania. Historia, bo zmienialo sie dwa razy:            │
+// │   22.10.2026 biuro potwierdzilo 250 zl netto za 30 minut             │
+// │              (wczesniej bylo robocze 200 zl za godzine),             │
+// │   01.11.2026 biuro poprosilo o 60 minut przy tej samej kwocie —      │
+// │              dwa niezalezne maile: "godzina konsultacji-60 minut"    │
+// │              oraz "konsultacje - czas trwania 1 h".                  │
+// │ Kwota BEZ ZMIAN: 250 zl netto. Zmienil sie tylko czas.               │
 // │ Cena wystepuje w calym projekcie TYLKO w stalej CENA ponizej.        │
 // └──────────────────────────────────────────────────────────────────────┘
 
@@ -14,11 +19,11 @@
 // komentarze musza stac nad nim, nie w srodku.
 export const CENA = {
     kwota: 'od 250 zł netto',
-    jednostka: 'za 30 minut konsultacji',
+    jednostka: 'za 60 minut konsultacji',
     uwaga: 'Ostateczną cenę potwierdzamy telefonicznie, zanim poprosimy o płatność.',
 };
 
-export const CZAS_TRWANIA = '30 minut';
+export const CZAS_TRWANIA = '60 minut';
 
 // Tematy konsultacji. Spojne z lista TEMATY uzywana w pozostalych
 // formularzach, ale zawezone do spraw, ktore realnie nadaja sie na

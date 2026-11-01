@@ -1,6 +1,15 @@
 // Jedno zrodlo cen dla podstrony /cennik i sekcji na stronie glownej.
 // Stawki pochodza z materialow DGC. Sa wywolawcze ("od") i nie maja daty
 // aktualizacji w zrodle — przed publikacja wymagaja potwierdzenia u klienta.
+//
+// Zakres pakietow poprawiony 01.11.2026 na podstawie uwag biura naniesionych
+// na wydruk cennika (mail Kamila). Z kazdego pakietu wypadly konsultacje,
+// w ich miejsce weszly czynnosci, ktore biuro faktycznie wykonuje.
+//
+// UWAGA do potwierdzenia u klienta: ryczalt zszedl z 20 do 5 dokumentow
+// miesiecznie, a KPiR zostal przy 20 — przy tej samej cenie wywolawczej
+// "od 200 zl". Tak bylo napisane na wydruku, ale wychodzi na to, ze
+// prostsza ksiegowosc jest drozsza w przeliczeniu na dokument.
 const pakiety = [
     {
         title: 'Ryczałt od przychodów ewidencjonowanych',
@@ -9,9 +18,9 @@ const pakiety = [
         naStronieGlownej: true,
         dlaKogo: 'Dla jednoosobowych działalności rozliczających się ryczałtem.',
         features: [
-            'Ewidencja przychodów do 20 dokumentów miesięcznie',
+            'Ewidencja przychodów do 5 dokumentów miesięcznie',
             'Obliczenie zaliczki na podatek dochodowy PIT',
-            'Do dwóch godzin konsultacji w miesiącu',
+            'Raport elektroniczny plików JPK',
         ],
     },
     {
@@ -23,7 +32,7 @@ const pakiety = [
         features: [
             'Prowadzenie KPiR do 20 dokumentów miesięcznie',
             'Obliczenie zaliczki na podatek dochodowy PIT',
-            'Do dwóch godzin konsultacji w miesiącu',
+            'Ewidencja środków trwałych oraz wartości niematerialnych i prawnych',
         ],
     },
     {
@@ -36,7 +45,7 @@ const pakiety = [
         features: [
             'Prowadzenie ksiąg handlowych do 20 dokumentów miesięcznie',
             'Obliczenie zaliczki na podatek dochodowy CIT',
-            'Do dwóch godzin konsultacji w miesiącu',
+            'Generowanie i wysyłka JPK_CIT',
         ],
     },
     {

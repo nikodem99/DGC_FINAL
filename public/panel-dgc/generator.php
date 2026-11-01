@@ -524,6 +524,39 @@ function cennikFormularzHtml(array $c): string {
     return '<p class="form_section_lead">' . h((string)($c['formularz'] ?? '')) . '</p>';
 }
 
+/**
+ * Kolejnosc kafelkow oferty. MUSI zgadzac sie z src/api/Services.js, bo
+ * scripts/szablon.mjs numeruje znaczniki @@KARTA_1@@..@@KARTA_6@@ wlasnie
+ * w tej kolejnosci. Zmiana kolejnosci tam wymaga zmiany tutaj.
+ */
+const KARTY_OFERTY = [
+    'biuro-rachunkowe-lodz',
+    'biuro-ksiegowe-lodz',
+    'rozliczenia-podatku',
+    'rozliczenia-kadrowo-placowe-pracownikow',
+    'uslugi-kadrowo-placowe',
+    'prowadzenie-ksiag-rachunkowych',
+];
+
+/** Tytuly kart, tylko jako etykiety w panelu. Zrodlem jest Services.js. */
+const NAZWY_KART = [
+    'biuro-rachunkowe-lodz' => 'Biuro rachunkowe Łódź',
+    'biuro-ksiegowe-lodz' => 'Biuro księgowe Łódź',
+    'rozliczenia-podatku' => 'Rozliczenia podatku VAT, PIT, CIT, IFT, PCC',
+    'rozliczenia-kadrowo-placowe-pracownikow' => 'Rozliczenia kadrowo-płacowe pracowników',
+    'uslugi-kadrowo-placowe' => 'Usługi kadrowo-płacowe',
+    'prowadzenie-ksiag-rachunkowych' => 'Prowadzenie ksiąg rachunkowych',
+];
+
+/** Pola @@KARTA_N@@: sam akapit opisu w kafelku, bez reszty karty. */
+function polaKartOferty(array $karty): array {
+    $pola = [];
+    foreach (KARTY_OFERTY as $i => $slug) {
+        $pola['KARTA_' . ($i + 1)] = '<p>' . h((string)($karty[$slug] ?? '')) . '</p>';
+    }
+    return $pola;
+}
+
 function konsWstepHtml(array $k): string {
     return '<h2>' . h((string)($k['tytul'] ?? '')) . '</h2>'
         . '<p>' . h((string)($k['wstep'] ?? '')) . '</p>';
@@ -811,10 +844,13 @@ function odswiezStroneStale(array $cennik, array $faq, ?string &$blad = null): i
     $oNas = oNasHtml((array)($teksty['onas'] ?? []));
     $cen = (array)($teksty['cennik'] ?? []);
     $kon = (array)($teksty['konsultacja'] ?? []);
+    $karty = polaKartOferty((array)($teksty['ofertaKarty'] ?? []));
 
     $strony = [
         ['szablon' => 'strona-glowna.html', 'cel' => KORZEN . '/index.html',
-         'pola' => ['CENNIK' => kartyCennika($cennik, true), 'HERO' => $hero, 'O_NAS' => $oNas]],
+         'pola' => ['CENNIK' => kartyCennika($cennik, true), 'HERO' => $hero, 'O_NAS' => $oNas] + $karty],
+        ['szablon' => 'oferta.html', 'cel' => KORZEN . '/oferta/index.html',
+         'pola' => $karty],
         ['szablon' => 'cennik.html', 'cel' => KORZEN . '/cennik/index.html',
          'pola' => ['CENNIK' => kartyCennika($cennik, false),
                     'CEN_WSTEP' => cennikWstepHtml($cen),
