@@ -57,7 +57,18 @@ if (!zdalneWpisy.length) {
 // Zapis w stylu reszty projektu: apostrofy zamiast cudzyslowow i klucze
 // bez cudzyslowow. Inaczej kazde pobranie z serwera robilo by halasliwy
 // diff na calym pliku.
-const wApostrofach = (w) => `'${String(w).replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+// Uciekamy tez znaki, ktore same w sobie przerywaja literal JavaScriptu:
+// nowa linia, powrot karetki oraz U+2028/U+2029 (separatory wiersza i akapitu,
+// ktore w JS licza sie jak znak konca wiersza). Od 01.11.2026 przez te funkcje
+// przechodzi kilkanascie pol z <textarea> w panelu — wystarczy, ze biuro
+// wcisnie Enter w akapicie, i src/api/tekstyStron.js przestaje sie parsowac.
+const wApostrofach = (w) => `'${String(w)
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'")
+    .replace(/\r/g, '\\r')
+    .replace(/\n/g, '\\n')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029')}'`;
 
 const naLiterale = (w, wciecie = 4) => {
     const sp = ' '.repeat(wciecie);

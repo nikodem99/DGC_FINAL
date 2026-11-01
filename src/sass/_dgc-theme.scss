@@ -1134,7 +1134,11 @@ h1, h2, h3, h4, h5, h6 {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    border: 1px solid var(--dgc-ink);
+    /* NIE skrot `border`, bo stoi PO longhandzie border-top wyzej i kasowal
+       czteropikselowy pas akcentu. Wypisujemy tylko trzy pozostale krawedzie. */
+    border-right: 1px solid var(--dgc-ink);
+    border-bottom: 1px solid var(--dgc-ink);
+    border-left: 1px solid var(--dgc-ink);
 
     @media (max-width: 991px) {
       flex-direction: column;
@@ -2216,7 +2220,10 @@ h1, h2, h3, h4, h5, h6 {
 
   /* Klauzule do pobrania. Bez kropek listy: to nie wyliczenie w tekscie,
      tylko dwa dokumenty do zabrania ze strony. */
-  .polityka_pliki {
+  /* &.polityka_pliki, zeby wygrac z regula .polityka_sekcja ul wyzej,
+     ktora narzuca padding-left: 22px. Bez tego lista byla wciskana w prawo
+     mimo deklaracji padding-left: 0. */
+  .polityka_sekcja ul.polityka_pliki {
     margin: 0 0 16px;
     padding-left: 0;
     list-style: none;

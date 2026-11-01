@@ -228,6 +228,24 @@ Dotąd panel znał tylko podstrony pojedynczych usług.
 bez niego `scripts/szablon.mjs` nie wczyta go w czystym Node (`ERR_MODULE_NOT_FOUND`).
 Vite wybacza brak rozszerzenia, Node nie.
 
+**ZNANE OGRANICZENIE: blok „Powiązane usługi" na sześciu podstronach oferty.**
+Komponent `ServiceSinglePage` czyta już opisy kafelków z panelu, więc po
+zamontowaniu Reacta treść jest wszędzie ta sama. Ale **prerenderowany HTML tych
+sześciu podstron nie jest przebudowywany przez panel** — nie ma tam znaczników
+`@@KARTA_N@@`. Skutek: między edycją w panelu a następnym zbudowaniem paczki
+pierwszy ekran tych podstron pokazuje stary opis, który React zaraz podmienia.
+
+Pełne domknięcie wymaga policzenia listy pól osobno dla każdej podstrony, bo
+blok pokazuje tylko trzy kafelki i nigdy ten, na którego podstronie stoi
+(`Services.filter(u => u.slug !== slug).slice(0, 3)`). Ustawienie wszystkich
+sześciu pól wywróciłoby kontrolę „oczekiwano 1 trafienia".
+
+**NIGDY nie kotwicz wzoru wycięcia na tekście, który jest edytowalny z panelu.**
+Pierwsze wersje `O_NAS` i `KONS_FORMULARZ` cięły po dosłownym „O nas" i „Zgłoś
+się na konsultację" — a oba te napisy wystawiliśmy tego samego dnia do edycji.
+Pierwsza zmiana zrobiona przez biuro wywaliłaby następny build. Teraz kotwicą są
+klasy kontenerów (`.about_left`, `.cta_form_s2`).
+
 **Kolejność pól na liście `pola` ma znaczenie.** `CEN_WSTEP` musi iść przed
 `CEN_OFERTA`: oba bloki zaczynają się tym samym `<div class="col-lg-9 col-12">`,
 a leniwy wzór `CEN_OFERTA` złapałby od pierwszego z nich. Po podmianie pierwszego

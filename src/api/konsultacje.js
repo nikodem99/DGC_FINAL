@@ -65,28 +65,9 @@ export const FORMY_DZIALALNOSCI = [
     'Jeszcze nie mam firmy',
 ];
 
-// Cztery kroki procesu. To najwazniejszy tekst na tej podstronie: konsultacja
-// jest platna, a formularz niczego nie rezerwuje ani nie pobiera pieniedzy.
-// Napisane wprost, zeby nikt nie mial poczucia, ze zostal zaskoczony
-// prosba o przelew.
-export const KROKI = [
-    {
-        tytul: 'Wypełniasz formularz',
-        opis: 'Podajesz temat, preferowany dzień i porę. Im więcej napiszesz o swojej sytuacji, tym lepiej przygotujemy się do rozmowy.',
-    },
-    {
-        tytul: 'Potwierdzamy zgłoszenie',
-        opis: 'Dostajesz od nas wiadomość, że zgłoszenie do nas dotarło. To jeszcze nie jest rezerwacja terminu.',
-    },
-    {
-        tytul: 'Dzwonimy do Ciebie',
-        opis: 'Ustalamy dokładny termin, zakres rozmowy i cenę. Wtedy też mówimy, czy Twoja sprawa w ogóle wymaga płatnej konsultacji.',
-    },
-    {
-        tytul: 'Opłacasz i rozmawiamy',
-        opis: 'Po ustaleniach wysyłamy dane do przelewu. Termin rezerwujemy po zaksięgowaniu wpłaty.',
-    },
-];
+// KROKI "Jak to dziala" przeniesione 01.11.2026 do src/api/tekstyStron.js
+// (KONSULTACJA_TEKSTY.kroki), zeby biuro moglo je zmieniac z panelu.
+// Eksport zostal tu martwy i byl druga, rozjezdzajaca sie kopia tej listy.
 
 // Czego mozna sie spodziewac. Bez obietnic, ktorych biuro nie potwierdzilo.
 export const CO_ZYSKUJESZ = [

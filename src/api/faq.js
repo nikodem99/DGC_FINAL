@@ -21,7 +21,7 @@ export const FAQ_OGOLNE = [
     },
     {
         title: 'Ile kosztuje prowadzenie księgowości?',
-        content: 'Ryczałt i księga przychodów i rozchodów od 200 zł netto miesięcznie, pełna księgowość od 550 zł, wirtualne biuro 150 zł. To stawki wywoławcze przy obsłudze do 20 dokumentów w miesiącu, a ostateczna cena zależy od ich liczby, formy prawnej i zakresu spraw kadrowych. Wycena jest bezpłatna i niezobowiązująca.',
+        content: 'Ryczałt i księga przychodów i rozchodów od 200 zł netto miesięcznie, pełna księgowość od 550 zł, wirtualne biuro 150 zł. To stawki wywoławcze: ryczałt przy obsłudze do 5 dokumentów w miesiącu, księga przychodów i rozchodów oraz pełna księgowość do 20 dokumentów. Ostateczną cenę ustalamy po rozmowie o zakresie.',
     },
     {
         title: 'Zaczynam działalność. Od czego zaczniemy współpracę?',

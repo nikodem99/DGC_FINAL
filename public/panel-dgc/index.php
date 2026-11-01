@@ -822,7 +822,15 @@ function liniaNaTablice(string $tekst): array {
     foreach ($linie as $l) {
         $l = trim($l);
         // Pozwalamy wpisac punkt z myslnikiem albo bez — biuro i tak go dopisze.
-        $l = ltrim($l, "-• \t");
+        //
+        // NIE ltrim($l, "-• \t"). ltrim bierze liste ZNAKOW jako BAJTY, a "•"
+        // to trzy bajty E2 80 A2. Linia zaczynajaca sie od polskiego cudzyslowu
+        // „ (E2 80 9E) albo od myslnika — (E2 80 94) tracila przez to dwa
+        // pierwsze bajty i przestawala byc poprawnym UTF-8. Dalej json_encode
+        // zwracal false, (string)false daje pusty napis i zapis KASOWAL plik
+        // z trescia. Od 01.11.2026 ta funkcja dostaje takze akapity prozy
+        // z zakladki "Teksty stron", wiec trafilo by to na pierwszy cytat.
+        $l = preg_replace('/^[-\x{2022}\s]+/u', '', $l) ?? $l;
         if ($l !== '') $wynik[] = $l;
     }
     return $wynik;
@@ -1173,7 +1181,11 @@ function zapiszTekstyStronZFormularza(): array {
 
     $bladStron = null;
     $ile = odswiezStroneStale(wczytajTrescStrony('cennik'), wczytajTrescStrony('faq'), $bladStron);
-    if ($bladStron !== null) return ["Teksty zapisane, ale nie przebudowano stron: $bladStron", ''];
+    // Czesc stron mogla sie przebudowac mimo klopotu z inna — komunikat musi
+    // to mowic, inaczej biuro nie wie, w jakim stanie jest strona.
+    if ($bladStron !== null) {
+        return ["Przebudowano $ile stron, ale nie wszystkie: $bladStron", ''];
+    }
 
     return ['', "Zapisane. Przebudowano $ile stron."];
 }

@@ -43,7 +43,7 @@ export const ADMINISTRATOR = {
 
 // Data tej wersji dokumentu, czyli dnia publikacji. Przy kazdej zmianie
 // tresci trzeba ja podniesc.
-export const DATA_WERSJI = '18 września 2026';
+export const DATA_WERSJI = '1 listopada 2026';
 
 export const SEKCJE = [
     {
@@ -198,7 +198,8 @@ export const SEKCJE = [
         id: 'klauzule',
         tytul: 'Klauzule informacyjne do pobrania',
         akapity: [
-            'Poniższe dokumenty to pełne klauzule informacyjne w rozumieniu art. 13 RODO, przygotowane osobno dla klientów biura i osobno dla komunikacji marketingowej. Ta polityka opisuje to samo szerzej, a klauzule są wersją skróconą do wydruku i przekazania.',
+            'Poniższe dokumenty to pełne klauzule informacyjne w rozumieniu art. 13 RODO, przygotowane osobno dla klientów biura i osobno dla komunikacji marketingowej. Dotyczą obsługi księgowej i kontaktu handlowego, a nie tej strony internetowej — o tym, co dzieje się z danymi na stronie, mówi niniejsza polityka.',
+            'W dwóch punktach dokumenty się różnią i w razie wątpliwości obowiązuje ta polityka, bo opisuje stan faktyczny strony. Po pierwsze: klauzule mówią, że dane nie trafiają poza Europejski Obszar Gospodarczy, a strona korzysta z dostawców przekazujących dane do Wielkiej Brytanii i Stanów Zjednoczonych — opisujemy to w punkcie „Przekazywanie danych poza Europejski Obszar Gospodarczy”. Po drugie: klauzula marketingowa kończy przetwarzanie na wycofaniu zgody, a my zachowujemy jeszcze sam zapis zgody i datę jej wycofania do upływu przedawnienia roszczeń, żeby móc wykazać, że kontakt był zgodny z prawem.',
         ],
         pliki: [
             {

@@ -162,11 +162,19 @@
                    zrzucie 01.11.2026). */
                 a,
                 .stopka_zgody {
+                    /* text-transform nizej dotyczy pozycji menu, ktore sa
+                       jednowyrazowe albo i tak pisane wielka litera.
+                       Przycisk zgod to zdanie — capitalize zrobilby
+                       "Ustawienia Prywatnosci". */
                     color: rgba(253, 252, 252, 0.80);
                     font-size: 18px;
                     font-weight: 400;
                     text-transform: capitalize;
                     position: relative;
+
+                    &.stopka_zgody {
+                        text-transform: none;
+                    }
 
 
 

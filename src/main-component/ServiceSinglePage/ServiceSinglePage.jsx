@@ -20,6 +20,10 @@ const ServiceSinglePage = (props) => {
     // a nie wprost z serviceContent.js. Nazwa uslugi i obrazki zostaja
     // w paczce — nazwa stoi tez w menu, ktore panel pomija.
     const trescZPanelu = useTresci('oferta');
+    // Opisy kafelkow, te same co na stronie glownej i na /oferta/. Bez tego
+    // blok "Powiazane uslugi" pokazywalby opis wkompilowany w paczke, czyli
+    // po edycji w panelu ten sam kafelek mialby na stronie dwie rozne tresci.
+    const OPISY = useTresci('strony').ofertaKarty;
     const znaleziony = Services.find(item => item.slug === slug)
     const serviceDetails = znaleziony
         ? { ...znaleziony, content: trescZPanelu[slug] ?? znaleziony.content }
@@ -73,7 +77,7 @@ const ServiceSinglePage = (props) => {
                                                 </div>
                                                 <div className="content">
                                                     <h3>{serves.title}</h3>
-                                                    <p>{serves.description}</p>
+                                                    <p>{OPISY?.[serves.slug] ?? serves.description}</p>
                                                     <Link onClick={ClickHandler} to={`/oferta/${serves.slug}/`} aria-label={`Przejdź do: ${serves.title}`}><i className="flaticon-right-arrow" aria-hidden="true"></i></Link>
                                                 </div>
                                             </div>

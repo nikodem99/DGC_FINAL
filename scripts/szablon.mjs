@@ -423,9 +423,15 @@ console.log(`Tresc stron dla panelu: cennik ${cennik.length} pakietow, FAQ ${faq
         },
         // Sekcja "O nas" bez bloku .ceo — nazwisko prezes idzie z danych
         // zespolu, nie z tekstu, wiec nie ma go po co wystawiac do edycji.
+        // KOTWICA NA KLASIE .ceo, NIE NA TRESCI NAGLOWKA.
+        // Pierwsza wersja ciela po doslownym "<h2>O nas</h2>" — a ten naglowek
+        // jest od 01.11.2026 polem edytowalnym z panelu (onas_naglowek).
+        // Pierwsza zmiana zrobiona przez biuro wywalilaby nastepny build na
+        // dwoch szablonach naraz. Zasada: NIGDY nie kotwiczymy wzoru na
+        // tekscie, ktory sam wystawilismy do edycji.
         O_NAS: {
-            wzor: /<div class="content"><h2>O nas<\/h2>[\s\S]*?(?=<div class="ceo">)/,
-            czym: '<div class="content">@@O_NAS@@',
+            wzor: /(<div class="about_left">[\s\S]*?)<div class="content"><h2>[\s\S]*?(?=<div class="ceo">)/,
+            czym: '$1<div class="content">@@O_NAS@@',
         },
         // --- proza na /cennik/ ---
         // CEN_WSTEP musi isc PRZED CEN_OFERTA: oba bloki zaczynaja sie tym
@@ -459,9 +465,12 @@ console.log(`Tresc stron dla panelu: cennik ${cennik.length} pakietow, FAQ ${faq
             wzor: /<div class="konsultacja_kroki"><h3>[\s\S]*?<\/ol>/,
             czym: '<div class="konsultacja_kroki">@@KONS_KROKI@@',
         },
+        // Tak samo jak przy O_NAS: naglowek "Zglos sie na konsultacje" jest
+        // od 01.11.2026 edytowalny (formularzTytul), wiec wzor nie moze na nim
+        // stac. Kotwica jest .cta_form_s2 — kontener formularza konsultacji.
         KONS_FORMULARZ: {
-            wzor: /<div class="title"><h3>Zgłoś się na konsultację<\/h3><p>[\s\S]*?<\/p><\/div>/,
-            czym: '<div class="title">@@KONS_FORMULARZ@@</div>',
+            wzor: /(<div class="cta_form_s2" id="formularz">)<div class="title">[\s\S]*?<\/p><\/div>/,
+            czym: '$1<div class="title">@@KONS_FORMULARZ@@</div>',
         },
         FAQ_SCHEMAT: {
             wzor: /<script type="application\/ld\+json">\{"@context":"https:\/\/schema\.org","@type":"FAQPage"[\s\S]*?<\/script>/,
@@ -529,13 +538,18 @@ if (fs.existsSync(GENERATOR)) {
     const php = fs.readFileSync(GENERATOR, 'utf8');
     const nieznane = [];
 
+    // oferta.html doszlo 01.11.2026 i bylo poza ta lista, czyli jedyny
+    // nowy szablon nie byl w ogole sprawdzany wobec generatora.
     for (const plik of ['artykul.html', 'lista.html', 'karta.html',
-                        'strona-glowna.html', 'cennik.html', 'faq.html', 'o-nas.html',
-                        'konsultacje.html',
+                        'strona-glowna.html', 'oferta.html', 'cennik.html', 'faq.html',
+                        'o-nas.html', 'konsultacje.html',
                         ...Object.keys(trescOferty).map((s) => `oferta-${s}.html`)]) {
         if (!fs.existsSync(path.join(DIST, 'dane', 'szablon', plik))) continue;
         const tresc = fs.readFileSync(path.join(DIST, 'dane', 'szablon', plik), 'utf8');
-        for (const znacznik of new Set(tresc.match(/@@[A-Z_]+@@/g) ?? [])) {
+        // CYFRY W KLASIE SA KONIECZNE. Bez nich wzor nie widzial @@KARTA_1@@
+        // ..@@KARTA_6@@, czyli szesciu pol dodanych 01.11.2026, i kontrola
+        // przepuszczala szablon, ktorego panel nie umie wypelnic.
+        for (const znacznik of new Set(tresc.match(/@@[A-Z0-9_]+@@/g) ?? [])) {
             const nazwa = znacznik.slice(2, -2);
             if (!new RegExp(`'${nazwa}'\\s*=>`).test(php)) nieznane.push(`${plik}: ${znacznik}`);
         }

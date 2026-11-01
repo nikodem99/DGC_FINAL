@@ -78,7 +78,11 @@ const Footer = (props) => {
                                         "klauzule" — osobna strona dublowalaby ten sam
                                         obowiazek informacyjny w dwoch miejscach, a to
                                         prosi sie o rozjazd przy pierwszej zmianie. */}
-                                    <li><Link onClick={ClickHandler} to="/polityka-prywatnosci/#klauzule">Klauzule informacyjne</Link></li>
+                                    {/* BEZ onClick={ClickHandler}: ten uchwyt przewija na gore
+                                        strony, czyli robilby doklandie odwrotnie niz kotwica.
+                                        Samo przewiniecie do sekcji obsluguje
+                                        PolitykaPrywatnosciPage — react-router nie robi tego sam. */}
+                                    <li><Link to="/polityka-prywatnosci/#klauzule">Klauzule informacyjne</Link></li>
                                     <li>
                                         <button type="button" className="stopka_zgody" onClick={wycofajZgody}>
                                             Ustawienia prywatności

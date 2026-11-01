@@ -61,7 +61,12 @@ const NA_STRONE = 5;
 // --- drobne pomocnicze --------------------------------------------------
 
 function h(string $t): string {
-    return htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    // htmlspecialchars z ENT_QUOTES daje apostrof jako &#039;, a React
+    // (react-dom/server) jako &#x27;. Obie postacie znacza to samo i tak samo
+    // sie wyswietlaja, ale psuly rownosc BAJTOWA miedzy HTML-em z panelu
+    // a HTML-em z paczki — czyli wlasnosc, na ktorej opiera sie cala kontrola
+    // zgodnosci tych dwoch drog. Sprowadzamy do postaci Reacta.
+    return str_replace('&#039;', '&#x27;', htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
 }
 
 /** Tekst bloku: uciekamy znaki HTML, a potem **pogrubienie** na <strong>. */
@@ -281,10 +286,11 @@ function wczytajSzkice(): array {
 }
 
 function zapiszSzkice(array $szkice): bool {
-    return zapiszAtomowo(
-        SZKICE,
-        (string)json_encode(['szkice' => $szkice], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
-    );
+    // Jak w zapiszTekstyStron: false z json_encode nie moze wyjsc jako pusty
+    // plik, bo skasowalby wszystkie nieopublikowane teksty.
+    $json = json_encode(['szkice' => $szkice], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    if ($json === false) return false;
+    return zapiszAtomowo(SZKICE, $json);
 }
 
 /** Szkic po identyfikatorze albo null. */
@@ -333,7 +339,10 @@ function szablonAktualny(string $html, ?string &$powod = null): bool {
  * powiedziec, niz opublikowac taka strone.
  */
 function zostalZnacznik(string $html): ?string {
-    return preg_match('/@@[A-Z_]+@@/', $html, $t) ? $t[0] : null;
+    // Cyfry w klasie sa konieczne: bez nich straznik nie widzial
+    // @@KARTA_1@@..@@KARTA_6@@ i panel moglby opublikowac strone
+    // z golym napisem znacznika w tresci.
+    return preg_match('/@@[A-Z0-9_]+@@/', $html, $t) ? $t[0] : null;
 }
 
 function podstaw(string $szablon, array $pola): string {
@@ -467,8 +476,14 @@ function wczytajTekstyStron(): array {
 function zapiszTekstyStron(array $dane): bool {
     $kat = DANE . '/tresc';
     if (!is_dir($kat)) @mkdir($kat, 0755, true);
-    return zapiszAtomowo($kat . '/strony.json',
-        (string)json_encode($dane, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+
+    // Wynik json_encode SPRAWDZAMY. Przy niepoprawnym UTF-8 funkcja zwraca
+    // false, a (string)false to pusty napis — zapis skasowalby plik z cala
+    // trescia stron zamiast zglosic blad.
+    $json = json_encode($dane, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    if ($json === false || $json === '') return false;
+
+    return zapiszAtomowo($kat . '/strony.json', $json);
 }
 
 /**
@@ -548,13 +563,28 @@ const NAZWY_KART = [
     'prowadzenie-ksiag-rachunkowych' => 'Prowadzenie ksiąg rachunkowych',
 ];
 
-/** Pola @@KARTA_N@@: sam akapit opisu w kafelku, bez reszty karty. */
+/**
+ * Pola @@KARTA_N@@: sam akapit opisu w kafelku, bez reszty karty.
+ *
+ * Nazwy pol wypisane WPROST, a nie skladane przez 'KARTA_' . ($i + 1).
+ * Kontrola "Panel zna wszystkie pola szablonow" w scripts/szablon.mjs szuka
+ * w tym pliku literalnego wzorca 'NAZWA' => i konkatenacji nie widzi —
+ * przepuszczala wiec szablon z polami, ktorych panel rzekomo nie umie
+ * wypelnic. Jawna lista jest tansza niz madrzejszy straznik.
+ */
 function polaKartOferty(array $karty): array {
-    $pola = [];
-    foreach (KARTY_OFERTY as $i => $slug) {
-        $pola['KARTA_' . ($i + 1)] = '<p>' . h((string)($karty[$slug] ?? '')) . '</p>';
+    $o = [];
+    foreach (KARTY_OFERTY as $slug) {
+        $o[] = '<p>' . h((string)($karty[$slug] ?? '')) . '</p>';
     }
-    return $pola;
+    return [
+        'KARTA_1' => $o[0] ?? '',
+        'KARTA_2' => $o[1] ?? '',
+        'KARTA_3' => $o[2] ?? '',
+        'KARTA_4' => $o[3] ?? '',
+        'KARTA_5' => $o[4] ?? '',
+        'KARTA_6' => $o[5] ?? '',
+    ];
 }
 
 function konsWstepHtml(array $k): string {
@@ -875,22 +905,35 @@ function odswiezStroneStale(array $cennik, array $faq, ?string &$blad = null): i
     }
 
     $zapisane = 0;
+    // Klopot z JEDNA strona nie przerywa pozostalych.
+    //
+    // Wczesniej bylo tu `return $zapisane`, czyli pierwszy brakujacy szablon
+    // konczyl cala petle. Gdy 01.11.2026 doszedl oferta.html jako DRUGI wpis
+    // listy, w ukladzie "nowy panel, stara paczka" przebudowala by sie sama
+    // strona glowna, a /cennik/, /faq/, /o-nas/ i /umow-konsultacje/ zostalyby
+    // ze stara trescia. Polowiczna aktualizacja jest gorsza niz zadna, bo
+    // nikt jej nie zauwaza. Teraz zbieramy klopoty i lecimy dalej.
+    $klopoty = [];
     foreach ($strony as $s) {
         $szab = szablon($s['szablon']);
         if ($szab === null) {
-            $blad = "brak szablonu {$s['szablon']} — wgraj aktualna paczke strony";
-            return $zapisane;
+            $klopoty[] = "brak szablonu {$s['szablon']}";
+            continue;
         }
         $html = podstaw($szab, $s['pola']);
 
         $znacznik = zostalZnacznik($html);
         if ($znacznik !== null) {
-            $blad = "szablon {$s['szablon']} ma pole $znacznik, ktorego ten panel nie zna"
-                . ' — wgrana paczka strony jest nowsza niz panel';
-            return $zapisane;
+            $klopoty[] = "{$s['szablon']} ma pole $znacznik, ktorego ten panel nie zna";
+            continue;
         }
 
         if (zapiszAtomowo($s['cel'], $html)) $zapisane++;
+    }
+
+    if ($klopoty) {
+        $blad = implode('; ', $klopoty)
+            . ' — wgrana paczka strony nie pasuje do panelu, popros opiekuna o nowa';
     }
     return $zapisane;
 }

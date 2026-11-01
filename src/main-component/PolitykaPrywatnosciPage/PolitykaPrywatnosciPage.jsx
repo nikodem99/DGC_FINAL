@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar.jsx';
 import PageTitle from '../../components/pagetitle/PageTitle.jsx';
 import Footer from '../../components/footer/Footer.jsx';
@@ -7,6 +8,42 @@ import Logo from '../../images/logo.svg';
 import { SEKCJE } from '../../api/politykaPrywatnosci';
 
 const PolitykaPrywatnosciPage = () => {
+    // Przewiniecie do sekcji wskazanej w adresie, np. /polityka-prywatnosci/#klauzule.
+    //
+    // react-router NIE robi tego sam: przy przejsciu wewnatrz aplikacji
+    // przegladarka nie przeladowuje strony, wiec nie obsluguje kotwicy.
+    // Odnosnik "Klauzule informacyjne" w stopce ladowal przez to na samej
+    // gorze dokumentu, a sekcja jest w dwoch trzecich dlugosci.
+    //
+    // Czekamy jedna klatke, bo przy wejsciu z zewnatrz sekcje jeszcze sie
+    // nie wyrenderowaly w chwili uruchomienia efektu.
+    const { hash } = useLocation();
+    useEffect(() => {
+        if (!hash) return undefined;
+        const id = decodeURIComponent(hash.slice(1));
+
+        // Ponawiamy, a nie strzelamy raz. Przy WEJSCIU Z ZEWNATRZ jedna klatka
+        // wystarcza, ale przy przejsciu WEWNATRZ aplikacji (klikniecie
+        // w stopce) dokument nie jest jeszcze rozlozony i pojedyncze
+        // scrollIntoView konczylo sie na samej gorze strony. Zmierzone:
+        // po kliknieciu scrollY zostawalo 0, a sekcja byla 5643 px nizej.
+        //
+        // Warunek konca: sekcja stoi blisko gory okna. .polityka_sekcja ma
+        // scroll-margin-top: 120px, wiec celujemy ponizej 200.
+        let proby = 0;
+        let czasomierz;
+        const sprobuj = () => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ block: 'start' });
+                if (Math.abs(el.getBoundingClientRect().top) < 200) return;
+            }
+            if (++proby < 12) czasomierz = setTimeout(sprobuj, 60);
+        };
+        czasomierz = setTimeout(sprobuj, 0);
+        return () => clearTimeout(czasomierz);
+    }, [hash]);
+
     return (
         <Fragment>
             <Navbar hclass={'dgc-site-header dgc-site-header-s2'} Logo={Logo} />
