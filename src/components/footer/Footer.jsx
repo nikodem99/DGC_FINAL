@@ -74,6 +74,11 @@ const Footer = (props) => {
                                     <li><Link onClick={ClickHandler} to="/kontakt/">Kontakt</Link></li>
                                     <li><Link onClick={ClickHandler} to="/faq/">Najczęstsze pytania</Link></li>
                                     <li><Link onClick={ClickHandler} to="/polityka-prywatnosci/">Polityka prywatności</Link></li>
+                                    {/* Klauzule informacyjne leza w polityce, w sekcji
+                                        "klauzule" — osobna strona dublowalaby ten sam
+                                        obowiazek informacyjny w dwoch miejscach, a to
+                                        prosi sie o rozjazd przy pierwszej zmianie. */}
+                                    <li><Link onClick={ClickHandler} to="/polityka-prywatnosci/#klauzule">Klauzule informacyjne</Link></li>
                                     <li>
                                         <button type="button" className="stopka_zgody" onClick={wycofajZgody}>
                                             Ustawienia prywatności

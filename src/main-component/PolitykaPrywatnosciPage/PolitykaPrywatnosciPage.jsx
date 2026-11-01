@@ -34,6 +34,22 @@ const PolitykaPrywatnosciPage = () => {
                                             {s.lista.map((l, i) => <li key={i}>{l}</li>)}
                                         </ul>
                                     )}
+                                    {s.pliki && (
+                                        <ul className="polityka_pliki">
+                                            {s.pliki.map((pl) => (
+                                                <li key={pl.adres}>
+                                                    {/* download, nie nowa karta: to dokument do zachowania,
+                                                        a nie strona do przeczytania. Typ i rozszerzenie
+                                                        podane w nazwie, zeby czytnik ekranu zapowiedzial,
+                                                        co sie zaraz pobierze. */}
+                                                    <a href={pl.adres} download>
+                                                        {pl.nazwa} <span className="polityka_plik_typ">(PDF)</span>
+                                                    </a>
+                                                    {pl.opis && <span className="polityka_plik_opis">{pl.opis}</span>}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
                                     {s.akapityPo?.map((a, i) => <p key={`po-${i}`}>{a}</p>)}
                                 </section>
                             ))}

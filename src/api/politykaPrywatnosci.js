@@ -185,6 +185,37 @@ export const SEKCJE = [
             'Zgodę na pliki cookies służące statystykom i marketingowi zmienisz odnośnikiem „Ustawienia prywatności” w stopce strony.',
         ],
     },
+    // Klauzule przyslane przez klienta 29.10.2026 (mail "do umieszczenia
+    // na stronie"), wygenerowane w GoRODO.pl. Ta polityka pokrywa niemal
+    // cala ich tresc i miejscami jest dokladniejsza, ale klient chce miec
+    // same dokumenty dostepne — wiec wystawiamy je do pobrania W CALOSCI,
+    // bez parafrazowania. Parafraza dokumentu o skutkach prawnych mogla by
+    // sie z nim rozjechac przy pierwszej zmianie po jednej ze stron.
+    //
+    // Formularz GoRODO to JEDYNA rzecz z tych klauzul, ktorej polityka
+    // dotad nie miala: byl tylko adres e-mail.
+    {
+        id: 'klauzule',
+        tytul: 'Klauzule informacyjne do pobrania',
+        akapity: [
+            'Poniższe dokumenty to pełne klauzule informacyjne w rozumieniu art. 13 RODO, przygotowane osobno dla klientów biura i osobno dla komunikacji marketingowej. Ta polityka opisuje to samo szerzej, a klauzule są wersją skróconą do wydruku i przekazania.',
+        ],
+        pliki: [
+            {
+                nazwa: 'Klauzula informacyjna dla klientów',
+                adres: '/dokumenty/klauzula-informacyjna-klienci.pdf',
+                opis: 'Przetwarzanie danych w związku z umową o obsługę księgową, w tym obowiązki z ustawy o przeciwdziałaniu praniu pieniędzy.',
+            },
+            {
+                nazwa: 'Klauzula informacyjna dla komunikacji marketingowej',
+                adres: '/dokumenty/klauzula-informacyjna-marketing.pdf',
+                opis: 'Przetwarzanie danych na podstawie zgody, na potrzeby ofert handlowych wysyłanych mailem, telefonicznie lub SMS-em.',
+            },
+        ],
+        akapityPo: [
+            'Żądanie dotyczące Twoich danych możesz złożyć mailem na nasz adres do spraw ochrony danych albo przez formularz pod adresem https://app.gorodo.pl/api/zadanie/9471976277.',
+        ],
+    },
     {
         id: 'skarga',
         tytul: 'Skarga do organu nadzorczego',

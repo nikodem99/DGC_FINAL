@@ -2214,6 +2214,41 @@ h1, h2, h3, h4, h5, h6 {
     }
   }
 
+  /* Klauzule do pobrania. Bez kropek listy: to nie wyliczenie w tekscie,
+     tylko dwa dokumenty do zabrania ze strony. */
+  .polityka_pliki {
+    margin: 0 0 16px;
+    padding-left: 0;
+    list-style: none;
+
+    li {
+      margin-bottom: 14px;
+      padding-left: 26px;
+      /* Strzalka w dol jako znak pobierania. Tlo, a nie znak w tresci —
+         czytnik ekranu nie ma po co jej czytac. */
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%230D4444'%3E%3Cpath d='M7.25 1.5v8.19L4.53 6.97 3.47 8.03 8 12.56l4.53-4.53-1.06-1.06-2.72 2.72V1.5h-1.5ZM2.5 13v1.5h11V13h-11Z'/%3E%3C/svg%3E") no-repeat 0 7px / 15px 15px;
+    }
+
+    a {
+      font-weight: 500;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .polityka_plik_typ {
+      font-weight: 400;
+      opacity: 0.75;
+    }
+
+    .polityka_plik_opis {
+      display: block;
+      margin-top: 2px;
+      font-size: 15px;
+      line-height: 25px;
+      opacity: 0.85;
+    }
+  }
+
   /* Braki widoczne na pierwszy rzut oka — dokument z dziura nie moze
      przejsc niezauwazony na produkcje. */
   .do_uzupelnienia {

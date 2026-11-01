@@ -153,7 +153,15 @@
             li {
                 position: relative;
 
-                a {
+                /* .stopka_zgody to BUTTON ("Ustawienia prywatnosci"), bo
+                   otwiera baner zgod, a nie prowadzi pod adres. Stal
+                   w tej samej liscie co odnosniki, ale o 3px mniejszy:
+                   dziedziczyl rozmiar z <li> przez font: inherit, a te
+                   18px dotyczylo tylko <a>. Wygladal przez to na pozycje
+                   drugiej kategorii. Zglosil to klient (zakreslone na
+                   zrzucie 01.11.2026). */
+                a,
+                .stopka_zgody {
                     color: rgba(253, 252, 252, 0.80);
                     font-size: 18px;
                     font-weight: 400;
