@@ -213,6 +213,12 @@
         position: relative;
         margin: 0 auto;
         margin-top: -100px;
+        /* Odstep do tytulu. Bez niego ikona konczyla sie DOKLADNIE tam, gdzie
+           zaczynal sie naglowek — zmierzone 0 px — i cala kafelka czytala sie
+           jak elementy nachodzace na siebie. Zglosil to klient 02.11.2026.
+           Samo zanurzenie ikony w karcie zostaje: 104 px wysokosci, 49 nad
+           krawedzia i 55 pod nia, czyli mniej wiecej pol na pol, i tak ma byc. */
+        margin-bottom: 18px;
         /* centrowanie flexem zamiast line-height: metryki Themify roznia sie
            od poprzedniego zestawu, sztywna interlinia zbijala glif w dol */
         display: flex;
