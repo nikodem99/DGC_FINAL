@@ -140,7 +140,7 @@ if (!zalogowany()) {
 // --- od tego miejsca uzytkownik jest zalogowany -------------------------
 
 $wpisy = wczytajWpisy();
-$akcja = (string)($_GET['akcja'] ?? 'lista');
+$akcja = (string)($_GET['akcja'] ?? 'pulpit');
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['co'] ?? '') === 'zapisz') {
     if (!sprawdzToken()) {
@@ -298,7 +298,12 @@ if ($akcja === 'nowy' || $akcja === 'edytuj') {
     exit;
 }
 
-widokListy($wpisy, $komunikat, $blad);
+if ($akcja === 'lista' || $akcja === 'artykuly') {
+    widokListy($wpisy, $komunikat, $blad);
+    exit;
+}
+
+widokPulpitu($wpisy, $komunikat, $blad);
 
 // =======================================================================
 //  ZAPIS
@@ -542,6 +547,23 @@ function domyslnaOkladka(array $wpisy): string {
  * poprzedniej akcji, a ekran pokazuje juz co innego, wiec podswietlenie
  * wskazywaloby nie te zakladke.
  */
+/**
+ * Adres arkusza ze znacznikiem wersji.
+ *
+ * Serwer podaje pliki z assets/ z roczna pamiecia podreczna
+ * (max-age=31536000). Bez tego znacznika przegladarka biura trzymala stary
+ * arkusz mimo wgrania nowego — panel wygladal jak nieostylowany, choc plik
+ * na serwerze byl juz poprawny i zgodny co do bajtu. Zdarzylo sie 02.11.2026.
+ *
+ * filemtime zmienia sie przy kazdym wgraniu pliku, wiec adres sam przestaje
+ * pasowac do tego, co siedzi w pamieci.
+ */
+function zasob(string $wzgledna): string {
+    $pelna = __DIR__ . '/' . $wzgledna;
+    $v = is_file($pelna) ? filemtime($pelna) : 0;
+    return h($wzgledna . '?v=' . $v);
+}
+
 function naglowek(string $tytul, string $gdzie = ''): void {
     $t = h($tytul);
     $szkicow = count(wczytajSzkice());
@@ -556,14 +578,15 @@ function naglowek(string $tytul, string $gdzie = ''): void {
         . '<meta name="viewport" content="width=device-width,initial-scale=1">'
         . '<meta name="robots" content="noindex,nofollow">'
         . '<title>' . $t . ' · panel DGC</title>'
-        . '<link rel="stylesheet" href="assets/css/panel.css">'
+        . '<link rel="stylesheet" href="' . zasob('assets/css/panel.css') . '">'
         . '</head><body class="panel">';
 
     echo '<aside class="bok">'
         . '<div class="bok_znak"><img src="assets/logo.svg" alt="DGC Biuro Rachunkowe"></div>'
         . '<nav class="bok_menu">'
+        . $poz('pulpit', '?', 'Pulpit', $gdzie)
         . '<p class="bok_grupa">Artykuły</p>'
-        . $poz('lista', '?', 'Wszystkie artykuły', $gdzie)
+        . $poz('lista', '?akcja=artykuly', 'Wszystkie artykuły', $gdzie)
         . $poz('nowy', '?akcja=nowy', 'Nowy artykuł', $gdzie)
         . $poz('szkice', '?akcja=szkice', 'Szkice' . $licznik, $gdzie)
         . '<p class="bok_grupa">Teksty na stronie</p>'
@@ -596,14 +619,17 @@ function stopka(): void { echo '</main></body></html>'; }
  */
 function naglowekLogowania(string $tytul): void {
     $t = h($tytul);
+    $boot = zasob('assets/css/bootstrap.min.css');
+    $tema = zasob('assets/css/theme.min.css');
+    $wlasny = zasob('assets/css/panel.css');
     echo <<<HTML
 <!doctype html><html lang="pl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>$t · panel DGC</title>
-<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-<link rel="stylesheet" href="assets/css/theme.min.css">
-<link rel="stylesheet" href="assets/css/panel.css">
+<link rel="stylesheet" href="$boot">
+<link rel="stylesheet" href="$tema">
+<link rel="stylesheet" href="$wlasny">
 </head><body class="dgc-logowanie">
 HTML;
 }
@@ -669,6 +695,63 @@ function widokLogowania(string $blad): void {
         'Zaloguj'
     );
     stopkaLogowania();
+}
+
+/**
+ * Pulpit — ekran startowy panelu.
+ *
+ * Wczesniej panel otwieral sie wprost na liscie 384 artykulow. Pulpit pokazuje
+ * stan w liczbach i prowadzi dalej, zamiast od razu zasypywac tabela.
+ */
+function widokPulpitu(array $wpisy, string $komunikat, string $blad): void {
+    naglowek('Pulpit', 'pulpit');
+    echo '<div class="srodek">';
+    if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
+    if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
+
+    $szkice = wczytajSzkice();
+    $cennik = wczytajTrescStrony('cennik');
+    $faq = wczytajTrescStrony('faq');
+
+    echo '<h1>Panel DGC</h1>';
+    echo '<p class="male" style="margin:-14px 0 26px">Stąd zmieniacie treści na stronie biurodgc.pl.</p>';
+
+    $kafelek = static function (string $liczba, string $opis, string $adres, string $akcja): string {
+        return '<a class="kafelek" href="' . $adres . '">'
+            . '<span class="kafelek_liczba">' . h($liczba) . '</span>'
+            . '<span class="kafelek_opis">' . h($opis) . '</span>'
+            . '<span class="kafelek_akcja">' . h($akcja) . '</span></a>';
+    };
+
+    echo '<div class="kafelki">'
+        . $kafelek((string)count($wpisy), 'artykułów na stronie', '?akcja=artykuly', 'Zobacz wszystkie')
+        . $kafelek((string)count($szkice), $szkice ? 'szkice czekają na publikację' : 'szkiców w poczekalni', '?akcja=szkice', 'Przejdź do szkiców')
+        . $kafelek((string)count($cennik), 'pakiety w cenniku', '?akcja=cennik', 'Zmień cennik')
+        . $kafelek((string)count($faq), 'pytań w FAQ', '?akcja=faq', 'Zmień pytania')
+        . '</div>';
+
+    echo '<h2>Co chcesz zrobić</h2>';
+    echo '<div class="skroty">'
+        . '<a class="przycisk akcent" href="?akcja=nowy">Napisz nowy artykuł</a> '
+        . '<a class="przycisk lekki" href="?akcja=strony">Zmień teksty na stronie</a> '
+        . '<a class="przycisk lekki" href="?akcja=kontakt">Zmień dane kontaktowe</a>'
+        . '</div>';
+
+    $ostatnie = array_slice($wpisy, 0, 5);
+    if ($ostatnie) {
+        echo '<h2>Ostatnio dodane</h2>';
+        echo '<table><tr><th>Tytuł</th><th>Kategoria</th><th>Data</th><th></th></tr>';
+        foreach ($ostatnie as $w) {
+            echo '<tr><td>' . h($w['title']) . '</td>'
+                . '<td class="male">' . h($w['tag']) . '</td>'
+                . '<td class="male">' . h($w['create_at']) . '</td>'
+                . '<td><a href="?akcja=edytuj&amp;slug=' . urlencode($w['slug']) . '">Edytuj</a></td></tr>';
+        }
+        echo '</table>';
+    }
+
+    echo '</div>';
+    stopka();
 }
 
 function widokListy(array $wpisy, string $komunikat, string $blad): void {
@@ -861,7 +944,7 @@ function widokFormularza(?array $wpis, string $tresc, string $blad, ?array $szki
     echo '<p style="margin-top:22px">'
         . '<button class="przycisk akcent" type="submit" name="co" value="zapisz">Zapisz i opublikuj</button> '
         . '<button class="przycisk lekki" type="submit" name="co" value="szkic" formnovalidate>Zapisz szkic</button> '
-        . '<a class="przycisk lekki" href="?">Anuluj</a></p>';
+        . '<a class="przycisk lekki" href="?akcja=artykuly">Anuluj</a></p>';
     echo '<p class="male">Szkic możesz zapisać niedokończony — pełna kontrola pól włącza się dopiero przy publikacji.</p>';
     echo '</form></div>';
     stopka();
@@ -1413,7 +1496,7 @@ function widokTekstowStron(array $t, string $komunikat, string $blad): void {
     }
 
     echo '<p style="margin-top:22px"><button class="przycisk akcent" type="submit">Zapisz</button> '
-        . '<a class="przycisk lekki" href="?">Wróć do listy</a></p>';
+        . '<a class="przycisk lekki" href="?akcja=artykuly">Wróć do listy</a></p>';
     echo '</form></div>';
     stopka();
 }

@@ -456,3 +456,56 @@ button:focus-visible,
 }
 
 .dgc-logo { max-width: 190px; height: auto; }
+
+/* --- pulpit -------------------------------------------------------- */
+.kafelki {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
+  margin-bottom: 34px;
+}
+
+.kafelek {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 20px 22px;
+  background: #fff;
+  border: 1px solid var(--linia);
+  border-radius: 14px;
+  box-shadow: var(--cien);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color .15s, transform .15s;
+}
+
+.kafelek:hover {
+  border-color: var(--ink);
+  transform: translateY(-2px);
+}
+
+.kafelek_liczba {
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+
+.kafelek_opis {
+  font-size: 13.5px;
+  color: rgba(13, 68, 68, .7);
+}
+
+.kafelek_akcja {
+  margin-top: 12px;
+  color: var(--akcent);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.skroty {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
