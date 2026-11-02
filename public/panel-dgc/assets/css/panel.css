@@ -81,69 +81,120 @@ body {
   line-height: 1.6;
 }
 
-/* --- gorny pasek -------------------------------------------------- */
-/* Widoki wypisuja go jako <div class="pas"><strong>Panel DGC</strong><span>
-   odnosniki</span></div>. Nie ruszamy tego znacznika, tylko go ubieramy. */
-.pas {
+/* --- uklad: boczne menu + tresc ----------------------------------- */
+body.panel {
+  display: flex;
+  align-items: stretch;
+  min-height: 100vh;
+}
+
+.bok {
+  flex: 0 0 264px;
+  width: 264px;
+  display: flex;
+  flex-direction: column;
   position: sticky;
   top: 0;
-  z-index: 20;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px 18px;
-  padding: 0 26px;
-  min-height: 62px;
-  background: var(--ink);
-  color: var(--kanwa);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, .12);
+  align-self: flex-start;
+  height: 100vh;
+  background: #fff;
+  border-right: 1px solid var(--linia);
 }
 
-.pas > strong {
-  font-size: 16px;
+.bok_znak {
+  padding: 22px 22px 20px;
+  border-bottom: 1px solid var(--linia);
+}
+
+.bok_znak img {
+  display: block;
+  width: 100%;
+  max-width: 168px;
+  height: auto;
+}
+
+.bok_menu {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 16px 14px 20px;
+}
+
+.bok_grupa {
+  margin: 18px 0 7px;
+  padding: 0 10px;
+  color: rgba(13, 68, 68, .5);
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: .01em;
+  text-transform: uppercase;
+  letter-spacing: .09em;
 }
 
-.pas > span {
+.bok_grupa:first-child { margin-top: 2px; }
+
+.bok_menu a {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 2px;
-  font-size: 0;            /* zjada separatory " · " miedzy odnosnikami */
-}
-
-.pas a,
-.pas strong:not(:first-child) {
-  display: inline-block;
-  padding: 7px 12px;
-  border-radius: 7px;
-  color: rgba(253, 252, 252, .82);
-  font-size: 14px;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 2px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  color: var(--ink);
+  font-size: 14.5px;
   font-weight: 500;
   text-decoration: none;
   transition: background .15s, color .15s;
 }
 
-.pas a:hover,
-.pas a:focus-visible {
-  background: rgba(253, 252, 252, .12);
-  color: var(--kanwa);
-}
+.bok_menu a:hover { background: #f1f5f4; }
 
-/* Zakladka biezaca: widoki wypisuja ja jako <strong>, nie <a>. */
-.pas strong:not(:first-child) {
-  background: rgba(253, 252, 252, .16);
+/* Pozycja biezaca. Petrol z biala trescia — ten sam sygnal, co na stronie. */
+.bok_menu a.akt {
+  background: var(--ink);
   color: var(--kanwa);
   font-weight: 600;
 }
 
+.bok_menu a.akt:hover { background: #0a3636; }
+
+.bok_licznik {
+  min-width: 22px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--akcent);
+  color: var(--kanwa);
+  font-size: 11.5px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.bok_dol {
+  padding: 14px;
+  border-top: 1px solid var(--linia);
+}
+
+.bok_dol a {
+  display: block;
+  padding: 9px 12px;
+  border-radius: 9px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.bok_dol a:hover { background: #f1f5f4; }
+.bok_dol .bok_wyjscie { color: var(--akcent); }
+
+.glowna {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 /* --- obszar tresci ------------------------------------------------ */
 .srodek {
-  max-width: 1040px;
-  margin: 0 auto;
-  padding: 30px 26px 80px;
+  max-width: 980px;
+  padding: 34px 34px 80px;
 }
 
 h1 {
@@ -337,8 +388,31 @@ button:focus-visible,
 }
 
 /* --- telefon ------------------------------------------------------ */
-@media (max-width: 575px) {
-  .pas { padding: 10px 16px; }
+@media (max-width: 900px) {
+  /* Na waskim ekranie menu idzie nad tresc, a nie obok — 264px kolumny
+     zjadaloby polowe szerokosci telefonu. */
+  body.panel { display: block; }
+
+  .bok {
+    width: auto;
+    height: auto;
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 14px;
+    border-right: 0;
+    border-bottom: 1px solid var(--linia);
+  }
+
+  .bok_znak { padding: 0 14px 0 0; border-bottom: 0; }
+  .bok_znak img { max-width: 118px; }
+  .bok_menu { display: flex; flex-wrap: wrap; gap: 4px; padding: 0; overflow: visible; }
+  .bok_menu a { margin: 0; padding: 8px 11px; font-size: 13.5px; }
+  .bok_grupa { display: none; }
+  .bok_dol { display: flex; gap: 4px; padding: 0; border-top: 0; }
+
   .srodek { padding: 22px 16px 60px; }
   h1 { font-size: 23px; }
   table { display: block; overflow-x: auto; }

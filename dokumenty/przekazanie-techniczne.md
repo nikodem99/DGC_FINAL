@@ -272,9 +272,21 @@ Od 2 listopada 2026 panel stoi na szablonie Duralux (Bootstrap 5, licencja
 klienta). Przeniesienie zrobione **bez dotykania ani jednej funkcji widoku** —
 i to jest tu najważniejsze.
 
-Czternaście widoków w `index.php` wypisuje HTML z **dziesięcioma nazwami klas**:
-`pas`, `srodek`, `karta`, `przycisk` (+`akcent`, +`lekki`), `blad`, `ok`,
-`male`, `pomoc`, `rzad`. `assets/css/panel.css` ubiera właśnie te nazwy.
+Układ to **boczne menu po lewej** (`<aside class="bok">`) i treść po prawej
+(`<main class="glowna">`). Oba wypisuje `naglowek()`, a `stopka()` je zamyka.
+
+Czternaście widoków w `index.php` wypisuje HTML z **dziewięcioma nazwami klas**:
+`srodek`, `karta`, `przycisk` (+`akcent`, +`lekki`), `blad`, `ok`, `male`,
+`pomoc`, `rzad`. `assets/css/panel.css` ubiera właśnie te nazwy.
+
+Pozycję do podświetlenia w menu każdy widok podaje jako drugi argument
+`naglowek()`. **Nie zgadujemy jej z `$_GET['akcja']`**: po zapisie formularza
+adres zostaje przy poprzedniej akcji, a ekran pokazuje już co innego, więc
+podświetlenie wskazywałoby nie tę zakładkę.
+
+`pasTresci()` jest pustą funkcją. Nawigacja przeniosła się do bocznego menu,
+ale osiem wywołań w widokach zostało — usuwanie ich nic by nie dało, a każde
+dotknięcie widoku to ryzyko.
 Zmiana wyglądu to więc zmiana jednego arkusza, a nie czternastu funkcji — i nie
 da się przez nią zepsuć żadnego ekranu.
 

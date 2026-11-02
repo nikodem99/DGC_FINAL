@@ -534,17 +534,55 @@ function domyslnaOkladka(array $wpisy): string {
 //  WIDOKI
 // =======================================================================
 
-function naglowek(string $tytul): void {
+/**
+ * Powloka panelu: boczne menu po lewej, tresc po prawej.
+ *
+ * $gdzie wskazuje pozycje do podswietlenia. Podajemy ja z widoku, a NIE
+ * zgadujemy z $_GET['akcja'] — po zapisie formularza adres zostaje przy
+ * poprzedniej akcji, a ekran pokazuje juz co innego, wiec podswietlenie
+ * wskazywaloby nie te zakladke.
+ */
+function naglowek(string $tytul, string $gdzie = ''): void {
     $t = h($tytul);
-    echo <<<HTML
-<!doctype html><html lang="pl"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<title>$t · panel DGC</title>
-<link rel="stylesheet" href="assets/css/panel.css">
-</head><body>
-HTML;
+    $szkicow = count(wczytajSzkice());
+    $licznik = $szkicow ? ' <span class="bok_licznik">' . $szkicow . '</span>' : '';
+
+    $poz = static function (string $klucz, string $adres, string $napis, string $biezaca): string {
+        $a = $klucz === $biezaca ? ' class="akt"' : '';
+        return '<a href="' . $adres . '"' . $a . '>' . $napis . '</a>';
+    };
+
+    echo '<!doctype html><html lang="pl"><head><meta charset="utf-8">'
+        . '<meta name="viewport" content="width=device-width,initial-scale=1">'
+        . '<meta name="robots" content="noindex,nofollow">'
+        . '<title>' . $t . ' · panel DGC</title>'
+        . '<link rel="stylesheet" href="assets/css/panel.css">'
+        . '</head><body class="panel">';
+
+    echo '<aside class="bok">'
+        . '<div class="bok_znak"><img src="assets/logo.svg" alt="DGC Biuro Rachunkowe"></div>'
+        . '<nav class="bok_menu">'
+        . '<p class="bok_grupa">Artykuły</p>'
+        . $poz('lista', '?', 'Wszystkie artykuły', $gdzie)
+        . $poz('nowy', '?akcja=nowy', 'Nowy artykuł', $gdzie)
+        . $poz('szkice', '?akcja=szkice', 'Szkice' . $licznik, $gdzie)
+        . '<p class="bok_grupa">Teksty na stronie</p>'
+        . $poz('strony', '?akcja=strony', 'Teksty stron', $gdzie)
+        . $poz('cennik', '?akcja=cennik', 'Cennik', $gdzie)
+        . $poz('faq', '?akcja=faq', 'Pytania', $gdzie)
+        . $poz('konsultacje', '?akcja=konsultacje', 'Konsultacja', $gdzie)
+        . $poz('oferta', '?akcja=oferta', 'Oferta', $gdzie)
+        . $poz('kontakt', '?akcja=kontakt', 'Dane kontaktowe', $gdzie)
+        . '</nav>'
+        . '<div class="bok_dol">'
+        . '<a href="' . DOMENA . '/" target="_blank" rel="noreferrer">Zobacz stronę</a>'
+        . '<a href="?akcja=wyloguj" class="bok_wyjscie">Wyloguj</a>'
+        . '</div></aside>';
+
+    echo '<main class="glowna">';
 }
+
+function stopka(): void { echo '</main></body></html>'; }
 
 /**
  * Powloka ekranow logowania — osobna od naglowek(), bo stoi na szablonie
@@ -635,18 +673,9 @@ function widokLogowania(string $blad): void {
 }
 
 function widokListy(array $wpisy, string $komunikat, string $blad): void {
-    naglowek('Artykuły');
+    naglowek('Artykuły', 'lista');
     $szukaj = trim((string)($_GET['szukaj'] ?? ''));
     $ileSzkicow = count(wczytajSzkice());
-    echo '<div class="pas"><strong>Panel DGC</strong><span>'
-        . '<a href="?akcja=nowy">Nowy artykuł</a> &nbsp;·&nbsp; '
-        . '<a href="?akcja=szkice">Szkice' . ($ileSzkicow ? ' (' . $ileSzkicow . ')' : '') . '</a> &nbsp;·&nbsp; '
-        . '<a href="?akcja=cennik">Cennik</a> &nbsp;·&nbsp; '
-        . '<a href="?akcja=faq">Pytania</a> &nbsp;·&nbsp; '
-        . '<a href="?akcja=konsultacje">Konsultacja</a> &nbsp;·&nbsp; '
-        . '<a href="?akcja=kontakt">Kontakt</a> &nbsp;·&nbsp; '
-        . '<a href="?akcja=oferta">Oferta</a> &nbsp;·&nbsp; '
-        . '<a href="?akcja=wyloguj">Wyloguj</a></span></div>';
     echo '<div class="srodek">';
     if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
     if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
@@ -677,11 +706,7 @@ function widokListy(array $wpisy, string $komunikat, string $blad): void {
 }
 
 function widokSzkicow(array $szkice, string $komunikat, string $blad): void {
-    naglowek('Szkice');
-    echo '<div class="pas"><strong>Panel DGC</strong><span>'
-        . '<a href="?">Artykuły</a> &nbsp;·&nbsp; '
-        . '<a href="?akcja=nowy">Nowy artykuł</a> &nbsp;·&nbsp; '
-        . '<a href="?akcja=wyloguj">Wyloguj</a></span></div>';
+    naglowek('Szkice', 'szkice');
     echo '<div class="srodek">';
     if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
     if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
@@ -761,11 +786,7 @@ function widokFormularza(?array $wpis, string $tresc, string $blad, ?array $szki
     }
 
     $tytulEkranu = $szkic ? 'Szkic' : ($nowy ? 'Nowy artykuł' : 'Edycja artykułu');
-    naglowek($tytulEkranu);
-    echo '<div class="pas"><strong>Panel DGC</strong><span>'
-        . '<a href="?">Wróć do listy</a> &nbsp;·&nbsp; '
-        . '<a href="?akcja=szkice">Szkice</a> &nbsp;·&nbsp; '
-        . '<a href="?akcja=wyloguj">Wyloguj</a></span></div>';
+    naglowek($tytulEkranu, 'nowy');
     echo '<div class="srodek">';
     if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
     echo '<h1>' . h($tytulEkranu) . '</h1>';
@@ -942,20 +963,15 @@ function zapiszFaq(): array {
     return ['', "Pytania zapisane. Odświeżono $ile stron."];
 }
 
-function pasTresci(string $gdzie): void {
-    echo '<div class="pas"><strong>Panel DGC</strong><span>'
-        . '<a href="?">Artykuły</a> &nbsp;·&nbsp; '
-        . ($gdzie === 'cennik' ? '<strong>Cennik</strong>' : '<a href="?akcja=cennik">Cennik</a>') . ' &nbsp;·&nbsp; '
-        . ($gdzie === 'faq' ? '<strong>Pytania</strong>' : '<a href="?akcja=faq">Pytania</a>') . ' &nbsp;·&nbsp; '
-        . ($gdzie === 'konsultacje' ? '<strong>Konsultacja</strong>' : '<a href="?akcja=konsultacje">Konsultacja</a>') . ' &nbsp;·&nbsp; '
-        . ($gdzie === 'kontakt' ? '<strong>Kontakt</strong>' : '<a href="?akcja=kontakt">Kontakt</a>') . ' &nbsp;·&nbsp; '
-        . ($gdzie === 'oferta' ? '<strong>Oferta</strong>' : '<a href="?akcja=oferta">Oferta</a>') . ' &nbsp;·&nbsp; '
-        . ($gdzie === 'strony' ? '<strong>Teksty stron</strong>' : '<a href="?akcja=strony">Teksty stron</a>') . ' &nbsp;·&nbsp; '
-        . '<a href="?akcja=wyloguj">Wyloguj</a></span></div>';
-}
+/**
+ * Nawigacja przeniesiona do bocznego menu w naglowek(). Funkcja zostaje pusta,
+ * zeby nie ruszac osmiu wywolan w widokach — pozycje biezaca kazdy z nich
+ * i tak podaje juz do naglowek().
+ */
+function pasTresci(string $gdzie): void {}
 
 function widokCennika(array $pakiety, string $komunikat, string $blad): void {
-    naglowek('Cennik');
+    naglowek('Cennik', 'cennik');
     pasTresci('cennik');
     echo '<div class="srodek">';
     if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
@@ -1011,7 +1027,7 @@ function widokCennika(array $pakiety, string $komunikat, string $blad): void {
 }
 
 function widokFaq(array $pytania, string $komunikat, string $blad): void {
-    naglowek('Pytania');
+    naglowek('Pytania', 'faq');
     pasTresci('faq');
     echo '<div class="srodek">';
     if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
@@ -1084,7 +1100,7 @@ function zapiszKonsultacje(): array {
 }
 
 function widokKonsultacji(array $k, string $komunikat, string $blad): void {
-    naglowek('Konsultacja');
+    naglowek('Konsultacja', 'konsultacje');
     pasTresci('konsultacje');
     echo '<div class="srodek">';
     if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
@@ -1277,7 +1293,7 @@ function zapiszKontakt(): array {
 }
 
 function widokTekstowStron(array $t, string $komunikat, string $blad): void {
-    naglowek('Teksty stron');
+    naglowek('Teksty stron', 'strony');
     pasTresci('strony');
     echo '<div class="srodek">';
     if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
@@ -1404,7 +1420,7 @@ function widokTekstowStron(array $t, string $komunikat, string $blad): void {
 }
 
 function widokKontaktu(array $k, string $komunikat, string $blad): void {
-    naglowek('Kontakt');
+    naglowek('Kontakt', 'kontakt');
     pasTresci('kontakt');
     echo '<div class="srodek">';
     if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
@@ -1509,7 +1525,7 @@ function zapiszOferte(): array {
 }
 
 function widokListyOferty(array $oferta, string $komunikat, string $blad): void {
-    naglowek('Oferta');
+    naglowek('Oferta', 'oferta');
     pasTresci('oferta');
     echo '<div class="srodek">';
     if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
@@ -1538,7 +1554,7 @@ function widokListyOferty(array $oferta, string $komunikat, string $blad): void 
 }
 
 function widokOferty(string $slug, array $d, string $komunikat, string $blad): void {
-    naglowek('Oferta');
+    naglowek('Oferta', 'oferta');
     pasTresci('oferta');
     echo '<div class="srodek">';
     if ($komunikat) echo '<div class="ok">' . h($komunikat) . '</div>';
