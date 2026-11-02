@@ -562,4 +562,34 @@ if (fs.existsSync(GENERATOR)) {
         process.exit(1);
     }
     console.log('Panel zna wszystkie pola szablonow.');
+
+    // Zadna funkcja PHP nie moze byc zadeklarowana dwa razy — ani w jednym
+    // pliku, ani w obu naraz. PHP przerywa wtedy z "Cannot redeclare" i panel
+    // oddaje blad 500, a parser skladni tego NIE lapie, bo to blad wykonania.
+    //
+    // Zdarzylo sie 02.11.2026: przy przebudowie powloki stopka() zostala
+    // zadeklarowana w nowym bloku i rownoczesnie przetrwala stara. Panel padl
+    // na produkcji. Ta kontrola kosztuje milisekunde i zamyka cala te rodzine.
+    const KAT_PANELU = path.dirname(GENERATOR);
+    const pliki = {
+        'generator.php': php,
+        'index.php': fs.readFileSync(path.join(KAT_PANELU, 'index.php'), 'utf8'),
+    };
+
+    const nazwy = new Map();
+    const kolizje = [];
+    for (const [plik, tresc] of Object.entries(pliki)) {
+        for (const m of tresc.matchAll(/^function (\w+)/gm)) {
+            const n = m[1];
+            if (nazwy.has(n)) kolizje.push(`${n}() — ${nazwy.get(n)} i ${plik}`);
+            else nazwy.set(n, plik);
+        }
+    }
+    if (kolizje.length) {
+        console.error('[szablon] funkcja PHP zadeklarowana wiecej niz raz:');
+        for (const k of kolizje) console.error(`  - ${k}`);
+        console.error('  PHP przerwie z "Cannot redeclare" i panel odda blad 500.');
+        process.exit(1);
+    }
+    console.log(`Panel: ${nazwy.size} funkcji PHP, zadnej zadeklarowanej dwa razy.`);
 }

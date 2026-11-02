@@ -640,7 +640,6 @@ function kartaLogowania(string $tytul, string $wstep, string $blad, string $pola
 HTML;
 }
 
-function stopka(): void { echo '</body></html>'; }
 
 function widokPierwszeUruchomienie(string $blad): void {
     naglowekLogowania('Pierwsze uruchomienie');
