@@ -29,7 +29,7 @@ export const O_NAS = {
 
 export const CENNIK_TEKSTY = {
     nad: 'Pakiety usług',
-    tytul: 'Obsługa dopasowana do Twojej firmy',
+    tytul: 'Ile kosztuje księgowość',
     wstep: 'Każdą współpracę wyceniamy indywidualnie. Pakiety pokazują '
         + 'podstawowy zakres obsługi i ułatwiają wybór właściwego rozwiązania.',
     uwaga: 'Obsługujemy przedsiębiorców z całej Polski — w pełni online, '
