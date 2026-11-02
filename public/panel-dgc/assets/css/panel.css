@@ -1,10 +1,19 @@
-/* Warstwa DGC na szablonie Duralux.
+/* Wyglad panelu DGC.
  *
- * Szablon jest gotowy i nie ruszamy go poza jedna rzecza: wyciety zostal
- * @import 21 rodzin fontow z fonts.googleapis.com. Cala strona celowo hostuje
- * kroj u siebie, zeby nie wysylac adresow IP odwiedzajacych do Google — i choc
- * panel stoi za haslem, nie ma powodu robic wyjatku dla adresow biura.
- * W zamian podstawiamy Schibsted Grotesk, ten sam, co na stronie.
+ * JAK TO DZIALA, zanim cokolwiek tu zmienisz
+ * ------------------------------------------
+ * Czternascie widokow w index.php wypisuje HTML z DZIESIECIOMA nazwami klas:
+ * pas, srodek, karta, przycisk (+akcent, +lekki), blad, ok, male, pomoc, rzad.
+ * Ten plik ubiera wlasnie te nazwy. Dzieki temu caly panel dostal nowy wyglad
+ * BEZ DOTYKANIA ANI JEDNEJ funkcji widoku — a wiec bez ryzyka, ze ktorys ekran
+ * przestanie dzialac.
+ *
+ * Ekrany logowania ida inna droga: uzywaja klas szablonu Duralux
+ * (.card, .btn, .form-control) i ladowanego obok theme.min.css.
+ *
+ * Wartosci sa wpisane wprost, a nie zrzynane z theme.min.css. Ten plik jest
+ * zminifikowany i ma w sobie warianty ciemne, ktore przy wyszukiwaniu wypadaja
+ * przed regulami bazowymi — budowanie na nich dalo by panel w losowych kolorach.
  */
 
 @font-face {
@@ -52,52 +61,324 @@
 }
 
 :root {
-  --dgc-ink: #0d4444;
-  --dgc-akcent: #b50b50;
-  --dgc-kanwa: #fdfcfc;
+  --ink: #0d4444;
+  --akcent: #b50b50;
+  --kanwa: #fdfcfc;
+  --tlo: #f1f4f3;
+  --linia: #e3e8e7;
+  --cien: 0 1px 2px rgba(13, 68, 68, .06), 0 8px 24px rgba(13, 68, 68, .05);
 }
 
-body,
-.form-control,
-.btn {
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--tlo);
+  color: var(--ink);
   font-family: 'Schibsted Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
-/* Petrol zamiast szablonowego granatu. Przycisk logowania jest jedynym
-   elementem akcji na tym ekranie, wiec dostaje kolor marki. */
+/* --- gorny pasek -------------------------------------------------- */
+/* Widoki wypisuja go jako <div class="pas"><strong>Panel DGC</strong><span>
+   odnosniki</span></div>. Nie ruszamy tego znacznika, tylko go ubieramy. */
+.pas {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  padding: 0 26px;
+  min-height: 62px;
+  background: var(--ink);
+  color: var(--kanwa);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .12);
+}
+
+.pas > strong {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+
+.pas > span {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  font-size: 0;            /* zjada separatory " · " miedzy odnosnikami */
+}
+
+.pas a,
+.pas strong:not(:first-child) {
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 7px;
+  color: rgba(253, 252, 252, .82);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background .15s, color .15s;
+}
+
+.pas a:hover,
+.pas a:focus-visible {
+  background: rgba(253, 252, 252, .12);
+  color: var(--kanwa);
+}
+
+/* Zakladka biezaca: widoki wypisuja ja jako <strong>, nie <a>. */
+.pas strong:not(:first-child) {
+  background: rgba(253, 252, 252, .16);
+  color: var(--kanwa);
+  font-weight: 600;
+}
+
+/* --- obszar tresci ------------------------------------------------ */
+.srodek {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 30px 26px 80px;
+}
+
+h1 {
+  margin: 0 0 22px;
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+
+h1 .male { font-size: 15px; font-weight: 400; }
+
+h2 {
+  margin: 36px 0 12px;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+
+a { color: var(--akcent); }
+
+.male {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: rgba(13, 68, 68, .7);
+}
+
+/* --- karty i tabele ----------------------------------------------- */
+/* Lista artykulow i wiekszosc formularzy stoi bezposrednio w .srodek,
+   wiec tabela sama w sobie musi wygladac jak karta. */
+.karta,
+table {
+  background: #fff;
+  border: 1px solid var(--linia);
+  border-radius: 14px;
+  box-shadow: var(--cien);
+}
+
+.karta {
+  padding: 22px 24px;
+  margin: 16px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 18px;
+  overflow: hidden;
+}
+
+th {
+  padding: 13px 18px;
+  background: #f7faf9;
+  border-bottom: 1px solid var(--linia);
+  color: rgba(13, 68, 68, .62);
+  font-size: 11.5px;
+  font-weight: 600;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+
+td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--linia);
+  vertical-align: top;
+}
+
+tr:last-child td { border-bottom: 0; }
+tbody tr:hover td { background: #fafcfb; }
+
+td a {
+  font-weight: 500;
+  text-decoration: none;
+}
+
+td a:hover { text-decoration: underline; }
+
+/* --- formularze --------------------------------------------------- */
+label {
+  display: block;
+  margin: 20px 0 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=date],
+input[type=file],
+select,
+textarea {
+  width: 100%;
+  padding: 11px 13px;
+  background: #fff;
+  border: 1px solid var(--linia);
+  border-radius: 9px;
+  color: inherit;
+  font: inherit;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(13, 68, 68, .1);
+  outline: none;
+}
+
+textarea {
+  min-height: 420px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13.5px;
+  line-height: 1.75;
+}
+
+.rzad { display: flex; gap: 16px; flex-wrap: wrap; }
+.rzad > * { flex: 1 1 220px; }
+
+/* --- przyciski ---------------------------------------------------- */
+.przycisk {
+  display: inline-block;
+  padding: 11px 20px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: var(--ink);
+  color: var(--kanwa);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+
+.przycisk:hover { background: #0a3636; color: var(--kanwa); }
+.przycisk.akcent { background: var(--akcent); border-color: var(--akcent); }
+.przycisk.akcent:hover { background: #9a0943; }
+
+.przycisk.lekki {
+  background: #fff;
+  border-color: var(--linia);
+  color: var(--ink);
+}
+
+.przycisk.lekki:hover { background: #f3f7f6; }
+
+/* Widoczny pierscien fokusu — bez niego obchodzenie panelu klawiatura
+   jest zgadywanka. Ten sam wzor co na stronie. */
+a:focus-visible,
+button:focus-visible,
+.przycisk:focus-visible {
+  outline: 3px solid var(--akcent);
+  outline-offset: 2px;
+}
+
+.pas a:focus-visible { outline-color: var(--kanwa); }
+
+/* --- komunikaty --------------------------------------------------- */
+.blad,
+.ok {
+  margin: 18px 0;
+  padding: 13px 16px;
+  border-radius: 10px;
+  border-left: 3px solid;
+  font-size: 14px;
+}
+
+.blad { background: #fdecef; border-left-color: var(--akcent); }
+.ok { background: #e9f4f1; border-left-color: var(--ink); }
+
+/* --- sciagawka ze skladnia tresci --------------------------------- */
+.pomoc {
+  padding: 15px 17px;
+  background: #f7faf9;
+  border: 1px solid var(--linia);
+  border-radius: 11px;
+  font-size: 13.5px;
+  line-height: 1.8;
+}
+
+.pomoc code {
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: #fff;
+  border: 1px solid var(--linia);
+  font-size: 12.5px;
+}
+
+/* --- telefon ------------------------------------------------------ */
+@media (max-width: 575px) {
+  .pas { padding: 10px 16px; }
+  .srodek { padding: 22px 16px 60px; }
+  h1 { font-size: 23px; }
+  table { display: block; overflow-x: auto; }
+}
+
+/* --- ekrany wejsciowe --------------------------------------------- */
+/* Logowanie i pierwsze uruchomienie ida na klasach szablonu Duralux
+   (.card, .btn, .form-control) i ladowanym obok theme.min.css. Ponizej
+   tylko to, czego szablon nie ma: kolory marki i widoczny fokus. */
+
+.dgc-logowanie .auth-minimal-wrapper { background: var(--tlo); }
+
+.dgc-logowanie .card {
+  border: 1px solid var(--linia);
+  border-radius: 16px;
+  box-shadow: var(--cien);
+}
+
 .dgc-przycisk {
-  background: var(--dgc-ink);
-  border-color: var(--dgc-ink);
-  color: var(--dgc-kanwa);
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--kanwa);
 }
 
 .dgc-przycisk:hover,
 .dgc-przycisk:focus-visible {
   background: #0a3636;
   border-color: #0a3636;
-  color: var(--dgc-kanwa);
+  color: var(--kanwa);
 }
 
-/* Widoczny pierscien fokusu. Szablon opiera sie na domyslnym obrysie
-   przegladarki, ktory na jasnej karcie bywa ledwo widoczny. */
 .dgc-logowanie :focus-visible {
-  outline: 3px solid var(--dgc-akcent);
+  outline: 3px solid var(--akcent);
   outline-offset: 2px;
 }
 
-/* Komunikat bledu w kolorach marki, a nie szablonowej czerwieni. */
 .dgc-blad {
   background: #fdecef;
-  border-left: 3px solid var(--dgc-akcent);
-  color: var(--dgc-ink);
+  border-left: 3px solid var(--akcent);
+  color: var(--ink);
 }
 
-.dgc-logowanie .auth-minimal-wrapper {
-  background: var(--dgc-kanwa);
-}
-
-.dgc-logo {
-  max-width: 190px;
-  height: auto;
-}
+.dgc-logo { max-width: 190px; height: auto; }

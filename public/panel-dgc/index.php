@@ -33,7 +33,15 @@ session_start();
 header('X-Robots-Tag: noindex, nofollow');
 header('Referrer-Policy: no-referrer');
 header('X-Content-Type-Options: nosniff');
-header("Content-Security-Policy: default-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:");
+// style-src MUSI miec 'self'. Przez pierwsze wersje panelu caly styl siedzial
+// w <style> w naglowku, wiec wystarczalo samo 'unsafe-inline' — i tak bylo tu
+// wpisane. Gdy 02.11.2026 doszly arkusze szablonu jako osobne pliki, wszystkie
+// trzy zostaly ZABLOKOWANE, a ekran logowania pokazal sie jako goly HTML.
+// Zadne narzedzie z linii polecen tego nie zlapie: curl ignoruje CSP, a plik
+// zwraca poprawne 200 z content-type text/css. Widac to dopiero w przegladarce.
+// 'unsafe-inline' zostaje na zapas: nic go dzis nie potrzebuje, ale styl
+// wpisany w atrybut style=" " w ktoryms widoku nadal by na nim stal.
+header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'");
 
 // --- pomocnicze ---------------------------------------------------------
 
@@ -533,39 +541,8 @@ function naglowek(string $tytul): void {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>$t · panel DGC</title>
-<style>
- :root{--ink:#0d4444;--akcent:#b50b50;--kanwa:#fdfcfc;--linia:rgba(13,68,68,.14)}
- *{box-sizing:border-box}
- body{margin:0;background:var(--kanwa);color:var(--ink);
-   font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
- .pas{background:var(--ink);color:var(--kanwa);padding:14px 20px;display:flex;
-   justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
- .pas a{color:var(--kanwa)}
- .srodek{max-width:940px;margin:0 auto;padding:24px 20px 60px}
- h1{font-size:26px;margin:0 0 4px}
- h2{font-size:19px;margin:28px 0 8px}
- a{color:var(--akcent)}
- label{display:block;margin:18px 0 6px;font-weight:600}
- input[type=text],input[type=password],input[type=date],select,textarea{
-   width:100%;padding:11px 12px;border:1px solid var(--linia);border-radius:8px;
-   font:inherit;color:inherit;background:#fff}
- textarea{min-height:420px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;line-height:1.7}
- .przycisk{display:inline-block;background:var(--ink);color:var(--kanwa);border:0;
-   padding:12px 22px;border-radius:8px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
- .przycisk.akcent{background:var(--akcent)}
- .przycisk.lekki{background:transparent;color:var(--ink);border:1px solid var(--linia)}
- .karta{background:#fff;border:1px solid var(--linia);border-radius:12px;padding:20px;margin:14px 0}
- .blad{background:#fdecef;border-left:3px solid var(--akcent);padding:12px 14px;border-radius:6px;margin:14px 0}
- .ok{background:#e8f3f0;border-left:3px solid var(--ink);padding:12px 14px;border-radius:6px;margin:14px 0}
- table{width:100%;border-collapse:collapse;margin-top:10px}
- td,th{text-align:left;padding:10px 8px;border-bottom:1px solid var(--linia);vertical-align:top}
- th{font-size:13px;text-transform:uppercase;letter-spacing:.04em;opacity:.65}
- .male{font-size:14px;opacity:.75}
- .pomoc{background:#fff;border:1px solid var(--linia);border-radius:10px;padding:14px 16px;font-size:14px}
- .pomoc code{background:var(--kanwa);padding:1px 6px;border-radius:4px}
- .rzad{display:flex;gap:14px;flex-wrap:wrap}
- .rzad>*{flex:1 1 220px}
-</style></head><body>
+<link rel="stylesheet" href="assets/css/panel.css">
+</head><body>
 HTML;
 }
 

@@ -266,35 +266,51 @@ Zgodność HTML-u panelu z HTML-em paczki sprawdzamy porównaniem bajt w bajt
 `heroHtml()`/`oNasHtml()` z fragmentem prerenderowanej strony. Rozjazd oznacza,
 że zapis z panelu po cichu zmieniłby wygląd strony.
 
-### Wygląd panelu — przenoszenie po kawałku
+### Wygląd panelu
 
-Panel dostaje nowy wygląd **stopniowo**. Od 2 listopada 2026 na szablonie
-Duralux (Bootstrap 5, licencja klienta) stoją dwa ekrany wejściowe: logowanie
-i pierwsze uruchomienie. Pozostałe czternaście widoków zostaje przy
-dotychczasowym stylu i działa bez zmian.
+Od 2 listopada 2026 panel stoi na szablonie Duralux (Bootstrap 5, licencja
+klienta). Przeniesienie zrobione **bez dotykania ani jednej funkcji widoku** —
+i to jest tu najważniejsze.
 
-Rozdzielone jest to czysto: `naglowekLogowania()` + `stopkaLogowania()`
-ładują szablon, `naglowek()` + `stopka()` zostają przy wbudowanym `<style>`.
-Przeniesienie kolejnego ekranu to podmiana jednej pary wywołań i przepisanie
-znaczników w jednej funkcji widoku.
+Czternaście widoków w `index.php` wypisuje HTML z **dziesięcioma nazwami klas**:
+`pas`, `srodek`, `karta`, `przycisk` (+`akcent`, +`lekki`), `blad`, `ok`,
+`male`, `pomoc`, `rzad`. `assets/css/panel.css` ubiera właśnie te nazwy.
+Zmiana wyglądu to więc zmiana jednego arkusza, a nie czternastu funkcji — i nie
+da się przez nią zepsuć żadnego ekranu.
 
-**Logika i `generator.php` nie są tym w ogóle dotknięte.** HTML, który panel
-generuje dla serwisu, zostaje bajt w bajt taki sam — sprawdzane pomiarem po
-każdej zmianie.
+Ekrany wejściowe (logowanie, pierwsze uruchomienie) idą inną drogą: używają
+klas szablonu (`.card`, `.btn`, `.form-control`) i ładowanego obok
+`theme.min.css`. Mają własną powłokę `naglowekLogowania()` / `stopkaLogowania()`.
 
-Z szablonu bierzemy tylko `bootstrap.min.css` i `theme.min.css`. Wykresy,
-kalendarze i tabele z sortowaniem zostają nietknięte, bo panel ich nie używa.
-Razem 568 kB zasobów, pobieranych raz i cache'owanych.
+**Wartości w `panel.css` są wpisane wprost, a nie zrzynane z `theme.min.css`.**
+Tamten plik jest zminifikowany i ma w sobie warianty ciemne, które przy
+wyszukiwaniu wypadają przed regułami bazowymi — budowanie na nich dałoby panel
+w losowych kolorach. Sprawdzone: `.card` zwraca tam `background:#eff0f6`
+z wariantu, nie wartość bazową.
 
 **Z `theme.min.css` wycięty został `@import` 21 rodzin fontów z
 fonts.googleapis.com.** Cała strona celowo hostuje krój u siebie, żeby nie
 wysyłać adresów IP do Google, i nie ma powodu robić wyjątku dla adresów biura.
-W zamian panel używa Schibsted Grotesk, tego samego co serwis — cztery pliki
-woff2 skopiowane do `assets/fonts/`. Sprawdzone w przeglądarce: zero zapytań
-do googleapis.
+Panel używa Schibsted Grotesk, tego samego co serwis.
+
+#### Pułapka, która kosztowała jeden wrzut
+
+`index.php` ustawia własny nagłówek Content-Security-Policy. Do 2 listopada
+brzmiał on `style-src 'unsafe-inline'` — **bez `'self'`**, bo przez pierwsze
+wersje cały styl siedział we wbudowanym `<style>`. Gdy doszły arkusze jako
+osobne pliki, przeglądarka **zablokowała wszystkie trzy** i ekran logowania
+pokazał się jako goły HTML.
+
+Żadne narzędzie z linii poleceń tego nie złapie: `curl` ignoruje CSP, pliki
+zwracają poprawne 200 z `content-type: text/css`, a sumy kontrolne się zgadzają.
+Widać to **wyłącznie w przeglądarce**, w zakładce sieci. Jeśli kiedyś dojdzie
+kolejny typ zasobu, trzeba sprawdzić, czy CSP go przepuszcza.
+
+Logika i `generator.php` nie są tym w ogóle dotknięte. HTML generowany dla
+serwisu zostaje bajt w bajt taki sam.
 
 Uwaga przy wgrywaniu: **katalog panelu to już nie dwa pliki PHP**, tylko także
-`assets/`. Przy aktualizacji panelu trzeba wgrać cały katalog.
+`assets/`. Przy aktualizacji wgrywa się cały katalog.
 
 ### Szkice
 
