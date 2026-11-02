@@ -569,28 +569,92 @@ function naglowek(string $tytul): void {
 HTML;
 }
 
+/**
+ * Powloka ekranow logowania — osobna od naglowek(), bo stoi na szablonie
+ * Duralux (Bootstrap 5), a pozostale czternascie widokow zostaje przy
+ * dotychczasowym stylu. Przenosimy panel na nowy wyglad po kawalku, zaczynajac
+ * od ekranu, ktory biuro widzi jako pierwszy, i nie ruszajac niczego, co juz
+ * dziala.
+ *
+ * Z szablonu bierzemy tylko dwa arkusze. Wykresy, kalendarze i tabele
+ * z sortowaniem zostaja nietkniete, bo panel ich nie uzywa.
+ */
+function naglowekLogowania(string $tytul): void {
+    $t = h($tytul);
+    echo <<<HTML
+<!doctype html><html lang="pl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>$t · panel DGC</title>
+<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="assets/css/theme.min.css">
+<link rel="stylesheet" href="assets/css/panel.css">
+</head><body class="dgc-logowanie">
+HTML;
+}
+
+function stopkaLogowania(): void { echo '</body></html>'; }
+
+/** Karta logowania: wspolny szkielet dla obu ekranow wejsciowych. */
+function kartaLogowania(string $tytul, string $wstep, string $blad, string $pola, string $przycisk): void {
+    $t = h($tytul);
+    $w = $wstep !== '' ? '<p class="fs-12 fw-medium text-muted mb-4">' . h($wstep) . '</p>' : '';
+    $b = $blad !== '' ? '<div class="dgc-blad rounded p-3 mb-4 fs-13">' . h($blad) . '</div>' : '';
+    $p = h($przycisk);
+    echo <<<HTML
+<main class="auth-minimal-wrapper">
+  <div class="auth-minimal-inner">
+    <div class="minimal-card-wrapper">
+      <div class="card mb-4 mt-5 mx-4 mx-sm-0">
+        <div class="card-body p-sm-5">
+          <img src="assets/logo.svg" alt="DGC Biuro Rachunkowe" class="dgc-logo mb-4">
+          <h1 class="fs-20 fw-bolder mb-4">$t</h1>
+          $w
+          $b
+          <form method="post" class="w-100">
+            $pola
+            <div class="mt-4">
+              <button type="submit" class="btn btn-lg w-100 dgc-przycisk">$p</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+HTML;
+}
+
 function stopka(): void { echo '</body></html>'; }
 
 function widokPierwszeUruchomienie(string $blad): void {
-    naglowek('Pierwsze uruchomienie');
-    echo '<div class="srodek"><h1>Ustaw hasło do panelu</h1>';
-    echo '<p class="male">To okno pojawia się tylko raz. Hasło zapisujemy w postaci nieodwracalnego skrótu, więc nikt, łącznie z osobą, która budowała stronę, nie może go odczytać. Zapisz je w menedżerze haseł, bo nie ma sposobu na jego odzyskanie.</p>';
-    if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
-    echo '<form method="post" class="karta">';
-    echo '<label for="h1">Hasło (co najmniej 12 znaków)</label><input id="h1" type="password" name="nowe_haslo" required autofocus>';
-    echo '<label for="h2">Powtórz hasło</label><input id="h2" type="password" name="powtorz" required>';
-    echo '<p><button class="przycisk" type="submit">Zapisz hasło</button></p></form></div>';
-    stopka();
+    naglowekLogowania('Pierwsze uruchomienie');
+    kartaLogowania(
+        'Ustaw hasło do panelu',
+        'To okno pojawia się tylko raz. Hasło zapisujemy w postaci nieodwracalnego skrótu, '
+        . 'więc nikt, łącznie z osobą, która budowała stronę, nie może go odczytać. '
+        . 'Zapisz je w menedżerze haseł, bo nie ma sposobu na jego odzyskanie.',
+        $blad,
+        '<div class="mb-3"><label for="h1" class="form-label fs-13 fw-semibold">Hasło (co najmniej 12 znaków)</label>'
+        . '<input id="h1" type="password" name="nowe_haslo" class="form-control" required autofocus></div>'
+        . '<div class="mb-3"><label for="h2" class="form-label fs-13 fw-semibold">Powtórz hasło</label>'
+        . '<input id="h2" type="password" name="powtorz" class="form-control" required></div>',
+        'Zapisz hasło'
+    );
+    stopkaLogowania();
 }
 
 function widokLogowania(string $blad): void {
-    naglowek('Logowanie');
-    echo '<div class="srodek" style="max-width:420px"><h1>Panel DGC</h1>';
-    if ($blad) echo '<div class="blad">' . h($blad) . '</div>';
-    echo '<form method="post" class="karta">';
-    echo '<label for="p">Hasło</label><input id="p" type="password" name="haslo" required autofocus>';
-    echo '<p><button class="przycisk" type="submit">Zaloguj</button></p></form></div>';
-    stopka();
+    naglowekLogowania('Logowanie');
+    kartaLogowania(
+        'Panel redakcyjny',
+        'Zaloguj się, żeby dodać artykuł albo zmienić teksty na stronie.',
+        $blad,
+        '<div class="mb-3"><label for="p" class="form-label fs-13 fw-semibold">Hasło</label>'
+        . '<input id="p" type="password" name="haslo" class="form-control" required autofocus></div>',
+        'Zaloguj'
+    );
+    stopkaLogowania();
 }
 
 function widokListy(array $wpisy, string $komunikat, string $blad): void {

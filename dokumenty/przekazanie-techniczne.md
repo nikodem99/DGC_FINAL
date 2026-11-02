@@ -266,6 +266,36 @@ Zgodność HTML-u panelu z HTML-em paczki sprawdzamy porównaniem bajt w bajt
 `heroHtml()`/`oNasHtml()` z fragmentem prerenderowanej strony. Rozjazd oznacza,
 że zapis z panelu po cichu zmieniłby wygląd strony.
 
+### Wygląd panelu — przenoszenie po kawałku
+
+Panel dostaje nowy wygląd **stopniowo**. Od 2 listopada 2026 na szablonie
+Duralux (Bootstrap 5, licencja klienta) stoją dwa ekrany wejściowe: logowanie
+i pierwsze uruchomienie. Pozostałe czternaście widoków zostaje przy
+dotychczasowym stylu i działa bez zmian.
+
+Rozdzielone jest to czysto: `naglowekLogowania()` + `stopkaLogowania()`
+ładują szablon, `naglowek()` + `stopka()` zostają przy wbudowanym `<style>`.
+Przeniesienie kolejnego ekranu to podmiana jednej pary wywołań i przepisanie
+znaczników w jednej funkcji widoku.
+
+**Logika i `generator.php` nie są tym w ogóle dotknięte.** HTML, który panel
+generuje dla serwisu, zostaje bajt w bajt taki sam — sprawdzane pomiarem po
+każdej zmianie.
+
+Z szablonu bierzemy tylko `bootstrap.min.css` i `theme.min.css`. Wykresy,
+kalendarze i tabele z sortowaniem zostają nietknięte, bo panel ich nie używa.
+Razem 568 kB zasobów, pobieranych raz i cache'owanych.
+
+**Z `theme.min.css` wycięty został `@import` 21 rodzin fontów z
+fonts.googleapis.com.** Cała strona celowo hostuje krój u siebie, żeby nie
+wysyłać adresów IP do Google, i nie ma powodu robić wyjątku dla adresów biura.
+W zamian panel używa Schibsted Grotesk, tego samego co serwis — cztery pliki
+woff2 skopiowane do `assets/fonts/`. Sprawdzone w przeglądarce: zero zapytań
+do googleapis.
+
+Uwaga przy wgrywaniu: **katalog panelu to już nie dwa pliki PHP**, tylko także
+`assets/`. Przy aktualizacji panelu trzeba wgrać cały katalog.
+
 ### Szkice
 
 `szkice.json` **w katalogu panelu**, nie w `dane/`. To nie jest kosmetyka:
