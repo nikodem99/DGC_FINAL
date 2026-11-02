@@ -91,6 +91,10 @@ const STRONY = {
         tytul: 'Usługi kadrowo-płacowe · outsourcing kadr i płac · DGC',
         opis: 'Outsourcing kadr i płac dla firm z Łodzi i całej Polski, także online. ZUS, wynagrodzenia, umowy, PFRON i GUS oraz indywidualna wycena obsługi.',
     },
+    '/porady/karnet-sportowy-dla-pracownikow': {
+        tytul: 'Karnet sportowy: koszt firmy i przychód \u00b7 DGC',
+        opis: 'Karnet sportowy to koszt firmy i przychód pracownika, chyba że finansuje go ZFŚS albo pracownik dopłaca. Sprawdź, który wariant ogranicza obciążenia.',
+    },
     '/porady/wigilia-firmowa-koszt-vat': {
         tytul: 'Wigilia firmowa i integracja: koszt i VAT · DGC',
         opis: 'Wigilia firmowa to koszt podatkowy, ale VAT z faktury za gastronomię nie podlega odliczeniu. Sprawdź, co zmieniają kontrahenci na imprezie.',

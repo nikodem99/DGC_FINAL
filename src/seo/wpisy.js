@@ -9,6 +9,12 @@
 // tytuly rozrozniane rokiem. Powod w naglowku skryptu.
 
 export const WPISY = {
+    'karnet-sportowy-dla-pracownikow': {
+        tytul: 'Karnet sportowy dla pracowników – koszt i przychód · DGC',
+        opis: 'Karnet sportowy to koszt firmy i przychód pracownika, chyba że finansuje go ZFŚS albo pracownik dopłaca. Sprawdź, który wariant ogranicza obciążenia.',
+        data: '2026-11-02',
+        nazwa: 'Karnet sportowy dla pracowników – koszt i przychód',
+    },
     'wigilia-firmowa-koszt-vat': {
         tytul: 'Impreza integracyjna i wigilia firmowa – koszt i VAT · DGC',
         opis: 'Wigilia firmowa to koszt podatkowy, ale VAT z faktury za gastronomię nie podlega odliczeniu. Sprawdź, co zmieniają kontrahenci na imprezie.',

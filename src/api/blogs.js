@@ -38,6 +38,22 @@ import wigiliaFirmowa from "../images/blog/wigilia-firmowa-koszt-vat.jpg";
 
 const blogs = [
     {
+        id: '27',
+        title: 'Karnet sportowy dla pracowników – koszt i przychód',
+        title2: 'Karnet sportowy dla pracowników – koszt i przychód',
+        tag: 'Płace',
+        slug: 'karnet-sportowy-dla-pracownikow',
+        screens: okladka,
+        description: 'Karnet sportowy to koszt firmy i przychód pracownika, chyba że finansuje go ZFŚS albo pracownik dopłaca. Sprawdź, który wariant ogranicza obciążenia.',
+        author: 'DGC Biuro Rachunkowe',
+        create_at: '2 listopada 2026',
+        archiveMonth: '2026-11',
+        archiveLabel: 'Listopad 2026',
+        blogSingleImg: okladka,
+        blClass: 'format-standard-image',
+        animation: '1200',
+    },
+    {
         id: '26',
         title: 'Impreza integracyjna i wigilia firmowa – koszt i VAT',
         title2: 'Impreza integracyjna i wigilia firmowa – koszt i VAT',
