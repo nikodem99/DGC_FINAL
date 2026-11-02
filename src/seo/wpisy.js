@@ -431,7 +431,7 @@ export const WPISY = {
     },
     'pulapka-na-myszy-a-koszt-podatkowy': {
         tytul: 'Pułapka na myszy a koszt podatkowy · DGC',
-        opis: 'Czy pułapka na myszy może być kosztem uzyskania przychodu? Sprawdź, zanim odliczysz',
+        opis: 'Pułapka na myszy i deratyzacja to koszt firmowy, gdy chronią lokal lub towar i masz fakturę na firmę. Sprawdź, jak opisać taki zakup przed kontrolą.',
         data: '2025-11-22',
         nazwa: 'Pułapka na myszy a koszt podatkowy',
     },
@@ -473,7 +473,7 @@ export const WPISY = {
     },
     'kawe-herbate-mleko': {
         tytul: 'Kawę, herbatę, mleko · DGC',
-        opis: 'Kawa, herbata, mleko i cukier dla pracowników a koszty podatkowe – praktyczny przewodnik',
+        opis: 'Kawa, herbata i mleko dostępne dla wszystkich pracowników to koszt pracowniczy, a nie reprezentacja. Sprawdź, czym to udokumentować bez ewidencji zużycia.',
         data: '2025-11-01',
         nazwa: 'Kawę, herbatę, mleko',
     },
@@ -485,7 +485,7 @@ export const WPISY = {
     },
     'delegacja-zagraniczna-pracownika-a-podatki': {
         tytul: 'Delegacja zagraniczna pracownika a podatki · DGC',
-        opis: 'Delegacja zagraniczna pracownika a podatki – kompletny przewodnik dla pracodawcy!!',
+        opis: 'Dieta zagraniczna jest wolna od podatku do limitu dla danego kraju, a bezpłatne śniadanie obniża ją o 15 procent. Sprawdź, co ze zwrotem noclegu i biletów.',
         data: '2025-10-25',
         nazwa: 'Delegacja zagraniczna pracownika a podatki',
     },
@@ -539,7 +539,7 @@ export const WPISY = {
     },
     'wsparcie-na-start-dofinansowanie': {
         tytul: 'Wsparcie na start, dofinansowanie · DGC',
-        opis: 'Zakładasz firmę? Sprawdź, jakie są możliwości dofinansowania na start i zrób to z głową',
+        opis: 'Dotacja z powiatowego urzędu pracy sięga w 2025 roku nawet 50 000 zł, a po roku działalności nie trzeba jej zwracać. Sprawdź, kto może ją dostać.',
         data: '2025-09-27',
         nazwa: 'Wsparcie na start, dofinansowanie',
     },
@@ -593,7 +593,7 @@ export const WPISY = {
     },
     'akcyza-na-papierosy': {
         tytul: 'Akcyza na papierosy · DGC',
-        opis: 'Akcyza na papierosy – Jak prawidłowo rozliczyć i uniknąć problemów? Ekspert radzi!',
+        opis: 'Akcyzę od papierosów płaci producent, importer i nabywca z Unii, a deklarację AKC-4 składa się do 25. dnia następnego miesiąca. Sprawdź, co z ewidencją.',
         data: '2025-08-23',
         nazwa: 'Akcyza na papierosy',
     },
@@ -677,7 +677,7 @@ export const WPISY = {
     },
     'zakup-samochodu': {
         tytul: 'Zakup samochodu · DGC',
-        opis: 'Zakup samochodu – Jakie obowiązki Cię czekają i jak rozliczyć podatek? Ekspert wyjaśnia!',
+        opis: 'Sprowadzony samochód to tłumaczenia, badanie techniczne, akcyza i rejestracja, a w 2025 roku amortyzacja do 150 000 zł. Sprawdź kolejność formalności.',
         data: '2025-07-05',
         nazwa: 'Zakup samochodu',
     },
@@ -719,7 +719,7 @@ export const WPISY = {
     },
     'obowiazek-podatkowy-w-vat': {
         tytul: 'Obowiązek podatkowy w vat! · DGC',
-        opis: 'Artykuł 19 Ustawy o VAT – Moment powstania obowiązku podatkowego Ekspert wyjaśnia!',
+        opis: 'Obowiązek podatkowy w VAT powstaje z chwilą dostawy towaru lub wykonania usługi, a przy zaliczce już w dniu zapłaty. Sprawdź wyjątek dla usług budowlanych.',
         data: '2025-06-10',
         nazwa: 'Obowiązek podatkowy w vat!',
     },
@@ -911,7 +911,7 @@ export const WPISY = {
     },
     'nowoczesna-ksiegowosc-dlaczego-warto-korzystac-z-nowoczesnych-technologii-w-finansach': {
         tytul: 'Nowoczesna księgowość tylko w DGC · DGC',
-        opis: 'Nowoczesna księgowość – dlaczego warto korzystać z nowoczesnych technologii w finansach?',
+        opis: 'Księgowość w chmurze z OCR i automatycznym księgowaniem daje wgląd w finanse firmy przez całą dobę i mniej pomyłek. Sprawdź, co to zmienia w codziennej pracy.',
         data: '2025-02-12',
         nazwa: 'Nowoczesna księgowość tylko w DGC',
     },
@@ -959,7 +959,7 @@ export const WPISY = {
     },
     'zakup-wienca-a-koszty-dzialalnosci-i-prawo-do-odliczenia-vat-co-warto-wiedziec': {
         tytul: 'Zakup wieńca jak rozliczyć · DGC',
-        opis: 'Zakup wieńca a koszty działalności i prawo do odliczenia VAT – co warto wiedzieć?',
+        opis: 'Wieniec na pogrzeb kontrahenta lub pracownika bywa kosztem, o ile nie zostanie uznany za reprezentację, bo wtedy znika też VAT. Sprawdź, jak uzasadnić zakup.',
         data: '2025-01-17',
         nazwa: 'Zakup wieńca jak rozliczyć',
     },
@@ -1439,7 +1439,7 @@ export const WPISY = {
     },
     'wzrost-akcyzy-na-alkohol-i-papierosy': {
         tytul: 'Wzrost akcyzy na alkohol i papierosy · DGC',
-        opis: 'W nowym roku wzrośnie wysokość akcyzy na papierosy i alkohol o 10 proc. Jak wzrosną ceny?',
+        opis: 'Akcyza na alkohol i papierosy rośnie od 2024 roku o 10 procent, więc wódka 0,5 l drożeje o 90 gr, a paczka papierosów o 42 gr. Sprawdź pozostałe wyliczenia.',
         data: '2023-10-23',
         nazwa: 'Wzrost akcyzy na alkohol i papierosy',
     },
@@ -1451,7 +1451,7 @@ export const WPISY = {
     },
     'producencie-wina-czy-wiesz-ze-zmienily-sie-przepisy': {
         tytul: 'Producencie wina. Czy wiesz, że zmieniły się przepisy? · DGC',
-        opis: 'Brak podstaw do zwolnienia drobnego producenta wina z obowiązku stosowania e-SAD. Czemu?',
+        opis: 'Drobny producent wina nie jest zwolniony z e-SAD, potrzebuje numeru akcyzowego i Systemu EMCS PL2. Sprawdź, co zrobić, gdy wino przyjechało na dokument MVV.',
         data: '2023-10-16',
         nazwa: 'Producencie wina. Czy wiesz, że zmieniły się przepisy?',
     },
@@ -1475,7 +1475,7 @@ export const WPISY = {
     },
     'masz-ponizej-26-lat-to-dla-ciebie-przydane-informacje': {
         tytul: 'Masz poniżej 26 lat? To dla Ciebie przydane informacje. · DGC',
-        opis: 'to są one zwolnione od podatku – maksymalnie do wysokości 85.528 zł w roku podatkowym.',
+        opis: 'Ulga dla młodych zwalniała w 2023 z podatku przychody z pracy, zlecenia i praktyk do 85 528 zł. Sprawdź, kiedy mimo ulgi trzeba złożyć zeznanie roczne.',
         data: '2023-10-02',
         nazwa: 'Masz poniżej 26 lat? To dla Ciebie przydane informacje.',
     },
@@ -1559,7 +1559,7 @@ export const WPISY = {
     },
     'komu-przysluguje-zasilek-chorobowy': {
         tytul: 'Komu przysługuje zasiłek chorobowy? · DGC',
-        opis: 'Zasiłek chorobowy z ubezpieczenia chorobowego możesz otrzymać, jeśli jesteś objęty w ZUS:',
+        opis: 'Zasiłek chorobowy należy się z ubezpieczenia obowiązkowego, jak u pracownika, albo dobrowolnego, jak przy zleceniu. Sprawdź, w której grupie jesteś.',
         data: '2023-08-07',
         nazwa: 'Komu przysługuje zasiłek chorobowy?',
     },
@@ -1589,7 +1589,7 @@ export const WPISY = {
     },
     'zatrudnienie-niani-dokumenty-finansowanie-zakonczenie-umowy': {
         tytul: 'Zatrudnienie niani- dokumenty, finansowanie, zakończenie umowy · DGC',
-        opis: 'w ciągu 7 dni od dnia, w którym budżet państwa przestanie płacić składki za nianię.',
+        opis: 'Dokumenty za nianię idą do ZUS do 20. dnia następnego miesiąca, a po zakończeniu umowy ZWUA i ZWPA w ciągu 7 dni. Sprawdź, kiedy składasz je tylko raz.',
         data: '2023-07-24',
         nazwa: 'Zatrudnienie niani- dokumenty, finansowanie, zakończenie umowy',
     },
@@ -1709,7 +1709,7 @@ export const WPISY = {
     },
     'spolka-akcyjna': {
         tytul: 'Spółka akcyjna · DGC',
-        opis: 'jest to spółka kapitałowa;',
+        opis: 'Spółka akcyjna potrzebuje kapitału co najmniej 100 000 zł oraz zarządu, rady nadzorczej i walnego zgromadzenia. Sprawdź, czym odpowiada akcjonariusz.',
         data: '2023-05-18',
         nazwa: 'Spółka akcyjna',
     },
@@ -1769,7 +1769,7 @@ export const WPISY = {
     },
     'co-jest-przedmiotem-opodatkowania-ryczaltem': {
         tytul: 'Co jest przedmiotem opodatkowania ryczałtem? · DGC',
-        opis: 'Przedmiotem opodatkowania ryczałtem od przychodów ewidencjonowanych są przychody z:',
+        opis: 'Ryczałt płacisz od kwot należnych, bez potrącania kosztów, ale w 2023 przychód pomniejszała połowa składki zdrowotnej. Sprawdź, co jest zwolnione z ryczałtu.',
         data: '2023-04-13',
         nazwa: 'Co jest przedmiotem opodatkowania ryczałtem?',
     },
@@ -1805,7 +1805,7 @@ export const WPISY = {
     },
     'kto-moze-stosowac-ryczalt': {
         tytul: 'Kto może stosować ryczałt? · DGC',
-        opis: 'Z opodatkowania w formie ryczałtu od przychodów ewidencjonowanych mogą skorzystać:',
+        opis: 'Ryczałt w 2023 obejmował firmy osób fizycznych oraz spółki cywilne i jawne z przychodem do 2 mln euro. Sprawdź, jak liczyć limit przy dwóch działalnościach.',
         data: '2023-03-23',
         nazwa: 'Kto może stosować ryczałt?',
     },
@@ -1877,7 +1877,7 @@ export const WPISY = {
     },
     'spolka-komandytowo-akcyjna': {
         tytul: 'Spółka komandytowo-akcyjna · DGC',
-        opis: 'jest to spółka osobowa;',
+        opis: 'Komplementariusz w spółce komandytowo-akcyjnej odpowiada całym majątkiem, akcjonariusz nie, a minimalny kapitał to 50 000 zł. Sprawdź rolę rady nadzorczej.',
         data: '2023-02-13',
         nazwa: 'Spółka komandytowo-akcyjna',
     },
@@ -1931,7 +1931,7 @@ export const WPISY = {
     },
     'spolka-partnerska': {
         tytul: 'Spółka partnerska · DGC',
-        opis: '-mogą ją zawiązać minimum 2 osoby fizyczne uprawnione do wykonywania wolnego zawodu',
+        opis: 'Spółkę partnerską zakładają co najmniej dwie osoby uprawnione do wolnego zawodu, a powstaje ona z wpisem do KRS. Sprawdź, za co partner odpowiada majątkiem.',
         data: '2023-01-12',
         nazwa: 'Spółka partnerska',
     },
