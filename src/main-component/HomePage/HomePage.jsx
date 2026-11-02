@@ -22,7 +22,12 @@ import Logo from '../../images/logo.svg'
 const HomePage = () => {
     return (
         <Fragment>
-            <Navbar hclass={'dgc-site-header'}  Logo={Logo} />
+            {/* Wariant -s2 = naglowek lezacy na CIEMNEJ powierzchni: biale menu,
+                bialy pasek sygnalu nad pozycja, znak w negatywie, przezroczysty
+                burger. Strona glowna przeszla na niego 02.11.2026, gdy sekcja
+                powitalna dostala zielone tlo z fala. Przedtem menu mialo kolor
+                petrol — czyli dokladnie kolor nowego tla, kontrast 1,0:1. */}
+            <Navbar hclass={'dgc-site-header dgc-site-header-s2'}  Logo={Logo} />
             <Hero hclass={'static-hero'} />
             <AppointmentSection hclass={'appointment_section'}/>
             <ServiceSection2 hclass={'service_section_s2 section-padding'} />

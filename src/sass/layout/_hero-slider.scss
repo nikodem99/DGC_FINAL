@@ -12,23 +12,32 @@
 	z-index: 111;
 	overflow: hidden;
 
-	@include media-query(1199px) {
-		background: $dgc-panel;
+	/* Zielone tlo z wzorem fali — ta sama grafika, co w pasie "Zadzwon do nas"
+	   na dole strony i w panelu ceny na /umow-konsultacje/. Prosba biura
+	   z 02.11.2026: "tlo tutaj na gorze zamiast szarego to ten zielony
+	   z wzorem fali jak na dole".
+	
+	   Wczesniej bylo tu tylko blade przemycie petrolem przy 4,5% krycia
+	   (ksztalt .bg_shape), ktore czytalo sie jako szarosc, a ponizej 1199px
+	   plaski $dgc-panel. Teraz jedno tlo na wszystkich szerokosciach.
+	
+	   KAZDY tekst w tej sekcji musi byc jasny. Petrol na tej grafice daje
+	   1,3:1 i jest nieczytelny. */
+	background-color: $dgc-ink;
+	background-image: url(../../images/cta-shape.png);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
 
-		border: 1px solid var(--dgc-line);
+	@include media-query(1199px) {
+		border: 1px solid $dgc-ink;
 	}
 
+	/* Ksztalt z bladym przemyciem zastapiony grafika wyzej. Znacznik zostaje
+	   w HTML-u, bo z tej strony scripts/szablon.mjs wycina szablon dla panelu
+	   i zmiana struktury wymusilaby przeliczenie wzorcow. */
 	.bg_shape {
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-
-		@include media-query(1199px) {
-			display: none;
-		}
+		display: none;
 	}
 
 

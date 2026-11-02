@@ -379,6 +379,17 @@ stronie używamy dwóch:
 | `01_podstawowe` | petrol `#0D4444` | jasne tła |
 | `03_negatyw_petrol` | biel `#FDFCFC` | ciemne tła |
 
+Wariant wybiera się **sam**, na podstawie klasy nagłówka: `Header.jsx` sprawdza,
+czy `hclass` zawiera `dgc-site-header-s2`, i wtedy podstawia negatyw. Nie trzeba
+tego podawać ręcznie przy każdej stronie.
+
+Od 2 listopada 2026 **strona główna też używa negatywu** — sekcja powitalna
+dostała zielone tło z wzorem fali, więc nagłówek leży na ciemnej powierzchni
+tak samo jak na podstronach. Przedtem menu miało kolor petrol, czyli dokładnie
+kolor nowego tła: kontrast 1,0:1, menu niewidoczne. Jeśli kiedyś sekcja
+powitalna wróci na jasne tło, trzeba zdjąć `dgc-site-header-s2` z `HomePage.jsx`,
+inaczej białe menu zniknie w drugą stronę.
+
 **Wariantu `02_akcent_magenta` (dwukolorowego, z różem) nie używamy nigdzie.**
 Zastrzeżenie od Kamila przy przekazaniu paczki: *„Jedno zastrzeżenie co do
 wariantu dwukolorowego (z tym różem) żeby go unikać. Lepiej jakby było go jak

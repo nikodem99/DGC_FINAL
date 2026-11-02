@@ -980,6 +980,15 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.03em;
 }
 
+/* Tekst sekcji powitalnej na zielonym tle z fala (02.11.2026).
+   Etykieta nad naglowkiem i napis przycisku byly biale juz wczesniej —
+   siedza na magentowych tlach. Zmieniaja sie tylko te dwa, ktore stalo
+   na petrolu. */
+.hero_section .content h1,
+.hero_section .content p {
+  color: var(--dgc-canvas);
+}
+
 /* Ikony fontowe musza zostac na swoich krojach — globalna podmiana rodziny
    zamienilaby je w kwadraty. */
 [class*='ti-'],
